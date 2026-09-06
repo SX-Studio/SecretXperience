@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111827">
+<title>Site Time Tracker</title>
+<style>
+:root{--bg:#f3f4f6;--card:#fff;--text:#111827;--muted:#6b7280;--line:#e5e7eb;--accent:#d97706;--accent2:#fbbf24;--green:#16a34a;--red:#dc2626;--blue:#2563eb;--r:12px}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);font-size:16px;line-height:1.5;padding-bottom:76px}
+header{background:#111827;color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:10}
+header h1{font-size:17px;font-weight:700;display:flex;align-items:center;gap:8px}
+header h1 .logo{background:var(--accent2);color:#111;border-radius:6px;width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;font-size:16px}
+.hright{display:flex;align-items:center;gap:8px}
+.chip{background:#374151;border-radius:999px;padding:4px 12px;font-size:13px;font-variant-numeric:tabular-nums}
+.lang{background:#374151;color:#fff;border:0;border-radius:999px;padding:4px 10px;font:inherit;font-size:12px;font-weight:700;cursor:pointer}
+main{max-width:680px;margin:0 auto;padding:16px}
+.screen{display:none}.screen.active{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:14px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.card h2{font-size:13px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:12px;font-weight:700}
+.card h2.mt{margin-top:18px}
+label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin:10px 0 4px}
+input,select,textarea{width:100%;font:inherit;padding:11px 12px;border:1px solid #d1d5db;border-radius:10px;background:#fff;color:var(--text);min-height:48px}
+textarea{min-height:70px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+input:disabled,select:disabled,textarea:disabled{background:#f9fafb;color:#6b7280}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;font:inherit;font-weight:700;padding:13px;border-radius:12px;border:0;cursor:pointer;min-height:50px;background:#1f2937;color:#fff;margin-top:10px}
+.btn:active{filter:brightness(.9)}
+.btn.primary{background:var(--accent);color:#111}
+.btn.start{background:var(--green);font-size:24px;min-height:80px;letter-spacing:1px}
+.btn.stop{background:var(--red);font-size:24px;min-height:80px;letter-spacing:1px}
+.btn.ghost{background:transparent;color:var(--blue);border:1px solid var(--line)}
+.btn.danger{background:#fee2e2;color:#991b1b}
+.btn.sm{width:auto;min-height:38px;padding:6px 12px;font-size:13px;border-radius:8px;margin-top:0}
+.btn.sm.on{background:var(--accent);color:#111;border-color:var(--accent)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.row{display:flex;gap:10px}.row>*{flex:1;min-width:0}
+.wrap{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.timer{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:54px;font-weight:700;text-align:center;letter-spacing:2px;margin:6px 0;font-variant-numeric:tabular-nums;line-height:1.1}
+.timer.running{color:var(--green)}
+.status{text-align:center;color:var(--muted);font-size:14px;margin-bottom:8px;min-height:20px}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:700}
+.pill.on{background:#dcfce7;color:#166534}.pill.off{background:#f3f4f6;color:#374151}
+.result{background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;border-radius:10px;padding:12px;margin-top:12px;display:none;font-size:14px}
+.result strong{font-size:20px}
+.list{list-style:none}
+.list li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
+.list li:last-child{border-bottom:0}
+.list .meta{color:var(--muted);font-size:12px}
+.list .hrs{font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.total{display:flex;justify-content:space-between;font-weight:800;padding-top:10px;margin-top:6px;border-top:2px solid var(--text)}
+.muted{color:var(--muted);font-size:13px}
+.empty{color:var(--muted);text-align:center;padding:14px;font-size:14px;justify-content:center}
+details summary{cursor:pointer;font-weight:600;color:var(--blue);padding:6px 0;list-style:none}
+details summary::before{content:'▸ ';}
+details[open] summary::before{content:'▾ ';}
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:640px}
+th,td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap;vertical-align:top}
+th{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tr.entry{cursor:pointer}
+tr.entry:hover{background:#fafafa}
+tr.detail td{white-space:normal;background:#fffbeb;font-size:13px;color:#374151}
+.x{background:none;border:0;color:var(--red);font-size:18px;cursor:pointer;padding:0 6px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.stat{background:#f9fafb;border:1px solid var(--line);border-radius:10px;padding:10px}
+.stat .v{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums}
+.stat .l{font-size:12px;color:var(--muted)}
+.bars{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.bar{display:grid;grid-template-columns:minmax(90px,30%) 1fr 62px;align-items:center;gap:8px;font-size:13px}
+.bar .lb{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar .tr{background:#f3f4f6;border-radius:6px;height:18px;overflow:hidden}
+.bar .fl{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:6px;min-width:2px}
+.bar .vl{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+nav.tabs{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;z-index:10;padding-bottom:env(safe-area-inset-bottom)}
+nav.tabs button{flex:1;background:none;border:0;font:inherit;font-size:12px;font-weight:600;color:var(--muted);padding:8px 4px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}
+nav.tabs button .ico{font-size:22px}
+nav.tabs button.active{color:var(--accent)}
+.toast{position:fixed;left:50%;bottom:88px;transform:translateX(-50%);background:#111827;color:#fff;padding:10px 16px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:20;max-width:92%;text-align:center}
+.toast.show{opacity:1}
+.toast.bad{background:var(--red)}
+.banner{background:#fef3c7;border:1px solid #fcd34d;color:#92400e;border-radius:10px;padding:10px 12px;font-size:13px;margin-bottom:14px}
+.err{color:var(--red);font-size:13px;margin-top:6px;min-height:18px}
+.hidden{display:none!important}
+@media(min-width:700px){.timer{font-size:68px}}
+</style>
+</head>
+<body>
+<header>
+  <h1><span class="logo">⛑</span><span data-i18n="app_title">Site Time Tracker</span></h1>
+  <div class="hright"><div id="who" class="chip hidden"></div><button id="btnLang" class="lang" type="button">NL</button></div>
+</header>
+<main>
+  <div id="banner" class="banner hidden"></div>
+
+  <!-- ===== SIGN IN ===== -->
+  <section id="s-login" class="screen">
+    <div class="card">
+      <h2 data-i18n="signin">Sign in</h2>
+      <p class="muted" data-i18n="signin_help">Enter the mobile number you use for work. No name is needed: your number is your ID.</p>
+      <label for="phone" data-i18n="phone">Mobile number</label>
+      <input id="phone" type="tel" inputmode="tel" placeholder="+32 470 12 34 56" autocomplete="tel">
+      <div id="phoneErr" class="err"></div>
+      <button id="btnLogin" class="btn primary" type="button" data-i18n="continue">Continue</button>
+    </div>
+  </section>
+
+  <!-- ===== CLOCK ===== -->
+  <section id="s-clock" class="screen">
+    <div class="card">
+      <div class="status"><span id="statePill" class="pill off"></span></div>
+      <div id="timer" class="timer">00:00:00</div>
+      <div id="since" class="status"></div>
+      <label for="site" data-i18n="site">Work site</label>
+      <select id="site"></select>
+      <div id="siteCustomWrap" class="hidden">
+        <label for="siteCustom" data-i18n="site_custom">Location</label>
+        <input id="siteCustom" autocomplete="off">
+      </div>
+      <label for="plate" data-i18n="plate">License plate (optional)</label>
+      <input id="plate" placeholder="1-ABC-123" autocapitalize="characters" autocomplete="off">
+      <label for="notes" data-i18n="notes">Daily notes (optional)</label>
+      <textarea id="notes" rows="2"></textarea>
+      <div id="clockErr" class="err"></div>
+      <button id="btnStart" class="btn start" type="button">▶ <span data-i18n="start">START</span></button>
+      <button id="btnStop" class="btn stop hidden" type="button">■ <span data-i18n="stop">STOP</span></button>
+      <div id="result" class="result"></div>
+    </div>
+    <div class="card">
+      <details>
+        <summary data-i18n="manual_title">Enter start and end time manually</summary>
+        <p class="muted" data-i18n="manual_help">Forgot to press start? Enter the times here. If the end time is earlier than the start time, the shift ends the next day. The break is deducted automatically.</p>
+        <label for="mDate" data-i18n="date">Date</label><input id="mDate" type="date">
+        <div class="row">
+          <div><label for="mStart" data-i18n="start_t">Start</label><input id="mStart" type="time"></div>
+          <div><label for="mEnd" data-i18n="end_t">End</label><input id="mEnd" type="time"></div>
+        </div>
+        <label for="mSite" data-i18n="site">Work site</label><select id="mSite"></select>
+        <div id="mSiteCustomWrap" class="hidden"><label for="mSiteCustom" data-i18n="site_custom">Location</label><input id="mSiteCustom" autocomplete="off"></div>
+        <label for="mPlate" data-i18n="plate">License plate (optional)</label><input id="mPlate" autocapitalize="characters" autocomplete="off">
+        <label for="mNotes" data-i18n="notes">Daily notes (optional)</label><textarea id="mNotes" rows="2"></textarea>
+        <div id="mErr" class="err"></div>
+        <button id="btnManual" class="btn" type="button" data-i18n="save_entry">Save entry</button>
+      </details>
+    </div>
+    <button id="btnLogout" class="btn ghost" type="button" data-i18n="switch_number">Use a different number</button>
+  </section>
+
+  <!-- ===== MY HOURS ===== -->
+  <section id="s-hours" class="screen">
+    <div class="card">
+      <h2 data-i18n="this_week">This week</h2>
+      <ul id="weekList" class="list"></ul>
+      <div class="total"><span data-i18n="total">Total</span><span id="weekTotal">0h 00m</span></div>
+    </div>
+    <div class="card">
+      <h2 data-i18n="this_month">This month</h2>
+      <ul id="monthList" class="list"></ul>
+      <div class="total"><span data-i18n="total">Total</span><span id="monthTotal">0h 00m</span></div>
+    </div>
+    <div class="card">
+      <h2 data-i18n="earlier">Earlier entries</h2>
+      <ul id="histList" class="list"></ul>
+    </div>
+  </section>
+
+  <!-- ===== ADMIN ===== -->
+  <section id="s-admin" class="screen">
+    <div id="adminLock" class="card">
+      <h2 id="pinTitle"></h2>
+      <p id="pinHelp" class="muted"></p>
+      <label for="pin" data-i18n="pin">PIN</label>
+      <input id="pin" type="password" inputmode="numeric" maxlength="8" autocomplete="off">
+      <div id="pinConfirmWrap" class="hidden"><label for="pin2" data-i18n="repeat_pin">Repeat PIN</label><input id="pin2" type="password" inputmode="numeric" maxlength="8" autocomplete="off"></div>
+      <div id="pinErr" class="err"></div>
+      <button id="btnPin" class="btn primary" type="button"></button>
+    </div>
+
+    <div id="adminPanel" class="hidden">
+      <div class="card">
+        <h2 data-i18n="on_site_now">On site now</h2>
+        <ul id="liveList" class="list"></ul>
+      </div>
+
+      <div class="card">
+        <h2 data-i18n="overview">Overview</h2>
+        <div class="wrap" id="periodBtns">
+          <button class="btn sm ghost" data-period="day" type="button" data-i18n="day">Day</button>
+          <button class="btn sm ghost" data-period="week" type="button" data-i18n="week">Week</button>
+          <button class="btn sm ghost" data-period="w1" type="button">W1</button>
+          <button class="btn sm ghost" data-period="w2" type="button">W2</button>
+          <button class="btn sm ghost" data-period="w3" type="button">W3</button>
+          <button class="btn sm ghost" data-period="w4" type="button">W4</button>
+          <button class="btn sm ghost" data-period="month" type="button" data-i18n="month">Month</button>
+        </div>
+        <div class="row">
+          <div><label for="fFrom" data-i18n="from">From</label><input id="fFrom" type="date"></div>
+          <div><label for="fTo" data-i18n="to">To</label><input id="fTo" type="date"></div>
+        </div>
+        <label for="fSite" data-i18n="site">Work site</label><select id="fSite"></select>
+        <label for="fPhone" data-i18n="phone">Mobile number</label><select id="fPhone"></select>
+        <label for="fPlate" data-i18n="plate_short">License plate</label><select id="fPlate"></select>
+
+        <h2 class="mt" data-i18n="statistics">Statistics</h2>
+        <div class="stats" id="stats"></div>
+
+        <h2 class="mt" data-i18n="chart">Chart</h2>
+        <div class="wrap" id="chartBtns">
+          <button class="btn sm ghost on" data-group="day" type="button" data-i18n="by_day">Per day</button>
+          <button class="btn sm ghost" data-group="phone" type="button" data-i18n="by_employee">Per employee</button>
+          <button class="btn sm ghost" data-group="site" type="button" data-i18n="by_site">Per site</button>
+          <button class="btn sm ghost" data-group="plate" type="button" data-i18n="by_plate">Per plate</button>
+        </div>
+        <div id="chart" class="bars"></div>
+
+        <h2 class="mt" data-i18n="totals_emp">Totals per employee</h2>
+        <ul id="totalsList" class="list"></ul>
+        <div class="total"><span data-i18n="grand_total">Grand total</span><span id="grandTotal"></span></div>
+
+        <h2 class="mt" data-i18n="entries">Entries</h2>
+        <p class="muted" data-i18n="entries_help">Tap an entry to see its notes and details.</p>
+        <div class="tablewrap">
+          <table>
+            <thead><tr>
+              <th data-i18n="th_date">Date</th><th data-i18n="th_mobile">Mobile</th><th data-i18n="th_site">Site</th><th data-i18n="th_plate">Plate</th>
+              <th data-i18n="th_start">Start</th><th data-i18n="th_end">End</th><th class="num" data-i18n="th_break">Break</th><th class="num" data-i18n="th_hours">Hours</th><th></th>
+            </tr></thead>
+            <tbody id="entryRows"></tbody>
+          </table>
+        </div>
+        <button id="btnCsv" class="btn primary" type="button" data-i18n="export_csv">Export CSV</button>
+      </div>
+
+      <div class="card">
+        <h2 data-i18n="sites_title">Work sites</h2>
+        <ul id="siteList" class="list"></ul>
+        <div class="row" style="margin-top:10px">
+          <input id="newSite" data-i18n-ph="new_site" placeholder="New work site">
+          <button id="btnAddSite" class="btn sm primary" type="button" style="flex:0 0 auto;min-height:48px" data-i18n="add">Add</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 data-i18n="settings">Settings</h2>
+        <p class="muted"><span data-i18n="storage">Storage</span>: <strong id="storeMode"></strong></p>
+        <details open>
+          <summary data-i18n="break_rule">Break deduction</summary>
+          <div class="row">
+            <div><label for="cfgBreak" data-i18n="break_min">Break (minutes)</label><input id="cfgBreak" type="number" min="0" max="240" step="5"></div>
+            <div><label for="cfgBreakAfter" data-i18n="break_after">Only for shifts longer than (hours)</label><input id="cfgBreakAfter" type="number" min="0" max="24" step="0.5"></div>
+          </div>
+          <p class="muted" data-i18n="break_help">The break is deducted automatically when a shift is stopped or entered manually. Set the hours to 0 to always deduct the break.</p>
+          <button id="btnBreak" class="btn" type="button" data-i18n="save">Save</button>
+        </details>
+        <details>
+          <summary data-i18n="db_title">Shared database (Supabase)</summary>
+          <p class="muted" data-i18n="db_help">Leave both fields empty to keep data on this phone only. Fill them in on every phone to share all hours with the office. See README.md.</p>
+          <label for="cfgUrl" data-i18n="db_url">Project URL</label><input id="cfgUrl" placeholder="https://xxxx.supabase.co" autocomplete="off">
+          <label for="cfgKey" data-i18n="db_key">Anon (public) API key</label><input id="cfgKey" autocomplete="off">
+          <button id="btnCfg" class="btn" type="button" data-i18n="save_reload">Save and reload</button>
+        </details>
+        <details>
+          <summary data-i18n="change_pin">Change admin PIN</summary>
+          <label for="newPin" data-i18n="new_pin">New PIN</label><input id="newPin" type="password" inputmode="numeric" maxlength="8" autocomplete="off">
+          <button id="btnNewPin" class="btn" type="button" data-i18n="change_pin">Change admin PIN</button>
+        </details>
+        <button id="btnLock" class="btn ghost" type="button" data-i18n="lock_admin">Lock admin</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<nav class="tabs">
+  <button data-tab="clock" class="active" type="button"><span class="ico">⏱</span><span data-i18n="tab_clock">Clock</span></button>
+  <button data-tab="hours" type="button"><span class="ico">📋</span><span data-i18n="tab_hours">My hours</span></button>
+  <button data-tab="admin" type="button"><span class="ico">🔒</span><span data-i18n="tab_admin">Admin</span></button>
+</nav>
+<div id="toast" class="toast"></div>
+
+<script>
+(function () {
+'use strict';
+
+/* ---------- translations ---------- */
+const T = {
+  en: {
+    app_title:'Site Time Tracker', signin:'Sign in',
+    signin_help:'Enter the mobile number you use for work. No name is needed: your number is your ID.',
+    phone:'Mobile number', continue:'Continue', not_clocked:'Not clocked in', clocked:'Clocked in',
+    site:'Work site', select_site:'— Select a work site —', other_site:'Other location (type it yourself)', site_custom:'Location',
+    plate:'License plate (optional)', plate_short:'License plate', notes:'Daily notes (optional)', start:'START', stop:'STOP',
+    started_at:'Started at', on:'on', manual_title:'Enter start and end time manually',
+    manual_help:'Forgot to press start? Enter the times here. If the end time is earlier than the start time, the shift ends the next day. The break is deducted automatically.',
+    date:'Date', start_t:'Start', end_t:'End', save_entry:'Save entry', switch_number:'Use a different number',
+    this_week:'This week', this_month:'This month', total:'Total', earlier:'Earlier entries',
+    admin_access:'Admin access', set_pin_title:'Set the admin PIN',
+    set_pin_help:'No admin PIN has been set yet. Choose one now. It is needed to see all hours, manage work sites and change settings.',
+    pin_help:'Enter the admin PIN to see all hours, manage work sites and export reports.',
+    pin:'PIN', repeat_pin:'Repeat PIN', unlock:'Unlock', set_pin:'Set PIN',
+    on_site_now:'On site now', overview:'Overview', day:'Day', week:'Week', month:'Month', from:'From', to:'To',
+    all_sites:'All sites', all_numbers:'All numbers', all_plates:'All plates', no_plate:'(no plate)',
+    statistics:'Statistics', chart:'Chart', by_day:'Per day', by_employee:'Per employee', by_site:'Per site', by_plate:'Per plate',
+    totals_emp:'Totals per employee', grand_total:'Grand total', entries:'Entries', entries_help:'Tap an entry to see its notes and details.',
+    export_csv:'Export CSV', th_date:'Date', th_mobile:'Mobile', th_site:'Site', th_plate:'Plate', th_start:'Start', th_end:'End', th_break:'Break', th_hours:'Hours',
+    sites_title:'Work sites', new_site:'New work site', add:'Add', settings:'Settings', storage:'Storage',
+    local_mode:'This phone only', shared_mode:'Shared database', break_rule:'Break deduction', break_min:'Break (minutes)',
+    break_after:'Only for shifts longer than (hours)',
+    break_help:'The break is deducted automatically when a shift is stopped or entered manually. Set the hours to 0 to always deduct the break.',
+    save:'Save', db_title:'Shared database (Supabase)',
+    db_help:'Leave both fields empty to keep data on this phone only. Fill them in on every phone to share all hours with the office. See README.md.',
+    db_url:'Project URL', db_key:'Anon (public) API key', save_reload:'Save and reload', change_pin:'Change admin PIN', new_pin:'New PIN',
+    lock_admin:'Lock admin', tab_clock:'Clock', tab_hours:'My hours', tab_admin:'Admin',
+    hours_total:'Hours', shifts:'Shifts', days_worked:'Days worked', employees:'Employees', avg_day:'Avg. per day', break_total:'Break time',
+    err_phone:'Enter a valid mobile number (at least 8 digits).', err_site:'Please select your work site.', err_custom:'Please type the location.',
+    err_manual:'Please fill in the date, start time and end time.', err_pin_format:'Choose a PIN of 4 to 8 digits.',
+    err_pin_match:'The two PINs do not match.', err_pin_wrong:'Wrong PIN.', err_site_empty:'Type a name for the work site.',
+    confirm_stop:'Stop the timer now?', stop_first:'Stop your shift first.', confirm_delete:'Delete this entry?', confirm_del_site:'Remove this work site?',
+    result:'Shift finished at {end}. Worked {gross}, break {brk} min.', counted:'Counted', today_total:'Total today',
+    toast_in:'Clocked in at {t}', saved:'Saved', pin_set:'Admin PIN set.', pin_changed:'Admin PIN changed.', settings_saved:'Settings saved.',
+    no_hours:'No hours in this period yet.', nothing:'Nothing yet.', none:'No entries in this period.', running:'running', manual_tag:'manual',
+    nobody:'Nobody is clocked in.', since:'since', break_lbl:'break', notes_none:'(no notes)', gross:'Gross', deleted:'Entry deleted.',
+    db_error:'Could not reach the shared database: {msg}. Check the settings under Admin.', csv_note:'Notes', csv_manual:'Manual', yes:'yes', no:'no',
+  },
+  nl: {
+    app_title:'Werf Urenregistratie', signin:'Aanmelden',
+    signin_help:'Geef het gsm-nummer in dat je voor het werk gebruikt. Geen naam nodig: je nummer is je ID.',
+    phone:'Gsm-nummer', continue:'Doorgaan', not_clocked:'Niet ingeklokt', clocked:'Ingeklokt',
+    site:'Werf', select_site:'— Kies een werf —', other_site:'Andere locatie (zelf invullen)', site_custom:'Locatie',
+    plate:'Nummerplaat (optioneel)', plate_short:'Nummerplaat', notes:'Dagnotities (optioneel)', start:'START', stop:'STOP',
+    started_at:'Gestart om', on:'op', manual_title:'Begin- en eindtijd handmatig ingeven',
+    manual_help:'Vergeten op start te drukken? Geef de tijden hier in. Als de eindtijd vroeger is dan de begintijd, eindigt de shift de volgende dag. De pauze wordt automatisch afgetrokken.',
+    date:'Datum', start_t:'Begin', end_t:'Einde', save_entry:'Opslaan', switch_number:'Ander nummer gebruiken',
+    this_week:'Deze week', this_month:'Deze maand', total:'Totaal', earlier:'Eerdere registraties',
+    admin_access:'Beheer', set_pin_title:'Admin-pincode instellen',
+    set_pin_help:'Er is nog geen admin-pincode. Kies er nu een. Die is nodig om alle uren te zien, werven te beheren en instellingen te wijzigen.',
+    pin_help:'Geef de admin-pincode in om alle uren te zien, werven te beheren en rapporten te exporteren.',
+    pin:'Pincode', repeat_pin:'Herhaal pincode', unlock:'Ontgrendelen', set_pin:'Pincode instellen',
+    on_site_now:'Nu op de werf', overview:'Overzicht', day:'Dag', week:'Week', month:'Maand', from:'Van', to:'Tot',
+    all_sites:'Alle werven', all_numbers:'Alle nummers', all_plates:'Alle nummerplaten', no_plate:'(geen plaat)',
+    statistics:'Statistieken', chart:'Grafiek', by_day:'Per dag', by_employee:'Per werknemer', by_site:'Per werf', by_plate:'Per nummerplaat',
+    totals_emp:'Totalen per werknemer', grand_total:'Algemeen totaal', entries:'Registraties', entries_help:'Tik op een registratie om de notities en details te zien.',
+    export_csv:'Exporteer CSV', th_date:'Datum', th_mobile:'Gsm', th_site:'Werf', th_plate:'Plaat', th_start:'Begin', th_end:'Einde', th_break:'Pauze', th_hours:'Uren',
+    sites_title:'Werven', new_site:'Nieuwe werf', add:'Toevoegen', settings:'Instellingen', storage:'Opslag',
+    local_mode:'Enkel deze telefoon', shared_mode:'Gedeelde database', break_rule:'Pauze-aftrek', break_min:'Pauze (minuten)',
+    break_after:'Enkel bij shifts langer dan (uren)',
+    break_help:'De pauze wordt automatisch afgetrokken bij het stoppen of handmatig ingeven van een shift. Zet de uren op 0 om de pauze altijd af te trekken.',
+    save:'Opslaan', db_title:'Gedeelde database (Supabase)',
+    db_help:'Laat beide velden leeg om de gegevens enkel op deze telefoon te bewaren. Vul ze op elke telefoon in om alle uren te delen met het kantoor. Zie README.md.',
+    db_url:'Project-URL', db_key:'Anon (publieke) API-sleutel', save_reload:'Opslaan en herladen', change_pin:'Admin-pincode wijzigen', new_pin:'Nieuwe pincode',
+    lock_admin:'Beheer vergrendelen', tab_clock:'Klok', tab_hours:'Mijn uren', tab_admin:'Beheer',
+    hours_total:'Uren', shifts:'Shifts', days_worked:'Gewerkte dagen', employees:'Werknemers', avg_day:'Gem. per dag', break_total:'Pauzetijd',
+    err_phone:'Geef een geldig gsm-nummer in (minstens 8 cijfers).', err_site:'Kies je werf.', err_custom:'Typ de locatie.',
+    err_manual:'Vul datum, begintijd en eindtijd in.', err_pin_format:'Kies een pincode van 4 tot 8 cijfers.',
+    err_pin_match:'De twee pincodes komen niet overeen.', err_pin_wrong:'Verkeerde pincode.', err_site_empty:'Typ een naam voor de werf.',
+    confirm_stop:'Timer nu stoppen?', stop_first:'Stop eerst je shift.', confirm_delete:'Deze registratie verwijderen?', confirm_del_site:'Deze werf verwijderen?',
+    result:'Shift beëindigd om {end}. Gewerkt {gross}, pauze {brk} min.', counted:'Geteld', today_total:'Totaal vandaag',
+    toast_in:'Ingeklokt om {t}', saved:'Opgeslagen', pin_set:'Admin-pincode ingesteld.', pin_changed:'Admin-pincode gewijzigd.', settings_saved:'Instellingen opgeslagen.',
+    no_hours:'Nog geen uren in deze periode.', nothing:'Nog niets.', none:'Geen registraties in deze periode.', running:'bezig', manual_tag:'handmatig',
+    nobody:'Niemand is ingeklokt.', since:'sinds', break_lbl:'pauze', notes_none:'(geen notities)', gross:'Bruto', deleted:'Registratie verwijderd.',
+    db_error:'Kan de gedeelde database niet bereiken: {msg}. Controleer de instellingen onder Beheer.', csv_note:'Notities', csv_manual:'Handmatig', yes:'ja', no:'nee',
+  }
+};
+let lang = 'en';
+const t = (k, v) => { let s = (T[lang] && T[lang][k]) || T.en[k] || k; if (v) for (const x in v) s = s.replace('{' + x + '}', v[x]); return s; };
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const K = { entries:'stt_entries', sites:'stt_sites', phone:'stt_phone', plate:'stt_plate', site:'stt_site', cfg:'stt_cfg', settings:'stt_settings', lang:'stt_lang' };
+const lsGet = (k, d) => { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+const lsDel = k => { try { localStorage.removeItem(k); } catch (e) {} };
+const pad = n => String(n).padStart(2, '0');
+const uid = () => (crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => { const r = Math.random() * 16 | 0; return (c === 'x' ? r : (r & 3 | 8)).toString(16); }));
+const ymd = d => { d = new Date(d); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); };
+const hm = d => { d = new Date(d); return pad(d.getHours()) + ':' + pad(d.getMinutes()); };
+const durMin = m => { m = Math.max(0, Math.round(m)); return Math.floor(m / 60) + 'h ' + pad(m % 60) + 'm'; };
+const durH = h => durMin(h * 60);
+const minutesBetween = (a, b) => (new Date(b) - new Date(a)) / 60000;
+const normPhone = s => { s = (s || '').replace(/[^\d+]/g, ''); if (s.startsWith('00')) s = '+' + s.slice(2); return s; };
+const normPlate = s => (s || '').trim().toUpperCase().replace(/\s+/g, ' ');
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+const dayStart = d => { d = new Date(d); d.setHours(0, 0, 0, 0); return d; };
+const weekStart = d => { d = dayStart(d); d.setDate(d.getDate() - (d.getDay() + 6) % 7); return d; };
+const monthStart = d => { d = dayStart(d); d.setDate(1); return d; };
+const addDays = (d, n) => { d = new Date(d); d.setDate(d.getDate() + n); return d; };
+async function sha(s) {
+  if (crypto.subtle) { const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)); return Array.from(new Uint8Array(b)).map(x => x.toString(16).padStart(2, '0')).join(''); }
+  let h = 5381; for (const c of s) h = ((h * 33) ^ c.charCodeAt(0)) >>> 0; return 'w' + h.toString(16);
+}
+let toastT;
+function toast(msg, bad) { const el = $('#toast'); el.textContent = msg; el.className = 'toast show' + (bad ? ' bad' : ''); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('show'), bad ? 5000 : 2600); }
+function err(sel, msg) { $(sel).textContent = msg || ''; return false; }
+function banner(msg) { const b = $('#banner'); b.textContent = msg; b.classList.toggle('hidden', !msg); }
+
+/* ---------- storage: local (this phone) or shared (Supabase REST) ---------- */
+const DEFAULT_SITES = ['Main yard'];
+const LocalStore = {
+  mode: 'local',
+  async getSites() { return lsGet(K.sites, DEFAULT_SITES); },
+  async setSites(l) { lsSet(K.sites, l); },
+  async getEntries() { return lsGet(K.entries, []); },
+  async saveEntry(e) { const all = lsGet(K.entries, []); const i = all.findIndex(x => x.id === e.id); if (i >= 0) all[i] = e; else all.push(e); lsSet(K.entries, all); },
+  async deleteEntry(id) { lsSet(K.entries, lsGet(K.entries, []).filter(e => e.id !== id)); },
+  async getSetting(k) { const v = lsGet(K.settings, {})[k]; return v == null ? null : v; },
+  async setSetting(k, v) { const s = lsGet(K.settings, {}); s[k] = v; lsSet(K.settings, s); }
+};
+function RemoteStore(url, key) {
+  const base = url.replace(/\/+$/, '') + '/rest/v1/';
+  const H = { apikey: key, Authorization: 'Bearer ' + key, 'Content-Type': 'application/json' };
+  async function req(path, o) {
+    o = o || {};
+    const r = await fetch(base + path, { method: o.method || 'GET', headers: Object.assign({}, H, o.headers || {}), body: o.body === undefined ? undefined : JSON.stringify(o.body) });
+    if (!r.ok) throw new Error(r.status + ' ' + (await r.text()).slice(0, 200));
+    const txt = await r.text(); return txt ? JSON.parse(txt) : null;
+  }
+  const toRow = e => ({ id: e.id, phone: e.phone, site: e.site, plate: e.plate || '', start_at: e.start, end_at: e.end, break_min: e.breakMin || 0, hours: e.hours, notes: e.notes || '', manual: !!e.manual });
+  const fromRow = r => ({ id: r.id, phone: r.phone, site: r.site, plate: r.plate || '', start: r.start_at, end: r.end_at, breakMin: Number(r.break_min || 0), hours: r.hours == null ? null : Number(r.hours), notes: r.notes || '', manual: !!r.manual });
+  return {
+    mode: 'shared',
+    async getSites() { return (await req('sites?select=name&order=name.asc')).map(r => r.name); },
+    async setSites(list) {
+      const cur = await this.getSites();
+      const add = list.filter(s => !cur.includes(s)), del = cur.filter(s => !list.includes(s));
+      if (add.length) await req('sites', { method: 'POST', headers: { Prefer: 'resolution=ignore-duplicates' }, body: add.map(name => ({ name })) });
+      for (const name of del) await req('sites?name=eq.' + encodeURIComponent(name), { method: 'DELETE' });
+    },
+    async getEntries() { return (await req('entries?select=*&order=start_at.desc&limit=5000')).map(fromRow); },
+    async saveEntry(e) { await req('entries', { method: 'POST', headers: { Prefer: 'resolution=merge-duplicates' }, body: toRow(e) }); },
+    async deleteEntry(id) { await req('entries?id=eq.' + encodeURIComponent(id), { method: 'DELETE' }); },
+    async getSetting(k) { const r = await req('settings?select=value&key=eq.' + encodeURIComponent(k)); return r.length ? r[0].value : null; },
+    async setSetting(k, v) { await req('settings', { method: 'POST', headers: { Prefer: 'resolution=merge-duplicates' }, body: { key: k, value: String(v) } }); }
+  };
+}
+
+/* ---------- state ---------- */
+let store = LocalStore, phone = lsGet(K.phone, null), sites = [], entries = [], active = null, tick = null, adminOpen = false;
+let breakMin = 30, breakAfterH = 6, chartGroup = 'day', openDetail = null;
+
+function calc(start, end) {
+  const grossMin = Math.round(minutesBetween(start, end));
+  const brk = grossMin > breakAfterH * 60 ? Math.min(breakMin, grossMin) : 0;
+  return { grossMin, breakMin: brk, hours: Math.round((grossMin - brk) / 60 * 100) / 100 };
+}
+const netMin = e => e.end ? Math.round((e.hours || 0) * 60) : Math.round(minutesBetween(e.start, new Date()));
+const sumHours = list => list.reduce((a, e) => a + (e.end ? (e.hours || 0) : 0), 0);
+
+/* ---------- i18n apply ---------- */
+function applyLang() {
+  document.documentElement.lang = lang;
+  $$('[data-i18n]').forEach(el => el.textContent = t(el.dataset.i18n));
+  $$('[data-i18n-ph]').forEach(el => el.placeholder = t(el.dataset.i18nPh));
+  $('#btnLang').textContent = lang === 'en' ? 'NL' : 'EN';
+  document.title = t('app_title');
+  $('#storeMode').textContent = t(store.mode === 'local' ? 'local_mode' : 'shared_mode');
+  renderSites(); renderClock(); renderHours(); prepPinScreen(); if (adminOpen) renderAdmin();
+}
+
+/* ---------- init ---------- */
+async function init() {
+  lang = lsGet(K.lang, (navigator.language || '').toLowerCase().startsWith('nl') ? 'nl' : 'en');
+  const cfg = lsGet(K.cfg, null);
+  if (cfg && cfg.url && cfg.key) store = RemoteStore(cfg.url, cfg.key);
+  $('#cfgUrl').value = cfg ? cfg.url || '' : ''; $('#cfgKey').value = cfg ? cfg.key || '' : '';
+  $('#mDate').value = ymd(new Date());
+  bind();
+  await reload();
+  applyLang();
+  showTab('clock');
+}
+async function reload() {
+  try {
+    sites = await store.getSites();
+    entries = await store.getEntries();
+    const b = await store.getSetting('break_min'), a = await store.getSetting('break_after_h');
+    if (b != null && b !== '') breakMin = Number(b);
+    if (a != null && a !== '') breakAfterH = Number(a);
+    banner('');
+  } catch (e) { banner(t('db_error', { msg: e.message })); }
+  $('#cfgBreak').value = breakMin; $('#cfgBreakAfter').value = breakAfterH;
+  entries.sort((a, b) => new Date(b.start) - new Date(a.start));
+  active = phone ? (entries.find(e => e.phone === phone && !e.end) || null) : null;
+  renderSites(); renderClock(); renderHours(); if (adminOpen) renderAdmin();
+}
+
+/* ---------- tabs ---------- */
+function showTab(name) {
+  $$('nav.tabs button').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+  $$('.screen').forEach(s => s.classList.remove('active'));
+  if (name !== 'admin' && !phone) { $('#s-login').classList.add('active'); return; }
+  if (name === 'admin') { if (!adminOpen) prepPinScreen(); }
+  if (name === 'hours') renderHours();
+  $('#s-' + name).classList.add('active');
+}
+
+/* ---------- sites ---------- */
+function fillSiteSelect(sel, current, withOther) {
+  const s = $(sel); const val = current != null ? current : s.value;
+  let html = '<option value="">' + esc(t('select_site')) + '</option>' + sites.map(x => '<option value="' + esc(x) + '">' + esc(x) + '</option>').join('');
+  if (withOther) html += '<option value="__other__">' + esc(t('other_site')) + '</option>';
+  s.innerHTML = html; s.value = val;
+  if (s.value !== val) s.value = '';
+}
+function renderSites() {
+  fillSiteSelect('#site', null, true); fillSiteSelect('#mSite', null, true);
+  syncCustom('#site', '#siteCustomWrap'); syncCustom('#mSite', '#mSiteCustomWrap');
+  $('#siteList').innerHTML = sites.map(s => '<li><span>' + esc(s) + '</span><button class="x" data-del-site="' + esc(s) + '" type="button" title="Remove">✕</button></li>').join('') || '<li class="empty">' + esc(t('nothing')) + '</li>';
+}
+function syncCustom(sel, wrap) { $(wrap).classList.toggle('hidden', $(sel).value !== '__other__'); }
+function pickedSite(sel, customSel, errSel) {
+  const v = $(sel).value;
+  if (!v) { err(errSel, t('err_site')); return null; }
+  if (v === '__other__') { const c = $(customSel).value.trim(); if (!c) { err(errSel, t('err_custom')); return null; } return c; }
+  return v;
+}
+
+/* ---------- clock screen ---------- */
+function renderClock() {
+  const running = !!active;
+  $('#statePill').className = 'pill ' + (running ? 'on' : 'off');
+  $('#statePill').textContent = running ? t('clocked') + ' · ' + active.site : t('not_clocked');
+  $('#btnStart').classList.toggle('hidden', running); $('#btnStop').classList.toggle('hidden', !running);
+  $('#site').disabled = running; $('#siteCustom').disabled = running; $('#plate').disabled = running;
+  if (running) {
+    if (sites.includes(active.site)) { $('#site').value = active.site; } else { $('#site').value = '__other__'; $('#siteCustom').value = active.site; }
+    syncCustom('#site', '#siteCustomWrap');
+    $('#plate').value = active.plate || '';
+    if (document.activeElement !== $('#notes')) $('#notes').value = active.notes || '';
+    $('#since').textContent = t('started_at') + ' ' + hm(active.start) + (ymd(active.start) !== ymd(new Date()) ? ' ' + t('on') + ' ' + ymd(active.start) : '');
+  } else {
+    $('#since').textContent = '';
+    if (!$('#site').value) { $('#site').value = lsGet(K.site, ''); if ($('#site').value !== lsGet(K.site, '')) $('#site').value = ''; syncCustom('#site', '#siteCustomWrap'); }
+    if (!$('#plate').value) $('#plate').value = lsGet(K.plate, '');
+  }
+  updateTimer();
+  clearInterval(tick); if (running) tick = setInterval(updateTimer, 1000);
+  $('#who').textContent = phone || ''; $('#who').classList.toggle('hidden', !phone);
+}
+function updateTimer() {
+  const el = $('#timer');
+  if (!active) { el.textContent = '00:00:00'; el.classList.remove('running'); return; }
+  const s = Math.max(0, Math.floor((Date.now() - new Date(active.start)) / 1000));
+  el.textContent = pad(Math.floor(s / 3600)) + ':' + pad(Math.floor(s % 3600 / 60)) + ':' + pad(s % 60);
+  el.classList.add('running');
+}
+async function start() {
+  const site = pickedSite('#site', '#siteCustom', '#clockErr'); if (!site) return;
+  const plate = normPlate($('#plate').value);
+  err('#clockErr', '');
+  const e = { id: uid(), phone, site, plate, start: new Date().toISOString(), end: null, breakMin: 0, hours: null, notes: $('#notes').value.trim(), manual: false };
+  lsSet(K.site, $('#site').value); lsSet(K.plate, plate);
+  try { await store.saveEntry(e); } catch (x) { return toast(x.message, true); }
+  entries.unshift(e); active = e; $('#result').style.display = 'none';
+  renderClock(); renderHours(); toast(t('toast_in', { t: hm(e.start) }) + ' · ' + site);
+}
+async function stop() {
+  if (!active || !confirm(t('confirm_stop'))) return;
+  const end = new Date().toISOString(); const c = calc(active.start, end);
+  const e = Object.assign({}, active, { end, breakMin: c.breakMin, hours: c.hours, notes: $('#notes').value.trim() });
+  try { await store.saveEntry(e); } catch (x) { return toast(x.message, true); }
+  const i = entries.findIndex(x => x.id === e.id); if (i >= 0) entries[i] = e; else entries.unshift(e);
+  active = null; $('#notes').value = ''; renderClock(); renderHours();
+  const todayH = sumHours(entries.filter(x => x.phone === phone && x.end && ymd(x.start) === ymd(new Date())));
+  const r = $('#result'); r.style.display = 'block';
+  r.innerHTML = esc(t('result', { end: hm(end), gross: durMin(c.grossMin), brk: c.breakMin })) + '<br>' + esc(t('counted')) + ': <strong>' + durH(c.hours) + '</strong> (' + c.hours.toFixed(2) + ' h) · ' + esc(e.site) + '<br>' + esc(t('today_total')) + ': <b>' + durH(todayH) + '</b>';
+}
+async function manual() {
+  const d = $('#mDate').value, s = $('#mStart').value, en = $('#mEnd').value;
+  if (!d || !s || !en) return err('#mErr', t('err_manual'));
+  const site = pickedSite('#mSite', '#mSiteCustom', '#mErr'); if (!site) return;
+  const start = new Date(d + 'T' + s), end = new Date(d + 'T' + en); if (end <= start) end.setDate(end.getDate() + 1);
+  const c = calc(start, end);
+  const e = { id: uid(), phone, site, plate: normPlate($('#mPlate').value), start: start.toISOString(), end: end.toISOString(), breakMin: c.breakMin, hours: c.hours, notes: $('#mNotes').value.trim(), manual: true };
+  try { await store.saveEntry(e); } catch (x) { return toast(x.message, true); }
+  entries.unshift(e); entries.sort((a, b) => new Date(b.start) - new Date(a.start));
+  err('#mErr', ''); $('#mStart').value = ''; $('#mEnd').value = ''; $('#mNotes').value = '';
+  renderHours(); toast(t('saved') + ': ' + durH(c.hours) + ' · ' + d);
+}
+
+/* ---------- my hours ---------- */
+function entryLi(e) {
+  const open = !e.end;
+  return '<li><div><div>' + esc(e.site) + (e.plate ? ' <span class="meta">· ' + esc(e.plate) + '</span>' : '') + '</div>' +
+    '<div class="meta">' + ymd(e.start) + ' · ' + hm(e.start) + ' – ' + (open ? '…' : hm(e.end)) + (e.breakMin ? ' · ' + t('break_lbl') + ' ' + e.breakMin + 'm' : '') + (e.manual ? ' · ' + t('manual_tag') : '') + '</div>' +
+    (e.notes ? '<div class="meta">📝 ' + esc(e.notes) + '</div>' : '') + '</div>' +
+    '<div class="hrs">' + (open ? '<span class="pill on">' + esc(t('running')) + '</span>' : durH(e.hours)) + '</div></li>';
+}
+function renderHours() {
+  if (!phone) return;
+  const mine = entries.filter(e => e.phone === phone);
+  const ws = weekStart(new Date()), ms = monthStart(new Date());
+  const week = mine.filter(e => new Date(e.start) >= ws), month = mine.filter(e => new Date(e.start) >= ms);
+  const older = mine.filter(e => new Date(e.start) < ms).slice(0, 60);
+  $('#weekList').innerHTML = week.map(entryLi).join('') || '<li class="empty">' + esc(t('no_hours')) + '</li>';
+  $('#weekTotal').textContent = durH(sumHours(week));
+  $('#monthList').innerHTML = month.map(entryLi).join('') || '<li class="empty">' + esc(t('no_hours')) + '</li>';
+  $('#monthTotal').textContent = durH(sumHours(month));
+  $('#histList').innerHTML = older.map(entryLi).join('') || '<li class="empty">' + esc(t('nothing')) + '</li>';
+}
+
+/* ---------- admin ---------- */
+async function prepPinScreen() {
+  let stored = null; try { stored = await store.getSetting('admin_pin'); } catch (e) {}
+  const setup = !stored;
+  $('#pinTitle').textContent = t(setup ? 'set_pin_title' : 'admin_access');
+  $('#pinHelp').textContent = t(setup ? 'set_pin_help' : 'pin_help');
+  $('#pinConfirmWrap').classList.toggle('hidden', !setup);
+  $('#btnPin').textContent = t(setup ? 'set_pin' : 'unlock');
+}
+async function unlock() {
+  const pin = $('#pin').value.trim();
+  let stored = null; try { stored = await store.getSetting('admin_pin'); } catch (e) { return toast(e.message, true); }
+  if (!stored) {
+    if (!/^\d{4,8}$/.test(pin)) return err('#pinErr', t('err_pin_format'));
+    if (pin !== $('#pin2').value.trim()) return err('#pinErr', t('err_pin_match'));
+    try { await store.setSetting('admin_pin', await sha(pin)); } catch (e) { return toast(e.message, true); }
+    toast(t('pin_set'));
+  } else if (await sha(pin) !== stored) return err('#pinErr', t('err_pin_wrong'));
+  err('#pinErr', ''); $('#pin').value = ''; $('#pin2').value = '';
+  adminOpen = true; $('#adminLock').classList.add('hidden'); $('#adminPanel').classList.remove('hidden');
+  setPeriod('week'); renderAdmin();
+}
+function lock() { adminOpen = false; $('#adminPanel').classList.add('hidden'); $('#adminLock').classList.remove('hidden'); prepPinScreen(); }
+
+function setPeriod(p) {
+  const now = new Date(); let from, to;
+  if (p === 'day') { from = dayStart(now); to = from; }
+  else if (p === 'week') { from = weekStart(now); to = addDays(from, 6); }
+  else if (p === 'month') { from = monthStart(now); to = addDays(monthStart(addDays(from, 40)), -1); }
+  else { const n = Number(p.slice(1)); const ms = monthStart(now); from = addDays(ms, (n - 1) * 7); to = n === 4 ? addDays(monthStart(addDays(ms, 40)), -1) : addDays(from, 6); }
+  $('#fFrom').value = ymd(from); $('#fTo').value = ymd(to);
+  $$('#periodBtns button').forEach(b => b.classList.toggle('on', b.dataset.period === p));
+}
+function fillFilter(sel, values, allKey, current) {
+  const s = $(sel); const val = current != null ? current : s.value;
+  s.innerHTML = '<option value="">' + esc(t(allKey)) + '</option>' + values.map(v => '<option value="' + esc(v) + '">' + esc(v || t('no_plate')) + '</option>').join('');
+  s.value = val; if (s.value !== val) s.value = '';
+}
+function filtered() {
+  const from = $('#fFrom').value, to = $('#fTo').value, site = $('#fSite').value, ph = $('#fPhone').value, pl = $('#fPlate').value;
+  return entries.filter(e => { const d = ymd(e.start); return (!from || d >= from) && (!to || d <= to) && (!site || e.site === site) && (!ph || e.phone === ph) && (pl === '' || e.plate === pl); });
+}
+function renderAdmin() {
+  // filters
+  const uniq = arr => Array.from(new Set(arr)).sort();
+  fillFilter('#fSite', uniq(sites.concat(entries.map(e => e.site))), 'all_sites');
+  fillFilter('#fPhone', uniq(entries.map(e => e.phone)), 'all_numbers');
+  const plates = uniq(entries.map(e => e.plate || '')); fillFilter('#fPlate', plates, 'all_plates');
+  // live
+  const live = entries.filter(e => !e.end);
+  $('#liveList').innerHTML = live.map(e => '<li><div><div><b>' + esc(e.phone) + '</b> · ' + esc(e.site) + (e.plate ? ' <span class="meta">· ' + esc(e.plate) + '</span>' : '') + '</div><div class="meta">' + t('since') + ' ' + hm(e.start) + (ymd(e.start) !== ymd(new Date()) ? ' (' + ymd(e.start) + ')' : '') + '</div></div><div class="hrs">' + durMin(minutesBetween(e.start, new Date())) + '</div></li>').join('') || '<li class="empty">' + esc(t('nobody')) + '</li>';
+  // report
+  const list = filtered(), done = list.filter(e => e.end);
+  const total = sumHours(done);
+  const days = new Set(done.map(e => ymd(e.start))).size, emps = new Set(done.map(e => e.phone)).size;
+  const brk = done.reduce((a, e) => a + (e.breakMin || 0), 0);
+  const stat = (v, l) => '<div class="stat"><div class="v">' + v + '</div><div class="l">' + esc(t(l)) + '</div></div>';
+  $('#stats').innerHTML = stat(durH(total), 'hours_total') + stat(done.length, 'shifts') + stat(days, 'days_worked') + stat(emps, 'employees') + stat(days ? durH(total / days) : '–', 'avg_day') + stat(durMin(brk), 'break_total');
+  // chart
+  const groups = {};
+  done.forEach(e => { const k = chartGroup === 'day' ? ymd(e.start) : chartGroup === 'phone' ? e.phone : chartGroup === 'site' ? e.site : (e.plate || t('no_plate')); groups[k] = (groups[k] || 0) + (e.hours || 0); });
+  let keys = Object.keys(groups); keys = chartGroup === 'day' ? keys.sort() : keys.sort((a, b) => groups[b] - groups[a]);
+  const max = Math.max(1, ...keys.map(k => groups[k]));
+  $('#chart').innerHTML = keys.map(k => '<div class="bar"><div class="lb" title="' + esc(k) + '">' + esc(k) + '</div><div class="tr"><div class="fl" style="width:' + (groups[k] / max * 100).toFixed(1) + '%"></div></div><div class="vl">' + groups[k].toFixed(2) + ' h</div></div>').join('') || '<div class="empty">' + esc(t('none')) + '</div>';
+  $$('#chartBtns button').forEach(b => b.classList.toggle('on', b.dataset.group === chartGroup));
+  // totals per employee
+  const per = {}; done.forEach(e => { per[e.phone] = per[e.phone] || { h: 0, n: 0, d: new Set() }; per[e.phone].h += e.hours || 0; per[e.phone].n++; per[e.phone].d.add(ymd(e.start)); });
+  $('#totalsList').innerHTML = Object.keys(per).sort().map(p => '<li><div><b>' + esc(p) + '</b><div class="meta">' + per[p].n + ' ' + t('shifts').toLowerCase() + ' · ' + per[p].d.size + ' ' + t('days_worked').toLowerCase() + '</div></div><div class="hrs">' + durH(per[p].h) + ' <span class="meta">(' + per[p].h.toFixed(2) + ')</span></div></li>').join('') || '<li class="empty">' + esc(t('none')) + '</li>';
+  $('#grandTotal').textContent = durH(total) + ' (' + total.toFixed(2) + ' h)';
+  // table
+  $('#entryRows').innerHTML = list.map(e => {
+    const row = '<tr class="entry" data-id="' + e.id + '"><td>' + ymd(e.start) + '</td><td>' + esc(e.phone) + '</td><td>' + esc(e.site) + '</td><td>' + esc(e.plate) + '</td><td>' + hm(e.start) + '</td><td>' + (e.end ? hm(e.end) : '<span class="pill on">' + esc(t('running')) + '</span>') + '</td><td class="num">' + (e.breakMin || 0) + '</td><td class="num"><b>' + (e.end ? e.hours.toFixed(2) : '') + '</b>' + (e.notes ? ' 📝' : '') + '</td><td><button class="x" data-del="' + e.id + '" type="button">✕</button></td></tr>';
+    const det = openDetail === e.id ? '<tr class="detail"><td colspan="9">' + (e.end ? esc(t('gross')) + ': ' + durMin(minutesBetween(e.start, e.end)) + ' · ' + esc(t('break_lbl')) + ': ' + (e.breakMin || 0) + ' min · ' + esc(t('counted')) + ': ' + durH(e.hours) + (e.manual ? ' · ' + esc(t('manual_tag')) : '') + '<br>' : '') + '📝 ' + (e.notes ? esc(e.notes) : esc(t('notes_none'))) + '</td></tr>' : '';
+    return row + det;
+  }).join('') || '<tr><td colspan="9" class="empty">' + esc(t('none')) + '</td></tr>';
+}
+function exportCsv() {
+  const q = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
+  const head = [t('th_date'), t('th_mobile'), t('th_site'), t('th_plate'), t('th_start'), t('th_end'), t('th_break') + ' (min)', t('th_hours'), t('csv_manual'), t('csv_note')];
+  const rows = filtered().map(e => [ymd(e.start), e.phone, e.site, e.plate, hm(e.start), e.end ? hm(e.end) : '', e.breakMin || 0, e.end ? e.hours.toFixed(2) : '', e.manual ? t('yes') : t('no'), e.notes || '']);
+  const text = [head].concat(rows).map(r => r.map(q).join(';')).join('\r\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['\ufeff' + text], { type: 'text/csv;charset=utf-8' }));
+  a.download = 'hours_' + $('#fFrom').value + '_' + $('#fTo').value + '.csv';
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+
+/* ---------- events ---------- */
+function bind() {
+  $$('nav.tabs button').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
+  $('#btnLang').addEventListener('click', () => { lang = lang === 'en' ? 'nl' : 'en'; lsSet(K.lang, lang); $$('.err').forEach(e => e.textContent = ''); applyLang(); });
+  $('#btnLogin').addEventListener('click', login);
+  $('#phone').addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
+  $('#btnLogout').addEventListener('click', () => { if (active) return toast(t('stop_first'), true); phone = null; lsDel(K.phone); renderClock(); showTab('clock'); });
+  $('#site').addEventListener('change', () => syncCustom('#site', '#siteCustomWrap'));
+  $('#mSite').addEventListener('change', () => syncCustom('#mSite', '#mSiteCustomWrap'));
+  $('#plate').addEventListener('input', e => { e.target.value = e.target.value.toUpperCase(); });
+  $('#mPlate').addEventListener('input', e => { e.target.value = e.target.value.toUpperCase(); });
+  $('#btnStart').addEventListener('click', start);
+  $('#btnStop').addEventListener('click', stop);
+  $('#btnManual').addEventListener('click', manual);
+  $('#btnPin').addEventListener('click', unlock);
+  $('#pin').addEventListener('keydown', e => { if (e.key === 'Enter') unlock(); });
+  $('#pin2').addEventListener('keydown', e => { if (e.key === 'Enter') unlock(); });
+  $('#btnLock').addEventListener('click', lock);
+  $$('#periodBtns button').forEach(b => b.addEventListener('click', () => { setPeriod(b.dataset.period); renderAdmin(); }));
+  $$('#chartBtns button').forEach(b => b.addEventListener('click', () => { chartGroup = b.dataset.group; renderAdmin(); }));
+  ['#fFrom', '#fTo', '#fSite', '#fPhone', '#fPlate'].forEach(s => $(s).addEventListener('change', () => { if (s === '#fFrom' || s === '#fTo') $$('#periodBtns button').forEach(b => b.classList.remove('on')); renderAdmin(); }));
+  $('#btnCsv').addEventListener('click', exportCsv);
+  $('#entryRows').addEventListener('click', async e => {
+    const del = e.target.closest('[data-del]');
+    if (del) { if (!confirm(t('confirm_delete'))) return; try { await store.deleteEntry(del.dataset.del); } catch (x) { return toast(x.message, true); } entries = entries.filter(x => x.id !== del.dataset.del); if (active && active.id === del.dataset.del) active = null; renderClock(); renderHours(); renderAdmin(); toast(t('deleted')); return; }
+    const tr = e.target.closest('tr.entry'); if (tr) { openDetail = openDetail === tr.dataset.id ? null : tr.dataset.id; renderAdmin(); }
+  });
+  $('#btnAddSite').addEventListener('click', addSite);
+  $('#newSite').addEventListener('keydown', e => { if (e.key === 'Enter') addSite(); });
+  $('#siteList').addEventListener('click', async e => {
+    const b = e.target.closest('[data-del-site]'); if (!b || !confirm(t('confirm_del_site'))) return;
+    const next = sites.filter(s => s !== b.dataset.delSite);
+    try { await store.setSites(next); } catch (x) { return toast(x.message, true); }
+    sites = next; renderSites(); renderAdmin();
+  });
+  $('#btnBreak').addEventListener('click', async () => {
+    const b = Math.max(0, Number($('#cfgBreak').value) || 0), a = Math.max(0, Number($('#cfgBreakAfter').value) || 0);
+    try { await store.setSetting('break_min', b); await store.setSetting('break_after_h', a); } catch (x) { return toast(x.message, true); }
+    breakMin = b; breakAfterH = a; toast(t('settings_saved'));
+  });
+  $('#btnCfg').addEventListener('click', () => { const url = $('#cfgUrl').value.trim(), key = $('#cfgKey').value.trim(); if (url && key) lsSet(K.cfg, { url, key }); else lsDel(K.cfg); location.reload(); });
+  $('#btnNewPin').addEventListener('click', async () => {
+    const p = $('#newPin').value.trim(); if (!/^\d{4,8}$/.test(p)) return toast(t('err_pin_format'), true);
+    try { await store.setSetting('admin_pin', await sha(p)); } catch (x) { return toast(x.message, true); }
+    $('#newPin').value = ''; toast(t('pin_changed'));
+  });
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) reload(); });
+}
+async function login() {
+  const p = normPhone($('#phone').value);
+  if (p.replace(/\D/g, '').length < 8) return err('#phoneErr', t('err_phone'));
+  err('#phoneErr', ''); phone = p; lsSet(K.phone, p);
+  await reload(); showTab('clock');
+}
+async function addSite() {
+  const name = $('#newSite').value.trim(); if (!name) return toast(t('err_site_empty'), true);
+  if (sites.includes(name)) { $('#newSite').value = ''; return; }
+  const next = sites.concat([name]).sort((a, b) => a.localeCompare(b));
+  try { await store.setSites(next); } catch (x) { return toast(x.message, true); }
+  sites = next; $('#newSite').value = ''; renderSites(); renderAdmin(); toast(t('saved'));
+}
+
+init();
+})();
+</script>
+</body>
+</html>
