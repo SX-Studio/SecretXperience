@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Clubs na middernacht — SecretXperience</title>
+<meta name="description" content="Techno, house, latin en lounge tot in de vroege uurtjes. Openingsuren, inkom en dresscode per club op één steekkaart."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#08080E; --bg1:#11111B; --bg2:#1B1B2A;
+  --b:#26263C; --b2:#373752;
+  --t:#F2F2FB; --t2:#9E9EBC; --t3:#7A7A9B;
+  --ac:#B28DFF; --acs:#C9AFFF; --on-ac:#0A0A12;
+  --ok:#7FBF8E; --okt:#CDEBD3;
+  --r:8px; --rs:4px;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Jost',system-ui,sans-serif;
+  --nav-h:64px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--t);font-family:var(--sans);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button,select,input{font:inherit;color:inherit}
+img,svg{display:block}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px;border-radius:4px}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.wrap{max-width:1440px;margin:0 auto;padding:0 clamp(16px,4vw,80px)}
+
+/* ── HEADER ── */
+.hd{position:sticky;top:0;z-index:40;height:var(--nav-h);background:rgba(8,8,14,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--b)}
+.hd-in{height:100%;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{font-family:var(--serif);font-size:clamp(22px,3.4vw,30px);font-weight:600;letter-spacing:.5px;white-space:nowrap}
+.logo span{color:var(--ac)}
+.nav{display:flex;gap:clamp(14px,2.4vw,36px);align-items:center;font-size:15px;letter-spacing:.3px;overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav a{color:var(--t2);white-space:nowrap;padding:6px 0;border-bottom:1px solid transparent}
+.nav a:hover{color:var(--t)}
+.nav a[aria-current="page"]{color:var(--t);border-bottom-color:var(--ac)}
+.hd-cta{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.btn-ghost{height:42px;padding:0 18px;display:inline-flex;align-items:center;border:1px solid var(--b2);border-radius:999px;color:var(--t);font-size:14px;background:transparent;cursor:pointer}
+.btn-ghost:hover{border-color:var(--ac);color:var(--ac)}
+.btn-solid{height:42px;padding:0 20px;display:inline-flex;align-items:center;border:none;border-radius:999px;background:var(--ac);color:var(--on-ac);font-size:14px;font-weight:500;cursor:pointer}
+.btn-solid:hover{filter:brightness(1.08)}
+@media(max-width:900px){.nav{display:none}.hd-cta .btn-ghost{display:none}}
+
+/* ── HERO ── */
+.crumb{padding-top:26px;font-size:13px;color:var(--t3);display:flex;gap:8px;flex-wrap:wrap}
+.crumb a:hover{color:var(--ac)}
+.hero{padding:18px 0 28px;border-bottom:1px solid var(--b)}
+.kick{font-size:12px;letter-spacing:2.4px;color:var(--ac);text-transform:uppercase}
+.hero h1{font-family:var(--serif);font-size:clamp(34px,6vw,58px);font-weight:600;line-height:1.05;margin:10px 0 12px;letter-spacing:.5px}
+.hero p{max-width:60ch;color:var(--t2);font-size:16px}
+
+/* ── FILTERS ── */
+.filters{padding:24px 0 6px;display:flex;flex-direction:column;gap:14px}
+.frow{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.flbl{font-size:11px;letter-spacing:1.8px;color:var(--t3);text-transform:uppercase;min-width:64px}
+.pills{display:flex;gap:10px;flex-wrap:wrap}
+.pill{height:44px;padding:0 18px;border-radius:var(--rs);font-size:14px;display:inline-flex;align-items:center;gap:8px;
+  border:1px solid var(--b2);background:transparent;color:var(--t);cursor:pointer;white-space:nowrap}
+.pill:hover{border-color:var(--ac)}
+.pill[aria-pressed="true"]{background:var(--ac);border-color:var(--ac);color:var(--on-ac)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--ok)}
+.sortbar{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;padding:22px 0 4px}
+.count{font-family:var(--serif);font-size:clamp(20px,3vw,26px);font-weight:500}
+.note{font-size:13px;color:var(--t2)}
+.sortsel{height:44px;padding:0 14px;border:1px solid var(--b2);border-radius:var(--rs);background:var(--bg1);cursor:pointer}
+
+/* ── STEEKKAART ── */
+.kaarten{display:grid;gap:22px;padding:14px 0 8px}
+.kaarten.cols4{grid-template-columns:repeat(auto-fill,minmax(270px,1fr))}
+.kaarten.cols2{grid-template-columns:repeat(auto-fill,minmax(440px,1fr))}
+@media(max-width:820px){.kaarten.cols2,.kaarten.cols4{grid-template-columns:1fr}}
+.kaart{background:var(--bg1);border:1px solid var(--b);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.kaart[data-featured="true"]{border-color:var(--acs)}
+.kaart[hidden]{display:none}
+.kaart-beeld{position:relative;background:var(--bg2);color:var(--t3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:190px}
+.kaart-beeld .lbl{font-size:11px;letter-spacing:2px}
+.kaart-merk{position:absolute;top:14px;left:14px;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.merk{font-size:11px;letter-spacing:1.4px;font-weight:500;padding:5px 10px;border-radius:999px;background:var(--acs);color:var(--on-ac)}
+.merk.open{background:rgba(8,8,14,.88);color:var(--okt);display:flex;align-items:center;gap:6px;letter-spacing:.2px;font-size:12px}
+.fav{position:absolute;top:10px;right:10px;width:44px;height:44px;border-radius:50%;border:1px solid var(--b2);
+  background:rgba(8,8,14,.88);color:var(--acs);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.fav[aria-pressed="true"] svg{fill:currentColor}
+.kaart-body{padding:18px 20px 20px;display:flex;flex-direction:column;gap:11px;flex-grow:1;min-width:0}
+.kaart-kop{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.kaart-kop h2{font-family:var(--serif);font-size:24px;font-weight:600;line-height:1.1;margin:0}
+.ver{color:var(--acs);display:flex}
+.plaats{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--t2);min-width:0}
+.plaats span{overflow:hidden;text-overflow:ellipsis}
+a.plaats span{text-decoration:underline;text-decoration-color:var(--b2);text-underline-offset:3px}
+a.plaats:hover{color:var(--ac)}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:12px;color:var(--acs);border:1px solid var(--b2);padding:3px 10px;border-radius:999px}
+
+/* the index-card field grid — the heart of the steekkaart */
+.velden{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px;padding:12px 0;
+  border-top:1px solid var(--b);border-bottom:1px solid var(--b)}
+.velden.drie{grid-template-columns:repeat(3,minmax(0,1fr))}
+.veld{display:flex;flex-direction:column;gap:2px;min-width:0}
+.veld dt{font-size:11px;letter-spacing:1.5px;color:var(--t3);text-transform:uppercase}
+.veld dd{font-size:13px;color:var(--t);overflow-wrap:anywhere}
+.prijsrij{margin-top:auto;padding-top:14px;display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.prijs-l{display:flex;flex-direction:column;gap:2px}
+.prijs-k{font-size:12px;color:var(--t2)}
+.prijs{font-size:22px;font-weight:500}
+.prijs small{font-size:13px;font-weight:300;color:var(--t2)}
+.link{font-size:14px;color:var(--acs);display:inline-flex;align-items:center;gap:6px;padding:10px 0}
+.link:hover{color:var(--ac)}
+.acties{display:flex;gap:8px;flex-wrap:wrap}
+.acties a{flex:1 1 90px;height:44px;display:flex;align-items:center;justify-content:center;gap:6px;
+  border-radius:var(--rs);border:1px solid var(--b2);font-size:13px}
+.acties a:hover{border-color:var(--ac);color:var(--ac)}
+.cta{height:44px;display:flex;align-items:center;justify-content:center;border-radius:var(--rs);
+  background:var(--ac);color:var(--on-ac);font-weight:500;font-size:14px}
+.cta:hover{filter:brightness(1.08)}
+
+/* date block for events */
+.kaart.datum{flex-direction:row}
+.datumblok{width:118px;flex-shrink:0;border-right:1px solid var(--b);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:2px;padding:14px 8px}
+.datumblok .wd{font-size:13px;letter-spacing:2px;color:var(--t2)}
+.datumblok .d{font-family:var(--serif);font-size:46px;line-height:1;color:var(--ac)}
+.datumblok .m{font-size:13px;letter-spacing:2px}
+@media(max-width:560px){.kaart.datum{flex-direction:column}.datumblok{width:100%;flex-direction:row;gap:10px;border-right:0;border-bottom:1px solid var(--b)}.datumblok .d{font-size:32px}}
+
+.leeg{margin:20px 0 0;padding:56px 24px;border:1px dashed var(--b2);border-radius:var(--r);text-align:center;color:var(--t2)}
+.meer{padding:40px 0 8px;display:flex;justify-content:center}
+.meer a{height:52px;padding:0 36px;display:flex;align-items:center;border:1px solid var(--b2);border-radius:999px;font-size:15px}
+.meer a:hover{border-color:var(--ac);color:var(--ac)}
+
+footer{margin-top:40px;padding:30px 0;border-top:1px solid var(--b);font-size:13px;color:var(--t2)}
+.ft-in{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.ft-in nav{display:flex;gap:20px;flex-wrap:wrap}
+.ft-in a:hover{color:var(--ac)}
+</style>
+</head>
+<body>
+
+<header class="hd">
+  <div class="wrap hd-in">
+    <a class="logo" href="SecretXperience.html">Secret<span>Xperience</span></a>
+    <nav class="nav" aria-label="Categorieën"><a href="SecretXperience.html">Escorts</a><a href="SX_Massage.html">Massage</a><a href="SX_Clubs.html" aria-current="page">Clubs</a><a href="SX_Bars.html">Bars</a><a href="SX_Events.html">Events</a><a href="SecretXperience.html">Creators</a></nav>
+    <div class="hd-cta">
+      <a class="btn-ghost" href="SecretXperience.html">Inloggen</a>
+      <a class="btn-solid" href="SecretXperience.html">Club aanmelden</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <nav class="crumb" aria-label="Kruimelpad">
+      <a href="SecretXperience.html">Home</a> <span aria-hidden="true">/</span>
+      <span>Categorieën</span> <span aria-hidden="true">/</span>
+      <span aria-current="page">Clubs na middernacht</span>
+    </nav>
+
+    <section class="hero">
+      <div class="kick">Nightlife</div>
+      <h1>Clubs na middernacht</h1>
+      <p>Techno, house, latin en lounge tot in de vroege uurtjes. Openingsuren, inkom en dresscode per club op één steekkaart.</p>
+    </section>
+
+    <section class="filters" aria-label="Filters"><div class="frow"><span class="flbl">Stad</span><div class="pills"><button type="button" class="pill" data-filter="city" data-value="Alle" aria-pressed="true">Alle</button><button type="button" class="pill" data-filter="city" data-value="Brussel" aria-pressed="false">Brussel</button><button type="button" class="pill" data-filter="city" data-value="Antwerpen" aria-pressed="false">Antwerpen</button><button type="button" class="pill" data-filter="city" data-value="Gent" aria-pressed="false">Gent</button><button type="button" class="pill" data-filter="city" data-value="Luik" aria-pressed="false">Luik</button></div></div><div class="frow"><span class="flbl">Genre</span><div class="pills"><button type="button" class="pill" data-filter="tag" data-value="Alle" aria-pressed="true">Alle</button><button type="button" class="pill" data-filter="tag" data-value="Hip-hop" aria-pressed="false">Hip-hop</button><button type="button" class="pill" data-filter="tag" data-value="House" aria-pressed="false">House</button><button type="button" class="pill" data-filter="tag" data-value="Latin" aria-pressed="false">Latin</button><button type="button" class="pill" data-filter="tag" data-value="Live" aria-pressed="false">Live</button><button type="button" class="pill" data-filter="tag" data-value="Lounge" aria-pressed="false">Lounge</button><button type="button" class="pill" data-filter="tag" data-value="Techno" aria-pressed="false">Techno</button></div></div><div class="frow"><span class="flbl">Filter</span><div class="pills"><button type="button" class="pill" data-filter="flag" data-value="open" aria-pressed="false"><span class="dot"></span>Nu open</button></div></div></section>
+
+    <div class="sortbar">
+      <div class="count" id="count" role="status">6 clubs</div>
+      <div class="frow">
+        <span class="note">Inkom aan de kassa · dresscode wordt aan de deur toegepast</span>
+        
+      </div>
+    </div>
+
+    <section class="kaarten cols2" id="kaarten" data-noun="clubs" data-noun-one="club" aria-label="Steekkaarten">
+
+        <article class="kaart" data-city="Brussel" data-tags="Techno" data-open="true">
+          <div class="kaart-beeld">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.5"/><path d="M8 5l1.5-2h5L16 5"/></svg><span class="lbl">CLUBFOTO</span>
+            <div class="kaart-merk"><span class="merk open"><span class="dot"></span>Nu open</span></div>
+            <button type="button" class="fav" aria-pressed="false" data-fav-name="Salle Noire" aria-label="Bewaar Salle Noire als favoriet"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></button>
+          </div>
+          <div class="kaart-body">
+            <div class="tags"><span class="tag">Techno</span></div>
+            <div class="kaart-kop"><h2>Salle Noire</h2></div>
+            <a class="plaats" href="https://www.google.com/maps/search/?api=1&amp;query=Salle%20Noire%2C%20Rue%20du%20March%C3%A9%20au%20Charbon%2034%2C%20Brussel" target="_blank" rel="noopener">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span>Rue du Marché au Charbon 34, Brussel</span></a>
+            <dl class="velden drie">
+              <div class="veld"><dt>Open</dt><dd>Vr–Za · 23–06u</dd></div><div class="veld"><dt>Inkom</dt><dd>€15</dd></div><div class="veld"><dt>Dresscode</dt><dd>All black</dd></div>
+            </dl>
+            <div class="acties"><a href="https://www.google.com/maps/search/?api=1&amp;query=Salle%20Noire%2C%20Rue%20du%20March%C3%A9%20au%20Charbon%2034%2C%20Brussel" target="_blank" rel="noopener" aria-label="Open Salle Noire in Google Maps"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3L3 5.5v15L9 18l6 3 6-2.5v-15L15 6 9 3z"/><path d="M9 3v15M15 6v15"/></svg>Maps</a><a href="https://m.uber.com/ul/?action=setPickup&amp;pickup=my_location&amp;dropoff%5Bnickname%5D=Salle%20Noire&amp;dropoff%5Bformatted_address%5D=Rue%20du%20March%C3%A9%20au%20Charbon%2034%2C%20Brussel" target="_blank" rel="noopener" aria-label="Bestel een Uber naar Salle Noire"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 16h14M4 16l1.5-5.5A2 2 0 0 1 7.4 9h9.2a2 2 0 0 1 1.9 1.5L20 16v3h-2.5v-1.5h-11V19H4v-3z"/><circle cx="7.5" cy="16" r="1"/><circle cx="16.5" cy="16" r="1"/></svg>Uber</a><a href="https://www.google.com/maps/search/?api=1&amp;query=taxi%20Brussel" target="_blank" rel="noopener" aria-label="Zoek een taxi in Brussel"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 17h14M4 17l1.4-5.2A2 2 0 0 1 7.3 10h9.4a2 2 0 0 1 1.9 1.8L20 17v3h-2.5v-1.5h-11V20H4v-3z"/><path d="M9 10V7h6v3"/></svg>Taxi</a></div><a class="cta" href="#">Tafel reserveren</a>
+          </div>
+        </article>
+        <article class="kaart" data-city="Antwerpen" data-tags="House|Live" data-open="false">
+          <div class="kaart-beeld">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.5"/><path d="M8 5l1.5-2h5L16 5"/></svg><span class="lbl">CLUBFOTO</span>
+            <div class="kaart-merk"></div>
+            <button type="button" class="fav" aria-pressed="false" data-fav-name="Club Velours" aria-label="Bewaar Club Velours als favoriet"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></button>
+          </div>
+          <div class="kaart-body">
+            <div class="tags"><span class="tag">House</span><span class="tag">Live</span></div>
+            <div class="kaart-kop"><h2>Club Velours</h2></div>
+            <a class="plaats" href="https://www.google.com/maps/search/?api=1&amp;query=Club%20Velours%2C%20Kloosterstraat%2088%2C%20Antwerpen" target="_blank" rel="noopener">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span>Kloosterstraat 88, Antwerpen</span></a>
+            <dl class="velden drie">
+              <div class="veld"><dt>Open</dt><dd>Do–Za · 22–05u</dd></div><div class="veld"><dt>Inkom</dt><dd>€12</dd></div><div class="veld"><dt>Dresscode</dt><dd>Chic</dd></div>
+            </dl>
+            <div class="acties"><a href="https://www.google.com/maps/search/?api=1&amp;query=Club%20Velours%2C%20Kloosterstraat%2088%2C%20Antwerpen" target="_blank" rel="noopener" aria-label="Open Club Velours in Google Maps"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3L3 5.5v15L9 18l6 3 6-2.5v-15L15 6 9 3z"/><path d="M9 3v15M15 6v15"/></svg>Maps</a><a href="https://m.uber.com/ul/?action=setPickup&amp;pickup=my_location&amp;dropoff%5Bnickname%5D=Club%20Velours&amp;dropoff%5Bformatted_address%5D=Kloosterstraat%2088%2C%20Antwerpen" target="_blank" rel="noopener" aria-label="Bestel een Uber naar Club Velours"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 16h14M4 16l1.5-5.5A2 2 0 0 1 7.4 9h9.2a2 2 0 0 1 1.9 1.5L20 16v3h-2.5v-1.5h-11V19H4v-3z"/><circle cx="7.5" cy="16" r="1"/><circle cx="16.5" cy="16" r="1"/></svg>Uber</a><a href="https://www.google.com/maps/search/?api=1&amp;query=taxi%20Antwerpen" target="_blank" rel="noopener" aria-label="Zoek een taxi in Antwerpen"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 17h14M4 17l1.4-5.2A2 2 0 0 1 7.3 10h9.4a2 2 0 0 1 1.9 1.8L20 17v3h-2.5v-1.5h-11V20H4v-3z"/><path d="M9 10V7h6v3"/></svg>Taxi</a></div><a class="cta" href="#">Tafel reserveren</a>
+          </div>
+        </article>
+        <article class="kaart" data-city="Gent" data-tags="Techno" data-open="true">
+          <div class="kaart-beeld">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.5"/><path d="M8 5l1.5-2h5L16 5"/></svg><span class="lbl">CLUBFOTO</span>
+            <div class="kaart-merk"><span class="merk open"><span class="dot"></span>Nu open</span></div>
+            <button type="button" class="fav" aria-pressed="false" data-fav-name="Warehouse 9" aria-label="Bewaar Warehouse 9 als favoriet"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></button>
+          </div>
+          <div class="kaart-body">
+            <div class="tags"><span class="tag">Techno</span></div>
+            <div class="kaart-kop"><h2>Warehouse 9</h2></div>
+            <a class="plaats" href="https://www.google.com/maps/search/?api=1&amp;query=Warehouse%209%2C%20Vlasmarkt%2012%2C%20Gent" target="_blank" rel="noopener">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span>Vlasmarkt 12, Gent</span></a>
+            <dl class="velden drie">
+              <div class="veld"><dt>Open</dt><dd>Za · 23–07u</dd></div><div class="veld"><dt>Inkom</dt><dd>€18</dd></div><div class="veld"><dt>Dresscode</dt><dd>Casual</dd></div>
+            </dl>
+            <div class="acties"><a href="https://www.google.com/maps/search/?api=1&amp;query=Warehouse%209%2C%20Vlasmarkt%2012%2C%20Gent" target="_blank" rel="noopener" aria-label="Open Warehouse 9 in Google Maps"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3L3 5.5v15L9 18l6 3 6-2.5v-15L15 6 9 3z"/><path d="M9 3v15M15 6v15"/></svg>Maps</a><a href="https://m.uber.com/ul/?action=setPickup&amp;pickup=my_location&amp;dropoff%5Bnickname%5D=Warehouse%209&amp;dropoff%5Bformatted_address%5D=Vlasmarkt%2012%2C%20Gent" target="_blank" rel="noopener" aria-label="Bestel een Uber naar Warehouse 9"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 16h14M4 16l1.5-5.5A2 2 0 0 1 7.4 9h9.2a2 2 0 0 1 1.9 1.5L20 16v3h-2.5v-1.5h-11V19H4v-3z"/><circle cx="7.5" cy="16" r="1"/><circle cx="16.5" cy="16" r="1"/></svg>Uber</a><a href="https://www.google.com/maps/search/?api=1&amp;query=taxi%20Gent" target="_blank" rel="noopener" aria-label="Zoek een taxi in Gent"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 17h14M4 17l1.4-5.2A2 2 0 0 1 7.3 10h9.4a2 2 0 0 1 1.9 1.8L20 17v3h-2.5v-1.5h-11V20H4v-3z"/><path d="M9 10V7h6v3"/></svg>Taxi</a></div><a class="cta" href="#">Tafel reserveren</a>
+          </div>
+        </article>
+        <article class="kaart" data-city="Luik" data-tags="Latin" data-open="false">
+          <div class="kaart-beeld">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.5"/><path d="M8 5l1.5-2h5L16 5"/></svg><span class="lbl">CLUBFOTO</span>
+            <div class="kaart-merk"></div>
+            <button type="button" class="fav" aria-pressed="false" data-fav-name="Le Carré Rouge" aria-label="Bewaar Le Carré Rouge als favoriet"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></button>
+          </div>
+          <div class="kaart-body">
+            <div class="tags"><span class="tag">Latin</span></div>
+            <div class="kaart-kop"><h2>Le Carré Rouge</h2></div>
+            <a class="plaats" href="https://www.google.com/maps/search/?api=1&amp;query=Le%20Carr%C3%A9%20Rouge%2C%20Rue%20Pont%20d%27Avroy%2040%2C%20Luik" target="_blank" rel="noopener">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span>Rue Pont d&#x27;Avroy 40, Luik</span></a>
+            <dl class="velden drie">
+              <div class="veld"><dt>Open</dt><dd>Vr–Za · 22–05u</dd></div><div class="veld"><dt>Inkom</dt><dd>€10</dd></div><div class="veld"><dt>Dresscode</dt><dd>Smart casual</dd></div>
+            </dl>
+            <div class="acties"><a href="https://www.google.com/maps/search/?api=1&amp;query=Le%20Carr%C3%A9%20Rouge%2C%20Rue%20Pont%20d%27Avroy%2040%2C%20Luik" target="_blank" rel="noopener" aria-label="Open Le Carré Rouge in Google Maps"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3L3 5.5v15L9 18l6 3 6-2.5v-15L15 6 9 3z"/><path d="M9 3v15M15 6v15"/></svg>Maps</a><a href="https://m.uber.com/ul/?action=setPickup&amp;pickup=my_location&amp;dropoff%5Bnickname%5D=Le%20Carr%C3%A9%20Rouge&amp;dropoff%5Bformatted_address%5D=Rue%20Pont%20d%27Avroy%2040%2C%20Luik" target="_blank" rel="noopener" aria-label="Bestel een Uber naar Le Carré Rouge"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 16h14M4 16l1.5-5.5A2 2 0 0 1 7.4 9h9.2a2 2 0 0 1 1.9 1.5L20 16v3h-2.5v-1.5h-11V19H4v-3z"/><circle cx="7.5" cy="16" r="1"/><circle cx="16.5" cy="16" r="1"/></svg>Uber</a><a href="https://www.google.com/maps/search/?api=1&amp;query=taxi%20Luik" target="_blank" rel="noopener" aria-label="Zoek een taxi in Luik"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 17h14M4 17l1.4-5.2A2 2 0 0 1 7.3 10h9.4a2 2 0 0 1 1.9 1.8L20 17v3h-2.5v-1.5h-11V20H4v-3z"/><path d="M9 10V7h6v3"/></svg>Taxi</a></div><a class="cta" href="#">Tafel reserveren</a>
+          </div>
+        </article>
+        <article class="kaart" data-city="Brussel" data-tags="Lounge|House" data-open="true">
+          <div class="kaart-beeld">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.5"/><path d="M8 5l1.5-2h5L16 5"/></svg><span class="lbl">CLUBFOTO</span>
+            <div class="kaart-merk"><span class="merk open"><span class="dot"></span>Nu open</span></div>
+            <button type="button" class="fav" aria-pressed="false" data-fav-name="Maison Minuit" aria-label="Bewaar Maison Minuit als favoriet"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></button>
+          </div>
+          <div class="kaart-body">
+            <div class="tags"><span class="tag">Lounge</span><span class="tag">House</span></div>
+            <div class="kaart-kop"><h2>Maison Minuit</h2></div>
+            <a class="plaats" href="https://www.google.com/maps/search/?api=1&amp;query=Maison%20Minuit%2C%20Place%20Saint-G%C3%A9ry%208%2C%20Brussel" target="_blank" rel="noopener">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span>Place Saint-Géry 8, Brussel</span></a>
+            <dl class="velden drie">
+              <div class="veld"><dt>Open</dt><dd>Wo–Za · 21–04u</dd></div><div class="veld"><dt>Inkom</dt><dd>Gratis</dd></div><div class="veld"><dt>Dresscode</dt><dd>Chic</dd></div>
+            </dl>
+            <div class="acties"><a href="https://www.google.com/maps/search/?api=1&amp;query=Maison%20Minuit%2C%20Place%20Saint-G%C3%A9ry%208%2C%20Brussel" target="_blank" rel="noopener" aria-label="Open Maison Minuit in Google Maps"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3L3 5.5v15L9 18l6 3 6-2.5v-15L15 6 9 3z"/><path d="M9 3v15M15 6v15"/></svg>Maps</a><a href="https://m.uber.com/ul/?action=setPickup&amp;pickup=my_location&amp;dropoff%5Bnickname%5D=Maison%20Minuit&amp;dropoff%5Bformatted_address%5D=Place%20Saint-G%C3%A9ry%208%2C%20Brussel" target="_blank" rel="noopener" aria-label="Bestel een Uber naar Maison Minuit"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 16h14M4 16l1.5-5.5A2 2 0 0 1 7.4 9h9.2a2 2 0 0 1 1.9 1.5L20 16v3h-2.5v-1.5h-11V19H4v-3z"/><circle cx="7.5" cy="16" r="1"/><circle cx="16.5" cy="16" r="1"/></svg>Uber</a><a href="https://www.google.com/maps/search/?api=1&amp;query=taxi%20Brussel" target="_blank" rel="noopener" aria-label="Zoek een taxi in Brussel"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 17h14M4 17l1.4-5.2A2 2 0 0 1 7.3 10h9.4a2 2 0 0 1 1.9 1.8L20 17v3h-2.5v-1.5h-11V20H4v-3z"/><path d="M9 10V7h6v3"/></svg>Taxi</a></div><a class="cta" href="#">Tafel reserveren</a>
+          </div>
+        </article>
+        <article class="kaart" data-city="Antwerpen" data-tags="Hip-hop" data-open="false">
+          <div class="kaart-beeld">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.5"/><path d="M8 5l1.5-2h5L16 5"/></svg><span class="lbl">CLUBFOTO</span>
+            <div class="kaart-merk"></div>
+            <button type="button" class="fav" aria-pressed="false" data-fav-name="Aurum Club" aria-label="Bewaar Aurum Club als favoriet"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></button>
+          </div>
+          <div class="kaart-body">
+            <div class="tags"><span class="tag">Hip-hop</span></div>
+            <div class="kaart-kop"><h2>Aurum Club</h2></div>
+            <a class="plaats" href="https://www.google.com/maps/search/?api=1&amp;query=Aurum%20Club%2C%20Groenplaats%2020%2C%20Antwerpen" target="_blank" rel="noopener">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span>Groenplaats 20, Antwerpen</span></a>
+            <dl class="velden drie">
+              <div class="veld"><dt>Open</dt><dd>Vr–Za · 23–06u</dd></div><div class="veld"><dt>Inkom</dt><dd>€15</dd></div><div class="veld"><dt>Dresscode</dt><dd>Chic</dd></div>
+            </dl>
+            <div class="acties"><a href="https://www.google.com/maps/search/?api=1&amp;query=Aurum%20Club%2C%20Groenplaats%2020%2C%20Antwerpen" target="_blank" rel="noopener" aria-label="Open Aurum Club in Google Maps"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3L3 5.5v15L9 18l6 3 6-2.5v-15L15 6 9 3z"/><path d="M9 3v15M15 6v15"/></svg>Maps</a><a href="https://m.uber.com/ul/?action=setPickup&amp;pickup=my_location&amp;dropoff%5Bnickname%5D=Aurum%20Club&amp;dropoff%5Bformatted_address%5D=Groenplaats%2020%2C%20Antwerpen" target="_blank" rel="noopener" aria-label="Bestel een Uber naar Aurum Club"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 16h14M4 16l1.5-5.5A2 2 0 0 1 7.4 9h9.2a2 2 0 0 1 1.9 1.5L20 16v3h-2.5v-1.5h-11V19H4v-3z"/><circle cx="7.5" cy="16" r="1"/><circle cx="16.5" cy="16" r="1"/></svg>Uber</a><a href="https://www.google.com/maps/search/?api=1&amp;query=taxi%20Antwerpen" target="_blank" rel="noopener" aria-label="Zoek een taxi in Antwerpen"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 17h14M4 17l1.4-5.2A2 2 0 0 1 7.3 10h9.4a2 2 0 0 1 1.9 1.8L20 17v3h-2.5v-1.5h-11V20H4v-3z"/><path d="M9 10V7h6v3"/></svg>Taxi</a></div><a class="cta" href="#">Tafel reserveren</a>
+          </div>
+        </article>
+    </section>
+
+    <div class="leeg" id="leeg" hidden>
+      Geen resultaten voor deze filters.
+      <div style="margin-top:14px"><button type="button" class="pill" id="wis">Filters wissen</button></div>
+    </div>
+
+    <div class="meer"><a href="#">Meer laden</a></div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap ft-in">
+    <div>18+ · Rijd nooit onder invloed — bestel een taxi of Uber · © 3S.lifestyle bv</div>
+    <nav aria-label="Juridisch">
+      <a href="SecretXperience.html">Gebruiksvoorwaarden</a>
+      <a href="SecretXperience_Privacy_Policy.html">Privacy</a>
+      <a href="SecretXperience_Privacy_Policy.html">Cookies</a>
+      <a href="SecretXperience.html">Melden</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var grid = document.getElementById('kaarten');
+  if(!grid) return;
+  var kaarten = Array.prototype.slice.call(grid.querySelectorAll('.kaart'));
+  var state = { city:'Alle', tag:'Alle', flags:{} };
+  var countEl = document.getElementById('count');
+  var leegEl  = document.getElementById('leeg');
+  var sortEl  = document.getElementById('sort');
+  var noun    = grid.getAttribute('data-noun') || 'resultaten';
+  var noun1   = grid.getAttribute('data-noun-one') || noun;
+
+  function pressed(btn, on){ btn.setAttribute('aria-pressed', on ? 'true' : 'false'); }
+
+  function apply(){
+    var zichtbaar = 0;
+    kaarten.forEach(function(k){
+      var ok = (state.city === 'Alle' || k.dataset.city === state.city);
+      if(ok && state.tag !== 'Alle'){
+        ok = (k.dataset.tags || '').split('|').indexOf(state.tag) !== -1;
+      }
+      Object.keys(state.flags).forEach(function(f){
+        if(ok && state.flags[f]) ok = (k.dataset[f] === 'true');
+      });
+      k.hidden = !ok;
+      if(ok) zichtbaar++;
+    });
+    if(countEl) countEl.textContent = zichtbaar + ' ' + (zichtbaar === 1 ? noun1 : noun);
+    if(leegEl) leegEl.hidden = zichtbaar !== 0;
+  }
+
+  function sorteer(mode){
+    var lijst = kaarten.slice();
+    if(mode === 'price-asc')  lijst.sort(function(a,b){ return a.dataset.price - b.dataset.price; });
+    else if(mode === 'price-desc') lijst.sort(function(a,b){ return b.dataset.price - a.dataset.price; });
+    else lijst.sort(function(a,b){ return (b.dataset.featured === 'true') - (a.dataset.featured === 'true'); });
+    lijst.forEach(function(k){ grid.appendChild(k); });
+  }
+
+  document.querySelectorAll('[data-filter]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var soort = btn.dataset.filter, waarde = btn.dataset.value;
+      if(soort === 'flag'){
+        state.flags[waarde] = !state.flags[waarde];
+        pressed(btn, state.flags[waarde]);
+      } else {
+        state[soort] = waarde;
+        document.querySelectorAll('[data-filter="' + soort + '"]').forEach(function(z){
+          pressed(z, z.dataset.value === waarde);
+        });
+      }
+      apply();
+    });
+  });
+
+  var wis = document.getElementById('wis');
+  if(wis) wis.addEventListener('click', function(){
+    state = { city:'Alle', tag:'Alle', flags:{} };
+    document.querySelectorAll('[data-filter]').forEach(function(b){
+      pressed(b, b.dataset.filter !== 'flag' && b.dataset.value === 'Alle');
+    });
+    apply();
+  });
+
+  if(sortEl) sortEl.addEventListener('change', function(){ sorteer(sortEl.value); });
+
+  // Favourites are a per-viewer convenience; storage may be unavailable.
+  var bewaard = [];
+  try { bewaard = JSON.parse(localStorage.getItem('sx-favs') || '[]'); } catch(err) { bewaard = []; }
+  document.querySelectorAll('.fav').forEach(function(btn){
+    var naam = btn.dataset.favName;
+    if(bewaard.indexOf(naam) !== -1){
+      pressed(btn, true);
+      btn.setAttribute('aria-label', 'Verwijder ' + naam + ' uit favorieten');
+    }
+    btn.addEventListener('click', function(){
+      var aan = btn.getAttribute('aria-pressed') !== 'true';
+      pressed(btn, aan);
+      btn.setAttribute('aria-label', (aan ? 'Verwijder ' : 'Bewaar ') + naam + (aan ? ' uit favorieten' : ' als favoriet'));
+      var i = bewaard.indexOf(naam);
+      if(aan && i === -1) bewaard.push(naam); else if(!aan && i !== -1) bewaard.splice(i, 1);
+      try { localStorage.setItem('sx-favs', JSON.stringify(bewaard)); } catch(err) { /* private mode */ }
+    });
+  });
+
+  apply();
+})();
+</script>
+</body>
+</html>

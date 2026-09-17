@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Massage &amp; wellness — SecretXperience</title>
+<meta name="description" content="Ontdek geverifieerde massagetherapeuten in Brussel, Antwerpen, Gent en Luik. Discreet, persoonlijk en altijd op afspraak."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#130E0F; --bg1:#1E1618; --bg2:#2B2023;
+  --b:#35282B; --b2:#4A383C;
+  --t:#F7EDEA; --t2:#B39DA0; --t3:#8A7377;
+  --ac:#DB907C; --acs:#EDB5A6; --on-ac:#1C0F10;
+  --ok:#7FBF8E; --okt:#CDEBD3;
+  --r:20px; --rs:999px;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Jost',system-ui,sans-serif;
+  --nav-h:64px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--t);font-family:var(--sans);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button,select,input{font:inherit;color:inherit}
+img,svg{display:block}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px;border-radius:4px}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.wrap{max-width:1440px;margin:0 auto;padding:0 clamp(16px,4vw,80px)}
+
+/* ── HEADER ── */
+.hd{position:sticky;top:0;z-index:40;height:var(--nav-h);background:rgba(19,14,15,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--b)}
+.hd-in{height:100%;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{font-family:var(--serif);font-size:clamp(22px,3.4vw,30px);font-weight:600;letter-spacing:.5px;white-space:nowrap}
+.logo span{color:var(--ac)}
+.nav{display:flex;gap:clamp(14px,2.4vw,36px);align-items:center;font-size:15px;letter-spacing:.3px;overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav a{color:var(--t2);white-space:nowrap;padding:6px 0;border-bottom:1px solid transparent}
+.nav a:hover{color:var(--t)}
+.nav a[aria-current="page"]{color:var(--t);border-bottom-color:var(--ac)}
+.hd-cta{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.btn-ghost{height:42px;padding:0 18px;display:inline-flex;align-items:center;border:1px solid var(--b2);border-radius:999px;color:var(--t);font-size:14px;background:transparent;cursor:pointer}
+.btn-ghost:hover{border-color:var(--ac);color:var(--ac)}
+.btn-solid{height:42px;padding:0 20px;display:inline-flex;align-items:center;border:none;border-radius:999px;background:var(--ac);color:var(--on-ac);font-size:14px;font-weight:500;cursor:pointer}
+.btn-solid:hover{filter:brightness(1.08)}
+@media(max-width:900px){.nav{display:none}.hd-cta .btn-ghost{display:none}}
+
+/* ── HERO ── */
+.crumb{padding-top:26px;font-size:13px;color:var(--t3);display:flex;gap:8px;flex-wrap:wrap}
+.crumb a:hover{color:var(--ac)}
+.hero{padding:18px 0 28px;border-bottom:1px solid var(--b)}
+.kick{font-size:12px;letter-spacing:2.4px;color:var(--ac);text-transform:uppercase}
+.hero h1{font-family:var(--serif);font-size:clamp(34px,6vw,58px);font-weight:600;line-height:1.05;margin:10px 0 12px;letter-spacing:.5px}
+.hero p{max-width:60ch;color:var(--t2);font-size:16px}
+
+/* ── FILTERS ── */
+.filters{padding:24px 0 6px;display:flex;flex-direction:column;gap:14px}
+.frow{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.flbl{font-size:11px;letter-spacing:1.8px;color:var(--t3);text-transform:uppercase;min-width:64px}
+.pills{display:flex;gap:10px;flex-wrap:wrap}
+.pill{height:44px;padding:0 18px;border-radius:var(--rs);font-size:14px;display:inline-flex;align-items:center;gap:8px;
+  border:1px solid var(--b2);background:transparent;color:var(--t);cursor:pointer;white-space:nowrap}
+.pill:hover{border-color:var(--ac)}
+.pill[aria-pressed="true"]{background:var(--ac);border-color:var(--ac);color:var(--on-ac)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--ok)}
+.sortbar{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;padding:22px 0 4px}
+.count{font-family:var(--serif);font-size:clamp(20px,3vw,26px);font-weight:500}
+.note{font-size:13px;color:var(--t2)}
+.sortsel{height:44px;padding:0 14px;border:1px solid var(--b2);border-radius:var(--rs);background:var(--bg1);cursor:pointer}
+
+/* ── STEEKKAART ── */
+.kaarten{display:grid;gap:22px;padding:14px 0 8px}
+.kaarten.cols4{grid-template-columns:repeat(auto-fill,minmax(270px,1fr))}
+.kaarten.cols2{grid-template-columns:repeat(auto-fill,minmax(440px,1fr))}
+@media(max-width:820px){.kaarten.cols2,.kaarten.cols4{grid-template-columns:1fr}}
+.kaart{background:var(--bg1);border:1px solid var(--b);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.kaart[data-featured="true"]{border-color:var(--acs)}
+.kaart[hidden]{display:none}
+.kaart-beeld{position:relative;background:var(--bg2);color:var(--t3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:190px}
+.kaart-beeld .lbl{font-size:11px;letter-spacing:2px}
+.kaart-merk{position:absolute;top:14px;left:14px;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.merk{font-size:11px;letter-spacing:1.4px;font-weight:500;padding:5px 10px;border-radius:999px;background:var(--acs);color:var(--on-ac)}
+.merk.open{background:rgba(19,14,15,.85);color:var(--okt);display:flex;align-items:center;gap:6px;letter-spacing:.2px;font-size:12px}
+.fav{position:absolute;top:10px;right:10px;width:44px;height:44px;border-radius:50%;border:1px solid var(--b2);
+  background:rgba(19,14,15,.85);color:var(--acs);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.fav[aria-pressed="true"] svg{fill:currentColor}
+.kaart-body{padding:18px 20px 20px;display:flex;flex-direction:column;gap:11px;flex-grow:1;min-width:0}
+.kaart-kop{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.kaart-kop h2{font-family:var(--serif);font-size:24px;font-weight:600;line-height:1.1;margin:0}
+.ver{color:var(--acs);display:flex}
+.plaats{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--t2);min-width:0}
+.plaats span{overflow:hidden;text-overflow:ellipsis}
+a.plaats span{text-decoration:underline;text-decoration-color:var(--b2);text-underline-offset:3px}
+a.plaats:hover{color:var(--ac)}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:12px;color:var(--acs);border:1px solid var(--b2);padding:3px 10px;border-radius:999px}
+
+/* the index-card field grid — the heart of the steekkaart */
+.velden{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px;padding:12px 0;
+  border-top:1px solid var(--b);border-bottom:1px solid var(--b)}
+.velden.drie{grid-template-columns:repeat(3,minmax(0,1fr))}
+.veld{display:flex;flex-direction:column;gap:2px;min-width:0}
+.veld dt{font-size:11px;letter-spacing:1.5px;color:var(--t3);text-transform:uppercase}
+.veld dd{font-size:13px;color:var(--t);overflow-wrap:anywhere}
+.prijsrij{margin-top:auto;padding-top:14px;display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.prijs-l{display:flex;flex-direction:column;gap:2px}
+.prijs-k{font-size:12px;color:var(--t2)}
+.prijs{font-size:22px;font-weight:500}
+.prijs small{font-size:13px;font-weight:300;color:var(--t2)}
+.link{font-size:14px;color:var(--acs);display:inline-flex;align-items:center;gap:6px;padding:10px 0}
+.link:hover{color:var(--ac)}
+.acties{display:flex;gap:8px;flex-wrap:wrap}
+.acties a{flex:1 1 90px;height:44px;display:flex;align-items:center;justify-content:center;gap:6px;
+  border-radius:var(--rs);border:1px solid var(--b2);font-size:13px}
+.acties a:hover{border-color:var(--ac);color:var(--ac)}
+.cta{height:44px;display:flex;align-items:center;justify-content:center;border-radius:var(--rs);
+  background:var(--ac);color:var(--on-ac);font-weight:500;font-size:14px}
+.cta:hover{filter:brightness(1.08)}
+
+/* date block for events */
+.kaart.datum{flex-direction:row}
+.datumblok{width:118px;flex-shrink:0;border-right:1px solid var(--b);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:2px;padding:14px 8px}
+.datumblok .wd{font-size:13px;letter-spacing:2px;color:var(--t2)}
+.datumblok .d{font-family:var(--serif);font-size:46px;line-height:1;color:var(--ac)}
+.datumblok .m{font-size:13px;letter-spacing:2px}
+@media(max-width:560px){.kaart.datum{flex-direction:column}.datumblok{width:100%;flex-direction:row;gap:10px;border-right:0;border-bottom:1px solid var(--b)}.datumblok .d{font-size:32px}}
+
+.leeg{margin:20px 0 0;padding:56px 24px;border:1px dashed var(--b2);border-radius:var(--r);text-align:center;color:var(--t2)}
+.meer{padding:40px 0 8px;display:flex;justify-content:center}
+.meer a{height:52px;padding:0 36px;display:flex;align-items:center;border:1px solid var(--b2);border-radius:999px;font-size:15px}
+.meer a:hover{border-color:var(--ac);color:var(--ac)}
+
+footer{margin-top:40px;padding:30px 0;border-top:1px solid var(--b);font-size:13px;color:var(--t2)}
+.ft-in{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.ft-in nav{display:flex;gap:20px;flex-wrap:wrap}
+.ft-in a:hover{color:var(--ac)}
+</style>
+</head>
+<body>
+
+<header class="hd">
+  <div class="wrap hd-in">
+    <a class="logo" href="SecretXperience.html">Secret<span>Xperience</span></a>
+    <nav class="nav" aria-label="Categorieën"><a href="SecretXperience.html">Escorts</a><a href="SX_Massage.html" aria-current="page">Massage</a><a href="SX_Clubs.html">Clubs</a><a href="SX_Bars.html">Bars</a><a href="SX_Events.html">Events</a><a href="SecretXperience.html">Creators</a></nav>
+    <div class="hd-cta">
+      <a class="btn-ghost" href="SecretXperience.html">Inloggen</a>
+      <a class="btn-solid" href="SecretXperience.html">Adverteer hier</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <nav class="crumb" aria-label="Kruimelpad">
+      <a href="SecretXperience.html">Home</a> <span aria-hidden="true">/</span>
+      <span>Categorieën</span> <span aria-hidden="true">/</span>
+      <span aria-current="page">Massage &amp; wellness</span>
+    </nav>
+
+    <section class="hero">
+      <div class="kick">Categorie</div>
+      <h1>Massage &amp; wellness</h1>
+      <p>Ontdek geverifieerde massagetherapeuten in Brussel, Antwerpen, Gent en Luik. Discreet, persoonlijk en altijd op afspraak.</p>
+    </section>
+
+    <section class="filters" aria-label="Filters"><div class="frow"><span class="flbl">Stad</span><div class="pills"><button type="button" class="pill" data-filter="city" data-value="Alle" aria-pressed="true">Alle</button><button type="button" class="pill" data-filter="city" data-value="Brussel" aria-pressed="false">Brussel</button><button type="button" class="pill" data-filter="city" data-value="Antwerpen" aria-pressed="false">Antwerpen</button><button type="button" class="pill" data-filter="city" data-value="Gent" aria-pressed="false">Gent</button><button type="button" class="pill" data-filter="city" data-value="Luik" aria-pressed="false">Luik</button></div></div><div class="frow"><span class="flbl">Stijl</span><div class="pills"><button type="button" class="pill" data-filter="tag" data-value="Alle" aria-pressed="true">Alle</button><button type="button" class="pill" data-filter="tag" data-value="Ontspanning" aria-pressed="false">Ontspanning</button><button type="button" class="pill" data-filter="tag" data-value="Tantra" aria-pressed="false">Tantra</button><button type="button" class="pill" data-filter="tag" data-value="Hot stone" aria-pressed="false">Hot stone</button><button type="button" class="pill" data-filter="tag" data-value="Duo massage" aria-pressed="false">Duo massage</button><button type="button" class="pill" data-filter="tag" data-value="Thaise stijl" aria-pressed="false">Thaise stijl</button></div></div><div class="frow"><span class="flbl">Filter</span><div class="pills"><button type="button" class="pill" data-filter="flag" data-value="verified" aria-pressed="false">Alleen geverifieerd</button><button type="button" class="pill" data-filter="flag" data-value="available" aria-pressed="false"><span class="dot"></span>Nu beschikbaar</button></div></div></section>
+
+    <div class="sortbar">
+      <div class="count" id="count" role="status">8 profielen</div>
+      <div class="frow">
+        <span class="note">Prijzen in euro en tokens · 10 tokens = €1</span>
+        <label class="sr" for="sort">Sorteren</label><select class="sortsel" id="sort"><option value="featured">Sorteren: aanbevolen</option><option value="price-asc">Prijs: laag naar hoog</option><option value="price-desc">Prijs: hoog naar laag</option></select>
+      </div>
+    </div>
+
+    <section class="kaarten cols4" id="kaarten" data-noun="profielen" data-noun-one="profiel" aria-label="Steekkaarten">
+
+        <article class="kaart" data-featured="true" data-city="Brussel"
+          data-tags="Ontspanning|Hot stone" data-verified="true"
+          data-available="true" data-price="110">
+          <div class="kaart-beeld" style="min-height:300px">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.5"/><path d="M8 5l1.5-2h5L16 5"/></svg><span class="lbl">PROFIELFOTO</span>
+            <div class="kaart-merk"><span class="merk">UITGELICHT</span><span class="merk open"><span class="dot"></span>Nu beschikbaar</span></div>
+            <button type="button" class="fav" aria-pressed="false" data-fav-name="Amélie" aria-label="Bewaar Amélie als favoriet"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></button>
+          </div>
+          <div class="kaart-body">
+            <div class="kaart-kop"><h2>Amélie</h2><span class="ver" title="Geverifieerd profiel"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l2.4 2.1 3.2-.3.9 3.1 2.8 1.6-1 3 1 3-2.8 1.6-.9 3.1-3.2-.3L12 22l-2.4-2.1-3.2.3-.9-3.1-2.8-1.6 1-3-1-3 2.8-1.6.9-3.1 3.2.3z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg><span class="sr">Geverifieerd</span></span></div>
+            <div class="plaats"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span>Brussel · Elsene</span></div>
+            <div class="tags"><span class="tag">Ontspanning</span><span class="tag">Hot stone</span></div>
+            <dl class="velden">
+              <div class="veld"><dt>Formule</dt><dd>Incall</dd></div><div class="veld"><dt>Duur</dt><dd>60 min</dd></div>
+              <div class="veld"><dt>Talen</dt><dd>NL · FR · EN</dd></div><div class="veld"><dt>Stijl</dt><dd>Ontspanning · Hot stone</dd></div>
+            </dl>
+            <div class="prijsrij">
+              <div class="prijs-l">
+                <span class="prijs-k">60 min vanaf</span>
+                <span class="prijs">€110 <small>· 1.100 tokens</small></span>
+              </div>
+              <a class="link" href="#">Profiel <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            </div>
+          </div>
+        </article>
+        <article class="kaart" data-featured="true" data-city="Brussel"
+          data-tags="Tantra|Duo massage" data-verified="true"
+          data-available="false" data-price="240">
+          <div class="kaart-beeld" style="min-height:300px">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.5"/><path d="M8 5l1.5-2h5L16 5"/></svg><span class="lbl">PROFIELFOTO</span>
+            <div class="kaart-merk"><span class="merk">UITGELICHT</span></div>
+            <button type="button" class="fav" aria-pressed="false" data-fav-name="Chloé" aria-label="Bewaar Chloé als favoriet"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></button>
+          </div>
+          <div class="kaart-body">
+            <div class="kaart-kop"><h2>Chloé</h2><span class="ver" title="Geverifieerd profiel"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l2.4 2.1 3.2-.3.9 3.1 2.8 1.6-1 3 1 3-2.8 1.6-.9 3.1-3.2-.3L12 22l-2.4-2.1-3.2.3-.9-3.1-2.8-1.6 1-3-1-3 2.8-1.6.9-3.1 3.2.3z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg><span class="sr">Geverifieerd</span></span></div>
+            <div class="plaats"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span>Brussel · Zavel</span></div>
+            <div class="tags"><span class="tag">Tantra</span><span class="tag">Duo massage</span></div>
+            <dl class="velden">
+              <div class="veld"><dt>Formule</dt><dd>Outcall · hotel</dd></div><div class="veld"><dt>Duur</dt><dd>120 min</dd></div>
+              <div class="veld"><dt>Talen</dt><dd>FR · NL · EN</dd></div><div class="veld"><dt>Stijl</dt><dd>Tantra · Duo massage</dd></div>
+            </dl>
+            <div class="prijsrij">
+              <div class="prijs-l">
+                <span class="prijs-k">120 min vanaf</span>
+                <span class="prijs">€240 <small>· 2.400 tokens</small></span>
+              </div>
+              <a class="link" href="#">Profiel <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            </div>
+          </div>
+        </article>
+        <article class="kaart" data-featured="false" data-city="Antwerpen"
+          data-tags="Tantra|Ontspanning" data-verified="true"
+          data-available="false" data-price="160">
+          <div class="kaart-beeld" style="min-height:300px">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.5"/><path d="M8 5l1.5-2h5L16 5"/></svg><span class="lbl">PROFIELFOTO</span>
+            <div class="kaart-merk"></div>
+            <button type="button" class="fav" aria-pressed="false" data-fav-name="Noor" aria-label="Bewaar Noor als favoriet"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></button>
+          </div>
+          <div class="kaart-body">
+            <div class="kaart-kop"><h2>Noor</h2><span class="ver" title="Geverifieerd profiel"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l2.4 2.1 3.2-.3.9 3.1 2.8 1.6-1 3 1 3-2.8 1.6-.9 3.1-3.2-.3L12 22l-2.4-2.1-3.2.3-.9-3.1-2.8-1.6 1-3-1-3 2.8-1.6.9-3.1 3.2.3z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg><span class="sr">Geverifieerd</span></span></div>
+            <div class="plaats"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span>Antwerpen · Zuid</span></div>
+            <div class="tags"><span class="tag">Tantra</span><span class="tag">Ontspanning</span></div>
+            <dl class="velden">
+              <div class="veld"><dt>Formule</dt><dd>Incall &amp; outcall</dd></div><div class="veld"><dt>Duur</dt><dd>90 min</dd></div>
+              <div class="veld"><dt>Talen</dt><dd>NL · EN</dd></div><div class="veld"><dt>Stijl</dt><dd>Tantra · Ontspanning</dd></div>
+            </dl>
+            <div class="prijsrij">
+              <div class="prijs-l">
+                <span class="prijs-k">90 min vanaf</span>
+                <span class="prijs">€160 <small>· 1.600 tokens</small></span>
+              </div>
+              <a class="link" href="#">Profiel <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            </div>
+          </div>
+        </article>
+        <article class="kaart" data-featured="false" data-city="Gent"
+          data-tags="Duo massage" data-verified="true"
+          data-available="true" data-price="180">
+          <div class="kaart-beeld" style="min-height:300px">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.5"/><path d="M8 5l1.5-2h5L16 5"/></svg><span class="lbl">PROFIELFOTO</span>
+            <div class="kaart-merk"><span class="merk open"><span class="dot"></span>Nu beschikbaar</span></div>
+            <button type="button" class="fav" aria-pressed="false" data-fav-name="Léa" aria-label="Bewaar Léa als favoriet"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></button>
+          </div>
+          <div class="kaart-body">
+            <div class="kaart-kop"><h2>Léa</h2><span class="ver" title="Geverifieerd profiel"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l2.4 2.1 3.2-.3.9 3.1 2.8 1.6-1 3 1 3-2.8 1.6-.9 3.1-3.2-.3L12 22l-2.4-2.1-3.2.3-.9-3.1-2.8-1.6 1-3-1-3 2.8-1.6.9-3.1 3.2.3z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg><span class="sr">Geverifieerd</span></span></div>
+            <div class="plaats"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span>Gent · Centrum</span></div>
+            <div class="tags"><span class="tag">Duo massage</span></div>
+            <dl class="velden">
+              <div class="veld"><dt>Formule</dt><dd>Incall</dd></div><div class="veld"><dt>Duur</dt><dd>60 min</dd></div>
+              <div class="veld"><dt>Talen</dt><dd>NL · FR</dd></div><div class="veld"><dt>Stijl</dt><dd>Duo massage</dd></div>
+            </dl>
+            <div class="prijsrij">
+              <div class="prijs-l">
+                <span class="prijs-k">60 min vanaf</span>
+                <span class="prijs">€180 <small>· 1.800 tokens</small></span>
+              </div>
+              <a class="link" href="#">Profiel <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            </div>
+          </div>
+        </article>
+        <article class="kaart" data-featured="false" data-city="Brussel"
+          data-tags="Thaise stijl" data-verified="false"
+          data-available="true" data-price="100">
+          <div class="kaart-beeld" style="min-height:300px">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.5"/><path d="M8 5l1.5-2h5L16 5"/></svg><span class="lbl">PROFIELFOTO</span>
+            <div class="kaart-merk"><span class="merk open"><span class="dot"></span>Nu beschikbaar</span></div>
+            <button type="button" class="fav" aria-pressed="false" data-fav-name="Sofia" aria-label="Bewaar Sofia als favoriet"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></button>
+          </div>
+          <div class="kaart-body">
+            <div class="kaart-kop"><h2>Sofia</h2></div>
+            <div class="plaats"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span>Brussel · Ukkel</span></div>
+            <div class="tags"><span class="tag">Thaise stijl</span></div>
+            <dl class="velden">
+              <div class="veld"><dt>Formule</dt><dd>Outcall</dd></div><div class="veld"><dt>Duur</dt><dd>60 min</dd></div>
+              <div class="veld"><dt>Talen</dt><dd>FR · EN · ES</dd></div><div class="veld"><dt>Stijl</dt><dd>Thaise stijl</dd></div>
+            </dl>
+            <div class="prijsrij">
+              <div class="prijs-l">
+                <span class="prijs-k">60 min vanaf</span>
+                <span class="prijs">€100 <small>· 1.000 tokens</small></span>
+              </div>
+              <a class="link" href="#">Profiel <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            </div>
+          </div>
+        </article>
+        <article class="kaart" data-featured="false" data-city="Luik"
+          data-tags="Tantra" data-verified="true"
+          data-available="false" data-price="150">
+          <div class="kaart-beeld" style="min-height:300px">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.5"/><path d="M8 5l1.5-2h5L16 5"/></svg><span class="lbl">PROFIELFOTO</span>
+            <div class="kaart-merk"></div>
+            <button type="button" class="fav" aria-pressed="false" data-fav-name="Yasmine" aria-label="Bewaar Yasmine als favoriet"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></button>
+          </div>
+          <div class="kaart-body">
+            <div class="kaart-kop"><h2>Yasmine</h2><span class="ver" title="Geverifieerd profiel"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l2.4 2.1 3.2-.3.9 3.1 2.8 1.6-1 3 1 3-2.8 1.6-.9 3.1-3.2-.3L12 22l-2.4-2.1-3.2.3-.9-3.1-2.8-1.6 1-3-1-3 2.8-1.6.9-3.1 3.2.3z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg><span class="sr">Geverifieerd</span></span></div>
+            <div class="plaats"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span>Luik · Centre</span></div>
+            <div class="tags"><span class="tag">Tantra</span></div>
+            <dl class="velden">
+              <div class="veld"><dt>Formule</dt><dd>Incall</dd></div><div class="veld"><dt>Duur</dt><dd>90 min</dd></div>
+              <div class="veld"><dt>Talen</dt><dd>FR · EN</dd></div><div class="veld"><dt>Stijl</dt><dd>Tantra</dd></div>
+            </dl>
+            <div class="prijsrij">
+              <div class="prijs-l">
+                <span class="prijs-k">90 min vanaf</span>
+                <span class="prijs">€150 <small>· 1.500 tokens</small></span>
+              </div>
+              <a class="link" href="#">Profiel <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            </div>
+          </div>
+        </article>
+        <article class="kaart" data-featured="false" data-city="Antwerpen"
+          data-tags="Hot stone|Ontspanning" data-verified="true"
+          data-available="true" data-price="130">
+          <div class="kaart-beeld" style="min-height:300px">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.5"/><path d="M8 5l1.5-2h5L16 5"/></svg><span class="lbl">PROFIELFOTO</span>
+            <div class="kaart-merk"><span class="merk open"><span class="dot"></span>Nu beschikbaar</span></div>
+            <button type="button" class="fav" aria-pressed="false" data-fav-name="Mila" aria-label="Bewaar Mila als favoriet"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></button>
+          </div>
+          <div class="kaart-body">
+            <div class="kaart-kop"><h2>Mila</h2><span class="ver" title="Geverifieerd profiel"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l2.4 2.1 3.2-.3.9 3.1 2.8 1.6-1 3 1 3-2.8 1.6-.9 3.1-3.2-.3L12 22l-2.4-2.1-3.2.3-.9-3.1-2.8-1.6 1-3-1-3 2.8-1.6.9-3.1 3.2.3z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg><span class="sr">Geverifieerd</span></span></div>
+            <div class="plaats"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span>Antwerpen · Eilandje</span></div>
+            <div class="tags"><span class="tag">Hot stone</span><span class="tag">Ontspanning</span></div>
+            <dl class="velden">
+              <div class="veld"><dt>Formule</dt><dd>Incall</dd></div><div class="veld"><dt>Duur</dt><dd>75 min</dd></div>
+              <div class="veld"><dt>Talen</dt><dd>NL · EN</dd></div><div class="veld"><dt>Stijl</dt><dd>Hot stone · Ontspanning</dd></div>
+            </dl>
+            <div class="prijsrij">
+              <div class="prijs-l">
+                <span class="prijs-k">75 min vanaf</span>
+                <span class="prijs">€130 <small>· 1.300 tokens</small></span>
+              </div>
+              <a class="link" href="#">Profiel <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            </div>
+          </div>
+        </article>
+        <article class="kaart" data-featured="false" data-city="Gent"
+          data-tags="Ontspanning" data-verified="false"
+          data-available="false" data-price="95">
+          <div class="kaart-beeld" style="min-height:300px">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.5"/><path d="M8 5l1.5-2h5L16 5"/></svg><span class="lbl">PROFIELFOTO</span>
+            <div class="kaart-merk"></div>
+            <button type="button" class="fav" aria-pressed="false" data-fav-name="Inès" aria-label="Bewaar Inès als favoriet"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></button>
+          </div>
+          <div class="kaart-body">
+            <div class="kaart-kop"><h2>Inès</h2></div>
+            <div class="plaats"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span>Gent · Patershol</span></div>
+            <div class="tags"><span class="tag">Ontspanning</span></div>
+            <dl class="velden">
+              <div class="veld"><dt>Formule</dt><dd>Incall</dd></div><div class="veld"><dt>Duur</dt><dd>60 min</dd></div>
+              <div class="veld"><dt>Talen</dt><dd>NL · FR</dd></div><div class="veld"><dt>Stijl</dt><dd>Ontspanning</dd></div>
+            </dl>
+            <div class="prijsrij">
+              <div class="prijs-l">
+                <span class="prijs-k">60 min vanaf</span>
+                <span class="prijs">€95 <small>· 950 tokens</small></span>
+              </div>
+              <a class="link" href="#">Profiel <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            </div>
+          </div>
+        </article>
+    </section>
+
+    <div class="leeg" id="leeg" hidden>
+      Geen resultaten voor deze filters.
+      <div style="margin-top:14px"><button type="button" class="pill" id="wis">Filters wissen</button></div>
+    </div>
+
+    <div class="meer"><a href="#">Meer laden</a></div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap ft-in">
+    <div>18+ · Alle advertenties worden gecontroleerd · © 3S.lifestyle bv</div>
+    <nav aria-label="Juridisch">
+      <a href="SecretXperience.html">Gebruiksvoorwaarden</a>
+      <a href="SecretXperience_Privacy_Policy.html">Privacy</a>
+      <a href="SecretXperience_Privacy_Policy.html">Cookies</a>
+      <a href="SecretXperience.html">Melden</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var grid = document.getElementById('kaarten');
+  if(!grid) return;
+  var kaarten = Array.prototype.slice.call(grid.querySelectorAll('.kaart'));
+  var state = { city:'Alle', tag:'Alle', flags:{} };
+  var countEl = document.getElementById('count');
+  var leegEl  = document.getElementById('leeg');
+  var sortEl  = document.getElementById('sort');
+  var noun    = grid.getAttribute('data-noun') || 'resultaten';
+  var noun1   = grid.getAttribute('data-noun-one') || noun;
+
+  function pressed(btn, on){ btn.setAttribute('aria-pressed', on ? 'true' : 'false'); }
+
+  function apply(){
+    var zichtbaar = 0;
+    kaarten.forEach(function(k){
+      var ok = (state.city === 'Alle' || k.dataset.city === state.city);
+      if(ok && state.tag !== 'Alle'){
+        ok = (k.dataset.tags || '').split('|').indexOf(state.tag) !== -1;
+      }
+      Object.keys(state.flags).forEach(function(f){
+        if(ok && state.flags[f]) ok = (k.dataset[f] === 'true');
+      });
+      k.hidden = !ok;
+      if(ok) zichtbaar++;
+    });
+    if(countEl) countEl.textContent = zichtbaar + ' ' + (zichtbaar === 1 ? noun1 : noun);
+    if(leegEl) leegEl.hidden = zichtbaar !== 0;
+  }
+
+  function sorteer(mode){
+    var lijst = kaarten.slice();
+    if(mode === 'price-asc')  lijst.sort(function(a,b){ return a.dataset.price - b.dataset.price; });
+    else if(mode === 'price-desc') lijst.sort(function(a,b){ return b.dataset.price - a.dataset.price; });
+    else lijst.sort(function(a,b){ return (b.dataset.featured === 'true') - (a.dataset.featured === 'true'); });
+    lijst.forEach(function(k){ grid.appendChild(k); });
+  }
+
+  document.querySelectorAll('[data-filter]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var soort = btn.dataset.filter, waarde = btn.dataset.value;
+      if(soort === 'flag'){
+        state.flags[waarde] = !state.flags[waarde];
+        pressed(btn, state.flags[waarde]);
+      } else {
+        state[soort] = waarde;
+        document.querySelectorAll('[data-filter="' + soort + '"]').forEach(function(z){
+          pressed(z, z.dataset.value === waarde);
+        });
+      }
+      apply();
+    });
+  });
+
+  var wis = document.getElementById('wis');
+  if(wis) wis.addEventListener('click', function(){
+    state = { city:'Alle', tag:'Alle', flags:{} };
+    document.querySelectorAll('[data-filter]').forEach(function(b){
+      pressed(b, b.dataset.filter !== 'flag' && b.dataset.value === 'Alle');
+    });
+    apply();
+  });
+
+  if(sortEl) sortEl.addEventListener('change', function(){ sorteer(sortEl.value); });
+
+  // Favourites are a per-viewer convenience; storage may be unavailable.
+  var bewaard = [];
+  try { bewaard = JSON.parse(localStorage.getItem('sx-favs') || '[]'); } catch(err) { bewaard = []; }
+  document.querySelectorAll('.fav').forEach(function(btn){
+    var naam = btn.dataset.favName;
+    if(bewaard.indexOf(naam) !== -1){
+      pressed(btn, true);
+      btn.setAttribute('aria-label', 'Verwijder ' + naam + ' uit favorieten');
+    }
+    btn.addEventListener('click', function(){
+      var aan = btn.getAttribute('aria-pressed') !== 'true';
+      pressed(btn, aan);
+      btn.setAttribute('aria-label', (aan ? 'Verwijder ' : 'Bewaar ') + naam + (aan ? ' uit favorieten' : ' als favoriet'));
+      var i = bewaard.indexOf(naam);
+      if(aan && i === -1) bewaard.push(naam); else if(!aan && i !== -1) bewaard.splice(i, 1);
+      try { localStorage.setItem('sx-favs', JSON.stringify(bewaard)); } catch(err) { /* private mode */ }
+    });
+  });
+
+  apply();
+})();
+</script>
+</body>
+</html>
