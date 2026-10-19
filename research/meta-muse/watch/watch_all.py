@@ -112,18 +112,24 @@ def main():
                                      headers={"Content-Type": "application/json"}, method="POST")
         if key:
             req.add_header("x-goog-api-key", key)
-        text, finish = "", None
+        text, finish, last_raw = "", None, ""
         with urllib.request.urlopen(req, timeout=900) as r:
             for line in r:
                 line = line.decode("utf-8", "replace").strip()
+                if line:
+                    last_raw = line[:300]
                 if not line.startswith("data:"):
                     continue
                 d = json.loads(line[5:])
+                if "error" in d:
+                    raise RuntimeError(f"stream error: {d['error']}")
                 for c in d.get("candidates", []):
                     finish = c.get("finishReason") or finish
                     for p in c.get("content", {}).get("parts", []):
                         if not p.get("thought"):
                             text += p.get("text", "")
+        if finish != "STOP":
+            print(f"  stream ended without STOP ({len(text.split())} words); last line: {last_raw}", flush=True)
         return text, finish
 
     def do_segment(job):
