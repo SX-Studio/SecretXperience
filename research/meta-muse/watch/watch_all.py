@@ -80,19 +80,34 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--tier", type=int, default=1)
     ap.add_argument("--ids", default="")
-    ap.add_argument("--model", default=os.environ.get("WATCH_GEMINI_MODEL", "gemini-3.7-flash"))
+    ap.add_argument("--models", default=os.environ.get(
+        "WATCH_GEMINI_MODELS",
+        "gemini-3.7-flash,gemini-3.5-flash,gemini-3-flash-preview,gemini-3.6-flash,gemini-3.5-flash-lite"),
+        help="comma list; free tier allows about 20 requests per model per day, so the runner "
+             "moves to the next model when one returns a daily-quota 429")
     ap.add_argument("--workers", type=int, default=3)
     args = ap.parse_args()
 
     key = os.environ.get("GEMINI_API_KEY")
-    endpoint = (f"https://generativelanguage.googleapis.com/v1beta/models/"
-                f"{args.model}:streamGenerateContent?alt=sse")
+    import threading
+    models = args.models.split(",")
+    exhausted = set()
+    lock = threading.Lock()
+
+    def current_model():
+        with lock:
+            for m in models:
+                if m not in exhausted:
+                    return m
+        return None
     here = pathlib.Path(__file__).parent
     out = here / "out"
     parts_dir = out / "parts"
     parts_dir.mkdir(parents=True, exist_ok=True)
 
-    def stream(body):
+    def stream(body, model):
+        endpoint = (f"https://generativelanguage.googleapis.com/v1beta/models/"
+                    f"{model}:streamGenerateContent?alt=sse")
         req = urllib.request.Request(endpoint, data=json.dumps(body).encode(),
                                      headers={"Content-Type": "application/json"}, method="POST")
         if key:
@@ -114,7 +129,7 @@ def main():
     def do_segment(job):
         vid, title, start, end = job
         dest = parts_dir / f"{vid}.{start:05d}.md"
-        if dest.exists() and dest.stat().st_size > 200:
+        if dest.exists() and dest.stat().st_size > 2000:
             return f"skip {vid} {mmss(start)}"
         part = {"file_data": {"file_uri": f"https://www.youtube.com/watch?v={vid}"}}
         if end:
@@ -124,25 +139,32 @@ def main():
             "generationConfig": {"thinkingConfig": {"thinkingLevel": "low"}},
         }
         last = None
-        for attempt in range(4):
+        for attempt in range(8):
+            model = current_model()
+            if model is None:
+                return f"error {vid} {mmss(start)}: every model is out of daily quota"
             try:
                 t = time.time()
-                text, finish = stream(body)
-                if len(text.split()) < 30:
-                    raise RuntimeError(f"short output ({len(text.split())} words, finish={finish})")
+                text, finish = stream(body, model)
+                if len(text.split()) < 30 or finish != "STOP":
+                    raise RuntimeError(f"incomplete output ({len(text.split())} words, finish={finish})")
                 dest.write_text(f"## Segment {mmss(start)} to {mmss(end) if end else 'end'}\n\n{text}\n")
-                return f"wrote {vid} {mmss(start)} ({len(text.split())} words, {round(time.time() - t)} s, {finish})"
+                return f"wrote {vid} {mmss(start)} ({len(text.split())} words, {round(time.time() - t)} s, {finish}, {model})"
             except Exception as e:
                 detail = ""
                 try:
-                    detail = e.read().decode()[:300]
+                    detail = e.read().decode()[:1500]
                 except Exception:
                     pass
-                last = f"{e} {detail}".strip()
+                last = f"{model}: {e} {detail}".strip()
+                if "PerDay" in detail or "per day" in detail.lower() or getattr(e, "code", 0) == 404:
+                    with lock:
+                        exhausted.add(model)
+                    continue
                 # thinkingConfig rejected by an older model: drop it and retry
                 if "thinking" in detail.lower():
                     body.pop("generationConfig", None)
-                time.sleep(20 * (attempt + 1))
+                time.sleep(15 * (attempt + 1))
         return f"error {vid} {mmss(start)}: {last}"
 
     if args.ids:
