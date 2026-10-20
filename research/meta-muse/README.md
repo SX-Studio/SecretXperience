@@ -31,6 +31,20 @@ container was reclaimed, so everything it produced was rebuilt from its transcri
 7. **Gemini key.** Added as a cloud-environment network secret on `generativelanguage.googleapis.com` injecting `x-goog-api-key`. Confirmed working in the review session.
 8. **Review session (2026-10-19/20):** user asked to watch all videos for visuals, then **"Skip the interview videos, no need."** All 15 tutorial/demo videos were watched with Gemini; results in `watch/`. User switched this session to Opus to save Fable usage and asked to gather as much context as possible for a later Fable session.
 
+## The user's standing preferences (follow these in every session)
+
+- **Review prompts first.** Before generating anything, write the prompt or brief out in full and review it. Improve it until it fully specifies the intended effects, visuals, context, style and camera motion. Keep the reviewed brief with the output, as in `demo-short-2-molasses/BRIEF.md`.
+- **Don't be fixed on a few tools.** Expand to whatever tools achieve the result best, such as 3D, depth models, archival sources, audio synthesis or new APIs.
+- **Video length is flexible.** Nothing should feel cut short. Endings need a held beat, a music tail and a slow fade.
+- **The user wants to be impressed.** Improvise in every dimension rather than repeat a formula.
+
+## Demo Shorts made in the review session
+
+| Folder | What it is |
+|---|---|
+| `demo-short/` | 30 s mechanism explainer, "This rod keeps your water heater alive". Gemini voice, code-rendered canvas animation, word captions, synthesized sound effects. The user's feedback: great, but choppy at the end. |
+| `demo-short-2-molasses/` | 81.5 s cinematic history Short, "The Great Molasses Flood". It combines a real 1919 Library of Congress photo with Depth Anything 2.5D parallax, Three.js 3D tank, rivets and wave, a living-newspaper design, a synthesized score and sound design, and film emulation. |
+
 ## Decisions still open (the user's call)
 
 - **Niche.** Recommended: "how things in your home actually work" mechanism explainers (Shorts first, over-55 long-form audience, $27 to $47 guide). Alternative: sports technique mechanics.
