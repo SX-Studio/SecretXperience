@@ -93,6 +93,8 @@ Added 2026-10-20, watched for visuals:
 |---|---|
 | -LNDXx__ZT0 | Higgsfield AI, Introducing Higgsfield Katana (Claude Motion), 78 s short |
 | zkhLZUGIIfE | The_Frizzy1, I Replaced Higgsfield Genjutsu With My RTX 3060 (local character swap) |
+| kvf2lRSGixg | Kristian Jennings, I stopped using seedance and now my AI UGC looks 100% real (31 min, [link](https://youtu.be/kvf2lRSGixg); visual watch 1 of 4 segments, rest pending Gemini quota) |
+| zke3bTtvmLo | Jad M.H, How to Make Viral Motion Graphics With AI With $0 (Turned it into a Skill) (16 min, [link](https://youtu.be/zke3bTtvmLo)) |
 
 Tier 2, interviews, skipped for visuals at the user's request (their transcripts were distilled into the `strategy-*.md` files, except Cole Gordon's, which only matters for the sales page):
 

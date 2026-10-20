@@ -51,6 +51,8 @@ VIDEOS = {
         ("rZvF_EWZoHw", "Higgsfield AI, Claude Opus 5.5 Made Clipping The Easiest Side Hustle", 805),
         ("2hJsvDSPWYM", "Dan Kieft, How I Make Realistic AI Videos with Seedance 2.5 - Full Guide", 1227),
         ("Zo8KaTs0l6k", "Dan Kieft, How I Make Ultra Realistic AI Videos using Seedance 2.5", 1362),
+        ("kvf2lRSGixg", "Kristian Jennings, I stopped using seedance and now my AI UGC looks 100% real", 1873),
+        ("zke3bTtvmLo", "Jad M.H, How to Make Viral Motion Graphics With AI With $0 (Turned it into a Skill)", 947),
     ],
     2: [
         ("Yt_BULiimg4", "Calum Johnson Show, The Creator Who Mastered Claude", 5739),
