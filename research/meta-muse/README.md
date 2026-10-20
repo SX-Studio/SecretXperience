@@ -19,6 +19,8 @@ container was reclaimed, so everything it produced was rebuilt from its transcri
 | `watch/VISUAL-FINDINGS.md` | **Read second.** Synthesis of what the 15 tutorial videos show on screen, trust caveats, verified repo list, and the blueprint changes (already applied) |
 | `transcripts/` | Plain-text transcripts of videos added after the first chat (earlier transcripts were lost with the old container; their content lives in the reports) |
 | `watch/out/*.md` | Visual-context reports, one per video (on-screen tools, verbatim prompts, UI steps, visual style, numbers) |
+| `tools/TOOLS-ASSESSMENT.md` | **Read third.** Hands-on verdicts on the six repos from S_W4OSuh2Aw plus the local stack, the production loop that worked, gotchas, licences |
+| `tools/setup-local-stack.sh` | Rebuilds the local, quota-free stack (HyperFrames + skills, Parakeet, Hypit, Kokoro, optional OmniVoice) in a fresh container |
 
 ## The conversation, in order
 
@@ -31,18 +33,23 @@ container was reclaimed, so everything it produced was rebuilt from its transcri
 7. **Gemini key.** Added as a cloud-environment network secret on `generativelanguage.googleapis.com` injecting `x-goog-api-key`. Confirmed working in the review session.
 8. **Review session (2026-10-19/20):** user asked to watch all videos for visuals, then **"Skip the interview videos, no need."** All 15 tutorial/demo videos were watched with Gemini; results in `watch/`. User switched this session to Opus to save Fable usage and asked to gather as much context as possible for a later Fable session.
 
+9. **Tools session (2026-10-20):** the user sent Eric Michaud's "6 MORE Repos to Replace Paid Software" (S_W4OSuh2Aw). HyperFrames, Kokoro, Parakeet and Hypit were installed and tested here; VoiceStudio/OmniVoice and MusicGen work but have non-commercial weights (`tools/TOOLS-ASSESSMENT.md`). Then two more videos (Kristian Jennings AI UGC, Jad M.H motion graphics; the user flagged Jad's as important); findings in `watch/VISUAL-FINDINGS.md`. Demo Short 3 was built end to end on the new stack.
+
 ## The user's standing preferences (follow these in every session)
 
 - **Review prompts first.** Before generating anything, write the prompt or brief out in full and review it. Improve it until it fully specifies the intended effects, visuals, context, style and camera motion. Keep the reviewed brief with the output, as in `demo-short-2-molasses/BRIEF.md`.
 - **Don't be fixed on a few tools.** Expand to whatever tools achieve the result best, such as 3D, depth models, archival sources, audio synthesis or new APIs.
 - **Video length is flexible.** Nothing should feel cut short. Endings need a held beat, a music tail and a slow fade.
 - **The user wants to be impressed.** Improvise in every dimension rather than repeat a formula.
+- **Run the scored critique loop before delivering** (from Jad M.H): contact sheet at every shot's midpoint, score each 1 to 10 for story clarity, composition, motion, typography, sync and polish, fix the 3 worst problems, repeat until all are 8+ (max 4 rounds). Keep a ban list of looks already used so each piece is new.
+- **Prefer commercial-safe tools for anything monetizable.** Check model weight licences, not just code licences.
 
 ## Demo Shorts made in the review session
 
 | Folder | What it is |
 |---|---|
 | `demo-short/` | 30 s mechanism explainer, "This rod keeps your water heater alive". Gemini voice, code-rendered canvas animation, word captions, synthesized sound effects. The user's feedback: great, but choppy at the end. |
+| `demo-short-3-wow-signal/` | 72.0 s Short, "The Wow! Signal": the video lasts exactly as long as the signal. Fully local and quota-free: HyperFrames faceless-explainer workflow with 12 parallel frame agents, Kokoro voice, Parakeet captions, original numpy score, scored critique loop, -14 LUFS master. Editable HyperFrames project included. |
 | `demo-short-2-molasses/` | 81.5 s cinematic history Short, "The Great Molasses Flood". It combines a real 1919 Library of Congress photo with Depth Anything 2.5D parallax, Three.js 3D tank, rivets and wave, a living-newspaper design, a synthesized score and sound design, and film emulation. |
 
 ## Decisions still open (the user's call)

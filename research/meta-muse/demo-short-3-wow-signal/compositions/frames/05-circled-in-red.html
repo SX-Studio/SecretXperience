@@ -1,0 +1,390 @@
+<template>
+  <div
+    id="root"
+    data-composition-id="05-circled-in-red"
+    data-width="1080"
+    data-height="1920"
+    data-duration="4.916"
+  >
+    <style>
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-400.woff2") format("woff2");font-weight:400;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-500.woff2") format("woff2");font-weight:500;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-600.woff2") format("woff2");font-weight:600;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-700.woff2") format("woff2");font-weight:700;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-800.woff2") format("woff2");font-weight:800;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-900.woff2") format("woff2");font-weight:900;font-style:normal;}
+@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/IBMPlexMono-400.woff2") format("woff2");font-weight:400;font-style:normal;}
+@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/IBMPlexMono-500.woff2") format("woff2");font-weight:500;font-style:normal;}
+@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/IBMPlexMono-600.woff2") format("woff2");font-weight:600;font-style:normal;}
+@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/IBMPlexMono-700.woff2") format("woff2");font-weight:700;font-style:normal;}
+
+      
+
+      #root {
+        position: absolute;
+        inset: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        container-type: size;
+        font-family: "IBM Plex Mono", monospace;
+        color: #f0ece5;
+      }
+
+      [id="05-circled-in-red-bg"] {
+        position: absolute;
+        inset: 0;
+        background: #111111;
+      }
+
+      /* Printout paper panel: same stage as Frame 3 (top 10% to 80%), cropped tighter. */
+      [id="05-circled-in-red-panel"] {
+        position: absolute;
+        left: 59px;
+        top: 192px;
+        width: 962px;
+        height: 1344px;
+        background: #1a1a18;
+        border: 1px solid #282826;
+        overflow: hidden;
+      }
+
+      /* Inner content uses canvas coordinates (offset back by the panel origin). */
+      [id="05-circled-in-red-content"] {
+        position: absolute;
+        left: -60px;
+        top: -193px;
+        width: 1080px;
+        height: 1920px;
+        transform-origin: 229px 952px;
+      }
+
+      [id="05-circled-in-red-noise"],
+      [id="05-circled-in-red-hero"] {
+        position: absolute;
+        inset: 0;
+      }
+
+      [id="05-circled-in-red-noise"] span,
+      [id="05-circled-in-red-hero"] span {
+        position: absolute;
+        width: 160px;
+        height: 144px;
+        line-height: 144px;
+        text-align: center;
+        font-weight: 500;
+        white-space: pre;
+      }
+
+      [id="05-circled-in-red-noise"] span {
+        font-size: 80px;
+        color: #505048;
+      }
+
+      [id="05-circled-in-red-hero"] span {
+        font-size: 112px;
+        color: #f0ece5;
+      }
+
+      /* Paper margin edge: 1px hairline marking the empty right margin. */
+      [id="05-circled-in-red-margin"] {
+        position: absolute;
+        left: 776px;
+        top: 193px;
+        width: 1px;
+        height: 1343px;
+        background: #282826;
+      }
+
+      [id="05-circled-in-red-ink"] {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: visible;
+      }
+
+      [id="05-circled-in-red-chrome"] {
+        position: absolute;
+        inset: 0;
+      }
+
+      [id="05-circled-in-red-kicker"] {
+        position: absolute;
+        left: 107px;
+        top: 230px;
+        font-size: 26px;
+        line-height: 1;
+        font-weight: 500;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        white-space: pre;
+        color: #888880;
+      }
+
+      [id="05-circled-in-red-kicker-typed"] {
+        color: #e85d26;
+      }
+
+      [id="05-circled-in-red-name"] {
+        position: absolute;
+        right: 107px;
+        top: 236px;
+        text-align: right;
+        font-weight: 500;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        white-space: pre;
+      }
+
+      [id="05-circled-in-red-rule"] {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 36px;
+        height: 2px;
+        background: #e85d26;
+        transform-origin: 100% 50%;
+      }
+
+      [id="05-circled-in-red-name-line"] {
+        position: absolute;
+        right: 0;
+        top: 22px;
+        font-size: 30px;
+        line-height: 1;
+        color: #f0ece5;
+      }
+
+      [id="05-circled-in-red-role-line"] {
+        position: absolute;
+        right: 0;
+        top: 66px;
+        font-size: 22px;
+        line-height: 1;
+        color: #888880;
+      }
+    </style>
+
+    <div
+      id="05-circled-in-red-bg"
+      class="clip"
+      data-start="0"
+      data-duration="4.916"
+      data-track-index="0"
+    ></div>
+
+    <div
+      id="05-circled-in-red-panel"
+      class="clip"
+      data-start="0"
+      data-duration="4.916"
+      data-track-index="1"
+    >
+      <div id="05-circled-in-red-content">
+        <div id="05-circled-in-red-noise"></div>
+        <div id="05-circled-in-red-hero"></div>
+        <div id="05-circled-in-red-margin"></div>
+        <svg
+          id="05-circled-in-red-ink"
+          viewBox="0 0 1080 1920"
+          width="1080"
+          height="1920"
+          aria-hidden="true"
+        >
+          <path
+            id="05-circled-in-red-circle"
+            d="M 244 496 C 300 491, 352 690, 349 940 C 346 1200, 300 1410, 226 1407 C 158 1404, 106 1196, 110 948 C 114 700, 152 488, 236 492 C 282 494, 316 510, 334 544"
+            fill="none"
+            stroke="#E85D26"
+            stroke-width="7"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          ></path>
+          <circle id="05-circled-in-red-pen" cx="244" cy="496" r="9" fill="#E85D26"></circle>
+        </svg>
+      </div>
+    </div>
+
+    <div
+      id="05-circled-in-red-chrome"
+      class="clip"
+      data-start="0"
+      data-duration="4.916"
+      data-track-index="2"
+    >
+      <div id="05-circled-in-red-kicker"><span>RECREATION · </span><span id="05-circled-in-red-kicker-typed"></span></div>
+      <div id="05-circled-in-red-name">
+        <div id="05-circled-in-red-rule"></div>
+        <div id="05-circled-in-red-name-line"></div>
+        <div id="05-circled-in-red-role-line"></div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        "use strict";
+
+        var FRAME_ID = "05-circled-in-red";
+        var DURATION = 4.916;
+        var byId = function (suffix) {
+          return document.getElementById(FRAME_ID + "-" + suffix);
+        };
+
+        var noiseLayer = byId("noise");
+        var heroLayer = byId("hero");
+        var content = byId("content");
+        var circle = byId("circle");
+        var pen = byId("pen");
+        var kickerTyped = byId("kicker-typed");
+        var rule = byId("rule");
+        var nameLine = byId("name-line");
+        var roleLine = byId("role-line");
+
+        // ---- Printout grid (seeded, deterministic) -------------------------
+        // Column centers: 160px pitch around the hero column (second column,
+        // x = 229). Column 0 is cropped by the panel edge.
+        var COLS = [69, 229, 389, 549, 709];
+        var ROWS = [448, 592, 736, 880, 1024, 1168, 1312, 1456];
+        var HERO_COL = 1;
+        var HERO = ["6", "E", "Q", "U", "J", "5"]; // rows 1..6
+
+        function mulberry32(a) {
+          return function () {
+            a |= 0;
+            a = (a + 0x6d2b79f5) | 0;
+            var t = Math.imul(a ^ (a >>> 15), 1 | a);
+            t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+            return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+          };
+        }
+        var rand = mulberry32(1977);
+        function noiseChar() {
+          var r = rand();
+          if (r < 0.5) return " ";
+          if (r < 0.8) return "1";
+          if (r < 0.93) return "2";
+          return "3";
+        }
+
+        function placeCell(layer, ch, cx, cy) {
+          var s = document.createElement("span");
+          s.textContent = ch;
+          s.style.left = cx - 80 + "px";
+          s.style.top = cy - 72 + "px";
+          layer.appendChild(s);
+          return s;
+        }
+
+        for (var r = 0; r < ROWS.length; r++) {
+          for (var c = 0; c < COLS.length; c++) {
+            var isHero = c === HERO_COL && r >= 1 && r <= 6;
+            if (isHero) {
+              placeCell(heroLayer, HERO[r - 1], COLS[c], ROWS[r]);
+            } else {
+              var ch = noiseChar();
+              if (ch !== " ") placeCell(noiseLayer, ch, COLS[c], ROWS[r]);
+            }
+          }
+        }
+
+        // ---- Typed mono labels (one span per character) --------------------
+        function buildTyped(el, text) {
+          var spans = [];
+          Array.from(text).forEach(function (ch) {
+            var s = document.createElement("span");
+            s.textContent = ch;
+            el.appendChild(s);
+            spans.push(s);
+          });
+          return spans;
+        }
+        var kickerChars = buildTyped(kickerTyped, "DAYS LATER");
+        var nameChars = buildTyped(nameLine, "JERRY R. EHMAN");
+        var roleChars = buildTyped(roleLine, "VOLUNTEER");
+
+        var tl = gsap.timeline({ paused: true });
+
+        function typeOn(spans, start, step) {
+          spans.forEach(function (s, i) {
+            tl.fromTo(s, { opacity: 0 }, { opacity: 1, duration: 0.001, ease: "none" }, start + i * step);
+          });
+        }
+
+        // ---- Macro camera: slow push into the hero column (whole shot) -----
+        tl.fromTo(content, { scale: 1 }, { scale: 1.04, duration: DURATION, ease: "sine.inOut" }, 0);
+
+        // ---- Scene 1 (0.0-1.6s): kicker "DAYS LATER" types on --------------
+        typeOn(kickerChars, 0.15, 0.06);
+
+        // ---- Scene 2 (1.6-2.8s): name label types on, upper right ----------
+        tl.fromTo(rule, { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power3.out" }, 1.6);
+        typeOn(nameChars, 1.68, 0.036);
+        typeOn(roleChars, 2.25, 0.035);
+
+        // ---- Scene 3 (2.8-4.0s): one-stroke hand-drawn circle --------------
+        // Marker-highlight technique: dash reveal from getTotalLength, ink
+        // hidden (opacity 0) until the cue so the round cap never pre-paints.
+        var DRAW_START = 2.85;
+        var DRAW = 0.95;
+        var length = circle.getTotalLength();
+        circle.style.strokeDasharray = String(length);
+        gsap.set(circle, { strokeDashoffset: length, opacity: 0 });
+        gsap.set(pen, { opacity: 0 });
+        tl.set(circle, { opacity: 1 }, DRAW_START);
+        tl.set(pen, { opacity: 1 }, DRAW_START);
+        tl.fromTo(
+          circle,
+          { strokeDashoffset: length },
+          { strokeDashoffset: 0, duration: DRAW, ease: "power2.inOut" },
+          DRAW_START,
+        );
+
+        // Pen tip rides the stroke: sample the path at the same eased progress.
+        var drawEase = gsap.parseEase("power2.inOut");
+        var STEPS = 32;
+        var start = circle.getPointAtLength(0);
+        gsap.set(pen, { attr: { cx: start.x, cy: start.y } });
+        for (var i = 1; i <= STEPS; i++) {
+          var p = circle.getPointAtLength(length * drawEase(i / STEPS));
+          tl.to(
+            pen,
+            { attr: { cx: p.x, cy: p.y }, duration: DRAW / STEPS, ease: "none" },
+            DRAW_START + (DRAW * (i - 1)) / STEPS,
+          );
+        }
+
+        // Noise recedes a touch as the ink lands on the column.
+        tl.fromTo(noiseLayer, { opacity: 1 }, { opacity: 0.6, duration: 0.8, ease: "power2.out" }, 2.85);
+
+        // ---- Scene 4 (4.0-4.9s): pen lifts to the right margin, hesitates --
+        var end = circle.getPointAtLength(length);
+        var MX = 884;
+        var MY = 836;
+        tl.fromTo(
+          pen,
+          { attr: { cx: end.x } },
+          { attr: { cx: MX }, duration: 0.55, ease: "power2.inOut", immediateRender: false },
+          4.0,
+        );
+        tl.fromTo(
+          pen,
+          { attr: { cy: end.y } },
+          { attr: { cy: MY }, duration: 0.55, ease: "power1.in", immediateRender: false },
+          4.0,
+        );
+        // Hesitation: two small deliberate nudges, then pen presses down.
+        tl.to(pen, { attr: { cx: MX + 7, cy: MY - 5 }, duration: 0.14, ease: "sine.inOut" }, 4.55);
+        tl.to(pen, { attr: { cx: MX + 2, cy: MY + 2 }, duration: 0.14, ease: "sine.inOut" }, 4.69);
+        tl.fromTo(pen, { attr: { r: 9 } }, { attr: { r: 11 }, duration: 0.12, ease: "power2.out", immediateRender: false }, 4.76);
+        // Hold: the word is withheld for Frame 6.
+
+        tl.seek(0);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["05-circled-in-red"] = tl;
+      })();
+    </script>
+  </div>
+</template>
