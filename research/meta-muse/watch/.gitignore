@@ -1,2 +1,3 @@
 out/parts/
 run.log
+.cache/
