@@ -17,6 +17,7 @@ container was reclaimed, so everything it produced was rebuilt from its transcri
 | `strategy-calum-johnson-kj.md` | Tactics from KJ on the Calum Johnson Show (math-vs-art slider, level-2 workflows, tool-spec method) |
 | `watch/watch_all.py` | Batch "watch" runner: Gemini video understanding over each YouTube URL, standard library only |
 | `watch/VISUAL-FINDINGS.md` | **Read second.** Synthesis of what the 15 tutorial videos show on screen, trust caveats, verified repo list, and the blueprint changes (already applied) |
+| `transcripts/` | Plain-text transcripts of videos added after the first chat (earlier transcripts were lost with the old container; their content lives in the reports) |
 | `watch/out/*.md` | Visual-context reports, one per video (on-screen tools, verbatim prompts, UI steps, visual style, numbers) |
 
 ## The conversation, in order
@@ -71,6 +72,13 @@ Tier 1, watched for visuals:
 | kqn_mSjSWMs | The Next New Thing, GitHub's top repos |
 | 1dlC0MVqzP0 | Deeplearn HQ short, Claude runs your YouTube channel |
 | tpZOU1ugODQ | Greg Isenberg, Meta Muse will create 1,000 millionaires |
+
+Added 2026-10-20, watched for visuals:
+
+| ID | Title |
+|---|---|
+| -LNDXx__ZT0 | Higgsfield AI, Introducing Higgsfield Katana (Claude Motion), 78 s short |
+| zkhLZUGIIfE | The_Frizzy1, I Replaced Higgsfield Genjutsu With My RTX 3060 (local character swap) |
 
 Tier 2, interviews, skipped for visuals at the user's request (their transcripts were distilled into the `strategy-*.md` files, except Cole Gordon's, which only matters for the sales page):
 

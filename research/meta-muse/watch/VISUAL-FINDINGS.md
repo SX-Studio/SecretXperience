@@ -92,3 +92,50 @@ The four long interviews were skipped at the user's request. Their transcripts a
 5. Stage 1: add Zinho's channel-teardown prompt and TubeLab's outlier and niche filters to the research job.
 6. Section 2: replace the Deeplearn row's repo with `jakeschincariol/youtube-agent-skill`, and upgrade the Resolve 21.1 connector from "claimed" to "shown on screen".
 7. Keys: the Gemini key now covers Watch runs, TTS and retention analysis. Free-tier limits are about 20 requests per model per day, so a scheduled pipeline needs either the paid tier or the model rotation in `watch_all.py`.
+
+## Added 2026-10-20: two Higgsfield videos
+
+Reports: `out/-LNDXx__ZT0.md` and `out/zkhLZUGIIfE.md`. Transcripts: `../transcripts/`.
+
+### Higgsfield Katana launch short (78 s, Higgsfield AI, 195K views)
+
+- **What is on screen.** In Claude Desktop the path is Settings, then Connectors, then "Higgsfield Katana" switched on. Prompts are one line, for example "Aura farming edit of my car" with a car photo, or a pasted Instagram link plus "aura farming edit of that person". Output is fast phonk-style edits with speed lines, chromatic aberration, whip pans, flash impacts and glowing all-caps kinetic type. A "Katana mode" toggle and "context-aware shot generation" are shown.
+- **What Higgsfield's own article adds** ([higgsfield.ai/blog/higgsfield-katana](https://higgsfield.ai/blog/higgsfield-katana)):
+  - **Function.** Katana is a Claude skill on the same connector (`https://mcp.higgsfield.ai/mcp`). It rebuilds a reference edit's shot order, pacing and cuts, using up to 5 photos of your characters or products.
+  - **Invocation.** `/katana` opens the preset library, and `/katana/<preset>` runs one.
+  - **Output.** An MP4 matching the reference's length, aspect ratio and frame rate. Corrections regenerate only the affected shots.
+  - **Billing.** Normal Higgsfield credits, with the cost shown before each generation.
+  - **Uploads.** Images attached in the Claude chat are not passed through. Use Higgsfield's upload window or a direct media link.
+  - **Contradiction.** The article says profile links from Instagram or TikTok are not accepted, while the launch video pastes an Instagram link.
+- **The editable After Effects route** ([AlphaSignal](https://alphasignal.ai/news/higgsfield-lets-claude-build-fully-editable-after-effects-projects)). A separate bridge (`https://bridge.higgsfield.ai/mcp`) plus a local Adobe plugin lets Claude return a layered `.aep` file with keyframes and expressions. Skills include `/use-after-effects` and `/paper-collage`. It needs Higgsfield, Claude and After Effects subscriptions.
+- **Fit for this project.** Katana is built for trend edits ("aura farming", hype reels), not for mechanism explainers. It is useful for a separate Shorts lane or product promos, and as a quick way to prototype a look before rebuilding it in HyperFrames. The article itself says to use only references you own or have permission to use. Treat cloning another creator's edit as the same risk class as Sirio's workflow.
+
+### "I Replaced Higgsfield Genjutsu With My RTX 3060" (10.6 min, The_Frizzy1)
+
+- **What it does.** It runs Genjutsu-style character swaps locally: one video plus one character sheet gives the same clip, same moves and original sound, with the person replaced. It needs no credits, no upload and no cloud filter.
+- **Model and files.** The model is MiniMax H3 Ref2VA plus a 155 MB Character Swap LoRA (Akatz Labs, rank 16), running in ComfyUI 0.39 or newer with core nodes only. The workflow is free on [GitHub](https://github.com/Thefrizzy1/The_frizzy1-Workflows/tree/main/workflows/minimax/h3-character-swap-12gb), and the files total about 42 GB:
+
+  | File | Size |
+  |---|---|
+  | Ref2VA model | 21.0 GB |
+  | Qwen2-VL text encoder | 15.7 GB |
+  | Video VAE | 2.8 GB |
+  | Audio VAE | 0.6 GB |
+  | Turbo LoRA | 2.0 GB |
+  | Swap LoRA | 155 MB |
+
+- **Hardware and real times.** It ran on an RTX 3060 with 12 GB at 0.4 megapixels, with VRAM at 95 percent and system RAM peaking at 23 GB. 32 GB of RAM is recommended.
+
+  | Job | Time |
+  |---|---|
+  | 5 s clip, 4 turbo steps | 9:55 |
+  | 5 s clip, 20 steps | 35:10 |
+  | Typical full meme, 6.7 to 9.8 s | 12 to 17.5 min |
+
+- **Three fixes he shows.** The H3 model alone does nothing, and the Swap LoRA fixes that. Box mode fails, and one "who to replace" sentence fixes that, for example "bald man in the black t-shirt at the back". Five-second clips cut off punchlines, so 124-frame passes are chained from the last 22 frames of the previous pass, and the original audio is restored at the end.
+- **Limits from the LoRA's model card.** Shots of 4 to 5 seconds work best, with one person at a time. Cuts inside a clip confuse it.
+- **Character sheets.** These are front, back and face close-up, made locally with Qwen Image 2.1 in about 15 to 20 seconds each.
+- **Fit for this project.**
+  - **Hardware.** This cloud container has no GPU, so this would run on the user's own PC or a rented GPU.
+  - **The legitimate use is a channel mascot.** Film yourself demonstrating something, such as how to reseat a water-heater element, then swap yourself for a consistent cartoon mascot. The motion is real and the presenter is clearly animated. That avoids the fabricated-human-avatar problem in blueprint section 4. It also lowers synthetic-content disclosure exposure, though disclosure still applies if the result looks realistic.
+  - **Real people and copyrighted clips stay out.** The creator himself swaps only into dogs and cartoons, "not real people. That's where it can get sketchy." Never put a real person's likeness, or a copyrighted meme clip, into a public channel this way.
