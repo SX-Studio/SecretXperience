@@ -16,8 +16,8 @@ container was reclaimed, so everything it produced was rebuilt from its transcri
 | `strategy-jake-trinder.md` | Rules from the Jake Trinder interview (demand floor/ceiling, 4P hook, blow-up score, post-mortems) |
 | `strategy-calum-johnson-kj.md` | Tactics from KJ on the Calum Johnson Show (math-vs-art slider, level-2 workflows, tool-spec method) |
 | `watch/watch_all.py` | Batch "watch" runner: Gemini video understanding over each YouTube URL, standard library only |
-| `watch/out/*.md` | Visual-context reports, one per video (on-screen tools, prompts, UI steps, visual style, numbers) |
-| `watch/VISUAL-FINDINGS.md` | Synthesis of the watch reports and what they change in the blueprint |
+| `watch/VISUAL-FINDINGS.md` | **Read second.** Synthesis of what the 15 tutorial videos show on screen, trust caveats, verified repo list, and the blueprint changes (already applied) |
+| `watch/out/*.md` | Visual-context reports, one per video (on-screen tools, verbatim prompts, UI steps, visual style, numbers) |
 
 ## The conversation, in order
 
@@ -28,7 +28,7 @@ container was reclaimed, so everything it produced was rebuilt from its transcri
 5. **Pivot: complete YouTube automation**, research through AI generation/editing to posting. TubeLab's video is the foundation. 13 videos transcribed. Produced the blueprint.
 6. **Five more videos for direction**, plus two side notes: use Reverse Engineer Anything on Adobe/Higgsfield (answer: no, Adobe terms section 17(B) forbid it and Higgsfield has nothing to decompile; rebuild the workflows from public docs instead), and watch every video for visual context (answer: Gemini batch runner, needs a key). Produced the addendum.
 7. **Gemini key.** Added as a cloud-environment network secret on `generativelanguage.googleapis.com` injecting `x-goog-api-key`. Confirmed working in the review session.
-8. **Review session:** user asked to watch all videos for visuals, then **"Skip the interview videos, no need."** So only the 15 tutorial/demo videos were watched.
+8. **Review session (2026-10-19/20):** user asked to watch all videos for visuals, then **"Skip the interview videos, no need."** All 15 tutorial/demo videos were watched with Gemini; results in `watch/`. User switched this session to Opus to save Fable usage and asked to gather as much context as possible for a later Fable session.
 
 ## Decisions still open (the user's call)
 
@@ -44,7 +44,7 @@ container was reclaimed, so everything it produced was rebuilt from its transcri
 
 | Key | Status | Unblocks |
 |---|---|---|
-| Gemini (network secret, `x-goog-api-key`) | **Live** | Watch runs, retention analysis, free TTS option |
+| Gemini (network secret, `x-goog-api-key`) | **Live** | Watch runs, retention analysis, free TTS (`gemini-3.8-flash-tts` tested OK). Free tier: about 20 requests per model per day |
 | TubeLab API key | Not yet | Outlier miner, niche validation |
 | YouTube OAuth client | Not yet | Upload, thumbnails, analytics |
 | ElevenLabs API key | Not yet | Narration with word timestamps |
@@ -84,5 +84,7 @@ Tier 2, interviews, skipped for visuals at the user's request (their transcripts
 ## Operational notes for the next session
 
 - YouTube rate-limits this container's IP (HTTP 429) for yt-dlp downloads. What worked for transcripts: `yt-dlp --js-runtimes node --extractor-args "youtube:player_client=web_embedded,mweb;player_skip=webpage" --skip-download -j URL` to get caption URLs, then fetch the caption URL through `https://r.jina.ai/<url>`.
-- Gemini accepts a YouTube URL directly as `file_data.file_uri`, so nothing is downloaded. Run `python3 -I research/meta-muse/watch/watch_all.py --ids <id>` to watch one more video. The proxy can return a transient 502; the script retries.
+- Gemini accepts a YouTube URL directly as `file_data.file_uri`, so nothing is downloaded. Run `python3 -I research/meta-muse/watch/watch_all.py --ids <id>` to watch one more video.
+- The agent proxy drops any request that sends no bytes for 30 seconds, so `watch_all.py` streams (`streamGenerateContent?alt=sse`), uses low thinking, and splits videos into 8-minute segments. It rotates models on daily-quota 429s and retries streams that end without `STOP`.
+- GitHub pages outside this session's repo scope are blocked by the proxy; read public repos via `https://cdn.jsdelivr.net/gh/<owner>/<repo>/README.md`.
 - Jason Cooperson's free starter prompt lives in his public artifact (claude.ai/artifact/BYH6Mcma5to3kt2KogkEzB, third-party content). Danny Why's prompt chain is a public Google Doc (id `1ggp5gSG1iKXMQqLz3OYJg7UhP2YAFiV7uGY-nwHvU7k`, export as txt). Both were sent to the user as files in the original chat.
