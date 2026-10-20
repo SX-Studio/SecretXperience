@@ -38,3 +38,7 @@ npx hyperframes lint && npx hyperframes check && npx hyperframes render --qualit
 ```
 
 Then master: remix the voice (`assets/voice/*.wav` at the frame starts), the score at 0.30 and the sound effects at 0.45 into stereo, then run `loudnorm=I=-14:TP=-1.5`. `CLAUDE.md` and `AGENTS.md` here are HyperFrames' own project guidance, written by `hyperframes init`.
+
+## Alternate score
+
+`wow-signal-72-seconds-acestep-score.mp4` has the same picture, voice and sound effects. The score is a local ACE-Step 1.5 take (seed 815, no LM, generated in about 4 min on CPU; prompts in `../tools/acestep/`). It swells near 30 s, close to the WOW beat, and fades to silence at 72 s. It is ducked under the voice, dipped under "Nothing.", sat 11 dB below the narration, and mastered to -14.4 LUFS.

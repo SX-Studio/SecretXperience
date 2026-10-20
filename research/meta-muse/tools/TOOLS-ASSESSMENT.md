@@ -15,7 +15,7 @@ Tested hands-on in the cloud container on 2026-10-20: 4 CPU cores, no GPU, 15 GB
 | **ArtCraft** | Rust desktop apps replacing Adobe tools | **Not applicable** | Desktop GUI apps; nothing to drive headless here. |
 | **REA** (morluto/rea) | Reverse-engineering assistant | **Ruled out** (as before) | Adobe's terms forbid reverse engineering (section 17(B)), and Higgsfield has no client to inspect. |
 | **MusicGen** (offered by `hyperframes doctor`) | Local music model | **Not for monetized work** | Weights are CC-BY-NC-4.0. Synthesized scores (numpy) are used instead. |
-| **ACE-Step 1.5** (from the Jad M.H video) | Local song and score generation | **Licence OK (weights MIT), CPU trial in progress** | Checkpoints are large (the tutorial's full set was 33 GB; Turbo plus the small LM is the minimum). See the results note when the trial lands. |
+| **ACE-Step 1.5** (from the Jad M.H video, code and weights MIT) | Local song and score generation | **Adopted as the music option** | Tested on this CPU: turbo DiT + VAE + text encoder + 0.6B LM is 7.7 GB. With bf16 (the CPU has AMX), a 75 s instrumental takes 4 to 5 min, mostly VAE decode. Structure tags set the order of sections but not their timing, so generate 3 or more seeds and keep the nearest, then fix timing with gain automation (or try its untested repaint task). Driver and prompts: `tools/acestep/`; install with `WITH_ACESTEP=1` in the setup script. Demo 3 has an alternate mix that uses take 2. |
 
 ## The production loop that worked (demo Short 3)
 
