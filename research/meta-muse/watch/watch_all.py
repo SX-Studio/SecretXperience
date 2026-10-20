@@ -45,6 +45,10 @@ VIDEOS = {
         ("1dlC0MVqzP0", "Deeplearn HQ short, Claude runs your YouTube channel", 56),
         ("tpZOU1ugODQ", "Greg Isenberg, Meta Muse will create 1,000 millionaires", 1474),
     ],
+    3: [  # added 2026-10-20
+        ("-LNDXx__ZT0", "Higgsfield AI, Introducing Higgsfield Katana (Claude Motion)", 78),
+        ("zkhLZUGIIfE", "The_Frizzy1, I Replaced Higgsfield Genjutsu With My RTX 3060", 636),
+    ],
     2: [
         ("Yt_BULiimg4", "Calum Johnson Show, The Creator Who Mastered Claude", 5739),
         ("UVsIqkkPLYU", "Jake Trinder, Most Valuable YouTube Advice", 0),
@@ -94,12 +98,20 @@ def main():
     exhausted = set()
     lock = threading.Lock()
 
+    cooling = {}  # model -> time it may be retried after a 503 "high demand"
+
     def current_model():
-        with lock:
-            for m in models:
-                if m not in exhausted:
-                    return m
-        return None
+        while True:
+            with lock:
+                live = [m for m in models if m not in exhausted]
+                if not live:
+                    return None
+                now = time.time()
+                for m in live:
+                    if cooling.get(m, 0) <= now:
+                        return m
+                wait = min(cooling[m] for m in live) - now
+            time.sleep(max(1, wait))
     here = pathlib.Path(__file__).parent
     out = here / "out"
     parts_dir = out / "parts"
@@ -145,7 +157,7 @@ def main():
             "generationConfig": {"thinkingConfig": {"thinkingLevel": "low"}},
         }
         last = None
-        for attempt in range(8):
+        for attempt in range(20):
             model = current_model()
             if model is None:
                 return f"error {vid} {mmss(start)}: every model is out of daily quota"
@@ -163,9 +175,18 @@ def main():
                 except Exception:
                     pass
                 last = f"{model}: {e} {detail}".strip()
-                if "PerDay" in detail or "per day" in detail.lower() or getattr(e, "code", 0) == 404:
+                code = getattr(e, "code", 0)
+                # daily quota or unknown model: drop the model for this run
+                if "PerDay" in detail or "per day" in detail.lower() or code == 404:
                     with lock:
                         exhausted.add(model)
+                    print(f"  dropping {model} for this run: {code} {detail[:120]!r}", flush=True)
+                    continue
+                # "high demand" 503: cool this model for 2 minutes, try another meanwhile
+                if code == 503:
+                    with lock:
+                        cooling[model] = time.time() + 120
+                    print(f"  {model} busy (503), cooling 2 min", flush=True)
                     continue
                 # thinkingConfig rejected by an older model: drop it and retry
                 if "thinking" in detail.lower():
