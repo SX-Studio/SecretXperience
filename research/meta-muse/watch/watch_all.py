@@ -48,6 +48,9 @@ VIDEOS = {
     3: [  # added 2026-10-20
         ("-LNDXx__ZT0", "Higgsfield AI, Introducing Higgsfield Katana (Claude Motion)", 78),
         ("zkhLZUGIIfE", "The_Frizzy1, I Replaced Higgsfield Genjutsu With My RTX 3060", 636),
+        ("rZvF_EWZoHw", "Higgsfield AI, Claude Opus 5.5 Made Clipping The Easiest Side Hustle", 805),
+        ("2hJsvDSPWYM", "Dan Kieft, How I Make Realistic AI Videos with Seedance 2.5 - Full Guide", 1227),
+        ("Zo8KaTs0l6k", "Dan Kieft, How I Make Ultra Realistic AI Videos using Seedance 2.5", 1362),
     ],
     2: [
         ("Yt_BULiimg4", "Calum Johnson Show, The Creator Who Mastered Claude", 5739),
