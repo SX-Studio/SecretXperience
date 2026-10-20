@@ -100,6 +100,10 @@ Added 2026-10-20, watched for visuals:
 |---|---|
 | -LNDXx__ZT0 | Higgsfield AI, Introducing Higgsfield Katana (Claude Motion), 78 s short |
 | zkhLZUGIIfE | The_Frizzy1, I Replaced Higgsfield Genjutsu With My RTX 3060 (local character swap) |
+| rZvF_EWZoHw | Higgsfield Katana clipping and teaser edits for paid clip campaigns (direction ideas; transcript in `transcripts/`, visual report in `watch/out/`) |
+| 2hJsvDSPWYM | Dan Kieft, Seedance full guide (transcript in `transcripts/`; visual watch pending Gemini quota) |
+| Zo8KaTs0l6k | Dan Kieft, Seedance ultra-realistic video (transcript in `transcripts/`; visual watch pending Gemini quota) |
+| S_W4OSuh2Aw | Eric Michaud, 6 MORE Repos to Replace Paid Software (assessed hands-on in `tools/TOOLS-ASSESSMENT.md`) |
 | kvf2lRSGixg | Kristian Jennings, I stopped using seedance and now my AI UGC looks 100% real (31 min, [link](https://youtu.be/kvf2lRSGixg); visual watch 1 of 4 segments, rest pending Gemini quota) |
 | zke3bTtvmLo | Jad M.H, How to Make Viral Motion Graphics With AI With $0 (Turned it into a Skill) (16 min, [link](https://youtu.be/zke3bTtvmLo)) |
 
