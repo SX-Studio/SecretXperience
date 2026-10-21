@@ -19,6 +19,8 @@ container was reclaimed, so everything it produced was rebuilt from its transcri
 | `watch/VISUAL-FINDINGS.md` | **Read second.** Synthesis of what the 15 tutorial videos show on screen, trust caveats, verified repo list, and the blueprint changes (already applied) |
 | `transcripts/` | Plain-text transcripts of videos added after the first chat (earlier transcripts were lost with the old container; their content lives in the reports) |
 | `watch/out/*.md` | Visual-context reports, one per video (on-screen tools, verbatim prompts, UI steps, visual style, numbers) |
+| `MONEY-ENGINE.md` | **Read first after this file.** The plan for the user's goal: three lanes ranked by speed to first dollar (sell production, own the audience, platform revenue), the series-engine architecture, guardrails, decisions needed, next 7 days |
+| `watch/notes-batch-{A,B,C}.md` | Notes on the nine videos sent 2026-10-21 (tools, prompts, monetization claims and credibility, red flags, takeaways) |
 | `tools/TOOLS-ASSESSMENT.md` | **Read third.** Hands-on verdicts on the six repos from S_W4OSuh2Aw plus the local stack, the production loop that worked, gotchas, licences |
 | `tools/setup-local-stack.sh` | Rebuilds the local, quota-free stack (HyperFrames + skills, Parakeet, Hypit, Kokoro, optional OmniVoice) in a fresh container |
 
@@ -34,6 +36,8 @@ container was reclaimed, so everything it produced was rebuilt from its transcri
 8. **Review session (2026-10-19/20):** user asked to watch all videos for visuals, then **"Skip the interview videos, no need."** All 15 tutorial/demo videos were watched with Gemini; results in `watch/`. User switched this session to Opus to save Fable usage and asked to gather as much context as possible for a later Fable session.
 
 9. **Tools session (2026-10-20):** the user sent Eric Michaud's "6 MORE Repos to Replace Paid Software" (S_W4OSuh2Aw). HyperFrames, Kokoro, Parakeet and Hypit were installed and tested here; VoiceStudio/OmniVoice and MusicGen work but have non-commercial weights (`tools/TOOLS-ASSESSMENT.md`). Then two more videos (Kristian Jennings AI UGC, Jad M.H motion graphics; the user flagged Jad's as important); findings in `watch/VISUAL-FINDINGS.md`. Demo Short 3 was built end to end on the new stack.
+
+10. **Money engine (2026-10-21):** the user set the goal: automate creative video series in any niche, style and format, choosing durations by audience and revenue type, and start with whatever makes money fastest. Nine more videos were studied (notes-batch A/B/C). Plan: `MONEY-ENGINE.md`.
 
 ## The user's standing preferences (follow these in every session)
 
@@ -54,7 +58,8 @@ container was reclaimed, so everything it produced was rebuilt from its transcri
 
 ## Decisions still open (the user's call)
 
-- **Niche.** Recommended: "how things in your home actually work" mechanism explainers (Shorts first, over-55 long-form audience, $27 to $47 guide). Alternative: sports technique mechanics.
+- **Money engine choices** (see `MONEY-ENGINE.md`): which service offers to sell first and at what price, payment account, which social accounts to connect, whether approved outreach templates may send automatically.
+- **Niche.** Now recommended first: AI/dev-tools 3D explainers (each episode doubles as a sales sample). Earlier recommendation, kept as the second track: "how things in your home actually work" mechanism explainers (Shorts first, over-55 long-form audience, $27 to $47 guide). Alternative: sports technique mechanics.
 - **Presenter.** AI avatar, motion graphics only, or the user's own face.
 - **Muse plays.** Whether to pursue any alongside YouTube.
 
@@ -104,6 +109,15 @@ Added 2026-10-20, watched for visuals:
 | 2hJsvDSPWYM | Dan Kieft, Seedance full guide (transcript in `transcripts/`; visual watch pending Gemini quota) |
 | Zo8KaTs0l6k | Dan Kieft, Seedance ultra-realistic video (transcript in `transcripts/`; visual watch pending Gemini quota) |
 | S_W4OSuh2Aw | Eric Michaud, 6 MORE Repos to Replace Paid Software (assessed hands-on in `tools/TOOLS-ASSESSMENT.md`) |
+| t9MFvSJHLsI | AIpreneur, I Made Insane 3D Motion Graphics With Claude (Free) (notes A) |
+| YLa0g-nMoWU | Moe Alamawi, Claude Replaced Higgsfield with This FREE MCP (fal.ai pay-per-use; notes A) |
+| ibr_NYgUKVY | Kristian Jennings, 5 music techniques for ads (notes A) |
+| 8rBiTpcoTrM | Jack Roberts, I Tested the Viral Reverse Engineering Repo (notes B) |
+| hZ_w1d0uYT4 | Jad M.H, Live motion-graphics carousels skill (notes B) |
+| JgoPiiBhdn8 | Massimo Seq, Beginners Guide to AI UGC Ads (format structure only; fake-testimonial practice not adopted; notes B) |
+| CCUSpJkAfgU | Matt Penny, Claude + Three.js = Premium 3D Motion Graphics (notes C) |
+| kHtOSJRUkLs | Sharbel A., Claude Code token audit (engine running costs; notes C) |
+| -PgsOwD4XZ8 | Austin Armstrong, AI clipping (undisclosed Syllaby CEO; variant-farm advice rejected; notes C) |
 | kvf2lRSGixg | Kristian Jennings, I stopped using seedance and now my AI UGC looks 100% real (31 min, [link](https://youtu.be/kvf2lRSGixg); visual watch 1 of 4 segments, rest pending Gemini quota) |
 | zke3bTtvmLo | Jad M.H, How to Make Viral Motion Graphics With AI With $0 (Turned it into a Skill) (16 min, [link](https://youtu.be/zke3bTtvmLo)) |
 
