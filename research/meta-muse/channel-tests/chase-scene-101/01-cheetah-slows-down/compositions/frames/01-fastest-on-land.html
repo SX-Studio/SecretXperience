@@ -1,0 +1,397 @@
+<template id="f01-fastest-on-land-template">
+  <div
+    id="root"
+    data-composition-id="01-fastest-on-land"
+    data-start="0"
+    data-duration="8.339"
+    data-width="1080"
+    data-height="1920"
+  >
+    <style>
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500-italic.woff2") format("woff2");font-weight:500;font-style:italic;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600-italic.woff2") format("woff2");font-weight:600;font-style:italic;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+#root, #root * { font-variant-numeric: lining-nums; }
+
+      
+      
+      
+
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+      }
+      #root * { box-sizing: border-box; }
+
+      /* ---------- page ground (own clip layer) ---------- */
+      #f01-paper {
+        position: absolute;
+        inset: 0;
+        background-color: #EFE6D2;
+        background-image:
+          linear-gradient(to right, rgba(185, 169, 140, 0.25) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(185, 169, 140, 0.25) 1px, transparent 1px);
+        background-size: 40px 40px;
+        background-position: 20px 0;
+      }
+      #f01-paper .f01-vignette {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse 78% 68% at 50% 45%, rgba(239, 230, 210, 0) 55%, rgba(150, 120, 80, 0.22) 100%);
+      }
+      #f01-paper .f01-fibre {
+        position: absolute;
+        inset: 0;
+        width: 1080px;
+        height: 1920px;
+        opacity: 0.07;
+        mix-blend-mode: multiply;
+      }
+
+      /* ---------- stage (push-in wrapper) ---------- */
+      #f01-stage {
+        position: absolute;
+        inset: 0;
+        transform-origin: 540px 768px;
+      }
+
+      /* ochre wash */
+      #f01-wash {
+        position: absolute;
+        left: -40px;
+        top: 380px;
+        width: 1160px;
+        height: 780px;
+        transform-origin: 50% 50%;
+      }
+
+      /* GPS trail (behind the plate) */
+      #f01-trail {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: visible;
+      }
+
+      /* cheetah plate */
+      #f01-plate {
+        position: absolute;
+        left: 81px;
+        top: 492px;
+        width: 918px;
+        height: 553px;
+      }
+      #f01-plate img {
+        display: block;
+        width: 918px;
+        height: 553px;
+        mix-blend-mode: multiply;
+      }
+
+      /* hand-written note */
+      #f01-note {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 520px;
+        transform: rotate(-2deg);
+        transform-origin: 300px 300px;
+      }
+      .f01-note-line {
+        position: absolute;
+        display: block;
+        padding: 14px 18px 22px 10px;
+        font-family: "Caveat", cursive;
+        font-weight: 700;
+        color: #5C4A36;
+        line-height: 1.05;
+        white-space: nowrap;
+      }
+      #f01-note-1 { left: 92px; top: 176px; font-size: 84px; }
+      #f01-note-2 { left: 150px; top: 276px; font-size: 96px; color: #2B2118; }
+
+      #f01-leader {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: visible;
+      }
+
+      /* specimen label */
+      #f01-label {
+        position: absolute;
+        left: 170px;
+        top: 1186px;
+        width: 740px;
+        padding: 34px 40px 36px;
+        background: #E4D7BC;
+        border: 2px solid #B9A98C;
+        text-align: center;
+      }
+      #f01-label .f01-latin {
+        font-family: "Cormorant Garamond", serif;
+        font-weight: 600;
+        font-style: italic;
+        font-size: 80px;
+        line-height: 1;
+        color: #2B2118;
+      }
+      #f01-label .f01-rule {
+        width: 420px;
+        height: 2px;
+        margin: 22px auto 20px;
+        background: #B9A98C;
+        transform-origin: 50% 50%;
+      }
+      #f01-label .f01-common {
+        font-family: "Source Sans 3", sans-serif;
+        font-weight: 700;
+        font-size: 34px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #5C4A36;
+      }
+    </style>
+
+    <!-- full-bleed paper ground -->
+    <div id="f01-paper" class="clip" data-start="0" data-duration="8.339" data-track-index="0">
+      <svg class="f01-fibre" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <filter id="f01-fibre-filter" x="0" y="0" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.9 0.35" numOctaves="2" seed="7" />
+          <feColorMatrix type="saturate" values="0" />
+        </filter>
+        <rect width="1080" height="1920" filter="url(#f01-fibre-filter)" />
+      </svg>
+      <div class="f01-vignette"></div>
+    </div>
+
+    <!-- content stage -->
+    <div id="f01-stage" class="clip" data-start="0" data-duration="8.339" data-track-index="1">
+      <!-- watercolor wash -->
+      <svg id="f01-wash" viewBox="0 0 1160 780" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <filter id="f01-wash-filter" x="-25%" y="-25%" width="150%" height="150%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.011" numOctaves="3" seed="11" result="f01n" />
+            <feDisplacementMap in="SourceGraphic" in2="f01n" scale="110" xChannelSelector="R" yChannelSelector="G" />
+            <feGaussianBlur stdDeviation="16" />
+          </filter>
+          <radialGradient id="f01-wash-grad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#C9A15B" stop-opacity="1" />
+            <stop offset="70%" stop-color="#C9A15B" stop-opacity="0.75" />
+            <stop offset="100%" stop-color="#C9A15B" stop-opacity="0" />
+          </radialGradient>
+        </defs>
+        <g filter="url(#f01-wash-filter)" opacity="0.28">
+          <ellipse cx="600" cy="390" rx="470" ry="270" fill="url(#f01-wash-grad)" />
+          <ellipse cx="380" cy="470" rx="300" ry="190" fill="url(#f01-wash-grad)" />
+          <ellipse cx="820" cy="300" rx="260" ry="170" fill="url(#f01-wash-grad)" />
+        </g>
+      </svg>
+
+      <!-- GPS trail: dashed line revealed through a self-drawing mask -->
+      <svg id="f01-trail" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <mask id="f01-trail-mask" maskUnits="userSpaceOnUse" x="-100" y="0" width="1280" height="1920">
+            <path id="f01-trail-reveal" d="" fill="none" stroke="#ffffff" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" />
+          </mask>
+        </defs>
+        <path
+          id="f01-trail-line"
+          d=""
+          fill="none"
+          stroke="#C2412D"
+          stroke-width="5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-dasharray="16 12"
+          mask="url(#f01-trail-mask)"
+        />
+        <g id="f01-trail-dots"></g>
+        <circle id="f01-trail-ring" cx="0" cy="0" r="16" fill="none" stroke="#C2412D" stroke-width="3" />
+        <circle id="f01-trail-head" cx="0" cy="0" r="8" fill="#C2412D" />
+      </svg>
+
+      <!-- cheetah ink plate -->
+      <div id="f01-plate">
+        <img src="public/cheetah-ink.png" alt="" />
+      </div>
+
+      <!-- hand-written note + leader -->
+      <div id="f01-note">
+        <span id="f01-note-1" class="f01-note-line">fastest&hellip;</span>
+        <span id="f01-note-2" class="f01-note-line">so why slow down?</span>
+      </div>
+      <svg id="f01-leader" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path id="f01-leader-line" d="" fill="none" stroke="#5C4A36" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+        <path id="f01-leader-tip" d="" fill="none" stroke="#5C4A36" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+
+      <!-- specimen label -->
+      <div id="f01-label">
+        <div class="f01-latin">Acinonyx jubatus</div>
+        <div class="f01-rule"></div>
+        <div class="f01-common">cheetah</div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        var FID = "01-fastest-on-land";
+        var DUR = 7.839;
+
+        // seeded PRNG (deterministic wobble / jitter)
+        function mulberry32(a) {
+          return function () {
+            a |= 0; a = (a + 0x6d2b79f5) | 0;
+            var t = Math.imul(a ^ (a >>> 15), 1 | a);
+            t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+            return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+          };
+        }
+        var rnd = mulberry32(20131);
+        function j(n) { return (rnd() * 2 - 1) * n; }
+
+        // ---- ink-wipe clip polygons (ragged leading edge) ----
+        var edgeJ = [];
+        for (var k = 0; k <= 8; k++) edgeJ.push(j(3.5));
+        function wipePoly(x) {
+          var pts = ["-2% -2%"];
+          for (var i = 0; i <= 8; i++) {
+            pts.push((x + edgeJ[i]).toFixed(2) + "% " + (-2 + i * 13).toFixed(2) + "%");
+          }
+          pts.push("-2% 102%");
+          return "polygon(" + pts.join(", ") + ")";
+        }
+        var wipeFrom = wipePoly(45);
+        var wipeTo = wipePoly(108);
+
+        // ---- GPS trail polyline (samples) ----
+        var samples = [];
+        var N = 9;
+        var x0 = -40, y0 = 1112, x1 = 292, y1 = 1034;
+        for (var s = 0; s < N; s++) {
+          var u = s / (N - 1);
+          var xx = x0 + (x1 - x0) * u;
+          var yy = y0 + (y1 - y0) * (1 - Math.pow(1 - u, 1.6)) + (s > 0 && s < N - 1 ? j(7) : 0);
+          samples.push([xx, yy]);
+        }
+        var trailD = "M" + samples.map(function (p) { return p[0].toFixed(1) + " " + p[1].toFixed(1); }).join(" L");
+        var cum = [0];
+        for (var q = 1; q < samples.length; q++) {
+          var dx = samples[q][0] - samples[q - 1][0];
+          var dy = samples[q][1] - samples[q - 1][1];
+          cum.push(cum[q - 1] + Math.sqrt(dx * dx + dy * dy));
+        }
+        var trailLen = cum[cum.length - 1];
+
+        var trailLine = document.getElementById("f01-trail-line");
+        var trailReveal = document.getElementById("f01-trail-reveal");
+        trailLine.setAttribute("d", trailD);
+        trailReveal.setAttribute("d", trailD);
+        trailReveal.setAttribute("stroke-dasharray", trailLen.toFixed(1) + " " + (trailLen + 40).toFixed(1));
+
+        var dotsG = document.getElementById("f01-trail-dots");
+        var SVGNS = "http://www.w3.org/2000/svg";
+        var dotEls = [];
+        for (var d = 1; d < samples.length - 1; d++) {
+          var c = document.createElementNS(SVGNS, "circle");
+          c.setAttribute("cx", samples[d][0].toFixed(1));
+          c.setAttribute("cy", samples[d][1].toFixed(1));
+          c.setAttribute("r", "6");
+          c.setAttribute("fill", "#C2412D");
+          c.setAttribute("id", "f01-trail-dot-" + d);
+          dotsG.appendChild(c);
+          dotEls.push({ el: c, at: cum[d] / trailLen });
+        }
+        var end = samples[samples.length - 1];
+        ["f01-trail-ring", "f01-trail-head"].forEach(function (id) {
+          var el = document.getElementById(id);
+          el.setAttribute("cx", end[0].toFixed(1));
+          el.setAttribute("cy", end[1].toFixed(1));
+        });
+
+        // ---- leader line (hand-drawn wobble) ----
+        var la = [770, 418], lb = [872, 556];
+        var lpts = [];
+        var LN = 7;
+        for (var m = 0; m <= LN; m++) {
+          var t = m / LN;
+          // gentle curve: bow outward to the right
+          var bx = la[0] + (lb[0] - la[0]) * t + Math.sin(t * Math.PI) * 46;
+          var by = la[1] + (lb[1] - la[1]) * t;
+          if (m > 0 && m < LN) { bx += j(3); by += j(3); }
+          lpts.push([bx, by]);
+        }
+        var leaderD = "M" + lpts[0][0].toFixed(1) + " " + lpts[0][1].toFixed(1);
+        for (var n = 1; n < lpts.length; n++) {
+          var pm = lpts[n - 1], pc = lpts[n];
+          var mx = (pm[0] + pc[0]) / 2, my = (pm[1] + pc[1]) / 2;
+          leaderD += " Q" + pm[0].toFixed(1) + " " + pm[1].toFixed(1) + " " + mx.toFixed(1) + " " + my.toFixed(1);
+        }
+        leaderD += " L" + lb[0] + " " + lb[1];
+        var leaderLine = document.getElementById("f01-leader-line");
+        leaderLine.setAttribute("d", leaderD);
+        var leaderLen = 0;
+        for (var r = 1; r < lpts.length; r++) {
+          var ddx = lpts[r][0] - lpts[r - 1][0], ddy = lpts[r][1] - lpts[r - 1][1];
+          leaderLen += Math.sqrt(ddx * ddx + ddy * ddy);
+        }
+        leaderLen = Math.ceil(leaderLen * 1.15) + 20;
+        leaderLine.setAttribute("stroke-dasharray", leaderLen + " " + leaderLen);
+        // arrow tip: two short strokes at lb, pointing down-left toward the face
+        var tip = document.getElementById("f01-leader-tip");
+        tip.setAttribute("d", "M" + (lb[0] - 14) + " " + (lb[1] - 20) + " L" + lb[0] + " " + lb[1] + " L" + (lb[0] + 14) + " " + (lb[1] - 18));
+        tip.setAttribute("stroke-dasharray", "60 60");
+
+        // ---- timeline ----
+        var tl = gsap.timeline({ paused: true });
+
+        // Scene 1 (0.0–2.8): wash blooms, ink wipe reveals plate, specimen label slides up
+        tl.fromTo("#f01-wash", { opacity: 0.6, scale: 0.94 }, { opacity: 1, scale: 1, duration: 1.0, ease: "power2.out" }, 0);
+        tl.fromTo("#f01-plate", { clipPath: wipeFrom, opacity: 0.85 }, { clipPath: wipeTo, opacity: 1, duration: 0.55, ease: "power2.out" }, 0);
+        tl.fromTo("#f01-label", { opacity: 0, y: 70 }, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, 0.5);
+        tl.fromTo("#f01-label .f01-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power2.out" }, 0.85);
+
+        // Scene 2 (2.8–4.4): hand-written note writes on, leader line draws to the cheetah
+        tl.fromTo("#f01-note-1", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.55, ease: "power1.inOut" }, 2.85);
+        tl.fromTo("#f01-note-2", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.95, ease: "power1.inOut" }, 3.35);
+        tl.fromTo(leaderLine, { strokeDashoffset: leaderLen }, { strokeDashoffset: 0, duration: 0.55, ease: "power2.inOut" }, 3.95);
+        tl.fromTo(tip, { strokeDashoffset: 60 }, { strokeDashoffset: 0, duration: 0.2, ease: "power1.out" }, 4.45);
+
+        // Scene 3 (4.4–7.84): telemetry trail draws behind the hind feet, then slow 2% push-in hold
+        var TR0 = 4.5, TRD = 1.5;
+        tl.fromTo(trailReveal, { strokeDashoffset: trailLen }, { strokeDashoffset: 0, duration: TRD, ease: "none" }, TR0);
+        dotEls.forEach(function (o) {
+          tl.fromTo(o.el, { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "none" }, TR0 + TRD * o.at - 0.04);
+        });
+        tl.fromTo("#f01-trail-head", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.3, ease: "power2.out", transformOrigin: "50% 50%" }, TR0 + TRD - 0.05);
+        tl.fromTo("#f01-trail-ring", { opacity: 0, scale: 0.5 }, { opacity: 0.9, scale: 1, duration: 0.6, ease: "power2.out", transformOrigin: "50% 50%" }, TR0 + TRD + 0.05);
+
+        tl.fromTo("#f01-stage", { scale: 1 }, { scale: 1.02, duration: DUR - 4.5, ease: "sine.inOut" }, 4.5);
+
+        // pad the timeline to the full frame length
+        tl.set({}, {}, DUR);
+
+        window.__timelines = window.__timelines || {};
+        window.__timelines[FID] = tl;
+      })();
+    </script>
+  </div>
+</template>

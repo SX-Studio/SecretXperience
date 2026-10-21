@@ -1,0 +1,536 @@
+<template id="f02-collars-and-runs-template">
+  <div
+    id="root"
+    data-composition-id="02-collars-and-runs"
+    data-start="0"
+    data-duration="11.837"
+    data-width="1080"
+    data-height="1920"
+  >
+    <style>
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500-italic.woff2") format("woff2");font-weight:500;font-style:italic;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600-italic.woff2") format("woff2");font-weight:600;font-style:italic;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+#root, #root * { font-variant-numeric: lining-nums; }
+
+      
+      
+      
+      
+      
+      
+
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+      }
+      #root * { box-sizing: border-box; }
+
+      /* ---------- page ground (own clip layer) ---------- */
+      #f02-paper {
+        position: absolute;
+        inset: 0;
+        background-color: #EFE6D2;
+        background-image:
+          linear-gradient(to right, rgba(185, 169, 140, 0.25) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(185, 169, 140, 0.25) 1px, transparent 1px);
+        background-size: 40px 40px;
+        background-position: 20px 0;
+      }
+      #f02-paper .f02-vignette {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse 78% 68% at 50% 45%, rgba(239, 230, 210, 0) 55%, rgba(150, 120, 80, 0.22) 100%);
+      }
+      #f02-paper .f02-fibre {
+        position: absolute;
+        inset: 0;
+        width: 1080px;
+        height: 1920px;
+        opacity: 0.07;
+        mix-blend-mode: multiply;
+      }
+
+      /* ---------- stage (push-in wrapper) ---------- */
+      #f02-stage {
+        position: absolute;
+        inset: 0;
+        transform-origin: 540px 1100px;
+      }
+
+      .f02-svg-full {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: visible;
+      }
+
+      /* ochre wash behind the collar */
+      #f02-wash {
+        position: absolute;
+        left: 20px;
+        top: 460px;
+        width: 800px;
+        height: 460px;
+        transform-origin: 50% 50%;
+      }
+
+      /* compass + place name */
+      #f02-place {
+        position: absolute;
+        left: 340px;
+        top: 190px;
+      }
+      #f02-place-label {
+        font-family: "Source Sans 3", sans-serif;
+        font-weight: 700;
+        font-size: 30px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #5C4A36;
+        line-height: 1;
+      }
+      #f02-place-name {
+        margin-top: 6px;
+        padding: 0 18px 8px 4px;
+        font-family: "Caveat", cursive;
+        font-weight: 700;
+        font-size: 104px;
+        line-height: 1.05;
+        color: #2B2118;
+        white-space: nowrap;
+      }
+
+      /* five paw prints + note */
+      #f02-paws {
+        position: absolute;
+        left: 80px;
+        top: 418px;
+        width: 460px;
+        height: 84px;
+      }
+      .f02-paw {
+        position: absolute;
+        top: 0;
+        width: 76px;
+        height: 84px;
+        overflow: visible;
+      }
+      #f02-paw-note {
+        position: absolute;
+        left: 566px;
+        top: 410px;
+        padding: 0 16px 6px 4px;
+        font-family: "Caveat", cursive;
+        font-weight: 700;
+        font-size: 64px;
+        line-height: 1.1;
+        color: #5C4A36;
+        white-space: nowrap;
+      }
+
+      /* collar telemetry labels */
+      .f02-tele {
+        position: absolute;
+        font-family: "Courier Prime", monospace;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        color: #C2412D;
+        white-space: nowrap;
+        line-height: 1;
+        padding: 2px 6px 4px 0;
+      }
+      .f02-tele-sub {
+        position: absolute;
+        font-family: "Courier Prime", monospace;
+        font-weight: 400;
+        font-size: 34px;
+        letter-spacing: 0.02em;
+        color: #5C4A36;
+        white-space: nowrap;
+        line-height: 1;
+        padding: 2px 6px 4px 0;
+      }
+      #f02-gps { left: 700px; top: 556px; font-size: 52px; }
+      #f02-gps-sub { left: 700px; top: 618px; }
+      #f02-ms { left: 616px; top: 790px; font-size: 40px; }
+      #f02-ms-sub { left: 616px; top: 840px; }
+
+      /* counter */
+      #f02-count-wrap {
+        position: absolute;
+        left: 0;
+        top: 1200px;
+        width: 1080px;
+        text-align: center;
+      }
+      #f02-count {
+        display: inline-block;
+        font-family: "Cormorant Garamond", serif;
+        font-weight: 700;
+        font-size: 200px;
+        line-height: 0.9;
+        color: #C2412D;
+        font-variant-numeric: lining-nums tabular-nums;
+        transform-origin: 50% 60%;
+      }
+      #f02-runs {
+        position: absolute;
+        left: 0;
+        top: 1392px;
+        width: 1080px;
+        text-align: center;
+      }
+      #f02-runs-word {
+        display: inline-block;
+        padding: 0 16px 6px 6px;
+        font-family: "Caveat", cursive;
+        font-weight: 700;
+        font-size: 84px;
+        line-height: 1;
+        color: #5C4A36;
+      }
+
+      /* source chip */
+      #f02-chip {
+        position: absolute;
+        left: 72px;
+        top: 1494px;
+        padding: 8px 18px 7px;
+        border: 2px solid #B9A98C;
+        background: #E4D7BC;
+        font-family: "Source Sans 3", sans-serif;
+        font-weight: 700;
+        font-size: 30px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #5C4A36;
+        line-height: 1;
+        white-space: nowrap;
+      }
+    </style>
+
+    <!-- full-bleed paper ground -->
+    <div id="f02-paper" class="clip" data-start="0" data-duration="11.837" data-track-index="0">
+      <svg class="f02-fibre" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <filter id="f02-fibre-filter" x="0" y="0" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.9 0.35" numOctaves="2" seed="7" />
+          <feColorMatrix type="saturate" values="0" />
+        </filter>
+        <rect width="1080" height="1920" filter="url(#f02-fibre-filter)" />
+      </svg>
+      <div class="f02-vignette"></div>
+    </div>
+
+    <!-- content stage -->
+    <div id="f02-stage" class="clip" data-start="0" data-duration="11.837" data-track-index="1">
+      <!-- watercolor wash -->
+      <svg id="f02-wash" viewBox="0 0 800 460" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <filter id="f02-wash-filter" x="-25%" y="-25%" width="150%" height="150%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="3" seed="23" result="f02n" />
+            <feDisplacementMap in="SourceGraphic" in2="f02n" scale="90" xChannelSelector="R" yChannelSelector="G" />
+            <feGaussianBlur stdDeviation="14" />
+          </filter>
+          <radialGradient id="f02-wash-grad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#C9A15B" stop-opacity="1" />
+            <stop offset="70%" stop-color="#C9A15B" stop-opacity="0.7" />
+            <stop offset="100%" stop-color="#C9A15B" stop-opacity="0" />
+          </radialGradient>
+        </defs>
+        <g filter="url(#f02-wash-filter)" opacity="0.24">
+          <ellipse cx="380" cy="230" rx="330" ry="170" fill="url(#f02-wash-grad)" />
+          <ellipse cx="250" cy="280" rx="200" ry="130" fill="url(#f02-wash-grad)" />
+          <ellipse cx="540" cy="190" rx="200" ry="120" fill="url(#f02-wash-grad)" />
+        </g>
+      </svg>
+
+      <!-- main line-art layer: compass, collar, leaders, tally rules, tallies -->
+      <svg id="f02-art" class="f02-svg-full" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- compass rose, centre (200, 270) -->
+        <g id="f02-compass">
+          <circle id="f02-cring-o" cx="200" cy="270" r="100" fill="none" stroke="#B9A98C" stroke-width="2.5" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" transform="rotate(-90 200 270)" />
+          <circle id="f02-cring-i" cx="200" cy="270" r="80" fill="none" stroke="#B9A98C" stroke-width="2" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" transform="rotate(-90 200 270)" />
+          <g id="f02-cticks"></g>
+          <g id="f02-cfill"></g>
+          <g id="f02-cpoints"></g>
+          <circle id="f02-chub" cx="200" cy="270" r="5" fill="#2B2118" />
+          <text id="f02-cN" x="200" y="160" text-anchor="middle" font-family="Cormorant Garamond, serif" font-weight="600" font-size="42" fill="#2B2118">N</text>
+        </g>
+
+        <!-- collar: band edges, unit, antenna -->
+        <g id="f02-collar" fill="none" stroke="#2B2118" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+          <path id="f02-band-top" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"
+            d="M 150 630 A 240 76 0 1 1 630 630 A 240 76 0 1 1 150 630" />
+          <path id="f02-band-bot" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"
+            d="M 150 630 L 150 664 A 240 76 0 0 0 630 664 L 630 630" />
+          <path id="f02-band-stitch" stroke="#5C4A36" stroke-width="2" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"
+            d="M 168 650 A 222 66 0 0 0 612 650" />
+        </g>
+        <g id="f02-unit">
+          <rect x="324" y="694" width="132" height="94" rx="12" fill="#E4D7BC" stroke="#2B2118" stroke-width="3.5" />
+          <line x1="340" y1="716" x2="340" y2="768" stroke="#5C4A36" stroke-width="2.5" stroke-linecap="round" />
+          <line x1="352" y1="716" x2="352" y2="768" stroke="#5C4A36" stroke-width="2.5" stroke-linecap="round" />
+          <line x1="364" y1="716" x2="364" y2="768" stroke="#5C4A36" stroke-width="2.5" stroke-linecap="round" />
+          <rect x="384" y="740" width="54" height="30" rx="4" fill="none" stroke="#5C4A36" stroke-width="2.5" />
+          <path d="M 440 694 L 452 660" fill="none" stroke="#2B2118" stroke-width="3.5" stroke-linecap="round" />
+          <circle cx="453" cy="657" r="4.5" fill="#2B2118" />
+        </g>
+        <circle id="f02-led" cx="420" cy="716" r="7" fill="#C2412D" />
+        <circle id="f02-led-ring" cx="420" cy="716" r="18" fill="none" stroke="#C2412D" stroke-width="2.5" />
+
+        <!-- leader lines (hand-drawn wobble, built in script) -->
+        <path id="f02-lead-gps" d="" fill="none" stroke="#5C4A36" stroke-width="2.5" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" />
+        <path id="f02-lead-ms" d="" fill="none" stroke="#5C4A36" stroke-width="2.5" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" />
+        <circle id="f02-lead-gps-dot" cx="420" cy="716" r="0" fill="#5C4A36" />
+        <circle id="f02-lead-ms-dot" cx="0" cy="0" r="5" fill="#5C4A36" />
+
+        <!-- ledger rules under the tally rows -->
+        <g id="f02-rules" stroke="#B9A98C" stroke-width="2" stroke-linecap="round" fill="none"></g>
+
+        <!-- tally marks (367, built in script) -->
+        <g id="f02-tally" stroke="#2B2118" stroke-width="3.5" stroke-linecap="round" fill="none"></g>
+
+        <!-- underline under the count -->
+        <path id="f02-underline" d="" fill="none" stroke="#C2412D" stroke-width="4" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" />
+      </svg>
+
+      <!-- place name -->
+      <div id="f02-place">
+        <div id="f02-place-label">Field site</div>
+        <div id="f02-place-name">BOTSWANA</div>
+      </div>
+
+      <!-- five paw prints (one per cheetah) -->
+      <div id="f02-paws"></div>
+      <div id="f02-paw-note">5 wild cheetahs</div>
+
+      <!-- collar labels -->
+      <div id="f02-gps" class="f02-tele">GPS</div>
+      <div id="f02-gps-sub" class="f02-tele-sub">5 fixes / sec</div>
+      <div id="f02-ms" class="f02-tele">MOTION SENSORS</div>
+      <div id="f02-ms-sub" class="f02-tele-sub">accel + gyro</div>
+
+      <!-- counter -->
+      <div id="f02-count-wrap"><span id="f02-count">0</span></div>
+      <div id="f02-runs"><span id="f02-runs-word">runs</span></div>
+
+      <!-- source chip -->
+      <div id="f02-chip">Wilson et al., Nature 2013</div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        var FID = "02-collars-and-runs";
+        var DUR = 11.337;
+        var SVGNS = "http://www.w3.org/2000/svg";
+        var host = document.querySelector('[data-composition-id="' + FID + '"]') || document;
+        function $(sel) { return host.querySelector(sel); }
+
+        // seeded PRNG (deterministic wobble / jitter)
+        function mulberry32(a) {
+          return function () {
+            a |= 0; a = (a + 0x6d2b79f5) | 0;
+            var t = Math.imul(a ^ (a >>> 15), 1 | a);
+            t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+            return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+          };
+        }
+        var rnd = mulberry32(2013);
+        function j(n) { return (rnd() * 2 - 1) * n; }
+        function f(n) { return Math.round(n * 10) / 10; }
+        function mk(tag, attrs, parent) {
+          var el = document.createElementNS(SVGNS, tag);
+          for (var k in attrs) el.setAttribute(k, attrs[k]);
+          if (parent) parent.appendChild(el);
+          return el;
+        }
+
+        // ---------- compass rose geometry ----------
+        var CX = 200, CY = 270;
+        function rot(x, y, a) {
+          var c = Math.cos(a), s = Math.sin(a);
+          return [f(CX + x * c - y * s), f(CY + x * s + y * c)];
+        }
+        var ticks = $("#f02-cticks");
+        for (var t = 0; t < 32; t++) {
+          var a = (t / 32) * Math.PI * 2;
+          var r1 = t % 4 === 0 ? 80 : 86;
+          var p1 = rot(0, -r1, a), p2 = rot(0, -96, a);
+          mk("line", { x1: p1[0], y1: p1[1], x2: p2[0], y2: p2[1], stroke: "#B9A98C", "stroke-width": 2, "stroke-linecap": "round" }, ticks);
+        }
+        var cpoints = $("#f02-cpoints"), cfill = $("#f02-cfill");
+        var pointEls = [];
+        for (var q = 0; q < 8; q++) {
+          var ang = (q / 8) * Math.PI * 2;
+          var main = q % 2 === 0;
+          var L = main ? 94 : 58, W = main ? 14 : 9;
+          var tip = rot(0, -L, ang), lft = rot(-W, -W, ang), rgt = rot(W, -W, ang);
+          var d = "M " + tip[0] + " " + tip[1] + " L " + rgt[0] + " " + rgt[1] + " L " + CX + " " + CY + " L " + lft[0] + " " + lft[1] + " Z";
+          var outline = mk("path", { d: d, fill: "none", stroke: "#2B2118", "stroke-width": main ? 2.5 : 2, "stroke-linejoin": "round", pathLength: 1, "stroke-dasharray": 1, "stroke-dashoffset": 1 }, cpoints);
+          pointEls.push(outline);
+          var half = "M " + tip[0] + " " + tip[1] + " L " + lft[0] + " " + lft[1] + " L " + CX + " " + CY + " Z";
+          mk("path", { d: half, fill: "#2B2118", opacity: main ? 1 : 0.75 }, cfill);
+        }
+        // keep half-fills above outlines
+        cpoints.parentNode.insertBefore(cpoints, cfill);
+
+        // ---------- paw prints ----------
+        var paws = $("#f02-paws");
+        var pawEls = [];
+        var pawSVG =
+          '<ellipse cx="38" cy="60" rx="21" ry="17" />' +
+          '<ellipse cx="13" cy="35" rx="7.5" ry="9.5" />' +
+          '<ellipse cx="29" cy="22" rx="8" ry="10.5" />' +
+          '<ellipse cx="47" cy="22" rx="8" ry="10.5" />' +
+          '<ellipse cx="63" cy="35" rx="7.5" ry="9.5" />' +
+          '<path d="M 11 24 L 9 17 M 28 10 L 27 3 M 48 10 L 49 3 M 65 24 L 67 17" fill="none" stroke="#2B2118" stroke-width="3" stroke-linecap="round" />';
+        for (var p = 0; p < 5; p++) {
+          var s = document.createElementNS(SVGNS, "svg");
+          s.setAttribute("class", "f02-paw");
+          s.setAttribute("viewBox", "0 0 76 84");
+          s.setAttribute("id", "f02-paw-" + p);
+          s.style.left = p * 94 + "px";
+          s.innerHTML = '<g fill="#2B2118" opacity="0.88">' + pawSVG + "</g>";
+          paws.appendChild(s);
+          pawEls.push({ el: s, r: j(9) });
+        }
+
+        // ---------- leader lines (slight hand wobble) ----------
+        function wobblyPath(x0, y0, x1, y1, bow, n) {
+          var dx = x1 - x0, dy = y1 - y0, len = Math.sqrt(dx * dx + dy * dy);
+          var nx = -dy / len, ny = dx / len;
+          var d = "M " + f(x0) + " " + f(y0);
+          for (var i = 1; i <= n; i++) {
+            var u = i / n;
+            var b = Math.sin(u * Math.PI) * bow + (i < n ? j(1.6) : 0);
+            d += " L " + f(x0 + dx * u + nx * b) + " " + f(y0 + dy * u + ny * b);
+          }
+          return d;
+        }
+        $("#f02-lead-gps").setAttribute("d", wobblyPath(456, 700, 686, 590, -14, 14));
+        $("#f02-lead-ms").setAttribute("d", wobblyPath(456, 772, 604, 810, 6, 10));
+        var msDot = $("#f02-lead-ms-dot");
+        msDot.setAttribute("cx", 456); msDot.setAttribute("cy", 772);
+        var gpsDot = $("#f02-lead-gps-dot");
+        gpsDot.setAttribute("cx", 456); gpsDot.setAttribute("cy", 700); gpsDot.setAttribute("r", 5);
+
+        // ---------- tally grid: 73 full gates + 2 = 367 ----------
+        var TOTAL = 367, PER_ROW = 15, X0 = 86, PITCH = 62, Y0 = 910, ROWH = 58, MH = 42;
+        var rules = $("#f02-rules"), tally = $("#f02-tally");
+        var ruleEls = [];
+        for (var rr = 0; rr < 5; rr++) {
+          var ry = Y0 + rr * ROWH + MH + 6;
+          ruleEls.push(mk("path", { d: wobblyPath(72, ry, 1008, ry + j(1.5), j(2), 12), pathLength: 1, "stroke-dasharray": 1, "stroke-dashoffset": 1 }, rules));
+        }
+        var marks = [];
+        var groups = Math.ceil(TOTAL / 5);
+        for (var g = 0; g < groups; g++) {
+          var cnt = Math.min(5, TOTAL - g * 5);
+          var row = Math.floor(g / PER_ROW), col = g % PER_ROW;
+          var gx = X0 + col * PITCH + j(1.5), gy = Y0 + row * ROWH + j(1.5);
+          for (var k = 0; k < cnt; k++) {
+            var d2;
+            if (k < 4) {
+              var x = gx + k * 10;
+              d2 = "M " + f(x + j(1.5)) + " " + f(gy + j(1.5)) + " L " + f(x + j(2)) + " " + f(gy + MH + j(1.5));
+            } else {
+              d2 = "M " + f(gx - 7 + j(1.5)) + " " + f(gy + MH - 8 + j(2)) + " L " + f(gx + 38 + j(1.5)) + " " + f(gy + 8 + j(2));
+            }
+            marks.push(mk("path", { d: d2, pathLength: 1, "stroke-dasharray": 1, "stroke-dashoffset": 1 }, tally));
+          }
+        }
+
+        // underline under "367"
+        $("#f02-underline").setAttribute("d", wobblyPath(380, 1388, 700, 1385, 4, 12));
+
+        // ---------- timeline ----------
+        var tl = gsap.timeline({ paused: true });
+
+        // Scene 1 (0.0–2.0): "In Botswana" — compass self-draws, place name writes on
+        tl.fromTo("#f02-cring-o", { attr: { "stroke-dashoffset": 1 } }, { attr: { "stroke-dashoffset": 0 }, duration: 0.9, ease: "power2.inOut" }, 0.05);
+        tl.fromTo("#f02-cring-i", { attr: { "stroke-dashoffset": 1 } }, { attr: { "stroke-dashoffset": 0 }, duration: 0.8, ease: "power2.inOut" }, 0.2);
+        tl.fromTo("#f02-cticks", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.out" }, 0.55);
+        tl.fromTo(pointEls, { attr: { "stroke-dashoffset": 1 } }, { attr: { "stroke-dashoffset": 0 }, duration: 0.45, ease: "power2.out", stagger: 0.07 }, 0.3);
+        tl.fromTo("#f02-cfill", { opacity: 0 }, { opacity: 1, duration: 0.45, ease: "power1.out" }, 1.0);
+        tl.fromTo("#f02-chub", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 0.9);
+        tl.fromTo("#f02-cN", { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 0.95);
+        tl.fromTo("#f02-place-label", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 0.1);
+        tl.fromTo("#f02-place-name", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.95, ease: "power1.inOut" }, 0.2);
+
+        // quiet page set-up: ledger rules for the tally sheet
+        tl.fromTo(ruleEls, { attr: { "stroke-dashoffset": 1 } }, { attr: { "stroke-dashoffset": 0 }, duration: 0.7, ease: "power2.inOut", stagger: 0.09 }, 1.35);
+
+        // Scene 2a (2.24–3.8): "five wild cheetahs" — five paw prints stamp in a row
+        var PAW_T = [2.24, 2.42, 2.62, 2.84, 3.04];
+        pawEls.forEach(function (pw, i) {
+          tl.fromTo(pw.el, { opacity: 0, scale: 1.25, rotation: pw.r - 6 }, { opacity: 1, scale: 1, rotation: pw.r, duration: 0.28, ease: "power3.out", transformOrigin: "50% 60%" }, PAW_T[i]);
+        });
+        tl.fromTo("#f02-paw-note", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.7, ease: "power1.inOut" }, 3.15);
+
+        // Scene 2b (3.8–7.6): "collars carrying GPS and motion sensors"
+        tl.fromTo("#f02-wash", { opacity: 0, scale: 0.92 }, { opacity: 1, scale: 1, duration: 1.6, ease: "power2.out" }, 3.6);
+        tl.fromTo("#f02-band-top", { attr: { "stroke-dashoffset": 1 } }, { attr: { "stroke-dashoffset": 0 }, duration: 0.85, ease: "power2.inOut" }, 3.95);
+        tl.fromTo("#f02-band-bot", { attr: { "stroke-dashoffset": 1 } }, { attr: { "stroke-dashoffset": 0 }, duration: 0.6, ease: "power2.inOut" }, 4.35);
+        tl.fromTo("#f02-band-stitch", { attr: { "stroke-dashoffset": 1 } }, { attr: { "stroke-dashoffset": 0 }, duration: 0.5, ease: "power1.inOut" }, 4.6);
+        tl.fromTo("#f02-unit", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, 4.65);
+        tl.fromTo("#f02-led", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 5.1);
+        tl.fromTo("#f02-led-ring", { opacity: 0, scale: 0.4 }, { opacity: 0.55, scale: 1, duration: 0.6, ease: "power2.out", transformOrigin: "50% 50%" }, 5.12);
+
+        // GPS leader + label (typed on)
+        tl.fromTo("#f02-lead-gps-dot", { opacity: 0 }, { opacity: 1, duration: 0.15 }, 5.1);
+        tl.fromTo("#f02-lead-gps", { attr: { "stroke-dashoffset": 1 } }, { attr: { "stroke-dashoffset": 0 }, duration: 0.4, ease: "power2.out" }, 5.12);
+        tl.fromTo("#f02-gps", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.36, ease: "steps(3)" }, 5.42);
+        tl.fromTo("#f02-gps-sub", { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, 5.8);
+
+        // MOTION SENSORS leader + label (typed on)
+        tl.fromTo("#f02-lead-ms-dot", { opacity: 0 }, { opacity: 1, duration: 0.15 }, 6.2);
+        tl.fromTo("#f02-lead-ms", { attr: { "stroke-dashoffset": 1 } }, { attr: { "stroke-dashoffset": 0 }, duration: 0.35, ease: "power2.out" }, 6.22);
+        tl.fromTo("#f02-ms", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.84, ease: "steps(14)" }, 6.45);
+        tl.fromTo("#f02-ms-sub", { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, 7.2);
+
+        // Scene 3 (7.6–10.6): "They recorded 367 runs" — tallies race in gates of five, counter counts with them
+        var T0 = 7.95, T1 = 9.9, MD = 0.05;
+        var step = (T1 - T0 - MD) / (TOTAL - 1);
+        marks.forEach(function (m, i) {
+          tl.fromTo(m, { attr: { "stroke-dashoffset": 1 }, opacity: 0 }, { attr: { "stroke-dashoffset": 0 }, opacity: 1, duration: MD, ease: "none" }, T0 + i * step);
+        });
+        var countEl = $("#f02-count");
+        var counter = { n: 0 };
+        tl.fromTo("#f02-count", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, 7.65);
+        tl.fromTo(counter, { n: 0 }, {
+          n: TOTAL, duration: T1 - T0, ease: "none",
+          onUpdate: function () { countEl.textContent = String(Math.floor(counter.n + 1e-6)); }
+        }, T0);
+        tl.fromTo("#f02-runs-word", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.5, ease: "power1.inOut" }, 10.05);
+        tl.fromTo("#f02-underline", { attr: { "stroke-dashoffset": 1 } }, { attr: { "stroke-dashoffset": 0 }, duration: 0.45, ease: "power2.inOut" }, 10.15);
+
+        // Scene 4 (10.6–11.34): source chip, hold
+        tl.fromTo("#f02-chip", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, 10.62);
+
+        // slow documentary push-in underneath the whole shot
+        tl.fromTo("#f02-stage", { scale: 1 }, { scale: 1.015, duration: DUR - 0.05, ease: "sine.inOut" }, 0);
+
+        // pad the timeline to the full frame length
+        tl.set({}, {}, DUR);
+
+        window.__timelines = window.__timelines || {};
+        window.__timelines[FID] = tl;
+      })();
+    </script>
+  </div>
+</template>
