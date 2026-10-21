@@ -137,3 +137,7 @@ Tier 2, interviews, skipped for visuals at the user's request (their transcripts
 - The agent proxy drops any request that sends no bytes for 30 seconds, so `watch_all.py` streams (`streamGenerateContent?alt=sse`), uses low thinking, and splits videos into 8-minute segments. It rotates models on daily-quota 429s and retries streams that end without `STOP`.
 - GitHub pages outside this session's repo scope are blocked by the proxy; read public repos via `https://cdn.jsdelivr.net/gh/<owner>/<repo>/README.md`.
 - Jason Cooperson's free starter prompt lives in his public artifact (claude.ai/artifact/BYH6Mcma5to3kt2KogkEzB, third-party content). Danny Why's prompt chain is a public Google Doc (id `1ggp5gSG1iKXMQqLz3OYJg7UhP2YAFiV7uGY-nwHvU7k`, export as txt). Both were sent to the user as files in the original chat.
+
+## Anime reimagined as 80s live action (2026-10-21)
+
+The user wants a new channel making anime scenes reimagined as realistic films. Full study in `anime-reimagined/STUDY.md`: the two Chapterunknown videos shot by shot, the niche survey (small channels pulling 0.7–1.3M views per upload), the production recipe, tool prices (image/video generation needs billing on the Gemini key; free tier is 0), the IP risk (Japanese publishers vs Sora 2), and a local 80s film pass (`anime-reimagined/tools/film80.sh`). Decisions needed from the user are in STUDY.md section 6.
