@@ -8,6 +8,8 @@ Date: 2026-10-20. Sources are yt-dlp metadata (title, channel, duration, views, 
 
 **Visual watch: not run, so all three are pending.** `watch_all.py --ids` only selects ids that are already in its `VIDEOS` dict, and it silently drops any others. None of these three ids is in that dict. The brief said not to edit the runner, so these notes come from captions and metadata only. The last `run.log` also shows every model at its daily free quota (429). On-screen detail is missing: the AIpreneur master prompt text, Moe's app UI, and Kristian's Premiere timeline. To watch them later, someone must add the three ids to `VIDEOS` (durations are 541 s, 453 s and 920 s) and run `--ids` again once quota resets.
 
+**Update 2026-10-21: visual watch done** (one whole-video Gemini request each, `--segment 1200`; reports in `out/<id>.md`). What the screen adds is under "Visual watch additions" at the end of each video's section. Same trust caveats as `VISUAL-FINDINGS.md`: Gemini misreads model labels (it reports "Claude 3.5 Sonnet" here) and some names, so only details that fit the speech or are plainly on-screen text are used.
+
 Auto-captions mangle a few names. In video 2, "VALL-E AI" and "Fal AI" are both **fal.ai** (the description links fal.ai), and "Cling" is **Kling**.
 
 ---
@@ -79,6 +81,16 @@ The description says "the text goes in CapCut, not in the image generator", but 
 - **The prompt is withheld** behind an engagement funnel.
 - **Low volume.** One 60-second short per hour by hand is not a series engine unless automated.
 - **AI disclosure.** YouTube and TikTok want altered or synthetic content disclosed when it looks realistic. Stylised motion graphics usually don't need the label, but the AI voice should be kept in mind.
+
+### Visual watch additions (Gemini, 2026-10-21)
+
+- **The master prompt's opening is legible**, which is enough to rebuild it: *"You are a short-form motion graphics production director for a premium mixed-media editorial channel. Your job is to turn a topic into a complete vertical short-form video package using photoreal 3D objects, mixed-media collage, 2.5D depth, kinetic typography, graphic accents, and premium motion design..."*, then *"STAGE 1 - TOPIC  Give me 5 strong short-form video topic ideas..."*. The rest scrolls past.
+- **Each image prompt has a fixed shape:** `SCRIPT LINE: "They say curiosity is a hook that pulls you in."` then `TEXT-TO-IMAGE PROMPT: Vertical 9:16 premium mixed-media editorial poster. Pale cream paper-textured background with a thin cross-dot grid...`. The locked palette spec is repeated inside every one.
+- **The batch motion instruction (the part the captions lacked):** *"generate the video prompts below, create 6 seconds video for each prompt, that first video prompt using the S-01 and the second video prompt using S-02..."*. References are named `S-01`…`S-11`.
+- **The voiceover prompt:** *"Write the voiceover for this video from the Stage 2 script above. Keep the same words and the same order, one beat per line, from B01 to B11, with a blank line between lines, so each line fits inside its own 6-second clip..."*. Beats are labelled `B01`…`B11`.
+- **Google Flow credits explain the "2–3 days":** the free tier shows **50 daily credits**, images cost 0 and each video **12 credits**, so about 4 clips a day. The video dropdown also lists **Veo 3.1 Fast** and **Veo 3.1 Quality** next to "Omni 1.1 Flash". Gemini read paid tiers as Google AI Plus $1.29/mo (200 credits), Pro $4.99/mo (1,000) and Ultra $99.99/mo (16,000); the low two look like regional or promo prices, so don't quote them.
+- **Voice:** ElevenLabs **Eleven v3**. The screen shows the voice *"James - Husky, Engaging and Bold"*, while he says "Chuck Miller".
+- **Palette picked on screen:** "Option 3: High-Contrast Academic". The look: pale cream paper with a fine grid, terracotta and orange accents, charcoal serif headlines, bold block captions, photoreal 3D objects (fishing hook, marble brain, wooden blocks, puzzle pieces), slow 2.5D parallax drift and quick fades to cream at cut points. That is a ready brief for the Three.js/HyperFrames template in takeaway 1.
 
 ---
 
@@ -162,6 +174,15 @@ fal also runs a public docs MCP (fal.ai/docs/mcp), but it only does search and r
 - **Content-farm risk.** Bulk-generated near-identical product videos look like reused or low-effort content and can be suppressed.
 - **Listing images.** Using seller listing images is common for affiliates, but the rights belong to the seller or brand.
 
+### Visual watch additions (Gemini, 2026-10-21)
+
+- **The app is inside his course platform:** Momentum Academy dashboard → **AI Director** → **Arc Shot Agent**. Paste a TikTok Shop product link, click **Pricing**, pick clips per video and videos per product (he chose 2 clips, 1 video), then **Create**.
+- **The cost table is linear at $0.48 per clip:** 1 video × 1 clip $0.48, 1 × 2 $0.96, 2 × 1 $0.96, 2 × 2 $1.92.
+- **The motion prompt is one line:** *"Arc Camera Shot from left to right, while keeping the products stationary and centered."* The output is a 9:16 clip with a slow arc of about 180° around cosmetics on a marble vanity, a red top banner "CRAZY DEAL 🚨" and an animated bottom badge "MEGA DEAL 🔥". We can reproduce that move with a Three.js turntable or Depth Anything parallax on a cutout.
+- **Higgsfield vs fal, as shown:** GPT Image 2 at 2K about $0.31 vs $0.05; a 5 s Kling 2.6 clip about $0.65 vs $0.35. Higgsfield's model menu lists GPT Image 2, Kling 3.0 Omni / 2.6 / 2.0 Master, Seedance 2.5 / 2.0 / 2.0 Fast / 2.0 Mini, MiniMax Hailuo, Gemini Omni Flash, Nano Banana Pro, Veo 3 and others.
+- **New: an earnings dashboard appears (05:35)** that the captions never mention: all-time commission **$31,310**, 30-day earnings **$3,705** from **78** videos in 30 days (about $47 a video), conversion rate **5.40%**, and a 30-day record of $30,000. It is his own course platform's dashboard and it is not clear whose account it is, so treat it as a marketing screen, not evidence. Even so, it is the only income number in batch A, and at $0.48 a clip the 78 videos would cost about $37–75 in generation.
+- **Higgsfield terms:** on-screen callouts say Higgsfield keeps perpetual training rights over user content. That matches his spoken claim; we still have not checked the terms themselves.
+
 ---
 
 ## 3. "Use these 5 music techniques in your ads to increase your ROAS" by Kristian Jennings
@@ -233,6 +254,16 @@ This raises the quality of every ad and short we render, at zero cost.
 - **Suno.** The free tier is non-commercial. Paid tiers grant commercial rights, but copyright status is unsettled.
 - **Fake-social-proof tools.** "Message Screenshot Maker / Inbox Maker / Comment Maker" are tools for fabricating social proof, which collides with our no-fake-testimonials rule. The FTC and platform ad policies prohibit fake reviews and testimonials. **Do not adopt them.**
 - **Unverified ad claims.** Example ad copy ("$1 a day", "money back in 180 days", hair-growth results) is client-specific. Health-adjacent claims in ads need substantiation.
+
+### Visual watch additions (Gemini, 2026-10-21)
+
+- **Selection starts from a flowchart, not a genre:** `Angle + Product + Message + Customer` → "How they should feel" → emotions (Calm, Hopeful, Elevated). A line graph shows "the low of the problem" against "the high of solving the problem". That gives our beat-aware music step its input: one target emotion per script section, set before choosing a mood prompt for ACE-Step.
+- **The hook rule on screen:** *"Well, shouldn't the song start at the 1 of the 4/4?"* → *"No"*. In Premiere he finds the drop's waveform spike, razors there, snaps the drop to the start of the hold, and drags the pre-drop back under the hook.
+- **Crossfade as shown:** track B sits on A2 under A1 with beat 1 aligned to beat 1, and the volume rubber bands form a diagonal X. Cards read "The beat 1 of the second track matches the beat 1 of the first track" and "Crossfade".
+- **Artlist filters used:** Instrument → Acoustic Guitar plus Mood → Hopeful, and Strings plus Tense or Cinematic. Gemini read track names such as "Into the Woods" (Super Neato), "One Sunny Day" (Amos Ever Hadani) and "Flame" (Ardie Son); unverified.
+- **Endings:** cards say "Close that loop", "POINT 1: Add an ending" and "POINT 2: You don't have to use the song's ending".
+- **A disclaimer slide** lists "Only sell what you believe in", "Nothing grey hat or black hat" and "Make sure it's ethical and moral". That sits oddly next to his Comment/Inbox Maker tools; our rule stands.
+- **The example ads are animated, not AI people:** the coffee tumbler (read as "STOKE") uses product pours and white lower thirds; the hair supplement uses a 3D cartoon superhero with newspaper headlines and yellow callouts; "Spicy Cubes" uses a 3D animated couple and a "Do Not Disturb" CTA. His own graphics are dark teal glassmorphism cards with cyan highlights and spring easing. No dashboards or ROAS numbers appear on screen either.
 
 ---
 

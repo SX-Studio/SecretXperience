@@ -8,6 +8,8 @@ Transcripts:
 
 **Visual watch: pending for all three.** `watch_all.py --ids` only runs ids that are already in its `VIDEOS` dict. These three are not, and the instructions said not to edit the runner, so Gemini did not watch them. On-screen prompts in video 1 and the slash command in video 2 are therefore missing; each gap is marked below. When someone adds these ids to the runner, run: `python3 -I watch_all.py --ids=CCUSpJkAfgU,kHtOSJRUkLs,-PgsOwD4XZ8 --workers 1` (durations: 739, 1187, 808 s).
 
+**Update 2026-10-21: visual watch done** (one whole-video Gemini request each, `--segment 1200`; reports in `out/<id>.md`). New on-screen details are under "Visual watch additions" at the end of each video's section. Trust caveats as in `VISUAL-FINDINGS.md`: Gemini misreads names and calls 2026 dates "mock-ups"; those readings are ignored.
+
 Caption mis-hearings, corrected here: "3.js" means Three.js. "Sonic 5.5" means Sonnet 5.5. "syllabi.io" and "Soul by" mean Syllaby. "small model like Opus 5.5" means "smart model". "chat.openai.com 6 Astra" is the ChatGPT model he names.
 
 ---
@@ -75,6 +77,15 @@ He says the motion graphics in the video itself were made this way.
 - The prompts are only on screen, so it is unclear how much hand-tuning went in.
 - "Studios charge thousands" is an anchor, not evidence that this output sells for thousands.
 - Low ToS risk: original code-generated visuals, no likeness or copyright issues.
+
+### Visual watch additions (Gemini, 2026-10-21)
+
+- **The prompts share one opening:** *"Make a 15-second, 1920x1080, 60fps motion-graphics explainer in Three.js, glassmorphism style, titled 'From idea to app with Claude Code'. Render it frame by frame to MP4 (Playwright plus ffmpeg)..."*. The other two swap the title: "How RAG works" and "How the internet sends a message".
+- **Each prompt is a timed scene list.** Demo 1: Describe it (0–3 s), Plan it (3–6 s), Build it (6–9 s), Ship it (9–12 s), Reveal (12–15 s). RAG: Embed (a card arc turning into 3D point clusters), Search (nearest neighbours around the prompt node), Generate (a model orb making the answer card), Result ("Answers grounded in your own documents"). Internet: Split, Route, Reassemble, Close shot.
+- **The style lines are concrete:** dark space background, a glowing dome, frosted glass panels via `MeshPhysicalMaterial`, particles, SF Pro, accent `#ff8a4c`. The globe is a **30,000-point dot-matrix sphere** with light arcs between New York, London, Tokyo and Singapore. The code on screen starts from `new Mesh(new IcosahedronGeometry(1, 0), glassMaterial)`.
+- **The checklist card (10:28) is his recipe in five lines:** use Three.js plus shaders; "Make it professional and sleek"; "Your showreel for a dream job"; 3D camera moves plus moving elements; "Run a verification loop" (overlaps, text scale, frame errors).
+- **Exact token count:** 36,108 for the 15 s demo, the "37,000" he rounds to. After Effects, HyperFrames and Remotion appear crossed out on a card ("using neither"). We use HyperFrames anyway for its deterministic seek and `check`; nothing in his method needs anything else.
+- **No live UI work.** The video is pre-rendered scenes and prompt cards, so how much hand-tuning went into each demo is still unknown.
 
 ---
 
@@ -211,6 +222,34 @@ The format itself (an AI tooling explainer with a free prompt in the description
 - The 0.01% and 96% figures are his own logs.
 - No paid funnel. Low ToS risk.
 
+### Visual watch additions (Gemini, 2026-10-21)
+
+- **The slash command is `/mcp`.** It opens a "Directory" modal with Skills, Connectors and Plugins tabs. Other commands typed on screen: `/clear`, `/rename token-audit`, `/resume`, `/model sonnet`, `/model haiku`, `/context`, `/rewind`, `/usage`.
+- **A second prompt, shown in full only on screen (07:08), "ASK FOR THE HOOK":**
+  ```
+  THE JOB:
+  Set up a hook that stops noisy command output from filling up my context.
+
+  WHAT TO CATCH:
+  The commands that print a lot and tell me almost nothing I need: installs,
+  builds, test runs, anything with a progress bar.
+
+  WHAT TO KEEP:
+  Rewrite those before they run so only the lines that matter come back.
+  Errors, failures, and the final summary.
+
+  WHAT TO LEAVE:
+  Leave everything else alone. If a command is short, I still want the whole thing.
+
+  WHERE TO PUT IT:
+  Write the file, wire it up in my settings, then run one real noisy command
+  and show me the before and after so I can see it working.
+  ```
+  This is the PreToolUse filter our engine needs for HyperFrames render, ffmpeg and npm logs.
+- **His sample audit report:** Opus at high effort costing about 159k output tokens per 20-turn session; 159 MCP tools from 5 servers costing 54k tokens (GitHub 26k, Files 20k, Slack 12k); no PreToolUse hooks; cache hit rate 85.2%. All three ambers apply to a session like this one.
+- **Numbers on screen:** 800 lines of install output added 11,680 tokens (about 15 tokens a line). One `/model sonnet` switch showed `cache_creation 198,431 tokens`, $1.02 for that turn. A sample session cost $13.11 at an 84% cache hit rate (5.8M cache read, 1.1M cache write). A 20-turn simulation re-sends 572,000 tokens in total.
+- **The cache-breaker list on screen has 7 items:** switching models, changing effort, turning on fast mode, connecting an MCP server, a plugin that ships MCP, compacting, and upgrading then resuming. The safe list matches the transcript notes above.
+
 ---
 
 ## 3. How to make $3,000/mo clipping with AI
@@ -313,6 +352,16 @@ Paid parts we would skip: Syllaby credits for Seedance B-roll, and the ChatGPT p
   - Running dozens of near-identical accounts also risks spam and fake-engagement enforcement and account linking.
 - **Realistic AI B-roll** ("can't even tell that it's real") spliced into talking-head clips may need AI labels: YouTube's altered/synthetic disclosure, TikTok's AI-generated label, Meta's "AI info".
 - Clipping *other people's* content needs their permission, through an official clipping campaign or a contract. The video does not address this.
+
+### Visual watch additions (Gemini, 2026-10-21)
+
+- **The skill on screen was built for a client first.** Before the "Austin Clipping" run, the ChatGPT screen shows a skill for *"Dr. Mark's existing health videos or raw footage"* ("Dr. Mark Video Editing", a 10-step workflow: review the source, plan distinct variations, preserve his message, keep his original audio, short B-roll when asked, captions, purposeful cuts and zooms, track bulk edits, verify every export, deliver). The description prompt is a renamed copy. That makes clipping a health creator's videos as a service the real use case shown, and the health-claims caution applies to it.
+- **The guardrail is on screen too:** *"Do not promise to bypass duplicate detection. Only schedule or publish when explicitly requested."* He then types the variant prompt to avoid getting "flagged for duplicate content" anyway.
+- **MCP setup steps:** ChatGPT settings cog → **Plugins** → **Browse directory** → **Add** → **Add custom MCP server** (Name, optional Description, Connection URL or Tunnel, Authentication) → name it "Syllaby" → paste the URL → tick "I understand and want to continue". The Syllaby MCP URL is `https://api.syllaby.io/mcp`, and Syllaby's page also has connect buttons for **Claude Desktop and Claude Code**, so it would work from our side too (paid credits, so not planned).
+- **His own account:** Premium plan at $1,609/year with 20,856 credits left (5,000 monthly), accounts for YouTube (Austin Armstrong, BusinessTok Podcast), TikTok, LinkedIn, Facebook, Instagram and Threads. A TikTok profile shows 408.4K followers and 1.7M likes.
+- **The "paying people" counter** in the intro rolls up to $87,669 over a Hormozi thumbnail wall. It shows what clipping is "worth" to entrepreneurs, not any earnings.
+- **The scheduling prompt on screen** is TikTok-only and adds spacing: *"Can you schedule them to my TikTok as well? 1 per day, make sure the timing is spaced out from the other already scheduled posts on my TikTok. Please write unique descriptions and hashtags for each video."*
+- **Clip style:** bold yellow and white centred captions, with a hard jump cut to AI B-roll (a pot of dark sauce being stirred) and back to the speaker.
 
 ---
 

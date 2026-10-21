@@ -4,6 +4,8 @@ Sources: yt-dlp metadata (description, chapters, view counts as of 2026-10-20) a
 
 **Visual watch: not run for any of the three.** `watch_all.py --ids` only accepts ids already in its `VIDEOS` dict (`items = [allv[i] for i in wanted if i in allv]`), and none of these three are in it. Since we were told not to edit the runner, these notes rely on transcripts only. Anything that was on screen but not spoken is missing: Massimo's Gemini TTS settings, the full scene prompts, the editor skill's output style, and what Jad's slides actually look like. If the orchestrator adds the three ids to `VIDEOS`, `python3 -I watch_all.py --ids 8rBiTpcoTrM,hZ_w1d0uYT4,JgoPiiBhdn8 --workers 1` will fill that gap. The most useful one to watch is JgoPiiBhdn8, because the TTS settings are on screen.
 
+**Update 2026-10-21: visual watch done** (one whole-video Gemini request each, `--segment 1200`; reports in `out/<id>.md`). New on-screen details are under "Visual watch additions" at the end of each video's section. Trust caveats as in `VISUAL-FINDINGS.md`: Gemini misreads model labels ("Opus 3.5", "Claude 3.5 Sonnet") and calls 2026 dates "mocked", so those readings are ignored.
+
 Transcripts:
 - `../transcripts/8rBiTpcoTrM-jack-roberts-reverse-engineering-repo-tested.txt`
 - `../transcripts/hZ_w1d0uYT4-jad-mh-motion-graphics-carousels-skill.txt`
@@ -61,6 +63,14 @@ His conclusions:
 - **IP and ToS risk.** His own clones are named generically ("Ask", "Lanes"), but the Trello clone copied the green-leaves background. That is the "don't copy their images" line he warns about himself. Cloning SaaS features is legal. Cloning the look is not safe.
 - **Relevance to the money engine is low.** This is an app-building video. It is useful for its method prompt and as a picture of the YouTube-to-paid-community business model.
 
+### Visual watch additions (Gemini, 2026-10-21)
+
+- **The on-screen Notion page differs from the text we fetched.** Its title reads "Reverse engineer an app from the outside (REA method, no install)", and it asks for three outputs: the checklist with its status, a findings table `Feature | UI | Logic | Data | Notes`, and a build spec "ready to paste into an app builder under a header 'Build Spec'". One rule worth copying: *"Never say 'this app', write 'build this'."* Gemini's transcription is garbled in places, so keep the fetched prompt above as the source text and add the table and header as the output format.
+- **The savings math in the intro:** Calendly $12/mo + Typeform $39/mo + Trello $6/mo = **$684 a year**. Valuations shown: Calendly $3B (2021), Typeform $935M (2022), Trello $425M (sold 2017). The "$219" comes from a C+R Research survey of 1,000 people: they guessed $86/mo and actually spent $219/mo ($2,628 a year).
+- **Base44 UI steps:** app.base44.com → paste the method prompt plus a screenshot → **Build** → **Publish** (Calendly clone set to Public, Typeform clone to Private) → **View app** → **Continue with Google**. In "Slot" he turns weekday switches off, sets **15 min** slots, **Save hours**, **Copy link**, books Oct 15 at 9:30, and a Gmail confirmation arrives at once. The edit round adds an **Edit** button, a description and a required guest question.
+- **The "Agentic OS" dashboard (06:32)** shows cash on hand $1,000,000, monthly income $400,000, and audiences of YouTube 284,600, Instagram 192,400, TikTok 163,400 and LinkedIn 8,420. It is his own dashboard and unverified, but the YouTube number matches his real subscriber count (286K), so the audience figures are at least plausible.
+- **Intro motion style:** dark UI (`#0B0C10`) with electric blue and neon green, floating SaaS icons on spring physics flying into a "Cloned" folder, and bar charts with rolling counters ($4 → $88 → $201 → $219). This is the same code-rendered explainer look as Matt Penny's (batch C), on a 286K channel.
+
 ---
 
 ## 2. "New VIRAL Carousels With Motion Graphics 0$ Turned It Into a Skill (COPY ME)"
@@ -117,6 +127,16 @@ Only the image-based variant needs paid image generation, and only when there ar
   - Carousels of looping videos need each clip to meet Instagram's current carousel limits (item count and per-clip length). Check those before building.
   - Music made with ACE-Step should be checked for originality, per its own README.
   - Label the content as AI-generated where Meta's rules require it. Code-generated motion design is generally not "realistic AI" content, but our policy is to disclose when in doubt.
+
+### Visual watch additions (Gemini, 2026-10-21)
+
+- **The demo prompt into the skill is one line:** *"Make me a live carousel about why most people quit the gym in February. Noir theme, 5 slides."* His first, pre-skill prompt was *"make it sick, make it super appealing, make the designs really nice ... please cook, make no mistakes"*.
+- **The skill's file layout is visible:** `live-carousel/SKILL.md` (1080x1350, **30 fps**, seamless looping, exact 120 BPM timing), `house-style.md`, `STORYBOARD.md`, `scripts/render_all.py`, `make_audio.py` (SFX functions such as `shutter()` and `projector()`, plus noise and hum) and a local `preview.html`. That is a good template for our own carousel preset.
+- **`house-style.md` is a ban list:** no gradient text, no neon or cyan, no full-screen gradients, and a limit on hero colours.
+- **Beat timing in code:** `01-hook.html` holds `keys: [0.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.75]` and a `beatPhase(t)` function, so the keyframes sit on the 0.5 s beat grid. Each slide is encoded with `ffmpeg -framerate 30 -i frames/%03d.png -c:v libx264 -pix_fmt yuv420p slide-01-hook.mp4`.
+- **The engagement numbers he shows:** carousels 0.56%, Reels 0.48%, images 0.33%. The source is not named on screen.
+- **Price and hardware readings conflict with other videos.** Higgsfield is shown as Basic $9, Pro $25, Max $59, while Moe Alamawi (batch A) shows Pro $29 and Max $79; these may be billed-annually prices. The Mac reads as an M3 Air (16 GB, 450 GB), against the M1 (2020) Gemini read in his earlier video. Don't rely on either.
+- **Example 2 is not fully $0.** Its photo assets came from Higgsfield and an OpenAI image model; only the motion, music and SFX were free.
 
 ---
 
@@ -183,6 +203,16 @@ Three AI UGC ad formats that Massimo says the winning ads use. He claims he stud
 - **Remixing a winning ad's script.** Close paraphrases of a competitor's script and scenes are a copyright and trade-dress risk. Keep to structure, never wording.
 - **Mixed incentives.** The video sells the app it demonstrates, the product in the demo ads is fictional ("UGC OS Skin Clear"), and he shows no results for his own AI ads.
 - **The only safe parts are the format thinking** (yap, b-roll story, interview), the "bank once, remix many" economics, and stills-first animation to save credits. If we ever use AI people, the brand has to be the advertiser, label the content AI, and the person must make no personal-experience claims ("AI presenter explains", not "I tried it").
+
+### Visual watch additions (Gemini, 2026-10-21)
+
+- **The Gemini TTS settings (the gap noted above):** model **Gemini 2.5 Pro TTS**, voice read as "Achemar" (probably **Achernar**, one of Gemini's prebuilt voices), Style **Empathetic**, Pace **Rapid Fire**, Expressiveness **1.00 (Creative)**, Accent **Neutral**, at 5 credits. These are his app's controls, so they map onto a Gemini TTS style prompt rather than API fields. Worth one test on our free `gemini-3.8-flash-tts` for fast, warm narration.
+- **The voice profile text:** *"VOICE - Female, early 20s with a neutral American accent. Warm, conversational, and direct, speaking with the effortless authority of someone talking to a friend from the front seat of their car..."*. Pasting the same block into every clip is how the voice stays consistent.
+- **The scene prompt format is time-coded:** *"[0:00-0:04] Medium portrait shot of CHARACTER sitting in the driver's seat of a parked car, addressing the camera directly under natural daylight streaming through the windshield..."*.
+- **Models in the app:** scripts with Gemini 3.6 Flash; images with GPT Image 2, Seedream 5.0 Pro or Nano Banana 2; video with Grok Imagine Video 1.5 (480p or 720p, 5 to 10 s, 9:16, 22 to 45 credits) or Seedance 2.5 (25 s, 144 to 180+ credits).
+- **Correction to the Seedance estimate above.** At his own rate (22 credits = $0.11, so $0.005 a credit), 180 credits is about **$0.90** for a 25 s Seedance render, not about $11. "100 clips for the cost of one Seedance video" doesn't fit the on-screen credits (180 / 22 ≈ 8). Treat the "100x" and "15x cheaper" lines as sales talk.
+- **Captions come from the prompt.** In the 480p test, captions were burned in because the prompt text asked for them. Every video-model prompt needs an explicit "no captions / no text on screen" line when captions are added later.
+- **The editing step is `/video-editor please edit the B-roll clips over the voiceover for me`**, run in Claude Code on a folder of clips and audio.
 
 ---
 

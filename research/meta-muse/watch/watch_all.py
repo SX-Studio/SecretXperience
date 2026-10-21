@@ -199,7 +199,7 @@ def main():
                     print(f"  dropping {model} for this run: {code} {detail[:120]!r}", flush=True)
                     continue
                 # "high demand" 503: cool this model for 2 minutes, try another meanwhile
-                if code == 503:
+                if code == 503 or "'code': 503" in str(e):
                     with lock:
                         cooling[model] = time.time() + 120
                     print(f"  {model} busy (503), cooling 2 min", flush=True)
@@ -207,6 +207,8 @@ def main():
                 # thinkingConfig rejected by an older model: drop it and retry
                 if "thinking" in detail.lower():
                     body.pop("generationConfig", None)
+                print(f"  attempt {attempt + 1} failed {vid} {mmss(start)} on {model} after "
+                      f"{round(time.time() - t)} s: {code or type(e).__name__} {str(e)[:160]}", flush=True)
                 time.sleep(15 * (attempt + 1))
         return f"error {vid} {mmss(start)}: {last}"
 
