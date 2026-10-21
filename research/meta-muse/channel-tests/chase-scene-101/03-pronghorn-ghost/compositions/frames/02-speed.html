@@ -1,0 +1,606 @@
+<template>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500-italic.woff2") format("woff2");font-weight:500;font-style:italic;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600-italic.woff2") format("woff2");font-weight:600;font-style:italic;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+#root, #root * { font-variant-numeric: lining-nums; }
+
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+    }
+
+    /* ---- track 0: full-bleed field photo (camera lives on the img) ---- */
+    #f02-photo {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+    }
+    #f02-shake {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 1920px;
+    }
+    /* 1920x1280 source scaled to cover height (x1.5) = 2880x1920.
+       Window starts on the middle/right pronghorn pair (image x ~1040-2120). */
+    #f02-img {
+      position: absolute;
+      left: -1040px;
+      top: 0;
+      width: 2880px;
+      height: 1920px;
+      display: block;
+      transform-origin: 1580px 400px;
+    }
+
+    /* ---- track 1: documentary grade ---- */
+    #f02-grade {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 1920px;
+      pointer-events: none;
+    }
+    #f02-grade-top {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 480px;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0));
+    }
+    #f02-grade-bottom {
+      position: absolute;
+      left: 0;
+      top: 1450px;
+      width: 1080px;
+      height: 470px;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
+    }
+
+    /* ---- speed lines (seeded, trail to the right: herd runs leftward) ---- */
+    #f02-streaks {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 1920px;
+      pointer-events: none;
+    }
+    .f02-streak {
+      position: absolute;
+      height: 3px;
+      border-radius: 2px;
+      transform-origin: 0% 50%;
+      background: linear-gradient(to right, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0));
+    }
+    .f02-streak.f02-red {
+      height: 4px;
+      background: linear-gradient(to right, rgba(194, 65, 45, 0.95), rgba(194, 65, 45, 0));
+    }
+
+    /* ---- telemetry track (dashed red, self-draws right -> left) ---- */
+    #f02-track {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 1920px;
+      overflow: visible;
+      pointer-events: none;
+    }
+
+    /* ---- Caveat field note on photo ---- */
+    #f02-note-wrap {
+      position: absolute;
+      left: 700px;
+      top: 730px;
+      width: 360px;
+      transform: rotate(-5deg);
+    }
+    #f02-note {
+      font-family: "Caveat", cursive;
+      font-weight: 700;
+      font-size: 88px;
+      line-height: 1.1;
+      color: #ffffff;
+      white-space: nowrap;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.65), 0 0 3px rgba(0, 0, 0, 0.5);
+    }
+
+    /* ---- stat card (paper) ---- */
+    #f02-statshake {
+      position: absolute;
+      left: 72px;
+      top: 520px;
+      width: 600px;
+      height: 400px;
+    }
+    #f02-statcard {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 600px;
+      height: 400px;
+      background: rgba(239, 230, 210, 0.92);
+      border: 2px solid #b9a98c;
+      transform-origin: 30% 50%;
+    }
+    #f02-statlabel {
+      position: absolute;
+      left: 48px;
+      top: 38px;
+      font-family: "Source Sans 3", sans-serif;
+      font-weight: 700;
+      font-size: 36px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #5c4a36;
+    }
+    #f02-numbox {
+      position: absolute;
+      left: 40px;
+      top: 92px;
+      width: 310px;
+      height: 252px;
+      text-align: center;
+    }
+    #f02-num {
+      display: inline-block;
+      font-family: "Cormorant Garamond", serif;
+      font-weight: 700;
+      font-size: 280px;
+      line-height: 0.9;
+      color: #c2412d;
+      font-variant-numeric: lining-nums tabular-nums;
+      transform-origin: 50% 80%;
+    }
+    #f02-mph {
+      position: absolute;
+      left: 366px;
+      top: 232px;
+      font-family: "Courier Prime", monospace;
+      font-weight: 700;
+      font-size: 78px;
+      letter-spacing: 0.04em;
+      color: #2b2118;
+    }
+    #f02-flash {
+      position: absolute;
+      left: 48px;
+      top: 342px;
+      width: 500px;
+      height: 18px;
+      background: #c2412d;
+    }
+    #f02-rule {
+      position: absolute;
+      left: 48px;
+      top: 348px;
+      width: 300px;
+      height: 6px;
+      background: #c2412d;
+      transform-origin: 0% 50%;
+    }
+
+    /* ---- bar race card (paper) ---- */
+    #f02-barcard {
+      position: absolute;
+      left: 72px;
+      top: 520px;
+      width: 936px;
+      height: 548px;
+      background: rgba(239, 230, 210, 0.92);
+      border: 2px solid #b9a98c;
+    }
+    #f02-barhead {
+      position: absolute;
+      left: 48px;
+      top: 36px;
+      font-family: "Source Sans 3", sans-serif;
+      font-weight: 700;
+      font-size: 36px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #5c4a36;
+    }
+    #f02-rows {
+      position: absolute;
+      left: 48px;
+      top: 112px;
+      width: 840px;
+      height: 390px;
+    }
+    .f02-row {
+      position: absolute;
+      left: 0;
+      width: 840px;
+      height: 112px;
+    }
+    .f02-rowlabel {
+      position: absolute;
+      left: 0;
+      top: 0;
+      font-family: "Source Sans 3", sans-serif;
+      font-weight: 700;
+      font-size: 40px;
+      line-height: 48px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #2b2118;
+    }
+    .f02-rowval {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 160px;
+      text-align: right;
+      font-family: "Courier Prime", monospace;
+      font-weight: 700;
+      font-size: 46px;
+      line-height: 48px;
+      letter-spacing: 0.04em;
+      font-variant-numeric: tabular-nums;
+      color: #2b2118;
+    }
+    .f02-rowval.f02-hot {
+      color: #c2412d;
+    }
+    .f02-trackbar {
+      position: absolute;
+      left: 0;
+      top: 62px;
+      width: 840px;
+      height: 46px;
+      border: 2px solid #b9a98c;
+      background: rgba(43, 33, 24, 0.06);
+      overflow: hidden;
+    }
+    .f02-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: #2b2118;
+      transform-origin: 0% 50%;
+    }
+    .f02-fill.f02-hot {
+      background: #c2412d;
+    }
+    /* finish line at 55 on a 0-70 scale: 840 * 55/70 = 660px */
+    #f02-finish {
+      position: absolute;
+      left: 658px;
+      top: 54px;
+      width: 0;
+      height: 330px;
+      border-left: 5px dashed #c2412d;
+      transform-origin: 50% 0%;
+    }
+
+    /* ---- source chip ---- */
+    #f02-chip {
+      position: absolute;
+      left: 72px;
+      top: 1462px;
+      padding: 10px 20px 8px;
+      background: rgba(239, 230, 210, 0.92);
+      border: 2px solid #b9a98c;
+      font-family: "Source Sans 3", sans-serif;
+      font-weight: 700;
+      font-size: 34px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #5c4a36;
+      white-space: nowrap;
+    }
+  </style>
+
+  <div
+    id="root"
+    data-composition-id="02-speed"
+    data-start="0"
+    data-duration="7.603"
+    data-width="1080"
+    data-height="1920"
+  >
+    <!-- track 0: moving field photo, visible from frame 0 -->
+    <div id="f02-photo" class="clip" data-start="0" data-duration="7.603" data-track-index="0">
+      <div id="f02-shake">
+        <img id="f02-img" src="public/ph-154061935.jpg" alt="" />
+      </div>
+    </div>
+
+    <!-- track 1: grade -->
+    <div id="f02-grade" class="clip" data-start="0" data-duration="7.603" data-track-index="1">
+      <div id="f02-grade-top"></div>
+      <div id="f02-grade-bottom"></div>
+    </div>
+
+    <!-- speed lines (populated by seeded script) -->
+    <div id="f02-streaks"></div>
+
+    <!-- dashed telemetry track: drawn right -> left (running direction), passes behind the card -->
+    <svg id="f02-track" viewBox="0 0 1080 1920" width="1080" height="1920">
+      <defs>
+        <mask id="f02-trackmask" maskUnits="userSpaceOnUse" x="0" y="0" width="1080" height="1920">
+          <path
+            id="f02-trackdraw"
+            d="M 1130 1240 C 960 1180, 860 960, 620 880 S 300 930, 96 990"
+            fill="none"
+            stroke="#ffffff"
+            stroke-width="40"
+            stroke-linecap="round"
+            pathLength="1"
+            stroke-dasharray="1 1"
+          />
+        </mask>
+      </defs>
+      <g mask="url(#f02-trackmask)">
+        <path
+          d="M 1130 1240 C 960 1180, 860 960, 620 880 S 300 930, 96 990"
+          fill="none"
+          stroke="#c2412d"
+          stroke-width="7"
+          stroke-linecap="round"
+          stroke-dasharray="28 20"
+        />
+      </g>
+      <g id="f02-arrow">
+        <polyline
+          points="128,956 84,990 128,1024"
+          fill="none"
+          stroke="#c2412d"
+          stroke-width="12"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </g>
+    </svg>
+
+    <!-- Caveat field note -->
+    <div id="f02-note-wrap"><div id="f02-note">for miles</div></div>
+
+    <!-- stat card -->
+    <div id="f02-statshake">
+      <div id="f02-statcard">
+        <div id="f02-statlabel">Top speed</div>
+        <div id="f02-numbox"><span id="f02-num">0</span></div>
+        <div id="f02-mph">MPH</div>
+        <div id="f02-flash"></div>
+        <div id="f02-rule"></div>
+      </div>
+    </div>
+
+    <!-- bar race card -->
+    <div id="f02-barcard">
+      <div id="f02-barhead">Top speed &middot; mph</div>
+      <div id="f02-rows">
+        <div class="f02-row" style="top: 0px">
+          <div class="f02-rowlabel">Pronghorn</div>
+          <div class="f02-rowval f02-hot"><span id="f02-v1">0</span></div>
+          <div class="f02-trackbar"><div class="f02-fill f02-hot" id="f02-b1"></div></div>
+        </div>
+        <div class="f02-row" style="top: 138px">
+          <div class="f02-rowlabel">Coyote</div>
+          <div class="f02-rowval"><span id="f02-a2">&asymp;40</span></div>
+          <div class="f02-trackbar"><div class="f02-fill" id="f02-b2"></div></div>
+        </div>
+        <div class="f02-row" style="top: 276px">
+          <div class="f02-rowlabel">Wolf</div>
+          <div class="f02-rowval"><span id="f02-a3">&asymp;40</span></div>
+          <div class="f02-trackbar"><div class="f02-fill" id="f02-b3"></div></div>
+        </div>
+        <div id="f02-finish"></div>
+      </div>
+    </div>
+
+    <!-- source chip -->
+    <div id="f02-chip">National Park Service</div>
+  </div>
+
+  <script>
+    (function () {
+      var FRAME_ID = "02-speed";
+      var DUR = 7.603;
+      var root = document.querySelector('[data-composition-id="' + FRAME_ID + '"]');
+      var q = function (s) {
+        return root.querySelector(s);
+      };
+
+      // seeded PRNG (mulberry32) — no Math.random
+      function mulberry32(a) {
+        return function () {
+          a |= 0;
+          a = (a + 0x6d2b79f5) | 0;
+          var t = Math.imul(a ^ (a >>> 15), 1 | a);
+          t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+      var rand = mulberry32(0x02f55);
+
+      var tl = gsap.timeline({ paused: true });
+
+      // ---------- camera: slow push + pan in the running direction (herd faces left -> image drifts right)
+      tl.fromTo(
+        q("#f02-img"),
+        { x: 0, scale: 1.06 },
+        { x: 150, scale: 1.12, duration: DUR, ease: "sine.inOut" },
+        0
+      );
+
+      // ---------- speed lines (seeded, one element per streak event)
+      var streakBox = q("#f02-streaks");
+      var t = 0.12;
+      var k = 0;
+      while (t < DUR - 0.5) {
+        var el = document.createElement("div");
+        el.className = "f02-streak" + (k % 3 === 2 ? " f02-red" : "");
+        var len = 140 + Math.round(rand() * 160);
+        var top = 1120 + Math.round(rand() * 360);
+        var left = 240 + Math.round(rand() * 620);
+        el.style.width = len + "px";
+        el.style.top = top + "px";
+        el.style.left = left + "px";
+        streakBox.appendChild(el);
+        tl.fromTo(
+          el,
+          { x: 0, scaleX: 0.35, opacity: 0 },
+          { x: 90, scaleX: 1, opacity: 0.85, duration: 0.14, ease: "power2.out" },
+          t
+        );
+        tl.to(el, { x: 240, opacity: 0, duration: 0.3, ease: "power1.in" }, t + 0.14);
+        // denser during the speed beat (0-2.6s), sparser after
+        t += (t < 2.6 ? 0.22 : 0.42) + rand() * 0.14;
+        k++;
+      }
+
+      // ---------- Scene 1: stat card slams on "55" (1.04s)
+      var SLAM = 0.98;
+      tl.fromTo(
+        q("#f02-statcard"),
+        { scale: 1.2, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.45, ease: "expo.out" },
+        SLAM
+      );
+      tl.fromTo(
+        q("#f02-statlabel"),
+        { opacity: 0, y: 10 },
+        { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" },
+        SLAM + 0.12
+      );
+
+      // count-up 0 -> 55 with dynamic scale (seek-safe: innerText is a tweened property, no callbacks)
+      var numEl = q("#f02-num");
+      tl.fromTo(
+        numEl,
+        { innerText: 0 },
+        { innerText: 55, snap: { innerText: 1 }, duration: 0.9, ease: "expo.out" },
+        SLAM
+      );
+      tl.fromTo(numEl, { scale: 0.78 }, { scale: 1, duration: 0.9, ease: "expo.out" }, SLAM);
+
+      // 1-frame red underline flash, then a persistent rule draws in
+      tl.fromTo(q("#f02-flash"), { opacity: 0 }, { opacity: 1, duration: 0.001 }, SLAM + 0.08);
+      tl.to(q("#f02-flash"), { opacity: 0, duration: 0.001 }, SLAM + 0.08 + 1 / 30);
+      tl.fromTo(
+        q("#f02-rule"),
+        { scaleX: 0 },
+        { scaleX: 1, duration: 0.35, ease: "power3.out" },
+        SLAM + 0.15
+      );
+
+      // MPH suffix lands after the count, on "miles" (1.68s)
+      tl.fromTo(
+        q("#f02-mph"),
+        { opacity: 0, y: 24 },
+        { opacity: 1, y: 0, duration: 0.4, ease: "back.out(1.6)" },
+        1.68
+      );
+
+      // impact shake (seeded, max 6px, 0.25s) on photo + card
+      var shakeTargets = [q("#f02-shake"), q("#f02-statshake")];
+      var st = SLAM + 0.04;
+      var steps = 6;
+      for (var i = 0; i < steps; i++) {
+        var amp = 6 * (1 - i / steps);
+        var dx = Math.round((rand() * 2 - 1) * amp);
+        var dy = Math.round((rand() * 2 - 1) * amp);
+        tl.to(shakeTargets, { x: dx, y: dy, duration: 0.25 / steps, ease: "none" }, st + (i * 0.25) / steps);
+      }
+      tl.to(shakeTargets, { x: 0, y: 0, duration: 0.04, ease: "none" }, st + 0.25);
+
+      // ---------- Scene 2: dashed track draws on "keep running" (2.8s), note writes on "for" (3.44s)
+      tl.fromTo(
+        q("#f02-trackdraw"),
+        { strokeDashoffset: 1 },
+        { strokeDashoffset: 0, duration: 1.2, ease: "power2.inOut" },
+        2.78
+      );
+      tl.fromTo(
+        q("#f02-arrow"),
+        { scale: 0.6, opacity: 0, transformOrigin: "30% 50%" },
+        { scale: 1, opacity: 1, duration: 0.25, ease: "expo.out" },
+        3.92
+      );
+      tl.fromTo(
+        q("#f02-note"),
+        { clipPath: "inset(-30% 100% -30% -6%)" },
+        { clipPath: "inset(-30% -6% -30% -6%)", duration: 0.7, ease: "power1.inOut" },
+        3.44
+      );
+
+      // ---------- Scene 3: quick card swap to the bar race (4.25s, "Wolves" at 4.4s)
+      var SWAP = 4.22;
+      tl.to(q("#f02-statcard"), { x: -760, duration: 0.3, ease: "power3.in" }, SWAP);
+      tl.to(q("#f02-note"), { opacity: 0, duration: 0.25, ease: "power1.in" }, SWAP);
+      tl.fromTo(
+        q("#f02-barcard"),
+        { x: 1100 },
+        { x: 0, duration: 0.42, ease: "power3.out" },
+        SWAP + 0.14
+      );
+
+      // bars: scale 0-70 mph across 840px
+      var FULL = 70;
+      function bar(fillSel, valSel, target, at, dur, ease) {
+        tl.fromTo(q(fillSel), { scaleX: 0 }, { scaleX: target / FULL, duration: dur, ease: ease }, at);
+        // counter shares the bar's timing + ease; seek-safe property tween
+        tl.fromTo(
+          q(valSel),
+          { innerText: 0 },
+          { innerText: target, snap: { innerText: 1 }, duration: dur, ease: ease },
+          at
+        );
+      }
+      // PRONGHORN shoots to 55 first
+      bar("#f02-b1", "#f02-v1", 55, 4.62, 0.75, "expo.out");
+      // COYOTE + WOLF grow and stop short, landing on "40." (6.72s)
+      // approximate values: bars grow, the "≈40" label appears as they stop (no count-up through other numbers)
+      tl.fromTo(q("#f02-b2"), { scaleX: 0 }, { scaleX: 40 / FULL, duration: 1.68, ease: "power2.out" }, 5.04);
+      tl.fromTo(q("#f02-b3"), { scaleX: 0 }, { scaleX: 40 / FULL, duration: 1.6, ease: "power2.out" }, 5.12);
+      tl.fromTo(q("#f02-a2"), { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power1.out" }, 6.5);
+      tl.fromTo(q("#f02-a3"), { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power1.out" }, 6.55);
+
+      // finish line at 55 drops once the predators stop short
+      tl.fromTo(
+        q("#f02-finish"),
+        { scaleY: 0 },
+        { scaleY: 1, duration: 0.35, ease: "power3.out" },
+        6.76
+      );
+
+      // source chip
+      tl.fromTo(
+        q("#f02-chip"),
+        { opacity: 0, y: 16 },
+        { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" },
+        5.5
+      );
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines[FRAME_ID] = tl;
+    })();
+  </script>
+</template>
