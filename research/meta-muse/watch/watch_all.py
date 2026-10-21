@@ -104,6 +104,8 @@ def main():
         help="comma list; free tier allows about 20 requests per model per day, so the runner "
              "moves to the next model when one returns a daily-quota 429")
     ap.add_argument("--workers", type=int, default=3)
+    ap.add_argument("--segment", type=int, default=SEGMENT,
+                    help="seconds per clip; longer = fewer requests, but the proxy drops streams silent for 30 s")
     args = ap.parse_args()
 
     key = os.environ.get("GEMINI_API_KEY")
@@ -220,11 +222,11 @@ def main():
         if (out / f"{vid}.md").exists():
             print(f"skip {vid} (merged file exists)", flush=True)
             continue
-        if not dur or dur <= SEGMENT + 60:
+        if not dur or dur <= args.segment + 60:
             jobs.append((vid, title, 0, 0))
         else:
-            for s in range(0, dur, SEGMENT):
-                jobs.append((vid, title, s, min(s + SEGMENT, dur)))
+            for s in range(0, dur, args.segment):
+                jobs.append((vid, title, s, min(s + args.segment, dur)))
 
     with ThreadPoolExecutor(max_workers=args.workers) as ex:
         for msg in ex.map(do_segment, jobs):
@@ -233,7 +235,7 @@ def main():
     # merge segments per video
     for vid, title, dur in items:
         segs = sorted(parts_dir.glob(f"{vid}.*.md"))
-        expected = 1 if (not dur or dur <= SEGMENT + 60) else len(range(0, dur, SEGMENT))
+        expected = 1 if (not dur or dur <= args.segment + 60) else len(range(0, dur, args.segment))
         if len(segs) == expected and not (out / f"{vid}.md").exists():
             body = "\n\n".join(p.read_text() for p in segs)
             (out / f"{vid}.md").write_text(f"# {title}\n\nhttps://www.youtube.com/watch?v={vid}\n\n{body}")
