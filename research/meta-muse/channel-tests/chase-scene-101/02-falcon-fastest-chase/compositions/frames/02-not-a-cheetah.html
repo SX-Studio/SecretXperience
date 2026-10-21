@@ -1,0 +1,553 @@
+<template id="f02-template">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500-italic.woff2") format("woff2");font-weight:500;font-style:italic;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600-italic.woff2") format("woff2");font-weight:600;font-style:italic;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+#root, #root * { font-variant-numeric: lining-nums; }
+
+  #root {
+    position: absolute;
+    inset: 0;
+    width: 1080px;
+    height: 1920px;
+    overflow: hidden;
+    color: #2B2118;
+  }
+
+  /* ---------- paper ground (own clip layer) ---------- */
+  #f02-paper {
+    position: absolute;
+    inset: 0;
+    background-color: #EFE6D2;
+  }
+  #f02-paper .f02-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(185,169,140,0.25) 2px, transparent 2px),
+      linear-gradient(to bottom, rgba(185,169,140,0.25) 2px, transparent 2px);
+    background-size: 40px 40px;
+  }
+  #f02-paper .f02-vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 75% 70% at 50% 45%, rgba(239,230,210,0) 55%, rgba(92,74,54,0.20) 100%);
+  }
+
+  /* ---------- camera ---------- */
+  #f02-stage {
+    position: absolute;
+    inset: 0;
+  }
+  #f02-cam {
+    position: absolute;
+    inset: 0;
+    transform-origin: 540px 1100px;
+  }
+  #f02-shake {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* ---------- specimen plate ---------- */
+  #f02-mat {
+    position: absolute;
+    left: 72px;
+    top: 150px;
+    width: 520px;
+    height: 700px;
+    box-sizing: border-box;
+    background: #E4D7BC;
+    border: 2px solid #B9A98C;
+  }
+  #f02-plate-view {
+    position: absolute;
+    left: 22px;
+    top: 22px;
+    width: 472px;
+    height: 592px;
+    overflow: hidden;
+  }
+  #f02-plate-move {
+    position: absolute;
+    inset: 0;
+  }
+  #f02-plate-img {
+    position: absolute;
+    left: -62px;
+    top: -114px;
+    width: 546px;
+    height: 849px;
+    mix-blend-mode: multiply;
+    transform-origin: 290px 340px;
+  }
+  #f02-spec {
+    position: absolute;
+    left: 22px;
+    right: 22px;
+    top: 626px;
+    border-top: 2px solid #B9A98C;
+    padding-top: 6px;
+    text-align: center;
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 42px;
+    line-height: 1.0;
+    color: #5C4A36;
+  }
+
+  /* ---------- gauge (right column) ---------- */
+  #f02-gauge-label {
+    position: absolute;
+    left: 630px;
+    width: 378px;
+    top: 196px;
+    text-align: center;
+    font-family: "Source Sans 3", sans-serif;
+    font-weight: 700;
+    font-size: 34px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #5C4A36;
+  }
+  #f02-gauge {
+    position: absolute;
+    left: 629px;
+    top: 250px;
+    width: 380px;
+    height: 300px;
+    overflow: visible;
+  }
+
+  /* ---------- bars ---------- */
+  .f02-label {
+    position: absolute;
+    font-family: "Source Sans 3", sans-serif;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 1;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #5C4A36;
+  }
+  #f02-cheetah-img {
+    position: absolute;
+    left: 72px;
+    top: 890px;
+    width: 153px;
+    height: 92px;
+  }
+  #f02-clabel { left: 246px; top: 918px; }
+  #f02-falcon-glyph {
+    position: absolute;
+    left: 66px;
+    top: 1106px;
+    width: 52px;
+    height: 104px;
+  }
+  #f02-flabel { left: 132px; top: 1138px; }
+
+  #f02-axis {
+    position: absolute;
+    left: 70px;
+    top: 988px;
+    width: 2px;
+    height: 324px;
+    background: #B9A98C;
+    transform-origin: top center;
+  }
+  #f02-cmark {
+    position: absolute;
+    left: 295px;
+    top: 988px;
+    width: 0;
+    height: 324px;
+    border-left: 3px dashed #5C4A36;
+  }
+  .f02-bar {
+    position: absolute;
+    left: 72px;
+    width: 936px;
+    transform-origin: left center;
+  }
+  #f02-cbar { top: 1000px; height: 76px; background: #2B2118; }
+  #f02-fbar { top: 1200px; height: 96px; background: #C2412D; }
+
+  #f02-cval {
+    position: absolute;
+    left: 322px;
+    top: 1000px;
+    height: 76px;
+    line-height: 76px;
+    font-family: "Courier Prime", monospace;
+    font-weight: 700;
+    font-size: 68px;
+    color: #2B2118;
+    white-space: nowrap;
+  }
+  #f02-cval .f02-unit { font-size: 40px; color: #5C4A36; }
+
+  #f02-fval {
+    position: absolute;
+    right: 72px;
+    top: 1312px;
+    display: flex;
+    align-items: baseline;
+    font-family: "Courier Prime", monospace;
+    font-weight: 700;
+    color: #C2412D;
+    white-space: nowrap;
+    transform-origin: right bottom;
+  }
+  #f02-fnum {
+    display: inline-block;
+    min-width: 3ch;
+    text-align: right;
+    font-size: 164px;
+    line-height: 0.95;
+    font-variant-numeric: tabular-nums;
+  }
+  #f02-fval .f02-unit { font-size: 58px; margin-left: 14px; }
+  #f02-funder {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -14px;
+    height: 7px;
+    background: #C2412D;
+    transform-origin: left center;
+  }
+
+  #f02-streaks {
+    position: absolute;
+    left: 72px;
+    top: 1170px;
+    width: 0;
+    height: 160px;
+  }
+  .f02-streak {
+    position: absolute;
+    right: 0;
+    transform-origin: right center;
+  }
+
+  #f02-four {
+    position: absolute;
+    right: 72px;
+    top: 1110px;
+    font-family: "Caveat", cursive;
+    font-weight: 700;
+    font-size: 66px;
+    line-height: 1;
+    color: #5C4A36;
+    white-space: nowrap;
+  }
+
+  #f02-chip {
+    position: absolute;
+    left: 72px;
+    top: 1488px;
+    padding: 9px 16px 7px;
+    background: #E4D7BC;
+    border: 2px solid #B9A98C;
+    font-family: "Source Sans 3", sans-serif;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 1.1;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #5C4A36;
+    white-space: nowrap;
+  }
+
+  /* ---------- payoff note ---------- */
+  #f02-leader {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1080px;
+    height: 1920px;
+    overflow: visible;
+    pointer-events: none;
+  }
+  #f02-note {
+    position: absolute;
+    left: 648px;
+    top: 636px;
+    width: 360px;
+    transform: rotate(-4deg);
+    transform-origin: left top;
+    font-family: "Caveat", cursive;
+    font-weight: 700;
+    font-size: 96px;
+    line-height: 0.98;
+    color: #2B2118;
+  }
+  #f02-note .f02-line { display: block; white-space: nowrap; }
+</style>
+
+<div id="root" data-composition-id="02-not-a-cheetah" data-width="1080" data-height="1920" data-duration="8.232">
+
+  <!-- full-bleed paper ground -->
+  <div id="f02-paper" class="clip" data-start="0" data-duration="8.232" data-track-index="0">
+    <div class="f02-grid"></div>
+    <div class="f02-vignette"></div>
+  </div>
+
+  <!-- camera: slow push + seeded impact shake -->
+  <div id="f02-stage" class="clip" data-start="0" data-duration="8.232" data-track-index="1">
+  <div id="f02-cam">
+    <div id="f02-shake">
+
+      <!-- specimen plate -->
+      <div id="f02-mat">
+        <div id="f02-plate-view">
+          <div id="f02-plate-move">
+            <img id="f02-plate-img" src="public/gould-peregrine.jpg" alt="Peregrine falcon, Gould plate" />
+          </div>
+        </div>
+        <div id="f02-spec">Falco peregrinus</div>
+      </div>
+
+      <!-- speed gauge -->
+      <div id="f02-gauge-label">Top speed</div>
+      <svg id="f02-gauge" viewBox="0 0 380 300" xmlns="http://www.w3.org/2000/svg">
+        <path id="f02-ring" d="M30 230 A160 160 0 0 1 350 230" fill="none" stroke="#B9A98C" stroke-width="3" stroke-linecap="round" />
+        <g id="f02-ticks"></g>
+        <line id="f02-ctick" x1="0" y1="0" x2="0" y2="0" stroke="#2B2118" stroke-width="5" stroke-linecap="round" />
+        <line id="f02-needle" x1="190" y1="230" x2="190" y2="92" stroke="#C2412D" stroke-width="7" stroke-linecap="round" />
+        <circle id="f02-hub" cx="190" cy="230" r="13" fill="#2B2118" />
+        <text id="f02-mph" x="190" y="290" text-anchor="middle" font-family="Courier Prime, monospace" font-weight="700" font-size="34" fill="#5C4A36">MPH</text>
+      </svg>
+
+      <!-- cheetah row -->
+      <img id="f02-cheetah-img" src="public/cheetah-ink.png" alt="Cheetah, ink" />
+      <div id="f02-clabel" class="f02-label">Cheetah</div>
+
+      <!-- falcon row label -->
+      <svg id="f02-falcon-glyph" viewBox="30 -30 60 120" xmlns="http://www.w3.org/2000/svg">
+        <path transform="rotate(90 60 30)" fill="#2B2118"
+          d="M60 4 C64 4 66 9 66 14 L70 20 C84 22 100 28 116 40 C100 38 86 36 74 34 L70 44 L76 56 L60 52 L44 56 L50 44 L46 34 C34 36 20 38 4 40 C20 28 36 22 50 20 L54 14 C54 9 56 4 60 4 Z" />
+      </svg>
+      <div id="f02-flabel" class="f02-label">Falcon</div>
+      <div id="f02-four">over 4&times; faster</div>
+
+      <!-- axis + cheetah mark -->
+      <div id="f02-axis"></div>
+      <div id="f02-cmark"></div>
+
+      <!-- bars -->
+      <div id="f02-cbar" class="f02-bar"></div>
+      <div id="f02-cval"><span id="f02-cnum">0</span><span class="f02-unit"> MPH</span></div>
+
+      <div id="f02-fbar" class="f02-bar"></div>
+      <div id="f02-streaks"></div>
+      <div id="f02-fval"><span id="f02-fnum">0</span><span class="f02-unit">MPH</span><div id="f02-funder"></div></div>
+
+      <!-- source chip -->
+      <div id="f02-chip">Cheetah: Wilson et al., Nature 2013</div>
+
+      <!-- payoff note + leader -->
+      <svg id="f02-leader" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+        <path id="f02-lead-path" d="M630 792 C548 784 462 712 421 482" fill="none" stroke="#5C4A36" stroke-width="4" stroke-linecap="round" />
+        <path id="f02-lead-head" d="M437 503 L421 482 L412 507" fill="none" stroke="#5C4A36" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+        <path id="f02-squiggle" d="M654 834 C724 818 800 834 872 816 S944 806 968 810" fill="none" stroke="#C2412D" stroke-width="6" stroke-linecap="round" />
+      </svg>
+      <div id="f02-note">
+        <span class="f02-line" id="f02-note1">it's</span>
+        <span class="f02-line" id="f02-note2">hunting.</span>
+      </div>
+
+    </div>
+  </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var D = 7.732;
+  var root = document.querySelector('[data-composition-id="02-not-a-cheetah"]');
+  var q = function (s) { return root.querySelector(s); };
+
+  // seeded PRNG (deterministic)
+  function mulberry32(a) {
+    return function () {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      var t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  var rnd = mulberry32(20242);
+
+  var SVGNS = "http://www.w3.org/2000/svg";
+  var CX = 190, CY = 230, R = 160;
+  var CHEETAH = 58, FALCON = 242, GMAX = 250;
+  var BAR_W = 936;
+
+  // gauge ticks (0..250 every 25)
+  var ticks = q("#f02-ticks");
+  for (var v = 0; v <= GMAX; v += 25) {
+    var th = Math.PI + (v / GMAX) * Math.PI;
+    var major = v % 50 === 0;
+    var r2 = major ? R - 24 : R - 14;
+    var ln = document.createElementNS(SVGNS, "line");
+    ln.setAttribute("x1", (CX + R * Math.cos(th)).toFixed(2));
+    ln.setAttribute("y1", (CY + R * Math.sin(th)).toFixed(2));
+    ln.setAttribute("x2", (CX + r2 * Math.cos(th)).toFixed(2));
+    ln.setAttribute("y2", (CY + r2 * Math.sin(th)).toFixed(2));
+    ln.setAttribute("stroke", "#B9A98C");
+    ln.setAttribute("stroke-width", major ? "3" : "2");
+    ln.setAttribute("class", "f02-tick");
+    ticks.appendChild(ln);
+  }
+  // cheetah mark on the gauge (ink)
+  var thC = Math.PI + (CHEETAH / GMAX) * Math.PI;
+  var ctick = q("#f02-ctick");
+  ctick.setAttribute("x1", (CX + (R + 10) * Math.cos(thC)).toFixed(2));
+  ctick.setAttribute("y1", (CY + (R + 10) * Math.sin(thC)).toFixed(2));
+  ctick.setAttribute("x2", (CX + (R - 30) * Math.cos(thC)).toFixed(2));
+  ctick.setAttribute("y2", (CY + (R - 30) * Math.sin(thC)).toFixed(2));
+
+  // speed streaks trailing the falcon bar tip (seeded)
+  var streakBox = q("#f02-streaks");
+  var streakDefs = [
+    { y: 8,   h: 3, c: "#C2412D" },
+    { y: 22,  h: 4, c: "#2B2118" },
+    { y: 52,  h: 3, c: "#2B2118" },
+    { y: 84,  h: 4, c: "#2B2118" },
+    { y: 112, h: 3, c: "#2B2118" },
+    { y: 140, h: 4, c: "#C2412D" },
+    { y: 152, h: 3, c: "#2B2118" }
+  ];
+  streakDefs.forEach(function (d) {
+    var s = document.createElement("div");
+    s.className = "f02-streak";
+    s.style.top = d.y + "px";
+    s.style.height = d.h + "px";
+    s.style.width = Math.round(150 + rnd() * 190) + "px";
+    s.style.background = d.c;
+    streakBox.appendChild(s);
+  });
+
+  // measured stroke lengths
+  function prepDraw(el) {
+    var L = el.getTotalLength();
+    el.style.strokeDasharray = L + " " + L;
+    return L;
+  }
+  var ring = q("#f02-ring"), ringL = prepDraw(ring);
+  var lead = q("#f02-lead-path"), leadL = prepDraw(lead);
+  var head = q("#f02-lead-head"), headL = prepDraw(head);
+  var squig = q("#f02-squiggle"), squigL = prepDraw(squig);
+
+  var needleRot = function (val) { return -90 + (val / GMAX) * 180; };
+  var SVG_O = CX + " " + CY;
+
+  var tl = gsap.timeline({ paused: true });
+
+  // ---- camera: slow documentary push across the whole shot
+  tl.fromTo("#f02-cam", { scale: 1 }, { scale: 1.025, duration: D, ease: "none" }, 0);
+  tl.fromTo("#f02-plate-img", { scale: 1 }, { scale: 1.05, duration: D, ease: "none" }, 0);
+
+  // ================= Scene 1 (0.0–2.4): plate slides up into the mat
+  tl.fromTo("#f02-mat", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 0);
+  tl.fromTo("#f02-plate-move", { y: 180, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1, ease: "power3.out" }, 0.1);
+  tl.fromTo("#f02-spec", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, 0.9);
+
+  // "animal ... clocked" — speed gauge drafts itself
+  tl.fromTo("#f02-gauge-label", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 1.1);
+  tl.fromTo(ring, { strokeDashoffset: ringL }, { strokeDashoffset: 0, duration: 0.9, ease: "power2.inOut" }, 1.15);
+  tl.fromTo(root.querySelectorAll(".f02-tick"), { opacity: 0 }, { opacity: 1, duration: 0.2, stagger: 0.06, ease: "power1.out" }, 1.4);
+  tl.fromTo(["#f02-hub", "#f02-mph"], { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power2.out" }, 1.9);
+  tl.fromTo("#f02-needle", { opacity: 0, rotation: needleRot(0), svgOrigin: SVG_O },
+    { opacity: 1, rotation: needleRot(0), svgOrigin: SVG_O, duration: 0.3, ease: "power2.out" }, 1.95);
+  // needle "wakes" on "clocked"
+  tl.to("#f02-needle", { rotation: needleRot(14), svgOrigin: SVG_O, duration: 0.35, ease: "power2.out" }, 2.25);
+  tl.to("#f02-needle", { rotation: needleRot(0), svgOrigin: SVG_O, duration: 0.4, ease: "power2.inOut" }, 2.6);
+
+  // ================= Scene 2 (2.4–4.6): "Not a cheetah." / "A bird."
+  tl.fromTo("#f02-cheetah-img", { opacity: 0, clipPath: "inset(0% 100% 0% 0%)" },
+    { opacity: 1, clipPath: "inset(0% 0% 0% 0%)", duration: 0.6, ease: "power2.out" }, 2.9);
+  tl.fromTo("#f02-clabel", { opacity: 0, x: -16 }, { opacity: 1, x: 0, duration: 0.45, ease: "power2.out" }, 3.0);
+  tl.fromTo("#f02-axis", { scaleY: 0 }, { scaleY: 1, duration: 0.6, ease: "power2.out" }, 3.0);
+
+  // cheetah bar grows to 58 MPH, count-up locked to the same ease
+  var CB_AT = 3.3, CB_DUR = 0.85;
+  var cState = { v: 0 };
+  var cNum = q("#f02-cnum");
+  tl.fromTo("#f02-cbar", { scaleX: 0 }, { scaleX: CHEETAH / FALCON, duration: CB_DUR, ease: "power3.out" }, CB_AT);
+  tl.fromTo("#f02-cval", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power1.out" }, CB_AT);
+  tl.fromTo(cState, { v: 0 }, { v: CHEETAH, duration: CB_DUR, ease: "power3.out",
+    onUpdate: function () { cNum.textContent = String(Math.round(cState.v)); } }, CB_AT);
+  tl.to("#f02-needle", { rotation: needleRot(CHEETAH), svgOrigin: SVG_O, duration: CB_DUR, ease: "power3.out" }, CB_AT);
+
+  // the cheetah's ceiling marked down through the falcon lane
+  tl.fromTo("#f02-cmark", { clipPath: "inset(0% 0% 100% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.35, ease: "power2.out" }, 3.85);
+
+  // "A bird." — falcon bar shoots past to 242 MPH
+  tl.fromTo("#f02-falcon-glyph", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 4.05);
+  tl.fromTo("#f02-flabel", { opacity: 0, x: -16 }, { opacity: 1, x: 0, duration: 0.35, ease: "power2.out" }, 4.1);
+
+  var FB_AT = 4.3, FB_DUR = 0.6;
+  var fState = { v: 0 };
+  var fNum = q("#f02-fnum");
+  tl.fromTo("#f02-fbar", { scaleX: 0 }, { scaleX: 1, duration: FB_DUR, ease: "expo.out" }, FB_AT);
+  // speed lines ride the tip (same ease => same position), then fade over 0.3 s
+  tl.fromTo("#f02-streaks", { x: 0 }, { x: BAR_W, duration: FB_DUR, ease: "expo.out" }, FB_AT);
+  tl.fromTo("#f02-streaks", { opacity: 0 }, { opacity: 1, duration: 0.05, ease: "none" }, FB_AT);
+  tl.fromTo(".f02-streak", { scaleX: 1 }, { scaleX: 0.15, duration: 0.45, ease: "power2.in" }, FB_AT + 0.25);
+  tl.to("#f02-streaks", { opacity: 0, duration: 0.3, ease: "power1.out" }, FB_AT + 0.4);
+  // stat slam: count-up + 1.25 -> 1.0 expo.out
+  tl.fromTo("#f02-fval", { opacity: 0, scale: 1.25 }, { opacity: 1, scale: 1, duration: FB_DUR, ease: "expo.out" }, FB_AT);
+  tl.fromTo(fState, { v: 0 }, { v: FALCON, duration: FB_DUR, ease: "expo.out",
+    onUpdate: function () { fNum.textContent = String(Math.round(fState.v)); } }, FB_AT);
+  tl.fromTo("#f02-funder", { scaleX: 0 }, { scaleX: 1, duration: 0.14, ease: "power2.out" }, FB_AT + 0.45);
+  tl.to("#f02-needle", { rotation: needleRot(FALCON), svgOrigin: SVG_O, duration: FB_DUR, ease: "expo.out" }, FB_AT);
+
+  // impact shake (seeded, max 6px, 0.25 s)
+  var SH_AT = FB_AT + 0.1, steps = 10, stepDur = 0.025;
+  for (var i = 0; i < steps; i++) {
+    var amp = 6 * (1 - i / steps);
+    tl.to("#f02-shake", { x: (rnd() * 2 - 1) * amp, y: (rnd() * 2 - 1) * amp, duration: stepDur, ease: "none" }, SH_AT + i * stepDur);
+  }
+  tl.to("#f02-shake", { x: 0, y: 0, duration: stepDur, ease: "none" }, SH_AT + steps * stepDur);
+
+  // needle quivers pinned near the top of the dial (seeded)
+  var JIT_AT = FB_AT + FB_DUR + 0.05, jitDur = 0.09;
+  var nJit = Math.floor((D - JIT_AT) / jitDur);
+  for (var j = 0; j < nJit; j++) {
+    tl.to("#f02-needle", { rotation: needleRot(FALCON) + (rnd() * 2 - 1) * 1.6, svgOrigin: SVG_O, duration: jitDur, ease: "sine.inOut" }, JIT_AT + j * jitDur);
+  }
+
+  // source chip + derived comparison
+  tl.fromTo("#f02-chip", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 5.0);
+  tl.fromTo("#f02-four", { opacity: 0, clipPath: "inset(0% 100% 0% 0%)" },
+    { opacity: 1, clipPath: "inset(0% 0% 0% 0%)", duration: 0.6, ease: "power2.out" }, 5.45);
+
+  // ================= Scene 3 (4.6–7.7): "It's hunting." — note writes on, leader to the plate
+  tl.fromTo(lead, { strokeDashoffset: leadL }, { strokeDashoffset: 0, duration: 0.6, ease: "power2.inOut" }, 6.05);
+  tl.fromTo(head, { strokeDashoffset: headL }, { strokeDashoffset: 0, duration: 0.18, ease: "power2.out" }, 6.62);
+  tl.fromTo("#f02-note1", { clipPath: "inset(-10% 100% -10% 0%)" }, { clipPath: "inset(-10% 0% -10% 0%)", duration: 0.28, ease: "power1.inOut" }, 6.3);
+  tl.fromTo("#f02-note2", { clipPath: "inset(-10% 100% -10% 0%)" }, { clipPath: "inset(-10% 0% -10% 0%)", duration: 0.5, ease: "power1.inOut" }, 6.56);
+  tl.fromTo(squig, { strokeDashoffset: squigL }, { strokeDashoffset: 0, duration: 0.35, ease: "power2.out" }, 7.08);
+
+  // pad timeline to the exact frame duration
+  tl.set({}, {}, D);
+
+  window.__timelines = window.__timelines || {};
+  window.__timelines["02-not-a-cheetah"] = tl;
+})();
+</script>
+</template>

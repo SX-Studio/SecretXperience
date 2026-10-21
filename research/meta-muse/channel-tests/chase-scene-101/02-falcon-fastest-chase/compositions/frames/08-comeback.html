@@ -1,0 +1,511 @@
+<template>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500-italic.woff2") format("woff2");font-weight:500;font-style:italic;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600-italic.woff2") format("woff2");font-weight:600;font-style:italic;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+#root, #root * { font-variant-numeric: lining-nums; }
+
+  #root {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1080px;
+    height: 1920px;
+    overflow: hidden;
+    display: block;
+  }
+
+  #f08-paper {
+    position: absolute;
+    inset: 0;
+    background-color: #EFE6D2;
+    background-image:
+      radial-gradient(ellipse 78% 62% at 50% 46%, rgba(92, 74, 54, 0) 58%, rgba(92, 74, 54, 0.16) 100%),
+      linear-gradient(to right, rgba(185, 169, 140, 0.25) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(185, 169, 140, 0.25) 1px, transparent 1px);
+    background-size: 100% 100%, 40px 40px, 40px 40px;
+    background-position: 0 0, 0 0, 0 0;
+  }
+
+  #f08-stage {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1080px;
+    height: 1920px;
+  }
+
+  .f08-svg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1080px;
+    height: 1920px;
+    overflow: visible;
+  }
+
+  #f08-defs {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+
+  /* Scene 1 — checklist field notes */
+  .f08-row {
+    position: absolute;
+    left: 120px;
+    height: 110px;
+    width: 860px;
+  }
+  #f08-row1 { top: 196px; }
+  #f08-row2 { top: 336px; }
+
+  .f08-box {
+    position: absolute;
+    left: 0;
+    top: 22px;
+    width: 64px;
+    height: 64px;
+    overflow: visible;
+  }
+
+  .f08-note {
+    position: absolute;
+    left: 96px;
+    top: 0;
+    padding: 0 14px;
+    font-family: "Caveat", cursive;
+    font-weight: 700;
+    font-size: 88px;
+    line-height: 110px;
+    color: #5C4A36;
+    white-space: nowrap;
+  }
+
+  #f08-rule {
+    position: absolute;
+    left: 120px;
+    top: 468px;
+    width: 840px;
+    height: 2px;
+    background: #B9A98C;
+    transform-origin: 0 50%;
+  }
+
+  /* Scene 2 — stamp */
+  #f08-stampwrap {
+    position: absolute;
+    left: 100px;
+    top: 524px;
+    width: 880px;
+    height: 250px;
+  }
+
+  #f08-stamp {
+    position: absolute;
+    inset: 0;
+    border: 7px solid #C2412D;
+    color: #C2412D;
+    filter: url(#f08-rough);
+    text-align: center;
+    font-family: "Courier Prime", monospace;
+    font-weight: 700;
+  }
+
+  #f08-stamp-inner {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    right: 10px;
+    bottom: 10px;
+    border: 2px solid #C2412D;
+  }
+
+  #f08-stamp-year {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 14px;
+    font-size: 132px;
+    line-height: 140px;
+    letter-spacing: 0.06em;
+  }
+
+  #f08-stamp-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 158px;
+    font-size: 38px;
+    line-height: 48px;
+    letter-spacing: 0.04em;
+  }
+</style>
+
+<div id="root" data-composition-id="08-comeback" data-start="0" data-duration="11.453" data-width="1080" data-height="1920">
+
+  <!-- Full-bleed paper ground: its own full-duration clip layer -->
+  <div id="f08-paper" class="clip" data-start="0" data-duration="11.453" data-track-index="0"></div>
+
+  <!-- Shared SVG defs (filters) -->
+  <svg id="f08-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <filter id="f08-rough" x="-5%" y="-10%" width="110%" height="120%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="8" result="f08n1" />
+        <feDisplacementMap in="SourceGraphic" in2="f08n1" scale="5" xChannelSelector="R" yChannelSelector="G" result="f08d" />
+        <feTurbulence type="fractalNoise" baseFrequency="0.07" numOctaves="3" seed="3" result="f08n2" />
+        <feColorMatrix in="f08n2" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -2.6 0 0 0 2.25" result="f08m" />
+        <feComposite in="f08d" in2="f08m" operator="in" />
+      </filter>
+      <filter id="f08-washfx" x="-30%" y="-30%" width="160%" height="160%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.011" numOctaves="3" seed="21" result="f08wn" />
+        <feDisplacementMap in="SourceGraphic" in2="f08wn" scale="90" xChannelSelector="R" yChannelSelector="G" result="f08wd" />
+        <feGaussianBlur in="f08wd" stdDeviation="14" />
+      </filter>
+      <filter id="f08-inkfx" x="-5%" y="-5%" width="110%" height="110%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="1" seed="5" result="f08in" />
+        <feDisplacementMap in="SourceGraphic" in2="f08in" scale="1.6" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+      <radialGradient id="f08-g-olive" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#6E7B4E" stop-opacity="1" />
+        <stop offset="70%" stop-color="#6E7B4E" stop-opacity="0.7" />
+        <stop offset="100%" stop-color="#6E7B4E" stop-opacity="0" />
+      </radialGradient>
+      <radialGradient id="f08-g-ochre" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#C9A15B" stop-opacity="1" />
+        <stop offset="70%" stop-color="#C9A15B" stop-opacity="0.7" />
+        <stop offset="100%" stop-color="#C9A15B" stop-opacity="0" />
+      </radialGradient>
+    </defs>
+  </svg>
+
+  <div id="f08-stage">
+
+    <!-- Watercolor washes (background, low opacity) -->
+    <svg class="f08-svg" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <g filter="url(#f08-washfx)">
+        <ellipse id="f08-wash-olive" cx="430" cy="330" rx="430" ry="175" fill="url(#f08-g-olive)" />
+        <ellipse id="f08-wash-stamp" cx="540" cy="649" rx="480" ry="190" fill="url(#f08-g-ochre)" />
+        <ellipse id="f08-wash-dawn" cx="620" cy="1080" rx="540" ry="330" fill="url(#f08-g-ochre)" />
+        <ellipse id="f08-wash-park" cx="470" cy="1450" rx="520" ry="60" fill="url(#f08-g-olive)" />
+      </g>
+    </svg>
+
+    <!-- Ink skyline, falcon, pigeons (built by script below) -->
+    <svg id="f08-city" class="f08-svg" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs id="f08-city-defs"></defs>
+      <g id="f08-towers" filter="url(#f08-inkfx)"></g>
+      <path id="f08-ground" d="M 48 1541 C 300 1539 560 1543 820 1540 S 1000 1541 1032 1540" fill="none" stroke="#2B2118" stroke-width="4" stroke-linecap="round" pathLength="1" />
+
+      <!-- speed lines trailing the falcon's swoop (direction = from upper right) -->
+      <g id="f08-speed" fill="none" stroke-linecap="round">
+        <path id="f08-sl1" d="M 798 727 L 668 854" stroke="#2B2118" stroke-width="3" pathLength="1" />
+        <path id="f08-sl2" d="M 838 743 L 683 892" stroke="#C2412D" stroke-width="4" pathLength="1" />
+        <path id="f08-sl3" d="M 812 788 L 699 897" stroke="#2B2118" stroke-width="3" pathLength="1" />
+      </g>
+
+      <!-- compass ring around the perched falcon -->
+      <g id="f08-ringg">
+        <circle id="f08-ring" cx="625" cy="912" r="88" fill="none" stroke="#B9A98C" stroke-width="3" pathLength="1" transform="rotate(-90 625 912)" />
+        <g id="f08-ticks" stroke="#5C4A36" stroke-width="3" stroke-linecap="round">
+          <line x1="625" y1="814" x2="625" y2="830" />
+          <line x1="625" y1="994" x2="625" y2="1010" />
+          <line x1="527" y1="912" x2="543" y2="912" />
+          <line x1="707" y1="912" x2="723" y2="912" />
+        </g>
+      </g>
+
+      <!-- the falcon, perched on the cornice of the tallest tower (facing left) -->
+      <g id="f08-falcon">
+        <g transform="translate(598 855) scale(1.25)">
+          <path d="M 24 2 C 17 1 11 4 9 9 L 4 13 C 5 15 7 16 9 16 C 10 19 12 22 15 24 C 10 32 8 44 10 56 C 12 66 17 74 22 80 L 20 97 L 29 98 L 31 84 C 36 80 41 72 42 62 C 43 46 40 32 34 22 C 33 12 31 4 24 2 Z" fill="#2B2118" />
+          <path d="M 11 17 C 13 21 16 24 20 25 C 17 31 14 41 14 52 C 12 42 11 31 11 23 Z" fill="#EFE6D2" opacity="0.8" />
+          <path d="M 34 24 C 38 40 37 60 30 82" fill="none" stroke="#EFE6D2" stroke-width="1.2" opacity="0.55" />
+          <circle cx="14" cy="9" r="1.7" fill="#EFE6D2" />
+          <path d="M 17 81 L 13 85 M 21 81 L 19 86" fill="none" stroke="#2B2118" stroke-width="2.2" stroke-linecap="round" />
+        </g>
+      </g>
+
+      <g id="f08-pigeons"></g>
+    </svg>
+
+    <!-- Scene 1: checklist notes -->
+    <div id="f08-row1" class="f08-row">
+      <svg class="f08-box" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path id="f08-box1" d="M 6 8 C 20 5 40 6 56 7 C 57 22 56 40 57 56 C 40 57 20 56 6 57 C 5 40 6 22 6 8 Z" fill="none" stroke="#5C4A36" stroke-width="3.5" stroke-linejoin="round" pathLength="1" />
+        <path id="f08-tick1" d="M 12 32 L 26 48 L 58 2" fill="none" stroke="#6E7B4E" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" pathLength="1" />
+      </svg>
+      <span id="f08-note1" class="f08-note">DDT banned</span>
+    </div>
+    <div id="f08-row2" class="f08-row">
+      <svg class="f08-box" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path id="f08-box2" d="M 7 6 C 22 7 40 5 57 7 C 56 24 57 40 56 57 C 40 56 22 57 7 56 C 6 40 7 22 7 6 Z" fill="none" stroke="#5C4A36" stroke-width="3.5" stroke-linejoin="round" pathLength="1" />
+        <path id="f08-tick2" d="M 12 32 L 26 48 L 58 2" fill="none" stroke="#6E7B4E" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" pathLength="1" />
+      </svg>
+      <span id="f08-note2" class="f08-note">captive breeding</span>
+    </div>
+    <div id="f08-rule"></div>
+
+    <!-- Scene 2: the stamp -->
+    <div id="f08-stampwrap" aria-label="1999 · REMOVED FROM THE ENDANGERED LIST">
+      <div id="f08-stamp">
+        <div id="f08-stamp-inner"></div>
+        <div id="f08-stamp-year">1999</div>
+        <div id="f08-stamp-line">REMOVED FROM THE ENDANGERED LIST</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function () {
+  var ID = "08-comeback";
+  var root = document.querySelector('[data-composition-id="' + ID + '"]');
+  var q = function (sel) { return root.querySelector(sel); };
+  var NS = "http://www.w3.org/2000/svg";
+  var INK = "#2B2118", INK2 = "#5C4A36", LINE = "#B9A98C", PAPER = "#EFE6D2", PAPER2 = "#E4D7BC";
+
+  function mulberry32(a) {
+    return function () {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      var t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  var rng = mulberry32(80808);
+  function j(a) { return (rng() * 2 - 1) * a; }
+  function r1(v) { return Math.round(v * 10) / 10; }
+
+  function el(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+
+  // Hand-drawn polyline through points, with seeded wobble on long edges.
+  function wobblePath(pts, closed) {
+    var d = "M " + r1(pts[0][0] + j(0.8)) + " " + r1(pts[0][1] + j(0.8));
+    for (var i = 1; i < pts.length; i++) {
+      var a = pts[i - 1], b = pts[i];
+      var len = Math.hypot(b[0] - a[0], b[1] - a[1]);
+      var n = Math.max(1, Math.round(len / 70));
+      for (var s = 1; s <= n; s++) {
+        var t = s / n;
+        var x = a[0] + (b[0] - a[0]) * t, y = a[1] + (b[1] - a[1]) * t;
+        var amp = s === n ? 0.8 : 1.4;
+        d += " L " + r1(x + j(amp)) + " " + r1(y + j(amp));
+      }
+    }
+    if (closed) d += " Z";
+    return d;
+  }
+
+  var defs = q("#f08-city-defs");
+  var towersG = q("#f08-towers");
+  var BASE = 1540;
+  var towerAnims = [];
+
+  function windows(g, x0, x1, y0, y1, ww, wh, gx, gy, color) {
+    var cols = Math.floor((x1 - x0 - ww) / gx) + 1;
+    var rows = Math.floor((y1 - y0 - wh) / gy) + 1;
+    var offx = x0 + ((x1 - x0) - ((cols - 1) * gx + ww)) / 2;
+    for (var r = 0; r < rows; r++) {
+      for (var c = 0; c < cols; c++) {
+        var x = offx + c * gx, y = y0 + r * gy;
+        var dark = rng() < 0.14;
+        el("rect", {
+          x: r1(x + j(0.6)), y: r1(y + j(0.6)), width: ww, height: wh,
+          fill: dark ? color : "none", "fill-opacity": dark ? 0.5 : 0,
+          stroke: color, "stroke-width": 1.6, "stroke-opacity": 0.75
+        }, g);
+      }
+    }
+  }
+
+  // tower(id, minX, maxX, topY, drawFn, distant)
+  function tower(key, minX, maxX, topY, build, distant) {
+    var cpId = "f08-cp-" + key;
+    var cp = el("clipPath", { id: cpId }, defs);
+    var h = BASE - topY + 80;
+    var rect = el("rect", { x: minX - 14, y: BASE + 10, width: maxX - minX + 28, height: h }, cp);
+    var g = el("g", { "clip-path": "url(#" + cpId + ")" }, towersG);
+    build(g, distant ? LINE : INK, distant);
+    towerAnims.push({ rect: rect, top: topY - 40, distant: !!distant, key: key });
+  }
+
+  function body(g, pts, color, distant) {
+    el("path", {
+      d: wobblePath(pts, true),
+      fill: distant ? PAPER2 : PAPER, "fill-opacity": distant ? 0.7 : 0.9,
+      stroke: color, "stroke-width": distant ? 2.5 : 4, "stroke-linejoin": "round"
+    }, g);
+  }
+  function line(g, pts, color, w) {
+    el("path", { d: wobblePath(pts, false), fill: "none", stroke: color, "stroke-width": w, "stroke-linecap": "round" }, g);
+  }
+
+  // --- distant towers (hairline, no windows) ---
+  tower("d1", 140, 270, 1150, function (g, c, d) {
+    body(g, [[140, BASE], [140, 1150], [270, 1150], [270, BASE]], c, d);
+    line(g, [[205, 1150], [205, 1100]], c, 2.5);
+  }, true);
+  tower("d2", 470, 590, 1040, function (g, c, d) {
+    body(g, [[470, BASE], [470, 1070], [530, 1040], [590, 1070], [590, BASE]], c, d);
+  }, true);
+  tower("d3", 860, 965, 1010, function (g, c, d) {
+    body(g, [[860, BASE], [860, 1010], [965, 1010], [965, BASE]], c, d);
+    for (var y = 1040; y < 1520; y += 44) line(g, [[872, y], [953, y]], c, 1.5);
+  }, true);
+  tower("d4", 985, 1050, 1250, function (g, c, d) {
+    body(g, [[985, BASE], [985, 1250], [1050, 1250], [1050, BASE]], c, d);
+  }, true);
+
+  // --- front towers (ink) ---
+  tower("a", 80, 210, 1204, function (g, c) {
+    body(g, [[80, BASE], [80, 1270], [210, 1270], [210, BASE]], c);
+    // rooftop water tank
+    el("path", { d: wobblePath([[118, 1218], [168, 1218], [168, 1250], [118, 1250]], true), fill: PAPER, stroke: c, "stroke-width": 3 }, g);
+    line(g, [[114, 1218], [143, 1204], [172, 1218]], c, 3);
+    line(g, [[124, 1250], [124, 1270]], c, 3);
+    line(g, [[162, 1250], [162, 1270]], c, 3);
+    line(g, [[124, 1252], [162, 1268]], c, 1.6);
+    windows(g, 92, 198, 1292, 1520, 14, 22, 26, 38, INK2);
+  });
+  tower("b", 200, 360, 1090, function (g, c) {
+    body(g, [[200, BASE], [200, 1090], [360, 1130], [360, BASE]], c);
+    windows(g, 214, 346, 1150, 1520, 14, 24, 28, 40, INK2);
+  });
+  tower("c", 370, 560, 1170, function (g, c) {
+    body(g, [[370, BASE], [370, 1200], [430, 1200], [430, 1170], [500, 1170], [500, 1200], [560, 1200], [560, BASE]], c);
+    windows(g, 386, 544, 1222, 1460, 16, 22, 30, 36, INK2);
+    el("path", { d: wobblePath([[446, BASE], [446, 1482], [484, 1482], [484, BASE]], false), fill: "none", stroke: c, "stroke-width": 3 }, g);
+  });
+  tower("d", 800, 1000, 1070, function (g, c) {
+    body(g, [[800, BASE], [800, 1150], [830, 1150], [830, 1110], [970, 1110], [970, 1150], [1000, 1150], [1000, BASE]], c);
+    line(g, [[900, 1110], [900, 1070]], c, 3);
+    windows(g, 816, 984, 1172, 1520, 14, 24, 28, 40, INK2);
+  });
+  // the tallest tower — cornice ledge at y=960 where the falcon perches
+  tower("t", 578, 802, 784, function (g, c) {
+    body(g, [[590, BASE], [590, 974], [790, 974], [790, BASE]], c);
+    el("path", { d: wobblePath([[578, 974], [578, 960], [802, 960], [802, 974]], true), fill: PAPER2, stroke: c, "stroke-width": 4, "stroke-linejoin": "round" }, g);
+    el("path", { d: wobblePath([[662, 960], [662, 892], [758, 892], [758, 960]], false), fill: PAPER, "fill-opacity": 0.9, stroke: c, "stroke-width": 3.5 }, g);
+    line(g, [[656, 892], [710, 860], [764, 892]], c, 3.5);
+    line(g, [[710, 860], [710, 792]], c, 3);
+    el("circle", { cx: 710, cy: 789, r: 3.5, fill: c }, g);
+    windows(g, 674, 746, 904, 950, 10, 18, 22, 26, INK2);
+    windows(g, 604, 776, 996, 1520, 12, 26, 30, 40, INK2);
+  });
+
+  // --- pigeons: tiny ink marks circling below the falcon ---
+  var pigeonsG = q("#f08-pigeons");
+  var flocks = [
+    { cx: 420, cy: 1188, rx: 272, ry: 52, n: 5, speed: 1.15, dir: 1 },
+    { cx: 892, cy: 1072, rx: 104, ry: 26, n: 3, speed: 1.5, dir: -1 }
+  ];
+  var pigeons = [];
+  flocks.forEach(function (f) {
+    for (var i = 0; i < f.n; i++) {
+      var outer = el("g", { opacity: 0 }, pigeonsG);
+      var pos = el("g", {}, outer);
+      var flap = el("g", {}, pos);
+      el("path", { d: "M -17 3 Q -9 -9 0 0 Q 9 -9 17 3", fill: "none", stroke: INK, "stroke-width": 4.2, "stroke-linecap": "round", "stroke-linejoin": "round" }, flap);
+      el("circle", { cx: 0, cy: 1, r: 2.6, fill: INK }, pos);
+      pigeons.push({ outer: outer, pos: pos, flap: flap, f: f, a0: (i / f.n) * Math.PI * 2 + j(0.35), ph: rng() * Math.PI * 2 });
+    }
+  });
+  function placePigeons(t) { // t = seconds of orbit time
+    for (var i = 0; i < pigeons.length; i++) {
+      var p = pigeons[i], f = p.f;
+      var a = p.a0 + f.dir * f.speed * t;
+      var x = f.cx + Math.cos(a) * f.rx;
+      var y = f.cy + Math.sin(a) * f.ry;
+      var s = 0.82 + 0.26 * (Math.sin(a) + 1) / 2;
+      var fl = 0.55 + 0.45 * Math.sin(p.ph + t * 11);
+      p.pos.setAttribute("transform", "translate(" + r1(x) + " " + r1(y) + ") scale(" + (Math.round(s * 1000) / 1000) + ")");
+      p.flap.setAttribute("transform", "scale(1 " + (Math.round(fl * 1000) / 1000) + ")");
+    }
+  }
+  placePigeons(0);
+
+  // ---------------- timeline ----------------
+  var tl = gsap.timeline({ paused: true });
+  var DUR = 10.953;
+
+  // Scene 1 (0.0–4.0): two notes write on, ticked off like a checklist
+  tl.fromTo("#f08-wash-olive", { opacity: 0, scale: 0.85, transformOrigin: "50% 50%" }, { opacity: 0.2, scale: 1, duration: 1.8, ease: "power2.out" }, 0);
+  tl.fromTo(q("#f08-box1"), { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.45, ease: "power2.inOut" }, 0.05);
+  tl.fromTo(q("#f08-box2"), { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.45, ease: "power2.inOut" }, 0.2);
+
+  tl.fromTo(q("#f08-note1"), { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.0, ease: "power1.inOut" }, 0.3);
+  tl.fromTo(q("#f08-tick1"), { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.32, ease: "power2.out" }, 1.45);
+  tl.fromTo(q("#f08-note2"), { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.25, ease: "power1.inOut" }, 1.9);
+  tl.fromTo(q("#f08-tick2"), { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.32, ease: "power2.out" }, 3.35);
+
+  // Scene 2 (4.0–6.4): ledger rule, wash bleeds, stamp lands
+  tl.fromTo("#f08-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.55, ease: "power2.inOut" }, 4.0);
+  tl.fromTo("#f08-wash-stamp", { opacity: 0, scale: 0.8, transformOrigin: "50% 50%" }, { opacity: 0.24, scale: 1, duration: 1.5, ease: "power2.out" }, 4.15);
+  tl.fromTo("#f08-stampwrap",
+    { opacity: 0, scale: 1.32, rotation: -9 },
+    { opacity: 0.88, scale: 1, rotation: -4, duration: 0.34, ease: "power3.out" }, 4.55);
+  tl.fromTo("#f08-stamp", { scale: 1.0 }, { scale: 0.985, duration: 0.12, ease: "power1.out" }, 4.89);
+  tl.fromTo(q("#f08-ground"), { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.85, ease: "power2.inOut" }, 5.45);
+
+  // Scene 3 (6.4–11.0): skyline draws upward, falcon lands on the ledge, pigeons circle
+  tl.fromTo("#f08-wash-dawn", { opacity: 0, scale: 0.85, transformOrigin: "50% 70%" }, { opacity: 0.26, scale: 1, duration: 1.8, ease: "power2.out" }, 4.40);
+  tl.fromTo("#f08-wash-park", { opacity: 0 }, { opacity: 0.2, duration: 1.4, ease: "power2.out" }, 4.60);
+  var order = { d1: 4.4, d4: 4.45, d2: 4.55, d3: 4.6, a: 4.5, b: 4.65, c: 4.8, d: 4.95, t: 5.0 };
+  towerAnims.forEach(function (ta) {
+    var dur = ta.key === "t" ? 1.05 : (ta.distant ? 0.8 : 0.75);
+    tl.fromTo(ta.rect, { attr: { y: BASE + 10 } }, { attr: { y: ta.top }, duration: dur, ease: "power2.inOut" }, order[ta.key]);
+  });
+
+  // falcon swoops in from upper right and settles on the cornice (speed lines trail)
+  tl.fromTo("#f08-falcon", { opacity: 0 }, { opacity: 1, duration: 0.14, ease: "none" }, 6.90);
+  tl.fromTo("#f08-falcon",
+    { x: 240, y: -232, rotation: -32, scale: 0.85, transformOrigin: "50% 100%" },
+    { x: 0, y: 0, rotation: 0, scale: 1, duration: 0.58, ease: "power3.out" }, 6.90);
+  ["#f08-sl1", "#f08-sl2", "#f08-sl3"].forEach(function (s, i) {
+    tl.fromTo(q(s), { strokeDasharray: 1, strokeDashoffset: 1, opacity: 0.85 }, { strokeDashoffset: 0, duration: 0.4, ease: "power2.out" }, 6.92 + i * 0.03);
+    tl.fromTo(q(s), { opacity: 0.85 }, { opacity: 0, duration: 0.3, ease: "power1.in", immediateRender: false }, 7.32 + i * 0.03);
+  });
+
+  // compass ring marks the nest ledge
+  tl.fromTo(q("#f08-ring"), { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.7, ease: "power2.inOut" }, 7.55);
+  tl.fromTo("#f08-ticks", { opacity: 0 }, { opacity: 1, duration: 0.35, ease: "power1.out" }, 8.1);
+
+  // pigeons appear and keep circling through the hold
+  pigeons.forEach(function (p, i) {
+    tl.fromTo(p.outer, { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power1.out" }, 8.7 + i * 0.09);
+  });
+  var orbit = { t: 0 };
+  tl.fromTo(orbit, { t: 0 }, {
+    t: DUR - 8.6, duration: DUR - 8.6, ease: "none",
+    onUpdate: function () { placePigeons(orbit.t); }
+  }, 8.6);
+
+  // documentary push-in under scene 3
+  tl.fromTo("#f08-stage", { scale: 1, transformOrigin: "600px 1000px" }, { scale: 1.025, duration: DUR - 6.4, ease: "power1.inOut" }, 6.4);
+
+  // pin the timeline to the frame's exact length
+  tl.set({}, {}, DUR);
+
+  window.__timelines = window.__timelines || {};
+  window.__timelines[ID] = tl;
+})();
+</script>
+</template>
