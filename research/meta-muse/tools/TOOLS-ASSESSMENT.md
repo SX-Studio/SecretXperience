@@ -34,3 +34,52 @@ Tested hands-on in the cloud container on 2026-10-20: 4 CPU cores, no GPU, 15 GB
 - The caption script holds the last caption group until the end of the video. Patch `isLast ? DURATION` so the ending is clean.
 - `letterSpacing` tweens are a lint error, because they snap under frame-by-frame capture. Animate transforms instead.
 - Frame ids that start with a digit trigger hundreds of cosmetic `id_requires_css_escape` warnings. Workers use `[id="…"]` selectors, so they render fine.
+
+## Gemini watch efficiency test (2026-10-21)
+
+The question was whether longer segments in `watch/watch_all.py` (`--segment`, default 480 s) cut free-tier requests without breaking on the agent proxy. Twelve pending videos were run with `--workers 1`, models ordered best first, from 07:22 UTC, just after the daily quota reset.
+
+**Result: all 12 videos are complete.** Nine are whole-video single requests at `--segment 1200`. The two Dan Kieft videos ran at `--segment 600`, and kvf2lRSGixg finished at the default 480 s using its cached first segment.
+
+| | Before (480 s segments) | Now |
+|---|---|---|
+| Successful requests, the 9 videos of 7.5 to 19.8 min | 19 (2.1 per video) | **9 (1 per video)** |
+| Successful requests, all 12 videos | 28 | **18** |
+| All HTTP requests sent, including failures | not logged | 72 (53 at 1200 s, 15 at 600 s, 4 at 480 s), plus 2 probes |
+| Wall time | not comparable | 41 min for 9 videos, 7 min for 2, 1 min for 1 |
+
+**Wall time is mostly backoff.** A successful request streamed in 16 to 45 s, even for a whole 19.8-minute video. Most of the 49 minutes was the runner's growing retry sleep (15 s × attempt) after 502s and 503s.
+
+**Long segments survive the proxy, mostly.** No stream was truncated: there were zero "ended without STOP" lines. Every failure was one of three kinds:
+- **502 Bad Gateway at exactly 30 to 31 s** (18 times). This is the proxy's 30-second no-bytes cutoff firing because Google had not sent response headers yet. It is not about segment length. A two-word text prompt to gemini-3.8-flash and gemini-3.7-flash also returned 502 after 30.4 s.
+- **503 "high demand"**, either as an HTTP status or inside the stream (30 times).
+- **Daily-quota 429s.**
+
+Length still matters at the edge. The 20.5-minute video (2hJsvDSPWYM, 1227 s, run whole because it is under the segment plus 60 s) got six 502s at 1200 s. At 600 s it went through after two more, and its other segments passed first time. So 1200 s worked for videos up to 1187 s, and 600 s is the fallback.
+
+**Models on the free tier** (key via the network secret):
+
+| Model | Outcome |
+|---|---|
+| gemini-3.6-flash | **Worked**: 5 videos, then 429 |
+| gemini-3.5-flash | **Worked**: 3 videos, then 429 |
+| gemini-3-flash-preview | **Worked**: 1 video, mostly 503s |
+| gemini-3.5-flash-lite | **Worked**: 9 segments (the Dan Kieft videos and kvf2lRSGixg) |
+| gemini-3.8-flash, gemini-3.7-flash | Listed by the models endpoint, but never answered within 30 s (502s and 503s). Both then returned daily-quota 429s, so **requests that 502 at the proxy still seem to count against the quota.** |
+| gemini-3.1-flash-lite | Only a 503; untested |
+| gemini-2.5-flash | **404**, "no longer available to new users" |
+
+The daily 429s arrived after only 4 to 8 non-503 requests per model, well under the "about 20 a day" noted earlier. Whole-video requests probably count against a token quota as well as a request count. This is an inference, not a published limit.
+
+**Detail drops with segment length.** Median report length fell from **160 words per video-minute** at 480 s (19 earlier videos) to **73** at 1200 s (the 9 whole-video runs; the range was 535 to 1,730 words per video). The 600 s Flash-Lite segments ranged from 352 to 3,233 words. One long prompt screen came out nearly verbatim, while one segment degenerated into a long list of invented app names. Whole-video reports still caught the key on-screen prompts, settings and numbers. They miss more of the incidental UI.
+
+**What to use from now on:**
+- **Talking-head or demo videos up to about 19 minutes:** `--segment 1200`. It roughly halves quota use.
+- **Prompt-heavy screen recordings, or anything over about 20 minutes:** `--segment 600`.
+- **Order:** keep Flash models ahead of Flash-Lite, and treat Flash-Lite output as thinner and less reliable.
+
+**Runner changes made in this test:**
+- Failed attempts are now logged with model, elapsed seconds and error.
+- A 503 delivered inside the stream now cools that model for 2 minutes, as an HTTP 503 already did, instead of retrying it straight away.
+
+**Paid tier would remove the quota juggling.** At about 100 tokens per second of video at the default low media resolution, a 15-minute video is about 90k input tokens. At $0.30 per million (Flash-Lite) to $0.75 per million (Flash, prices through 2026), that is about **$0.03 to $0.07 per video** plus a few thousand output tokens. All 12 videos here (3.2 hours) would cost roughly $0.35 to $0.90. `watch_all.py` does not set `mediaResolution`; set it to low explicitly before relying on that estimate.

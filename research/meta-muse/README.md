@@ -106,8 +106,8 @@ Added 2026-10-20, watched for visuals:
 | -LNDXx__ZT0 | Higgsfield AI, Introducing Higgsfield Katana (Claude Motion), 78 s short |
 | zkhLZUGIIfE | The_Frizzy1, I Replaced Higgsfield Genjutsu With My RTX 3060 (local character swap) |
 | rZvF_EWZoHw | Higgsfield Katana clipping and teaser edits for paid clip campaigns (direction ideas; transcript in `transcripts/`, visual report in `watch/out/`) |
-| 2hJsvDSPWYM | Dan Kieft, Seedance full guide (transcript in `transcripts/`; visual watch pending Gemini quota) |
-| Zo8KaTs0l6k | Dan Kieft, Seedance ultra-realistic video (transcript in `transcripts/`; visual watch pending Gemini quota) |
+| 2hJsvDSPWYM | Dan Kieft, Seedance full guide (transcript in `transcripts/`; visual report in `watch/out/`, findings in `watch/VISUAL-FINDINGS.md`) |
+| Zo8KaTs0l6k | Dan Kieft, Seedance ultra-realistic video (transcript in `transcripts/`; visual report in `watch/out/`, findings in `watch/VISUAL-FINDINGS.md`) |
 | S_W4OSuh2Aw | Eric Michaud, 6 MORE Repos to Replace Paid Software (assessed hands-on in `tools/TOOLS-ASSESSMENT.md`) |
 | t9MFvSJHLsI | AIpreneur, I Made Insane 3D Motion Graphics With Claude (Free) (notes A) |
 | YLa0g-nMoWU | Moe Alamawi, Claude Replaced Higgsfield with This FREE MCP (fal.ai pay-per-use; notes A) |
@@ -118,7 +118,7 @@ Added 2026-10-20, watched for visuals:
 | CCUSpJkAfgU | Matt Penny, Claude + Three.js = Premium 3D Motion Graphics (notes C) |
 | kHtOSJRUkLs | Sharbel A., Claude Code token audit (engine running costs; notes C) |
 | -PgsOwD4XZ8 | Austin Armstrong, AI clipping (undisclosed Syllaby CEO; variant-farm advice rejected; notes C) |
-| kvf2lRSGixg | Kristian Jennings, I stopped using seedance and now my AI UGC looks 100% real (31 min, [link](https://youtu.be/kvf2lRSGixg); visual watch 1 of 4 segments, rest pending Gemini quota) |
+| kvf2lRSGixg | Kristian Jennings, I stopped using seedance and now my AI UGC looks 100% real (31 min, [link](https://youtu.be/kvf2lRSGixg); visual watch complete, all 4 segments) |
 | zke3bTtvmLo | Jad M.H, How to Make Viral Motion Graphics With AI With $0 (Turned it into a Skill) (16 min, [link](https://youtu.be/zke3bTtvmLo)) |
 
 Tier 2, interviews, skipped for visuals at the user's request (their transcripts were distilled into the `strategy-*.md` files, except Cole Gordon's, which only matters for the sales page):
