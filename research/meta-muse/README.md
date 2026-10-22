@@ -141,3 +141,15 @@ Tier 2, interviews, skipped for visuals at the user's request (their transcripts
 ## Anime reimagined as 80s live action (2026-10-21)
 
 The user wants a new channel making anime scenes reimagined as realistic films. Full study in `anime-reimagined/STUDY.md`: the two Chapterunknown videos shot by shot, the niche survey (small channels pulling 0.7–1.3M views per upload), the production recipe, tool prices (image/video generation needs billing on the Gemini key; free tier is 0), the IP risk (Japanese publishers vs Sora 2), and a local 80s film pass (`anime-reimagined/tools/film80.sh`). Decisions needed from the user are in STUDY.md section 6.
+
+## AI video workflow (Dan Kieft study, 2026-10-22)
+
+`ai-video-workflow/STUDY.md` breaks down "How To Start Making AI Videos in 2026". It covers:
+- the asset-first pipeline: character, location and prop sheets on 18% grey, then reference-to-video;
+- the staged prompt format: GOAL / REFERENCES / SCENE / timed STAGES / STYLE / AUDIO / CONSISTENCY;
+- generating a draft before 1080p;
+- the black-screen MP4 voice-reference trick;
+- motion transfer;
+- costs.
+
+`ai-video-workflow/PROMPTER.md` is our reusable prompter for Sora, Seedance, Kling and Veo, with a worked Chase Scene 101 example.
