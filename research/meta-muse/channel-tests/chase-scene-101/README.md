@@ -17,21 +17,25 @@ Studio on 2026-10-22 showed 49 subscribers and 69 views in 28 days. Episodes 01,
 
 **Zero views means YouTube showed the videos to almost no one.** A Shorts view counts every time a Short starts playing in the feed, so even 20 impressions would show as about 20 views. The videos weren't served, so we haven't yet learned anything about how good they are.
 
-The channel's history (from the RSS feed, the Shorts tab and a Gemini check):
+The channel's history (from the RSS feed and the Shorts tab):
 - Before this test there were 26 Shorts, uploaded 3–18 April 2026. Most got 0.3–2.5k views each and then levelled off.
-- They were **clips cut from broadcast documentaries**. The top one, "Fossa Vs Lemur AT NIGHT", is BBC *Seven Worlds, One Planet*. The titles tagged them "#original".
+- **The user made them with Sora**: AI-generated, cinematic animal-chase clips of about 10 s. Gemini mistook the top one, "Fossa Vs Lemur AT NIGHT", for footage from BBC *Seven Worlds, One Planet*. It was wrong; the clip only looks like that series.
 - The channel was **silent for six months**. Then three videos in a completely different format went up within 17 hours.
 
 Likely causes, most likely first:
-1. **Channel standing.** A channel built on reused documentary footage often has copyright claims, a reused-content flag, or low trust, which limits how far new uploads are shown.
-2. **Audience mismatch.** The viewers YouTube associates with this channel watch 10 s chase clips. It tests new Shorts on them first, and educational narration doesn't fit that profile.
-3. **Cold restart.** Three uploads in one burst after six months of silence.
+1. **Audience mismatch.** YouTube tests a new Short on viewers who watched the channel's past videos first. Those viewers watched 10 s spectacle clips, and a narrated science explainer doesn't fit what they watched.
+2. **Cold restart.** Three uploads in one burst after six months of silence.
+3. **Channel standing.** Repeated AI clips with templated titles ("The BEST Animal Chase Scenes! #original") can be treated as low-effort or mass-produced content. This is less likely than the first two causes, but the checks below rule it in or out.
 
 Checks in Studio:
 - Content tab → Restrictions column on each video.
 - Settings → Channel → Feature eligibility, which shows copyright and Community Guidelines strikes.
 - Each video's Analytics → "Shown in feed".
 
-**Decision:** stop testing the new format on this channel. Its history works against it, and a new channel costs nothing.
-- Run the content test where every new post gets an initial audience: TikTok and Facebook Reels give one to any post.
-- Start a fresh YouTube channel dedicated to the format.
+**Revised decision** (after the Sora correction): this channel's proven format is the AI chase clip, at about 1.3k views per Short with no other promotion. The next test is a hybrid of the two formats:
+- **Hook:** a Sora-generated chase scene.
+- **Educational layer:** one surprising, sourced fact in the narration, with the top banner and a loop from `research/COMPETITOR-RESEARCH.md`.
+- **Length:** 15–30 s.
+- **Disclosure:** tick YouTube's "altered or synthetic content" box, because the footage is realistic AI.
+
+The educational layer is also what keeps the channel clear of YouTube's mass-produced-content policy.
