@@ -1,0 +1,312 @@
+<template>
+  <style>
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-400.woff2") format("woff2");font-weight:400;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-500.woff2") format("woff2");font-weight:500;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-600.woff2") format("woff2");font-weight:600;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-700.woff2") format("woff2");font-weight:700;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-800.woff2") format("woff2");font-weight:800;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-900.woff2") format("woff2");font-weight:900;font-style:normal;}
+@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/IBMPlexMono-400.woff2") format("woff2");font-weight:400;font-style:normal;}
+@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/IBMPlexMono-500.woff2") format("woff2");font-weight:500;font-style:normal;}
+@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/IBMPlexMono-600.woff2") format("woff2");font-weight:600;font-style:normal;}
+@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/IBMPlexMono-700.woff2") format("woff2");font-weight:700;font-style:normal;}
+
+    
+    
+
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      container-type: size;
+      isolation: isolate;
+      color: #f0ece5;
+      font-family: "Barlow", sans-serif;
+    }
+
+    [id="12-end-card-bg"],
+    [id="12-end-card-content"],
+    [id="12-end-card-fade"] {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    /* Full-bleed ground: ink-black field + dimmed starfield (background role, 20%). */
+    [id="12-end-card-ground"] {
+      position: absolute;
+      inset: 0;
+      background: #111111;
+    }
+    [id="12-end-card-stars"] {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.2;
+    }
+
+    /* Foreground subject: the vertical printout column, centred at y = 0.36H. */
+    [id="12-end-card-colwrap"] {
+      position: absolute;
+      inset: 0;
+    }
+    [id="12-end-card-col"] {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: calc(36cqh - 36.1cqw);
+      height: 72.2cqw;
+      margin: 0;
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 11.8cqw;
+      line-height: 1.02;
+      text-align: center;
+      color: #f0ece5;
+    }
+    [id="12-end-card-col"] span {
+      display: block;
+    }
+
+    /* Hand-drawn circle: authored stroke stretched into a tall box (marker-highlight technique). */
+    [id="12-end-card-ring"] {
+      position: absolute;
+      left: calc(50% - 13cqw);
+      top: calc(36cqh - 44cqw);
+      width: 26cqw;
+      height: 88cqw;
+      overflow: visible;
+      transform: rotate(-3deg);
+    }
+
+    /* Supporting: rule stub, title, mono meta line. */
+    [id="12-end-card-rule"] {
+      position: absolute;
+      left: calc(50% - 3cqw);
+      top: 64.4cqh;
+      width: 6cqw;
+      height: 3px;
+      background: #e85d26;
+    }
+    [id="12-end-card-title"] {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 66.2cqh;
+      margin: 0;
+      font-family: "Barlow", sans-serif;
+      font-weight: 700;
+      font-size: 8.4cqw;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      text-transform: lowercase;
+      text-align: center;
+      color: #f0ece5;
+    }
+    [id="12-end-card-meta"] {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 72.9cqh;
+      margin: 0;
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 2.8cqw;
+      line-height: 1.4;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-align: center;
+      color: #888880;
+    }
+    [id="12-end-card-meta"] .sep {
+      color: #505048;
+    }
+
+    /* Final-frame exit: fade to black. */
+    [id="12-end-card-black"] {
+      position: absolute;
+      inset: 0;
+      background: #000000;
+    }
+  </style>
+
+  <div
+    id="root"
+    data-composition-id="12-end-card"
+    data-duration="4.084"
+    data-width="1080"
+    data-height="1920"
+  >
+    <div
+      id="12-end-card-bg"
+      class="clip"
+      data-start="0"
+      data-duration="4.084"
+      data-track-index="0"
+    >
+      <div id="12-end-card-ground"></div>
+      <svg
+        id="12-end-card-stars"
+        viewBox="0 0 1080 1920"
+        preserveAspectRatio="xMidYMid slice"
+        aria-hidden="true"
+      ></svg>
+    </div>
+
+    <div
+      id="12-end-card-content"
+      class="clip"
+      data-start="0"
+      data-duration="4.084"
+      data-track-index="1"
+    >
+      <div id="12-end-card-colwrap">
+        <p id="12-end-card-col" aria-label="6EQUJ5">
+          <span>6</span><span>E</span><span>Q</span><span>U</span><span>J</span><span>5</span>
+        </p>
+      </div>
+
+      <svg
+        id="12-end-card-ring"
+        viewBox="0 0 40 100"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        <path
+          id="12-end-card-ring-path"
+          d="M 7 22 C 1 58, 8 95, 20 97 C 31 99, 38 74, 37 44 C 36 16, 29 2, 19 3 C 10 4, 4 22, 4.5 52"
+          fill="none"
+          stroke="#e85d26"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        ></path>
+      </svg>
+
+      <div id="12-end-card-rule"></div>
+      <h2 id="12-end-card-title">the wow! signal</h2>
+      <p id="12-end-card-meta">
+        AUG 15 1977 <span class="sep">·</span> 72 S <span class="sep">·</span> NEVER REPEATED
+      </p>
+    </div>
+
+    <div
+      id="12-end-card-fade"
+      class="clip"
+      data-start="0"
+      data-duration="4.084"
+      data-track-index="2"
+    >
+      <div id="12-end-card-black"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      "use strict";
+      var FRAME_ID = "12-end-card";
+      var DURATION = 4.084;
+      var $ = function (suffix) {
+        return document.getElementById(FRAME_ID + "-" + suffix);
+      };
+
+      // ---- Starfield: seeded deterministic PRNG (mulberry32, fixed seed). ----
+      var seed = 0x6e0a15;
+      function rand() {
+        seed |= 0;
+        seed = (seed + 0x6d2b79f5) | 0;
+        var t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      }
+      var svgNS = "http://www.w3.org/2000/svg";
+      var stars = $("stars");
+      for (var i = 0; i < 190; i++) {
+        var c = document.createElementNS(svgNS, "circle");
+        var x = rand() * 1080;
+        var y = rand() * 1920;
+        var size = rand();
+        var r = 0.9 + size * size * size * 2.6;
+        var o = 0.45 + rand() * 0.55;
+        c.setAttribute("cx", x.toFixed(1));
+        c.setAttribute("cy", y.toFixed(1));
+        c.setAttribute("r", r.toFixed(2));
+        c.setAttribute("fill", "#f0ece5");
+        c.setAttribute("fill-opacity", o.toFixed(2));
+        stars.appendChild(c);
+      }
+
+      var colWrap = $("colwrap");
+      var ringPath = $("ring-path");
+      var rule = $("rule");
+      var title = $("title");
+      var meta = $("meta");
+      var black = $("black");
+
+      // Dash reveal from measured length (never pathLength); fallback keeps it seek-safe.
+      var len = 0;
+      try {
+        len = ringPath.getTotalLength();
+      } catch (e) {
+        len = 0;
+      }
+      if (!(len > 0)) len = 300;
+      ringPath.style.strokeDasharray = String(len);
+      gsap.set(ringPath, { strokeDashoffset: len, opacity: 0 });
+
+      var tl = gsap.timeline({ paused: true });
+
+      // Scene 1 (0.0–1.2s): column fades up at centre; the orange circle self-draws around it.
+      tl.fromTo(
+        colWrap,
+        { opacity: 0, y: 26 },
+        { opacity: 1, y: 0, duration: 0.7, ease: "power2.out" },
+        0
+      );
+      tl.set(ringPath, { opacity: 1 }, 0.32);
+      tl.fromTo(
+        ringPath,
+        { strokeDashoffset: len },
+        { strokeDashoffset: 0, duration: 0.88, ease: "power2.inOut" },
+        0.32
+      );
+
+      // Scene 2 (1.2–2.2s): rule stub, title and mono line fade up below.
+      tl.fromTo(
+        rule,
+        { opacity: 0, scaleX: 0 },
+        { opacity: 1, scaleX: 1, duration: 0.45, ease: "power2.out", transformOrigin: "50% 50%" },
+        1.2
+      );
+      tl.fromTo(
+        title,
+        { opacity: 0, y: 22 },
+        { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" },
+        1.26
+      );
+      tl.fromTo(
+        meta,
+        { opacity: 0, y: 14 },
+        { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" },
+        1.58
+      );
+
+      // Scene 3 (2.2s–end): absolute stillness, then the film's only real exit —
+      // the whole frame fades to black over the last 1.2 s.
+      tl.fromTo(
+        black,
+        { opacity: 0 },
+        { opacity: 1, duration: 1.2, ease: "sine.inOut" },
+        DURATION - 1.2
+      );
+
+      tl.seek(0);
+      window.__timelines = window.__timelines || {};
+      window.__timelines[FRAME_ID] = tl;
+    })();
+  </script>
+</template>

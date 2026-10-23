@@ -1,0 +1,50 @@
+{
+  "provider": "auto",
+  "speed": "1.04",
+  "lines": [
+    {
+      "id": "01",
+      "text": "In nineteen seventy-seven, something in deep space broke through the static for seventy-two seconds. This video lasts exactly that long."
+    },
+    {
+      "id": "02",
+      "text": "August fifteenth. Ohio State's Big Ear telescope listens to the sky, and a computer prints what it hears."
+    },
+    {
+      "id": "03",
+      "text": "Most of the page is noise. Then, six characters. Six. E. Q. U. J. Five."
+    },
+    {
+      "id": "04",
+      "text": "Every letter means louder. U means thirty times louder than the background."
+    },
+    {
+      "id": "05",
+      "text": "Days later, volunteer Jerry Ehman circled it in red, and wrote one word."
+    },
+    {
+      "id": "07",
+      "text": "Big Ear couldn't move. Earth's spin swept the sky past it, so anything out in space would rise and fall over seventy-two seconds. This did."
+    },
+    {
+      "id": "08",
+      "text": "It sat near fourteen twenty megahertz, the natural frequency of hydrogen."
+    },
+    {
+      "id": "09",
+      "text": "Big Ear had two receivers. It should have heard the signal twice. It heard it once. Decades of searching since. Nothing."
+    },
+    {
+      "id": "10",
+      "text": "In twenty twenty-four, researchers proposed a natural cause. A hydrogen cloud, briefly lit by a burst from a magnetar. Maybe."
+    },
+    {
+      "id": "11",
+      "text": "But for seventy-two seconds, the sky got loud. And we only heard it once."
+    }
+  ],
+  "bgm": {
+    "mode": "none"
+  },
+  "voice": "af_heart"
+}

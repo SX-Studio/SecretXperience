@@ -1,0 +1,400 @@
+<template>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-400.woff2") format("woff2");font-weight:400;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-500.woff2") format("woff2");font-weight:500;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-600.woff2") format("woff2");font-weight:600;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-700.woff2") format("woff2");font-weight:700;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-800.woff2") format("woff2");font-weight:800;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-900.woff2") format("woff2");font-weight:900;font-style:normal;}
+@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/IBMPlexMono-400.woff2") format("woff2");font-weight:400;font-style:normal;}
+@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/IBMPlexMono-500.woff2") format("woff2");font-weight:500;font-style:normal;}
+@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/IBMPlexMono-600.woff2") format("woff2");font-weight:600;font-style:normal;}
+@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/IBMPlexMono-700.woff2") format("woff2");font-weight:700;font-style:normal;}
+
+    
+    
+
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      container-type: size;
+      color: #f0ece5;
+      font-family: "Barlow", sans-serif;
+    }
+
+    [id="08-hydrogen-line-bg"] {
+      position: absolute;
+      inset: 0;
+      background: #111111;
+    }
+
+    [id="08-hydrogen-line-stage"] {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* kicker — mono eyebrow, just below the reserved global-overlay band */
+    [id="08-hydrogen-line-kicker"] {
+      position: absolute;
+      left: 7.4cqw;
+      top: 21.3cqw;
+      display: flex;
+      align-items: center;
+      gap: 1.8cqw;
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 2.4cqw;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #e85d26;
+    }
+    [id="08-hydrogen-line-kicker"] i {
+      display: block;
+      width: 4.4cqw;
+      height: 2px;
+      background: #e85d26;
+    }
+
+    /* hero counter — stat-value, fire-orange, Barlow 900 */
+    [id="08-hydrogen-line-readout"] {
+      position: absolute;
+      left: 7.4cqw;
+      top: 32cqw;
+      display: flex;
+      align-items: baseline;
+      gap: 2.2cqw;
+    }
+    [id="08-hydrogen-line-counter"] {
+      display: inline-block;
+      width: 66cqw;
+      font-family: "Barlow", sans-serif;
+      font-weight: 900;
+      font-size: 30.5cqw;
+      line-height: 0.88;
+      letter-spacing: -0.04em;
+      font-variant-numeric: tabular-nums;
+      color: #e85d26;
+      transform-origin: 0% 85%;
+    }
+    [id="08-hydrogen-line-unit"] {
+      display: inline-block;
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 5cqw;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #f0ece5;
+    }
+
+    [id="08-hydrogen-line-svg"] {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    [id="08-hydrogen-line-svg"] text {
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+    }
+
+    /* typed mono label */
+    [id="08-hydrogen-line-label"] {
+      position: absolute;
+      left: 7.4cqw;
+      top: 133cqw;
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 3.7cqw;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      white-space: pre;
+      color: #f0ece5;
+    }
+    [id="08-hydrogen-line-label-a"] {
+      color: #e85d26;
+    }
+  </style>
+
+  <div
+    id="root"
+    data-composition-id="08-hydrogen-line"
+    data-start="0"
+    data-duration="5.331"
+    data-width="1080"
+    data-height="1920"
+  >
+    <div
+      id="08-hydrogen-line-bg"
+      class="clip"
+      data-start="0"
+      data-duration="5.331"
+      data-track-index="0"
+    ></div>
+
+    <div
+      id="08-hydrogen-line-stage"
+      class="clip"
+      data-start="0"
+      data-duration="5.331"
+      data-track-index="1"
+    >
+      <div id="08-hydrogen-line-kicker"><i></i><span>Radio spectrum · L-band</span></div>
+
+      <div id="08-hydrogen-line-readout">
+        <span id="08-hydrogen-line-counter">1400</span><span id="08-hydrogen-line-unit">MHz</span>
+      </div>
+
+      <svg
+        id="08-hydrogen-line-svg"
+        viewBox="0 0 1080 1920"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        <!-- strip frame hairline -->
+        <line id="08-hydrogen-line-topRule" x1="80" y1="850" x2="1000" y2="850" stroke="#282826" stroke-width="1" />
+        <!-- spectrum noise floor (built in JS) -->
+        <path id="08-hydrogen-line-noise" d="" fill="none" stroke="#888880" stroke-width="2" stroke-linejoin="round" />
+        <!-- ticks + axis labels (built in JS) -->
+        <g id="08-hydrogen-line-ticks"></g>
+        <g id="08-hydrogen-line-axis"></g>
+        <!-- baseline -->
+        <line id="08-hydrogen-line-baseline" x1="80" y1="1280" x2="1000" y2="1280" stroke="#505048" stroke-width="2" />
+        <!-- the hydrogen spike at 1420.4 MHz -->
+        <polygon id="08-hydrogen-line-spike" points="540,1280 549.2,900 558.4,1280" fill="#e85d26" />
+        <!-- cursor that tracks the count -->
+        <g id="08-hydrogen-line-cursor">
+          <line x1="0" y1="872" x2="0" y2="1280" stroke="#f0ece5" stroke-width="2" />
+          <polygon points="-9,862 9,862 0,874" fill="#f0ece5" />
+        </g>
+        <!-- leader from spike peak to the atom -->
+        <path id="08-hydrogen-line-leader" d="" fill="none" stroke="#888880" stroke-width="1.5" />
+        <!-- hydrogen atom glyph: one orbit ring + one nucleus -->
+        <g id="08-hydrogen-line-atom">
+          <circle id="08-hydrogen-line-orbit" cx="800" cy="1000" r="105" fill="none" stroke="#f0ece5" stroke-width="2.5" transform="rotate(-90 800 1000)" />
+          <g id="08-hydrogen-line-electronOrbit">
+            <circle id="08-hydrogen-line-electron" cx="800" cy="895" r="9" fill="#f0ece5" />
+          </g>
+          <g id="08-hydrogen-line-nucleus">
+            <circle id="08-hydrogen-line-nucleusDot" cx="800" cy="1000" r="32" fill="#e85d26" />
+            <text id="08-hydrogen-line-nucleusH" x="800" y="1001" text-anchor="middle" dominant-baseline="central" font-size="34" fill="#111111">H</text>
+          </g>
+        </g>
+      </svg>
+
+      <div id="08-hydrogen-line-label"><span id="08-hydrogen-line-label-a"></span><span id="08-hydrogen-line-label-b"></span></div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var FID = "08-hydrogen-line";
+      var SVGNS = "http://www.w3.org/2000/svg";
+      function $(id) {
+        return document.getElementById(FID + "-" + id);
+      }
+
+      // ── geometry ────────────────────────────────────────────────────────────
+      var X0 = 80, X1 = 1000, F0 = 1400, F1 = 1440, BASE = 1280;
+      var PX_PER_MHZ = (X1 - X0) / (F1 - F0); // 23 px / MHz
+      function xOf(f) {
+        return X0 + (f - F0) * PX_PER_MHZ;
+      }
+      var LINE_F = 1420.4; // the hydrogen line
+      var LINE_X = xOf(LINE_F);
+
+      // deterministic hash (sin fold, no Math.random)
+      function rnd(n) {
+        var v = Math.sin(n * 127.1 + 311.7) * 43758.5453;
+        return v - Math.floor(v);
+      }
+
+      // ── noise floor path ────────────────────────────────────────────────────
+      var noise = $("noise");
+      var d = "";
+      var i = 0;
+      for (var x = X0; x <= X1; x += 8, i++) {
+        var hump = 26 * Math.exp(-Math.pow((x - LINE_X) / 46, 2));
+        var y = BASE - 8 - (4 + 20 * rnd(i + 31)) - hump;
+        d += (i === 0 ? "M " : " L ") + x.toFixed(1) + " " + y.toFixed(1);
+      }
+      noise.setAttribute("d", d);
+
+      // ── ticks + axis labels ─────────────────────────────────────────────────
+      var ticksG = $("ticks");
+      var axisG = $("axis");
+      var ticks = [];
+      var axisLabels = [];
+      var label1420 = null;
+      var tick1420 = null;
+      for (var f = F0; f <= F1; f++) {
+        var tx = xOf(f);
+        var major = f % 10 === 0;
+        var mid = !major && f % 5 === 0;
+        var ln = document.createElementNS(SVGNS, "line");
+        ln.setAttribute("x1", tx);
+        ln.setAttribute("x2", tx);
+        ln.setAttribute("y1", BASE);
+        ln.setAttribute("y2", BASE + (major ? 30 : mid ? 20 : 12));
+        ln.setAttribute("stroke", major ? "#888880" : "#505048");
+        ln.setAttribute("stroke-width", major ? 2 : 1.5);
+        ticksG.appendChild(ln);
+        ticks.push(ln);
+        if (f === 1420) tick1420 = ln;
+        if (major) {
+          var t = document.createElementNS(SVGNS, "text");
+          t.setAttribute("x", tx);
+          t.setAttribute("y", BASE + 66);
+          t.setAttribute("text-anchor", f === F0 ? "start" : f === F1 ? "end" : "middle");
+          t.setAttribute("font-size", "26");
+          t.setAttribute("fill", "#888880");
+          t.textContent = String(f);
+          axisG.appendChild(t);
+          axisLabels.push(t);
+          if (f === 1420) label1420 = t;
+        }
+      }
+
+      // ── leader: spike peak → nearest point on the orbit ring ────────────────
+      var AX = 800, AY = 1000, AR = 105;
+      var PX = LINE_X + 8, PY = 904;
+      var dx = PX - AX, dy = PY - AY, dl = Math.sqrt(dx * dx + dy * dy);
+      var RX = AX + (dx / dl) * (AR + 10), RY = AY + (dy / dl) * (AR + 10);
+      var leader = $("leader");
+      leader.setAttribute("d", "M " + PX.toFixed(1) + " " + PY + " L " + RX.toFixed(1) + " " + RY.toFixed(1));
+
+      // ── stroke-draw setup (measured lengths) ────────────────────────────────
+      function prepDraw(el, len) {
+        el.style.strokeDasharray = len + " " + len;
+        el.style.strokeDashoffset = len;
+        return len;
+      }
+      var noiseLen = noise.getTotalLength() * 1.02;
+      var leaderLen = leader.getTotalLength() * 1.02;
+      var orbit = $("orbit");
+      var orbitLen = 2 * Math.PI * AR * 1.01;
+      var baseline = $("baseline");
+      var topRule = $("topRule");
+      prepDraw(noise, noiseLen);
+      prepDraw(leader, leaderLen);
+      prepDraw(orbit, orbitLen);
+      prepDraw(baseline, X1 - X0);
+      prepDraw(topRule, X1 - X0);
+
+      // ── refs ────────────────────────────────────────────────────────────────
+      var stage = $("stage");
+      var kicker = $("kicker");
+      var counter = $("counter");
+      var unit = $("unit");
+      var spike = $("spike");
+      var cursor = $("cursor");
+      var nucleusDot = $("nucleusDot");
+      var nucleusH = $("nucleusH");
+      var electron = $("electron");
+      var electronOrbit = $("electronOrbit");
+      var labelA = $("label-a");
+      var labelB = $("label-b");
+      var LABEL_A = "Hydrogen";
+      var LABEL_B = " · 1420.4 MHz";
+      labelA.textContent = "";
+      labelB.textContent = "";
+
+      // ── timeline ────────────────────────────────────────────────────────────
+      var tl = gsap.timeline({ paused: true });
+      var DUR = 4.831;
+
+      // macro camera: slow continuous push-in underneath the whole shot
+      tl.fromTo(stage, { scale: 1 }, { scale: 1.04, duration: DUR, ease: "none", transformOrigin: "50% 48%" }, 0);
+
+      // Scene 1 (0.0–2.4s) — strip draws across, counter ticks 1400 → 1420, cursor rides, spike shoots up
+      tl.fromTo(kicker, { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.45, ease: "power2.out" }, 0.05);
+      tl.to(topRule, { strokeDashoffset: 0, duration: 0.6, ease: "power2.out" }, 0.0);
+      tl.to(baseline, { strokeDashoffset: 0, duration: 0.6, ease: "power2.out" }, 0.05);
+      tl.fromTo(ticks, { opacity: 0 }, { opacity: 1, duration: 0.18, ease: "power1.out", stagger: 0.012 }, 0.1);
+      tl.fromTo(axisLabels, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out", stagger: 0.08 }, 0.3);
+      tl.to(noise, { strokeDashoffset: 0, duration: 1.5, ease: "none" }, 0.2);
+
+      // hero counter visible by 0.35s, then counts on "fourteen twenty megahertz"
+      var COUNT_AT = 0.4, COUNT_DUR = 1.55, COUNT_EASE = "power3.out";
+      var freq = { v: F0 };
+      tl.fromTo(counter, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power1.out" }, 0.05);
+      tl.fromTo(
+        freq,
+        { v: F0 },
+        {
+          v: LINE_F,
+          duration: COUNT_DUR,
+          ease: COUNT_EASE,
+          onUpdate: function () {
+            counter.textContent = String(Math.round(freq.v));
+            cursor.setAttribute("transform", "translate(" + xOf(freq.v).toFixed(2) + ",0)");
+          },
+        },
+        COUNT_AT,
+      );
+      tl.fromTo(counter, { scale: 0.55 }, { scale: 1, duration: COUNT_DUR, ease: COUNT_EASE }, COUNT_AT);
+      cursor.setAttribute("transform", "translate(" + xOf(F0) + ",0)");
+      tl.fromTo(cursor, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power1.out" }, 0.3);
+
+      // the count lands → spike shoots up, unit lands, cursor steps back
+      var LAND = COUNT_AT + COUNT_DUR; // 1.95
+      // spike height driven through a proxy → polygon points (seek-safe, no SVG scale-from-zero)
+      var SPIKE_TOP = 900, SPIKE_HALF = 9.2;
+      var spikeH = { h: 0 };
+      function drawSpike() {
+        var top = BASE - spikeH.h * (BASE - SPIKE_TOP);
+        spike.setAttribute(
+          "points",
+          (LINE_X - SPIKE_HALF).toFixed(1) + "," + BASE + " " + LINE_X.toFixed(1) + "," + top.toFixed(1) + " " + (LINE_X + SPIKE_HALF).toFixed(1) + "," + BASE,
+        );
+      }
+      drawSpike();
+      tl.fromTo(spikeH, { h: 0 }, { h: 1, duration: 0.38, ease: "expo.out", onUpdate: drawSpike }, LAND - 0.12);
+      tl.fromTo(unit, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.42, ease: "back.out(1.6)" }, LAND);
+      tl.to(cursor, { opacity: 0.25, duration: 0.3, ease: "power1.out" }, LAND + 0.15);
+
+      // Scene 2 (2.4–4.8s) — the channel is marked, then the hydrogen atom self-draws + label types on
+      tl.to(noise, { opacity: 0.45, duration: 0.5, ease: "power1.out" }, 2.45);
+      tl.to(label1420, { fill: "#e85d26", duration: 0.25, ease: "power1.out" }, 2.55);
+      tl.to(tick1420, { stroke: "#e85d26", attr: { y2: BASE + 40 }, duration: 0.25, ease: "power2.out" }, 2.55);
+
+      tl.to(leader, { strokeDashoffset: 0, duration: 0.35, ease: "power2.out" }, 3.2);
+      tl.fromTo(nucleusDot, { attr: { r: 0 } }, { attr: { r: 32 }, duration: 0.45, ease: "back.out(2)" }, 3.42);
+      tl.fromTo(nucleusH, { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power1.out" }, 3.6);
+      tl.to(orbit, { strokeDashoffset: 0, duration: 0.6, ease: "power2.out" }, 3.5);
+      tl.fromTo(electron, { attr: { r: 0 } }, { attr: { r: 9 }, duration: 0.3, ease: "back.out(2.2)" }, 3.95);
+      tl.fromTo(
+        electronOrbit,
+        { rotation: 0 },
+        { rotation: 70, duration: DUR - 3.95, ease: "power1.inOut", svgOrigin: AX + " " + AY },
+        3.95,
+      );
+
+      var typed = { n: 0 };
+      var TOTAL = LABEL_A.length + LABEL_B.length;
+      tl.fromTo(
+        typed,
+        { n: 0 },
+        {
+          n: TOTAL,
+          duration: 0.75,
+          ease: "none",
+          onUpdate: function () {
+            var k = Math.round(typed.n);
+            labelA.textContent = LABEL_A.slice(0, Math.min(k, LABEL_A.length));
+            labelB.textContent = LABEL_B.slice(0, Math.max(0, k - LABEL_A.length));
+          },
+        },
+        3.55,
+      );
+      // hold to the end under the camera push
+
+      window.__timelines["08-hydrogen-line"] = tl;
+    })();
+  </script>
+</template>

@@ -1,0 +1,30 @@
+{
+  "provider": "auto",
+  "speed": "1.08",
+  "lines": [
+    {
+      "id": "01",
+      "text": "Nothing alive in North America can catch this animal."
+    },
+    {
+      "id": "02",
+      "text": "The pronghorn can hit fifty-five miles an hour, and keep running for miles. Wolves and coyotes top out near forty."
+    },
+    {
+      "id": "03",
+      "text": "So what is it running from? A ghost."
+    },
+    {
+      "id": "04",
+      "text": "Until about twelve thousand years ago, these plains were hunted by the American cheetah. Scientists think the pronghorn got this fast escaping it."
+    },
+    {
+      "id": "05",
+      "text": "Then that cheetah vanished. But the pronghorn never slowed down. Which is why, today..."
+    }
+  ],
+  "bgm": {
+    "mode": "none"
+  },
+  "voice": "bm_george"
+}

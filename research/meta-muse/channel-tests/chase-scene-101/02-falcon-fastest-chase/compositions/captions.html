@@ -1,0 +1,230 @@
+<template id="captions-template" data-composition-id="captions" data-width="1080" data-height="1920">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+
+
+<style data-brand-tokens>
+      @font-face { font-family: 'Cormorant Garamond'; src: url('assets/fonts/cormorant-garamond-500-italic.woff2') format('woff2'); font-weight: 500; font-style: italic; font-display: block; }
+      @font-face { font-family: 'Cormorant Garamond'; src: url('assets/fonts/cormorant-garamond-500.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: block; }
+      @font-face { font-family: 'Cormorant Garamond'; src: url('assets/fonts/cormorant-garamond-600-italic.woff2') format('woff2'); font-weight: 600; font-style: italic; font-display: block; }
+      @font-face { font-family: 'Cormorant Garamond'; src: url('assets/fonts/cormorant-garamond-600.woff2') format('woff2'); font-weight: 600; font-style: normal; font-display: block; }
+      @font-face { font-family: 'Cormorant Garamond'; src: url('assets/fonts/cormorant-garamond-700.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: block; }
+      @font-face { font-family: 'Source Sans 3'; src: url('assets/fonts/source-sans-3-400.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: block; }
+      @font-face { font-family: 'Source Sans 3'; src: url('assets/fonts/source-sans-3-600.woff2') format('woff2'); font-weight: 600; font-style: normal; font-display: block; }
+      @font-face { font-family: 'Source Sans 3'; src: url('assets/fonts/source-sans-3-700.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: block; }
+      :root {
+      --paper: #EFE6D2;
+      --paper-2: #E4D7BC;
+      --ink: #2B2118;
+      --ink-2: #5C4A36;
+      --line: #B9A98C;
+      --ochre: #C9A15B;
+      --olive: #6E7B4E;
+      --telemetry: #C2412D;
+      --canvas: #EFE6D2;
+      --cap-ink: #2B2118;
+      --cap-canvas: #EFE6D2;
+      --cap-accent: #C2412D;
+      --cap-accent-2: #C9A15B;
+      --font-display: "Cormorant Garamond", system-ui, serif;
+      --font-body: "Source Sans 3", system-ui, sans-serif;
+      --cap-band-top: 1600px;
+      --cap-band-height: 320px;
+      }
+    </style>
+
+<style>
+  @font-face { font-family: "Source Sans 3"; src: url("assets/fonts/source-sans-3-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
+  @font-face { font-family: "Source Sans 3"; src: url("assets/fonts/source-sans-3-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+  #captions-root {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .caption-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    pointer-events: none;
+  }
+  /* the keep-out band, from captionBand(H) — frame content stays above it */
+  .caption-stage {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: var(--cap-band-top, 900px);
+    height: var(--cap-band-height, 180px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .caption-group {
+    /* every group is absolutely stacked over the SAME band — exactly one shown at a
+       time via opacity. Must be absolute: in-flow groups would lay out side-by-side. */
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+  }
+
+  /* THE stone card — single 1px taupe hairline border (cartesian's universal
+     structural device), SHARP corners, ZERO shadow, ZERO fill beyond the stone canvas */
+  .caption-pill {
+    max-width: 78%;
+    padding: 18px 40px 22px;
+    background: #EFE6D2;
+    border: 2px solid #B9A98C;
+    border-radius: 0;
+  }
+  .caption-line {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.1em 0.34em;
+    font-family: "Source Sans 3", sans-serif;
+    font-weight: 600;
+    font-size: 62px;
+    line-height: 1.15;
+    letter-spacing: 0;
+  }
+
+  /* upcoming — faint ink, no mark */
+  .caption-word {
+    display: inline-block;
+    padding: 0 0.06em;
+    border-bottom: 3px solid transparent;
+    color: color-mix(in srgb, #2B2118 75%, #EFE6D2);
+  }
+  /* current word — a QUIET marker: a faint warm-stone wash behind solid ink, plus a
+     1px taupe hairline underline (restraint, not a loud block; SHARP, NO shadow) */
+  .caption-word.is-active {
+    color: #2B2118;
+    background: color-mix(in srgb, #C9A15B 45%, #EFE6D2);
+    border-bottom: 3px solid #C2412D;
+  }
+  /* already spoken — solid ink, wash + underline cleared */
+  .caption-word.is-spoken {
+    color: #2B2118;
+    background: transparent;
+    border-bottom: 3px solid transparent;
+  }
+
+  /* optional per-word accents (dormant until a word-classer tags them) */
+  /* brand / key term — Playfair Display italic, cartesian's only display inflection */
+  .caption-word.cap-brand {
+    font-style: italic;
+  }
+  /* numerals / data — the body sans voice, slightly recessed */
+  .caption-word.cap-num {
+    font-family: "Source Sans 3", ui-sans-serif, sans-serif;
+    color: color-mix(in srgb, var(--cap-ink, #1a1a1a) 72%, var(--cap-canvas, #ede8e0));
+  }
+  /* emphasis — a 1px taupe hairline underline (no second color; stone-and-ink only) */
+  .caption-word.cap-cta {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--cap-accent, #8a8178);
+    text-underline-offset: 0.12em;
+  }
+
+  @media (max-aspect-ratio: 9/16) {
+    .caption-pill {
+      max-width: 92%;
+    }
+    .caption-line {
+      font-size: 60px;
+    }
+  }
+</style>
+
+<div
+  id="captions-root"
+  data-composition-id="captions"
+  data-timeline-locked
+  data-start="0"
+  data-duration="89.143"
+  data-fps="30"
+  data-width="1080"
+  data-height="1920"
+>
+  <div class="caption-layer" aria-hidden="true">
+    <div id="caption-stage" class="caption-stage"></div>
+  </div>
+</div>
+
+<script>
+  // captions.mjs injects the engine's scene-aware groups + real duration here.
+  var GROUPS = [{"id":"caption-group-0","frame":1,"start":0.16,"end":1.8,"text":"242","words":[{"id":"caption-word-0-0","text":"242","start":0.16,"end":1.68}]},{"id":"caption-group-1","frame":1,"start":2.08,"end":3.4,"text":"miles an hour.","words":[{"id":"caption-word-1-0","text":"miles","start":2.08,"end":2.64},{"id":"caption-word-1-1","text":"an","start":2.64,"end":2.88},{"id":"caption-word-1-2","text":"hour.","start":2.88,"end":3.28}]},{"id":"caption-group-2","frame":2,"start":3.892,"end":5.012,"text":"The fastest any","words":[{"id":"caption-word-2-0","text":"The","start":3.892,"end":4.132},{"id":"caption-word-2-1","text":"fastest","start":4.132,"end":4.692},{"id":"caption-word-2-2","text":"any","start":4.692,"end":5.012}]},{"id":"caption-group-3","frame":2,"start":5.012,"end":5.572,"text":"animal has","words":[{"id":"caption-word-3-0","text":"animal","start":5.012,"end":5.332},{"id":"caption-word-3-1","text":"has","start":5.332,"end":5.572}]},{"id":"caption-group-4","frame":2,"start":5.572,"end":6.852,"text":"ever been clocked.","words":[{"id":"caption-word-4-0","text":"ever","start":5.572,"end":5.732},{"id":"caption-word-4-1","text":"been","start":5.732,"end":5.972},{"id":"caption-word-4-2","text":"clocked.","start":5.972,"end":6.852}]},{"id":"caption-group-5","frame":2,"start":6.852,"end":8.052,"text":"Not a cheetah.","words":[{"id":"caption-word-5-0","text":"Not","start":6.852,"end":7.012},{"id":"caption-word-5-1","text":"a","start":7.092,"end":7.252},{"id":"caption-word-5-2","text":"cheetah.","start":7.252,"end":8.052}]},{"id":"caption-group-6","frame":2,"start":8.052,"end":8.692,"text":"A bird.","words":[{"id":"caption-word-6-0","text":"A","start":8.052,"end":8.212},{"id":"caption-word-6-1","text":"bird.","start":8.212,"end":8.692}]},{"id":"caption-group-7","frame":2,"start":8.692,"end":9.092,"text":"And it","words":[{"id":"caption-word-7-0","text":"And","start":8.692,"end":8.932},{"id":"caption-word-7-1","text":"it","start":8.932,"end":9.092}]},{"id":"caption-group-8","frame":2,"start":9.092,"end":10.212,"text":"isn't escaping.","words":[{"id":"caption-word-8-0","text":"isn't","start":9.092,"end":9.412},{"id":"caption-word-8-1","text":"escaping.","start":9.412,"end":10.212}]},{"id":"caption-group-9","frame":2,"start":10.212,"end":11.052,"text":"It's hunting.","words":[{"id":"caption-word-9-0","text":"It's","start":10.212,"end":10.452},{"id":"caption-word-9-1","text":"hunting.","start":10.452,"end":10.932}]},{"id":"caption-group-10","frame":3,"start":11.624,"end":12.904,"text":"The peregrine falcon","words":[{"id":"caption-word-10-0","text":"The","start":11.624,"end":11.704},{"id":"caption-word-10-1","text":"peregrine","start":11.704,"end":12.344},{"id":"caption-word-10-2","text":"falcon","start":12.344,"end":12.904}]},{"id":"caption-group-11","frame":3,"start":12.904,"end":13.544,"text":"climbs high","words":[{"id":"caption-word-11-0","text":"climbs","start":12.904,"end":13.304},{"id":"caption-word-11-1","text":"high","start":13.304,"end":13.544}]},{"id":"caption-group-12","frame":3,"start":13.544,"end":14.664,"text":"above its prey,","words":[{"id":"caption-word-12-0","text":"above","start":13.544,"end":13.864},{"id":"caption-word-12-1","text":"its","start":13.864,"end":14.024},{"id":"caption-word-12-2","text":"prey,","start":14.024,"end":14.664}]},{"id":"caption-group-13","frame":3,"start":14.664,"end":15.784,"text":"folds its wings,","words":[{"id":"caption-word-13-0","text":"folds","start":14.664,"end":15.144},{"id":"caption-word-13-1","text":"its","start":15.144,"end":15.304},{"id":"caption-word-13-2","text":"wings,","start":15.304,"end":15.784}]},{"id":"caption-group-14","frame":3,"start":15.784,"end":16.824,"text":"and drops.","words":[{"id":"caption-word-14-0","text":"and","start":15.784,"end":16.024},{"id":"caption-word-14-1","text":"drops.","start":16.024,"end":16.824}]},{"id":"caption-group-15","frame":3,"start":16.824,"end":17.304,"text":"It's called","words":[{"id":"caption-word-15-0","text":"It's","start":16.824,"end":17.064},{"id":"caption-word-15-1","text":"called","start":17.064,"end":17.304}]},{"id":"caption-group-16","frame":3,"start":17.304,"end":18.224,"text":"the stoop.","words":[{"id":"caption-word-16-0","text":"the","start":17.304,"end":17.464},{"id":"caption-word-16-1","text":"stoop.","start":17.464,"end":18.104}]},{"id":"caption-group-17","frame":4,"start":18.631,"end":19.191,"text":"Last time,","words":[{"id":"caption-word-17-0","text":"Last","start":18.631,"end":18.951},{"id":"caption-word-17-1","text":"time,","start":18.951,"end":19.191}]},{"id":"caption-group-18","frame":4,"start":19.191,"end":19.511,"text":"we saw","words":[{"id":"caption-word-18-0","text":"we","start":19.191,"end":19.351},{"id":"caption-word-18-1","text":"saw","start":19.351,"end":19.511}]},{"id":"caption-group-19","frame":4,"start":19.511,"end":20.111,"text":"the cheetah","words":[{"id":"caption-word-19-0","text":"the","start":19.511,"end":19.671},{"id":"caption-word-19-1","text":"cheetah","start":19.671,"end":19.991}]},{"id":"caption-group-20","frame":4,"start":20.231,"end":20.871,"text":"slow down","words":[{"id":"caption-word-20-0","text":"slow","start":20.231,"end":20.631},{"id":"caption-word-20-1","text":"down","start":20.631,"end":20.871}]},{"id":"caption-group-21","frame":4,"start":20.871,"end":21.671,"text":"to win.","words":[{"id":"caption-word-21-0","text":"to","start":20.871,"end":21.031},{"id":"caption-word-21-1","text":"win.","start":21.031,"end":21.671}]},{"id":"caption-group-22","frame":4,"start":21.671,"end":22.711,"text":"The falcon does","words":[{"id":"caption-word-22-0","text":"The","start":21.671,"end":21.831},{"id":"caption-word-22-1","text":"falcon","start":21.831,"end":22.471},{"id":"caption-word-22-2","text":"does","start":22.471,"end":22.711}]},{"id":"caption-group-23","frame":4,"start":22.711,"end":23.671,"text":"the opposite.","words":[{"id":"caption-word-23-0","text":"the","start":22.711,"end":22.871},{"id":"caption-word-23-1","text":"opposite.","start":22.871,"end":23.671}]},{"id":"caption-group-24","frame":4,"start":23.671,"end":25.511,"text":"Physics simulations show that","words":[{"id":"caption-word-24-0","text":"Physics","start":23.671,"end":24.231},{"id":"caption-word-24-1","text":"simulations","start":24.231,"end":24.951},{"id":"caption-word-24-2","text":"show","start":24.951,"end":25.271},{"id":"caption-word-24-3","text":"that","start":25.271,"end":25.511}]},{"id":"caption-group-25","frame":4,"start":25.511,"end":27.031,"text":"diving faster gives it","words":[{"id":"caption-word-25-0","text":"diving","start":25.511,"end":26.071},{"id":"caption-word-25-1","text":"faster","start":26.071,"end":26.551},{"id":"caption-word-25-2","text":"gives","start":26.551,"end":26.871},{"id":"caption-word-25-3","text":"it","start":26.871,"end":27.031}]},{"id":"caption-group-26","frame":4,"start":27.031,"end":27.671,"text":"more force","words":[{"id":"caption-word-26-0","text":"more","start":27.031,"end":27.271},{"id":"caption-word-26-1","text":"force","start":27.271,"end":27.671}]},{"id":"caption-group-27","frame":4,"start":27.671,"end":28.631,"text":"to steer.","words":[{"id":"caption-word-27-0","text":"to","start":27.671,"end":27.831},{"id":"caption-word-27-1","text":"steer.","start":27.831,"end":28.631}]},{"id":"caption-group-28","frame":4,"start":28.631,"end":29.351,"text":"The faster","words":[{"id":"caption-word-28-0","text":"The","start":28.631,"end":28.871},{"id":"caption-word-28-1","text":"faster","start":28.871,"end":29.351}]},{"id":"caption-group-29","frame":4,"start":29.351,"end":30.231,"text":"it falls,","words":[{"id":"caption-word-29-0","text":"it","start":29.351,"end":29.511},{"id":"caption-word-29-1","text":"falls,","start":29.511,"end":30.231}]},{"id":"caption-group-30","frame":4,"start":30.231,"end":30.791,"text":"the harder","words":[{"id":"caption-word-30-0","text":"the","start":30.231,"end":30.391},{"id":"caption-word-30-1","text":"harder","start":30.391,"end":30.791}]},{"id":"caption-group-31","frame":4,"start":30.791,"end":31.711,"text":"it can turn.","words":[{"id":"caption-word-31-0","text":"it","start":30.791,"end":30.951},{"id":"caption-word-31-1","text":"can","start":30.951,"end":31.191},{"id":"caption-word-31-2","text":"turn.","start":31.191,"end":31.591}]},{"id":"caption-group-32","frame":5,"start":32.251,"end":32.651,"text":"So how","words":[{"id":"caption-word-32-0","text":"So","start":32.251,"end":32.491},{"id":"caption-word-32-1","text":"how","start":32.491,"end":32.651}]},{"id":"caption-group-33","frame":5,"start":32.651,"end":32.971,"text":"does it","words":[{"id":"caption-word-33-0","text":"does","start":32.651,"end":32.811},{"id":"caption-word-33-1","text":"it","start":32.811,"end":32.971}]},{"id":"caption-group-34","frame":5,"start":32.971,"end":33.611,"text":"aim?","words":[{"id":"caption-word-34-0","text":"aim?","start":32.971,"end":33.611}]},{"id":"caption-group-35","frame":5,"start":33.611,"end":34.891,"text":"Scientists in Wales","words":[{"id":"caption-word-35-0","text":"Scientists","start":33.611,"end":34.331},{"id":"caption-word-35-1","text":"in","start":34.331,"end":34.411},{"id":"caption-word-35-2","text":"Wales","start":34.411,"end":34.891}]},{"id":"caption-group-36","frame":5,"start":34.891,"end":36.491,"text":"put GPS trackers","words":[{"id":"caption-word-36-0","text":"put","start":34.891,"end":35.211},{"id":"caption-word-36-1","text":"GPS","start":35.211,"end":35.851},{"id":"caption-word-36-2","text":"trackers","start":35.851,"end":36.491}]},{"id":"caption-group-37","frame":5,"start":36.491,"end":37.611,"text":"and tiny cameras","words":[{"id":"caption-word-37-0","text":"and","start":36.491,"end":36.731},{"id":"caption-word-37-1","text":"tiny","start":36.731,"end":37.131},{"id":"caption-word-37-2","text":"cameras","start":37.131,"end":37.611}]},{"id":"caption-group-38","frame":5,"start":37.611,"end":38.811,"text":"on falcons.","words":[{"id":"caption-word-38-0","text":"on","start":37.611,"end":37.771},{"id":"caption-word-38-1","text":"falcons.","start":37.771,"end":38.811}]},{"id":"caption-group-39","frame":5,"start":38.811,"end":39.531,"text":"They steer","words":[{"id":"caption-word-39-0","text":"They","start":38.811,"end":39.051},{"id":"caption-word-39-1","text":"steer","start":39.051,"end":39.531}]},{"id":"caption-group-40","frame":5,"start":39.531,"end":39.851,"text":"with the","words":[{"id":"caption-word-40-0","text":"with","start":39.531,"end":39.691},{"id":"caption-word-40-1","text":"the","start":39.691,"end":39.851}]},{"id":"caption-group-41","frame":5,"start":39.851,"end":40.891,"text":"same rule as","words":[{"id":"caption-word-41-0","text":"same","start":39.851,"end":40.171},{"id":"caption-word-41-1","text":"rule","start":40.171,"end":40.651},{"id":"caption-word-41-2","text":"as","start":40.651,"end":40.891}]},{"id":"caption-group-42","frame":5,"start":40.891,"end":42.531,"text":"most guided missiles.","words":[{"id":"caption-word-42-0","text":"most","start":40.891,"end":41.211},{"id":"caption-word-42-1","text":"guided","start":41.211,"end":41.771},{"id":"caption-word-42-2","text":"missiles.","start":41.771,"end":42.411}]},{"id":"caption-group-43","frame":6,"start":43.012,"end":44.212,"text":"Sailors know it.","words":[{"id":"caption-word-43-0","text":"Sailors","start":43.012,"end":43.652},{"id":"caption-word-43-1","text":"know","start":43.652,"end":43.812},{"id":"caption-word-43-2","text":"it.","start":43.812,"end":44.212}]},{"id":"caption-group-44","frame":6,"start":44.212,"end":44.612,"text":"If a","words":[{"id":"caption-word-44-0","text":"If","start":44.212,"end":44.452},{"id":"caption-word-44-1","text":"a","start":44.452,"end":44.612}]},{"id":"caption-group-45","frame":6,"start":44.612,"end":45.252,"text":"ship holds","words":[{"id":"caption-word-45-0","text":"ship","start":44.612,"end":44.932},{"id":"caption-word-45-1","text":"holds","start":44.932,"end":45.252}]},{"id":"caption-group-46","frame":6,"start":45.252,"end":45.652,"text":"the same","words":[{"id":"caption-word-46-0","text":"the","start":45.252,"end":45.412},{"id":"caption-word-46-1","text":"same","start":45.412,"end":45.652}]},{"id":"caption-group-47","frame":6,"start":45.652,"end":46.372,"text":"bearing as","words":[{"id":"caption-word-47-0","text":"bearing","start":45.652,"end":46.212},{"id":"caption-word-47-1","text":"as","start":46.212,"end":46.372}]},{"id":"caption-group-48","frame":6,"start":46.372,"end":47.492,"text":"it closes in,","words":[{"id":"caption-word-48-0","text":"it","start":46.372,"end":46.532},{"id":"caption-word-48-1","text":"closes","start":46.532,"end":47.092},{"id":"caption-word-48-2","text":"in,","start":47.092,"end":47.492}]},{"id":"caption-group-49","frame":6,"start":47.492,"end":47.892,"text":"you're on","words":[{"id":"caption-word-49-0","text":"you're","start":47.492,"end":47.732},{"id":"caption-word-49-1","text":"on","start":47.732,"end":47.892}]},{"id":"caption-group-50","frame":6,"start":47.892,"end":49.172,"text":"a collision course.","words":[{"id":"caption-word-50-0","text":"a","start":47.892,"end":47.972},{"id":"caption-word-50-1","text":"collision","start":47.972,"end":48.612},{"id":"caption-word-50-2","text":"course.","start":48.612,"end":49.172}]},{"id":"caption-group-51","frame":6,"start":49.172,"end":50.612,"text":"The falcon turns","words":[{"id":"caption-word-51-0","text":"The","start":49.172,"end":49.412},{"id":"caption-word-51-1","text":"falcon","start":49.412,"end":50.052},{"id":"caption-word-51-2","text":"turns","start":50.052,"end":50.612}]},{"id":"caption-group-52","frame":6,"start":50.612,"end":51.092,"text":"just enough","words":[{"id":"caption-word-52-0","text":"just","start":50.612,"end":50.772},{"id":"caption-word-52-1","text":"enough","start":50.772,"end":51.092}]},{"id":"caption-group-53","frame":6,"start":51.092,"end":51.492,"text":"to keep","words":[{"id":"caption-word-53-0","text":"to","start":51.092,"end":51.252},{"id":"caption-word-53-1","text":"keep","start":51.252,"end":51.492}]},{"id":"caption-group-54","frame":6,"start":51.492,"end":52.532,"text":"its target right","words":[{"id":"caption-word-54-0","text":"its","start":51.492,"end":51.732},{"id":"caption-word-54-1","text":"target","start":51.732,"end":52.212},{"id":"caption-word-54-2","text":"right","start":52.212,"end":52.532}]},{"id":"caption-group-55","frame":6,"start":52.532,"end":52.972,"text":"there.","words":[{"id":"caption-word-55-0","text":"there.","start":52.532,"end":52.852}]},{"id":"caption-group-56","frame":7,"start":53.496,"end":53.976,"text":"Yet this","words":[{"id":"caption-word-56-0","text":"Yet","start":53.496,"end":53.736},{"id":"caption-word-56-1","text":"this","start":53.816,"end":53.976}]},{"id":"caption-group-57","frame":7,"start":53.976,"end":55.336,"text":"perfect hunter nearly","words":[{"id":"caption-word-57-0","text":"perfect","start":53.976,"end":54.376},{"id":"caption-word-57-1","text":"hunter","start":54.376,"end":54.776},{"id":"caption-word-57-2","text":"nearly","start":54.936,"end":55.336}]},{"id":"caption-group-58","frame":7,"start":55.336,"end":56.136,"text":"vanished.","words":[{"id":"caption-word-58-0","text":"vanished.","start":55.336,"end":56.136}]},{"id":"caption-group-59","frame":7,"start":56.136,"end":57.816,"text":"The pesticide DDT","words":[{"id":"caption-word-59-0","text":"The","start":56.136,"end":56.296},{"id":"caption-word-59-1","text":"pesticide","start":56.296,"end":57.016},{"id":"caption-word-59-2","text":"DDT","start":57.016,"end":57.816}]},{"id":"caption-group-60","frame":7,"start":57.816,"end":59.496,"text":"thinned its eggshells.","words":[{"id":"caption-word-60-0","text":"thinned","start":57.816,"end":58.296},{"id":"caption-word-60-1","text":"its","start":58.296,"end":58.456},{"id":"caption-word-60-2","text":"eggshells.","start":58.456,"end":59.496}]},{"id":"caption-group-61","frame":7,"start":59.496,"end":61.976,"text":"By 1975,","words":[{"id":"caption-word-61-0","text":"By","start":59.496,"end":59.816},{"id":"caption-word-61-1","text":"1975,","start":59.816,"end":61.976}]},{"id":"caption-group-62","frame":7,"start":61.976,"end":64.616,"text":"just 324 breeding pairs","words":[{"id":"caption-word-62-0","text":"just","start":61.976,"end":62.296},{"id":"caption-word-62-1","text":"324","start":62.296,"end":63.496},{"id":"caption-word-62-2","text":"breeding","start":63.656,"end":64.136},{"id":"caption-word-62-3","text":"pairs","start":64.136,"end":64.616}]},{"id":"caption-group-63","frame":7,"start":64.616,"end":65.176,"text":"were left","words":[{"id":"caption-word-63-0","text":"were","start":64.616,"end":64.776},{"id":"caption-word-63-1","text":"left","start":64.776,"end":65.176}]},{"id":"caption-group-64","frame":7,"start":65.176,"end":66.416,"text":"in North America.","words":[{"id":"caption-word-64-0","text":"in","start":65.176,"end":65.416},{"id":"caption-word-64-1","text":"North","start":65.416,"end":65.736},{"id":"caption-word-64-2","text":"America.","start":65.736,"end":66.296}]},{"id":"caption-group-65","frame":8,"start":66.945,"end":68.785,"text":"After DDT was banned,","words":[{"id":"caption-word-65-0","text":"After","start":66.945,"end":67.265},{"id":"caption-word-65-1","text":"DDT","start":67.265,"end":68.065},{"id":"caption-word-65-2","text":"was","start":68.065,"end":68.225},{"id":"caption-word-65-3","text":"banned,","start":68.225,"end":68.785}]},{"id":"caption-group-66","frame":8,"start":68.785,"end":69.265,"text":"and with","words":[{"id":"caption-word-66-0","text":"and","start":68.785,"end":69.025},{"id":"caption-word-66-1","text":"with","start":69.025,"end":69.265}]},{"id":"caption-group-67","frame":8,"start":69.265,"end":69.665,"text":"years of","words":[{"id":"caption-word-67-0","text":"years","start":69.265,"end":69.505},{"id":"caption-word-67-1","text":"of","start":69.505,"end":69.665}]},{"id":"caption-group-68","frame":8,"start":69.665,"end":70.865,"text":"captive breeding,","words":[{"id":"caption-word-68-0","text":"captive","start":69.665,"end":70.225},{"id":"caption-word-68-1","text":"breeding,","start":70.225,"end":70.865}]},{"id":"caption-group-69","frame":8,"start":70.865,"end":72.065,"text":"the falcon came","words":[{"id":"caption-word-69-0","text":"the","start":70.865,"end":71.025},{"id":"caption-word-69-1","text":"falcon","start":71.025,"end":71.665},{"id":"caption-word-69-2","text":"came","start":71.665,"end":72.065}]},{"id":"caption-group-70","frame":8,"start":72.065,"end":72.545,"text":"back.","words":[{"id":"caption-word-70-0","text":"back.","start":72.065,"end":72.545}]},{"id":"caption-group-71","frame":8,"start":72.545,"end":73.665,"text":"Today it nests","words":[{"id":"caption-word-71-0","text":"Today","start":72.545,"end":72.945},{"id":"caption-word-71-1","text":"it","start":73.025,"end":73.185},{"id":"caption-word-71-2","text":"nests","start":73.185,"end":73.665}]},{"id":"caption-group-72","frame":8,"start":73.665,"end":75.185,"text":"on skyscrapers,","words":[{"id":"caption-word-72-0","text":"on","start":73.665,"end":73.905},{"id":"caption-word-72-1","text":"skyscrapers,","start":73.905,"end":75.185}]},{"id":"caption-group-73","frame":8,"start":75.185,"end":76.785,"text":"hunting pigeons above our","words":[{"id":"caption-word-73-0","text":"hunting","start":75.185,"end":75.745},{"id":"caption-word-73-1","text":"pigeons","start":75.745,"end":76.225},{"id":"caption-word-73-2","text":"above","start":76.225,"end":76.625},{"id":"caption-word-73-3","text":"our","start":76.625,"end":76.785}]},{"id":"caption-group-74","frame":8,"start":76.785,"end":77.385,"text":"cities.","words":[{"id":"caption-word-74-0","text":"cities.","start":76.785,"end":77.265}]},{"id":"caption-group-75","frame":9,"start":77.898,"end":78.458,"text":"So next","words":[{"id":"caption-word-75-0","text":"So","start":77.898,"end":78.138},{"id":"caption-word-75-1","text":"next","start":78.138,"end":78.458}]},{"id":"caption-group-76","frame":9,"start":78.458,"end":79.818,"text":"time you're downtown,","words":[{"id":"caption-word-76-0","text":"time","start":78.458,"end":78.618},{"id":"caption-word-76-1","text":"you're","start":78.618,"end":78.938},{"id":"caption-word-76-2","text":"downtown,","start":78.938,"end":79.818}]},{"id":"caption-group-77","frame":9,"start":79.818,"end":80.698,"text":"look up.","words":[{"id":"caption-word-77-0","text":"look","start":79.818,"end":80.138},{"id":"caption-word-77-1","text":"up.","start":80.138,"end":80.698}]},{"id":"caption-group-78","frame":9,"start":80.698,"end":81.818,"text":"The fastest chase","words":[{"id":"caption-word-78-0","text":"The","start":80.698,"end":80.858},{"id":"caption-word-78-1","text":"fastest","start":80.858,"end":81.418},{"id":"caption-word-78-2","text":"chase","start":81.418,"end":81.818}]},{"id":"caption-group-79","frame":9,"start":81.818,"end":82.378,"text":"on Earth","words":[{"id":"caption-word-79-0","text":"on","start":81.818,"end":81.978},{"id":"caption-word-79-1","text":"Earth","start":81.978,"end":82.378}]},{"id":"caption-group-80","frame":9,"start":82.378,"end":82.858,"text":"might be","words":[{"id":"caption-word-80-0","text":"might","start":82.378,"end":82.698},{"id":"caption-word-80-1","text":"be","start":82.698,"end":82.858}]},{"id":"caption-group-81","frame":9,"start":82.858,"end":83.778,"text":"right above you.","words":[{"id":"caption-word-81-0","text":"right","start":82.858,"end":83.098},{"id":"caption-word-81-1","text":"above","start":83.098,"end":83.418},{"id":"caption-word-81-2","text":"you.","start":83.418,"end":83.658}]}];
+  var DURATION = 89.143;
+
+  (function () {
+    var stage = document.getElementById("caption-stage");
+
+    // build DOM: one .caption-group per group, .caption-word per word
+    GROUPS.forEach(function (group, g) {
+      var groupEl = document.createElement("div");
+      groupEl.className = "caption-group";
+      groupEl.id = "caption-group-" + g;
+      var pill = document.createElement("div");
+      pill.className = "caption-pill";
+      var line = document.createElement("div");
+      line.className = "caption-line";
+      (group.words || []).forEach(function (w, i) {
+        var span = document.createElement("span");
+        span.className = "caption-word";
+        span.id = "caption-word-" + g + "-" + i;
+        span.textContent = String(w.text);
+        line.appendChild(span);
+      });
+      pill.appendChild(line);
+      groupEl.appendChild(pill);
+      stage.appendChild(groupEl);
+    });
+
+    window.__timelines = window.__timelines || {};
+    var tl = gsap.timeline({ paused: true });
+
+    GROUPS.forEach(function (group, g) {
+      var groupEl = document.getElementById("caption-group-" + g);
+      var words = group.words || [];
+      var next = GROUPS[g + 1];
+      var isLast = g === GROUPS.length - 1;
+      var start = Math.max(0, Number(group.start));
+      var end = isLast ? Math.min(DURATION, Number(group.end) + 0.5) : Math.min(Number(next.start), Number(group.end) + 0.3);
+      if (end <= start) end = start + 0.01;
+
+      // group on/off — exactly one group visible at a time
+      tl.set(groupEl, { opacity: 1 }, start);
+      tl.set(groupEl, { opacity: 0 }, end);
+
+      // 3-state karaoke via className SETS — seek-safe (gsap.set applies on the
+      // engine's frame-by-frame seek; .call callbacks would NOT fire).
+      words.forEach(function (w, i) {
+        var el = document.getElementById("caption-word-" + g + "-" + i);
+        var at = Math.max(start, Number(w.start));
+        tl.set(el, { className: "caption-word" }, start); // upcoming (also resets on reverse-seek)
+        tl.set(el, { className: "caption-word is-active" }, at); // current
+        tl.fromTo(el, { scale: 0.985 }, { scale: 1, duration: 0.2, ease: "power1.out" }, at);
+        if (i + 1 < words.length) {
+          var nextAt = Math.max(start, Number(words[i + 1].start));
+          tl.set(el, { className: "caption-word is-spoken" }, nextAt); // demote when next activates
+        }
+      });
+      if (words.length) {
+        var lastEl = document.getElementById("caption-word-" + g + "-" + (words.length - 1));
+        var lastSpoken = Math.min(end, Number(words[words.length - 1].end) + 0.1);
+        tl.set(lastEl, { className: "caption-word is-spoken" }, lastSpoken);
+      }
+    });
+
+    // full-span anchor so the sub-comp timeline spans the whole video
+    tl.to({}, { duration: DURATION }, 0);
+    window.__timelines["captions"] = tl;
+  })();
+</script>
+
+<style>
+  .caption-line { line-height: 1.1 !important; }
+</style>
+</template>

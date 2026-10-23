@@ -1,0 +1,394 @@
+<template>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500-italic.woff2") format("woff2");font-weight:500;font-style:italic;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600-italic.woff2") format("woff2");font-weight:600;font-style:italic;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+#root, #root * { font-variant-numeric: lining-nums; }
+
+    
+
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+      color: #2b2118;
+    }
+
+    /* ---------- page: paper + faint 40px graph grid + soft edge vignette ---------- */
+    .f09-paper {
+      position: absolute;
+      inset: 0;
+      background-color: #efe6d2;
+      overflow: hidden;
+    }
+    .f09-grid {
+      position: absolute;
+      inset: 0;
+      opacity: 0.25;
+      background-image:
+        linear-gradient(to right, #b9a98c 1px, transparent 1px),
+        linear-gradient(to bottom, #b9a98c 1px, transparent 1px);
+      background-size: 40px 40px;
+      background-position: 0 0;
+    }
+    .f09-vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        ellipse 78% 62% at 50% 44%,
+        rgba(92, 74, 54, 0) 58%,
+        rgba(92, 74, 54, 0.1) 82%,
+        rgba(92, 74, 54, 0.2) 100%
+      );
+    }
+
+    /* ---------- content stage ---------- */
+    .f09-stage {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    /* watercolor olive wash behind the plate */
+    .f09-wash {
+      position: absolute;
+      left: 70px;
+      top: 215px;
+      width: 940px;
+      height: 600px;
+    }
+    .f09-wash svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    /* the cheetah plate, ~60% width, upper area */
+    .f09-plate {
+      position: absolute;
+      left: 216px;
+      top: 320px;
+      width: 648px;
+      height: 390px;
+    }
+    .f09-plate img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      mix-blend-mode: multiply;
+    }
+
+    /* lead-in line (h2, ink-2) */
+    .f09-lead {
+      position: absolute;
+      left: 72px;
+      right: 72px;
+      top: 790px;
+      margin: 0;
+      text-align: center;
+      font-family: "Cormorant Garamond", serif;
+      font-weight: 600;
+      font-size: 72px;
+      line-height: 1.1;
+      color: #5c4a36;
+    }
+
+    /* book-style quotation ornament: hairline — “ — hairline */
+    .f09-orn {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 1010px;
+      height: 90px;
+    }
+    .f09-orn-rule {
+      position: absolute;
+      top: 54px;
+      width: 120px;
+      height: 2px;
+      background: #b9a98c;
+    }
+    .f09-orn-rule-l {
+      left: 380px;
+    }
+    .f09-orn-rule-r {
+      left: 580px;
+    }
+    .f09-orn-quote {
+      position: absolute;
+      left: 500px;
+      top: 0;
+      width: 80px;
+      height: 90px;
+      margin: 0;
+      text-align: center;
+      font-family: "Cormorant Garamond", serif;
+      font-weight: 600;
+      font-size: 150px;
+      line-height: 1;
+      color: #c9a15b;
+    }
+
+    /* the closing line (h1, ink) — the focal */
+    .f09-close {
+      position: absolute;
+      left: 72px;
+      right: 72px;
+      top: 1120px;
+      margin: 0;
+      text-align: center;
+      font-family: "Cormorant Garamond", serif;
+      font-weight: 600;
+      font-size: 96px;
+      line-height: 1.05;
+      color: #2b2118;
+    }
+
+    .f09-line {
+      display: block;
+      white-space: nowrap;
+    }
+    .f09-w {
+      display: inline-block;
+    }
+
+    /* "slow down" + its hand-drawn telemetry-red underline */
+    .f09-u {
+      position: relative;
+      display: inline-block;
+    }
+    .f09-u svg {
+      position: absolute;
+      left: -3%;
+      width: 106%;
+      bottom: -0.16em;
+      height: 0.3em;
+      overflow: visible;
+    }
+  </style>
+
+  <div
+    id="root"
+    data-composition-id="09-knowing-when"
+    data-width="1080"
+    data-height="1920"
+    data-duration="8.04"
+  >
+    <!-- background: full-bleed paper page -->
+    <div
+      id="f09-paper"
+      class="clip f09-paper"
+      data-start="0"
+      data-duration="8.04"
+      data-track-index="0"
+    >
+      <div class="f09-grid"></div>
+      <div class="f09-vignette"></div>
+    </div>
+
+    <!-- content -->
+    <div
+      id="f09-stage"
+      class="clip f09-stage"
+      data-start="0"
+      data-duration="8.04"
+      data-track-index="1"
+    >
+      <!-- supporting: soft olive watercolor wash -->
+      <div id="f09-wash" class="f09-wash">
+        <svg viewBox="0 0 940 600" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="f09-wash-filter" x="-20%" y="-20%" width="140%" height="140%">
+              <feTurbulence
+                type="fractalNoise"
+                baseFrequency="0.011"
+                numOctaves="3"
+                seed="9"
+                result="noise"
+              ></feTurbulence>
+              <feDisplacementMap
+                in="SourceGraphic"
+                in2="noise"
+                scale="70"
+                xChannelSelector="R"
+                yChannelSelector="G"
+                result="warped"
+              ></feDisplacementMap>
+              <feGaussianBlur in="warped" stdDeviation="16"></feGaussianBlur>
+            </filter>
+          </defs>
+          <g filter="url(#f09-wash-filter)">
+            <ellipse cx="470" cy="300" rx="380" ry="210" fill="#6E7B4E" fill-opacity="0.2"></ellipse>
+            <ellipse cx="560" cy="350" rx="250" ry="140" fill="#6E7B4E" fill-opacity="0.12"></ellipse>
+            <ellipse cx="340" cy="250" rx="200" ry="120" fill="#C9A15B" fill-opacity="0.1"></ellipse>
+          </g>
+        </svg>
+      </div>
+
+      <!-- supporting: the cheetah plate, at rest -->
+      <div id="f09-plate" class="f09-plate">
+        <img src="public/cheetah-ink.png" alt="" />
+      </div>
+
+      <!-- lead-in line -->
+      <p id="f09-lead" class="f09-lead">
+        <span class="f09-line"
+          ><span class="f09-w f09-lw">It</span> <span class="f09-w f09-lw">doesn’t</span>
+          <span class="f09-w f09-lw">win</span> <span class="f09-w f09-lw">by</span></span
+        >
+        <span class="f09-line"
+          ><span class="f09-w f09-lw">running</span> <span class="f09-w f09-lw">flat</span>
+          <span class="f09-w f09-lw">out.</span></span
+        >
+      </p>
+
+      <!-- quotation ornament -->
+      <div id="f09-orn" class="f09-orn">
+        <div id="f09-orn-l" class="f09-orn-rule f09-orn-rule-l"></div>
+        <p id="f09-orn-q" class="f09-orn-quote">“</p>
+        <div id="f09-orn-r" class="f09-orn-rule f09-orn-rule-r"></div>
+      </div>
+
+      <!-- foreground subject: the closing line -->
+      <h1 id="f09-close" class="f09-close">
+        <span class="f09-line"
+          ><span class="f09-w f09-cw">It</span> <span class="f09-w f09-cw">wins</span>
+          <span class="f09-w f09-cw">by</span> <span class="f09-w f09-cw">knowing</span></span
+        >
+        <span class="f09-line"
+          ><span class="f09-w f09-cw">when</span> <span class="f09-w f09-cw">to</span>
+          <span id="f09-u" class="f09-u"
+            ><span class="f09-w f09-cw">slow</span> <span class="f09-w f09-cw">down</span
+            ><svg viewBox="0 0 400 30" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                id="f09-stroke"
+                d="M4 19 C 52 13, 98 22, 150 17 S 248 11, 300 16 S 372 21, 396 12"
+                pathLength="1"
+                fill="none"
+                stroke="#C2412D"
+                stroke-width="7"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-dasharray="1"
+                stroke-dashoffset="1"
+              ></path></svg></span
+          ><span class="f09-w f09-cw">.</span></span
+        >
+      </h1>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var FID = "09-knowing-when";
+      window.__timelines = window.__timelines || {};
+      var byId = function (s) {
+        return document.getElementById("f09-" + s);
+      };
+      var root = document.querySelector('[data-composition-id="' + FID + '"]');
+      var leadWords = root.querySelectorAll(".f09-lw");
+      var closeWords = root.querySelectorAll(".f09-cw");
+
+      var tl = gsap.timeline({ paused: true });
+
+      // ---------- Scene 1 (0.0–3.4s): wash blooms, plate fades up, lead line writes on ----------
+      tl.fromTo(
+        byId("wash"),
+        { opacity: 0, scale: 0.84, transformOrigin: "50% 50%" },
+        { opacity: 1, scale: 1, transformOrigin: "50% 50%", duration: 2.4, ease: "power2.out" },
+        0
+      );
+
+      // plate fades up and decelerates to rest across the whole shot
+      tl.fromTo(
+        byId("plate"),
+        { opacity: 0 },
+        { opacity: 1, duration: 1.4, ease: "power2.out" },
+        0.1
+      );
+      tl.fromTo(
+        byId("plate"),
+        { scale: 1.04, y: 10, transformOrigin: "50% 60%" },
+        { scale: 1, y: 0, transformOrigin: "50% 60%", duration: 7.44, ease: "power3.out" },
+        0.1
+      );
+
+      // "It doesn't win by running flat out." — word-by-word write-on, paced to VO
+      var leadT = [1.1, 1.32, 1.56, 1.76, 2.0, 2.34, 2.6];
+      for (var i = 0; i < leadWords.length; i++) {
+        tl.fromTo(
+          leadWords[i],
+          { opacity: 0, y: 16, filter: "blur(6px)" },
+          { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.7, ease: "power3.out" },
+          leadT[i]
+        );
+      }
+
+      // ---------- Scene 2 (3.4–7.54s): closing line writes on large, "slow down" underlined ----------
+      // lead line steps back so the closing line owns the frame
+      tl.fromTo(
+        byId("lead"),
+        { opacity: 1 },
+        { opacity: 0.55, duration: 1.0, ease: "power2.inOut" },
+        3.4
+      );
+
+      // quotation ornament: hairlines draw outward, the mark settles in
+      tl.fromTo(
+        byId("orn-l"),
+        { scaleX: 0, transformOrigin: "100% 50%" },
+        { scaleX: 1, transformOrigin: "100% 50%", duration: 0.9, ease: "power2.out" },
+        3.3
+      );
+      tl.fromTo(
+        byId("orn-r"),
+        { scaleX: 0, transformOrigin: "0% 50%" },
+        { scaleX: 1, transformOrigin: "0% 50%", duration: 0.9, ease: "power2.out" },
+        3.3
+      );
+      tl.fromTo(
+        byId("orn-q"),
+        { opacity: 0, y: 12 },
+        { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
+        3.32
+      );
+
+      // "It wins by knowing / when to slow down." — paced to the narration
+      var closeT = [3.45, 3.7, 3.94, 4.14, 4.6, 4.85, 5.2, 5.5, 5.62];
+      for (var j = 0; j < closeWords.length; j++) {
+        tl.fromTo(
+          closeWords[j],
+          { opacity: 0, y: 20, filter: "blur(8px)" },
+          { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.85, ease: "power3.out" },
+          closeT[j]
+        );
+      }
+
+      // hand-drawn telemetry-red stroke under "slow down"
+      tl.fromTo(
+        byId("stroke"),
+        { attr: { "stroke-dashoffset": 1 } },
+        { attr: { "stroke-dashoffset": 0 }, duration: 0.8, ease: "power2.inOut" },
+        5.8
+      );
+
+      // 6.6–7.54s: hold still (allocated stillness)
+
+      window.__timelines[FID] = tl;
+    })();
+  </script>
+</template>

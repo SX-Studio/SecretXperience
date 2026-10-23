@@ -1,0 +1,458 @@
+<template>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500-italic.woff2") format("woff2");font-weight:500;font-style:italic;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600-italic.woff2") format("woff2");font-weight:600;font-style:italic;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+#root, #root * { font-variant-numeric: lining-nums; }
+
+    
+    
+    
+    
+    
+    
+
+    #root {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+      color: #2B2118;
+    }
+    #f03-paper {
+      position: absolute;
+      inset: 0;
+      background-color: #EFE6D2;
+      background-image:
+        linear-gradient(rgba(185, 169, 140, 0.25) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(185, 169, 140, 0.25) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    #f03-vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 70% at 50% 45%, rgba(92, 74, 54, 0) 62%, rgba(92, 74, 54, 0.16) 100%);
+    }
+    #f03-stage {
+      position: absolute;
+      inset: 0;
+      transform-origin: 50% 52%;
+    }
+    #f03-art {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 1920px;
+      overflow: visible;
+    }
+    .f03-label {
+      position: absolute;
+      font-family: "Source Sans 3", sans-serif;
+      font-weight: 700;
+      font-size: 30px;
+      line-height: 1.2;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #5C4A36;
+      white-space: nowrap;
+    }
+    #f03-kicker {
+      left: 0;
+      width: 1080px;
+      top: 150px;
+      text-align: center;
+    }
+    #f03-readout {
+      position: absolute;
+      left: 0;
+      top: 705px;
+      width: 1080px;
+      display: flex;
+      justify-content: center;
+      align-items: baseline;
+    }
+    #f03-count {
+      display: inline-block;
+      width: 240px;
+      text-align: right;
+      font-family: "Cormorant Garamond", serif;
+      font-weight: 700;
+      font-size: 200px;
+      line-height: 0.9;
+      color: #C2412D;
+      font-variant-numeric: lining-nums tabular-nums;
+      transform-origin: 70% 85%;
+    }
+    #f03-unit {
+      display: inline-block;
+      width: 150px;
+      margin-left: 18px;
+      font-family: "Cormorant Garamond", serif;
+      font-weight: 600;
+      font-size: 72px;
+      line-height: 1.1;
+      color: #5C4A36;
+    }
+    #f03-metric {
+      position: absolute;
+      left: 0;
+      top: 940px;
+      width: 1080px;
+      text-align: center;
+      font-family: "Courier Prime", monospace;
+      font-weight: 700;
+      font-size: 40px;
+      letter-spacing: 0.04em;
+      color: #C2412D;
+    }
+    #f03-chart-title {
+      left: 72px;
+      top: 1000px;
+    }
+    #f03-unit-y {
+      position: absolute;
+      left: 72px;
+      top: 1128px;
+      font-family: "Courier Prime", monospace;
+      font-weight: 400;
+      font-size: 30px;
+      color: #5C4A36;
+    }
+    #f03-unit-x {
+      position: absolute;
+      right: 90px;
+      top: 1492px;
+      font-family: "Courier Prime", monospace;
+      font-weight: 400;
+      font-size: 30px;
+      color: #5C4A36;
+    }
+    #f03-toplabel {
+      position: absolute;
+      right: 90px;
+      top: 1062px;
+      font-family: "Courier Prime", monospace;
+      font-weight: 700;
+      font-size: 34px;
+      letter-spacing: 0.04em;
+      color: #C2412D;
+      white-space: nowrap;
+    }
+    #f03-source {
+      left: 72px;
+      top: 1512px;
+    }
+    #f03-note {
+      position: absolute;
+      left: 300px;
+      top: 1338px;
+      font-family: "Caveat", cursive;
+      font-weight: 700;
+      font-size: 54px;
+      line-height: 1.1;
+      color: #5C4A36;
+      white-space: nowrap;
+    }
+    #f03-art .f03-ink { fill: none; stroke: #2B2118; stroke-linecap: round; stroke-linejoin: round; }
+    #f03-art .f03-hair { fill: none; stroke: #B9A98C; stroke-width: 2; stroke-linecap: round; }
+    #f03-art .f03-tel { fill: none; stroke: #C2412D; stroke-linecap: round; }
+    #f03-art .f03-dial-num {
+      font-family: "Cormorant Garamond", serif;
+      font-weight: 600;
+      font-size: 50px;
+      fill: #5C4A36;
+    }
+    #f03-art .f03-axis-num {
+      font-family: "Courier Prime", monospace;
+      font-weight: 400;
+      font-size: 30px;
+      fill: #5C4A36;
+    }
+  </style>
+
+  <div id="root" data-composition-id="03-top-speed" data-width="1080" data-height="1920" data-duration="7.485">
+    <!-- Track 0: full-bleed paper ground -->
+    <div id="f03-paper" class="clip" data-start="0" data-duration="7.485" data-track-index="0">
+      <div id="f03-vignette"></div>
+    </div>
+
+    <!-- Track 1: the drafted page (camera wrapper) -->
+    <div id="f03-stage" class="clip" data-start="0" data-duration="7.485" data-track-index="1">
+      <svg id="f03-art" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+        <!-- gauge -->
+        <g id="f03-gauge">
+          <line id="f03-diameter" class="f03-hair" x1="160" y1="660" x2="920" y2="660" />
+          <path id="f03-ring-inner" class="f03-hair" d="" />
+          <path id="f03-arc" class="f03-ink" stroke-width="3" d="" />
+          <g id="f03-ticks"></g>
+          <g id="f03-dial-nums"></g>
+          <path id="f03-progress" class="f03-tel" stroke-width="12" style="stroke-linecap:butt" opacity="0.9" d="" />
+          <path id="f03-mark58" fill="#C2412D" stroke="none" d="" />
+          <g id="f03-needle">
+            <line class="f03-tel" stroke-width="7" x1="540" y1="660" x2="240" y2="660" />
+            <line class="f03-tel" stroke-width="7" x1="540" y1="660" x2="578" y2="660" />
+          </g>
+          <circle id="f03-hub" cx="540" cy="660" r="20" fill="#2B2118" />
+          <circle id="f03-hub-in" cx="540" cy="660" r="7" fill="#EFE6D2" />
+        </g>
+
+        <!-- hunt chart -->
+        <g id="f03-chart">
+          <g id="f03-grid"></g>
+          <path id="f03-axis-y" class="f03-ink" stroke-width="2.5" d="M 180 1440 L 180 1090" />
+          <path id="f03-axis-x" class="f03-ink" stroke-width="2.5" d="M 180 1440 L 990 1440" />
+          <g id="f03-axis-ticks"></g>
+          <g id="f03-axis-nums"></g>
+          <g id="f03-dashes"></g>
+          <path id="f03-trace" class="f03-ink" stroke-width="5" d="" />
+          <circle id="f03-pen" r="8" cx="180" cy="1440" fill="#2B2118" />
+          <path id="f03-leader" class="f03-ink" style="stroke:#5C4A36" stroke-width="3" d="" />
+          <path id="f03-arrow" class="f03-ink" style="stroke:#5C4A36" stroke-width="3" d="" />
+        </g>
+      </svg>
+
+      <div id="f03-kicker" class="f03-label">Fastest recorded run</div>
+      <div id="f03-readout"><span id="f03-count">0</span><span id="f03-unit">mph</span></div>
+      <div id="f03-metric">93 km/h</div>
+
+      <div id="f03-chart-title" class="f03-label">One real hunt (Lea)</div>
+      <div id="f03-unit-y">mph</div>
+      <div id="f03-unit-x">seconds</div>
+      <div id="f03-toplabel">top recorded · 58 mph</div>
+      <div id="f03-note">most hunts: moderate</div>
+      <div id="f03-source" class="f03-label">Redrawn from Wilson et al. 2013</div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var FID = "03-top-speed";
+      var root = document.querySelector('[data-composition-id="03-top-speed"]');
+      var q = function (s) { return root.querySelector(s); };
+      var qa = function (s) { return Array.prototype.slice.call(root.querySelectorAll(s)); };
+      var NS = "http://www.w3.org/2000/svg";
+
+      // Seeded PRNG (deterministic) for the hunt trace wiggle + leader wobble.
+      function mulberry32(a) {
+        return function () {
+          a |= 0; a = (a + 0x6d2b79f5) | 0;
+          var t = Math.imul(a ^ (a >>> 15), 1 | a);
+          t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+      var rand = mulberry32(30358);
+
+      function mk(tag, attrs, parent) {
+        var el = document.createElementNS(NS, tag);
+        for (var k in attrs) el.setAttribute(k, attrs[k]);
+        parent.appendChild(el);
+        return el;
+      }
+      function f(n) { return n.toFixed(1); }
+
+      // ---------- Gauge geometry (0–60 mph semicircle) ----------
+      var CX = 540, CY = 660, R = 350;
+      function pt(s, r) {
+        var th = Math.PI * (1 - s / 60);
+        return [CX + r * Math.cos(th), CY - r * Math.sin(th)];
+      }
+      function arcD(r, s0, s1) {
+        var a = pt(s0, r), b = pt(s1, r);
+        return "M " + f(a[0]) + " " + f(a[1]) + " A " + r + " " + r + " 0 0 1 " + f(b[0]) + " " + f(b[1]);
+      }
+      q("#f03-arc").setAttribute("d", arcD(R, 0, 60));
+      q("#f03-ring-inner").setAttribute("d", arcD(290, 0, 60));
+      q("#f03-progress").setAttribute("d", arcD(306, 0, 58));
+
+      var ticksG = q("#f03-ticks"), numsG = q("#f03-dial-nums");
+      for (var s = 0; s <= 60; s += 5) {
+        var major = s % 10 === 0;
+        var a = pt(s, major ? 320 : 334), b = pt(s, R);
+        mk("line", {
+          class: "f03-ink f03-tick",
+          x1: f(a[0]), y1: f(a[1]), x2: f(b[0]), y2: f(b[1]),
+          "stroke-width": major ? 3 : 2,
+          style: "stroke:" + (major ? "#2B2118" : "#5C4A36")
+        }, ticksG);
+        if (major) {
+          var p = pt(s, 395);
+          var tx = mk("text", {
+            class: "f03-dial-num",
+            x: f(p[0]), y: f(p[1] + 17),
+            "text-anchor": "middle"
+          }, numsG);
+          tx.textContent = String(s);
+        }
+      }
+      // telemetry marker at 58 (outside the arc, pointing in)
+      var m0 = pt(58, 358), m1 = pt(57.1, 384), m2 = pt(58.9, 384);
+      q("#f03-mark58").setAttribute("d",
+        "M " + f(m0[0]) + " " + f(m0[1]) + " L " + f(m1[0]) + " " + f(m1[1]) + " L " + f(m2[0]) + " " + f(m2[1]) + " Z");
+
+      // ---------- Chart geometry ----------
+      var X0 = 180, X1 = 990, Y0 = 1440, YT = 1100;
+      var PXS = 81;                 // px per second (0–10 s)
+      var PXM = (Y0 - YT) / 60;     // px per mph (0–60 mph)
+      function xs(t) { return X0 + t * PXS; }
+      function ys(v) { return Y0 - v * PXM; }
+
+      var gridG = q("#f03-grid"), aTicks = q("#f03-axis-ticks"), aNums = q("#f03-axis-nums");
+      [20, 40].forEach(function (v) {
+        mk("line", { class: "f03-hair f03-gridline", x1: X0, y1: f(ys(v)), x2: X1, y2: f(ys(v)), style: "stroke-width:1.5" }, gridG);
+      });
+      [0, 20, 40, 60].forEach(function (v) {
+        mk("line", { class: "f03-ink f03-atick", x1: X0 - 10, y1: f(ys(v)), x2: X0, y2: f(ys(v)), "stroke-width": 2.5 }, aTicks);
+        var t = mk("text", { class: "f03-axis-num", x: X0 - 20, y: f(ys(v) + 10), "text-anchor": "end" }, aNums);
+        t.textContent = String(v);
+      });
+      [0, 2, 4, 6, 8, 10].forEach(function (sec) {
+        mk("line", { class: "f03-ink f03-atick", x1: f(xs(sec)), y1: Y0, x2: f(xs(sec)), y2: Y0 + 10, "stroke-width": 2.5 }, aTicks);
+        var t = mk("text", { class: "f03-axis-num", x: f(xs(sec)), y: Y0 + 42, "text-anchor": "middle" }, aNums);
+        t.textContent = String(sec);
+      });
+
+      // dashed 58 mph "top recorded" line — individual dashes so it can reveal left→right
+      var dashG = q("#f03-dashes"), yTop = ys(58);
+      for (var dx = X0 + 6; dx + 16 <= X1; dx += 28) {
+        mk("line", { class: "f03-tel f03-dash", x1: f(dx), y1: f(yTop), x2: f(dx + 16), y2: f(yTop), "stroke-width": 4, style: "stroke-linecap:butt" }, dashG);
+      }
+
+      // Hunt trace (Lea) — shape redrawn from Wilson et al. 2013 Fig. 2e:
+      // ~2 s acceleration to ~14–16 m/s (≈31–36 mph), ~5 s plateau with small
+      // fluctuations, then a sharp deceleration to near zero.
+      var knots = [];
+      for (var i = 0; i < 32; i++) knots.push(rand() * 2 - 1);
+      var ph1 = rand() * 6.2832, ph2 = rand() * 6.2832;
+      function noise(t) {
+        var k = t / 0.45, i0 = Math.floor(k), fr = k - i0, u = (1 - Math.cos(Math.PI * fr)) / 2;
+        return knots[i0] * (1 - u) + knots[i0 + 1] * u;
+      }
+      function env(t) {
+        if (t < 2) { var u = t / 2; return 1 - Math.pow(1 - u, 2.2); }
+        if (t < 7) return 1;
+        if (t < 8.2) { var w = (t - 7) / 1.2; return (1 + Math.cos(Math.PI * w)) / 2; }
+        return 0;
+      }
+      function speed(t) {
+        var wig = 1.2 * Math.sin(2 * Math.PI * 0.55 * t + ph1) + 0.8 * Math.sin(2 * Math.PI * 1.3 * t + ph2) + 0.9 * noise(t);
+        return 1.5 + env(t) * (31.5 + wig);
+      }
+      var d = "";
+      for (var n = 0; n <= 180; n++) {
+        var tt = n * 0.05;
+        d += (n === 0 ? "M " : " L ") + f(xs(tt)) + " " + f(ys(speed(tt)));
+      }
+      var trace = q("#f03-trace");
+      trace.setAttribute("d", d);
+
+      // annotation leader: from the note up to the plateau line
+      var lx = 530, lt = (lx - X0) / PXS;
+      var lyEnd = ys(speed(lt)) + 14, lyStart = 1338;
+      var cxw = lx + (rand() - 0.5) * 26;
+      q("#f03-leader").setAttribute("d",
+        "M " + f(lx - 4) + " " + f(lyStart) + " Q " + f(cxw) + " " + f((lyStart + lyEnd) / 2) + " " + f(lx + 3) + " " + f(lyEnd));
+      q("#f03-arrow").setAttribute("d",
+        "M " + f(lx - 7) + " " + f(lyEnd + 13) + " L " + f(lx + 3) + " " + f(lyEnd) + " L " + f(lx + 12) + " " + f(lyEnd + 12));
+
+      // ---------- Stroke-draw setup (measured lengths) ----------
+      function prep(el) {
+        var len = el.getTotalLength() * 1.02;
+        el.style.strokeDasharray = len + " " + len;
+        el.style.strokeDashoffset = len;
+        return len;
+      }
+      var arcEl = q("#f03-arc"), ringEl = q("#f03-ring-inner"), progEl = q("#f03-progress");
+      var ayEl = q("#f03-axis-y"), axEl = q("#f03-axis-x"), leadEl = q("#f03-leader");
+      var arcLen = prep(arcEl), ringLen = prep(ringEl), progLen = prep(progEl);
+      var ayLen = prep(ayEl), axLen = prep(axEl), leadLen = prep(leadEl);
+      var traceLen = trace.getTotalLength();
+      trace.style.strokeDasharray = traceLen + " " + traceLen;
+      trace.style.strokeDashoffset = traceLen;
+
+      // ---------- Timeline ----------
+      var tl = gsap.timeline({ paused: true });
+
+      // Camera: slow documentary push-in across the whole shot
+      tl.fromTo("#f03-stage", { scale: 1 }, { scale: 1.02, duration: 6.985, ease: "power1.inOut" }, 0);
+
+      // Scene 1 — gauge self-draws
+      tl.fromTo("#f03-kicker", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, 0.1);
+      tl.fromTo("#f03-diameter", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.out" }, 0.05);
+      tl.fromTo(arcEl, { strokeDashoffset: arcLen }, { strokeDashoffset: 0, duration: 1.1, ease: "power2.out" }, 0.1);
+      tl.fromTo(ringEl, { strokeDashoffset: ringLen }, { strokeDashoffset: 0, duration: 1.1, ease: "power2.out" }, 0.25);
+      tl.fromTo(qa(".f03-tick"), { opacity: 0 }, { opacity: 1, duration: 0.25, stagger: 0.06, ease: "power1.out" }, 0.3);
+      tl.fromTo(qa(".f03-dial-num"), { opacity: 0 }, { opacity: 1, duration: 0.35, stagger: 0.1, ease: "power1.out" }, 0.45);
+      tl.fromTo(["#f03-needle", "#f03-hub", "#f03-hub-in"], { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power1.out" }, 0.3);
+
+      // On "fifty-eight": needle sweep + red progress arc + count-up, one shared ease
+      var SWEEP_AT = 1.3, SWEEP = 1.6, SWEEP_EASE = "power3.out";
+      tl.fromTo("#f03-needle", { rotation: 0, svgOrigin: CX + " " + CY }, { rotation: 174, svgOrigin: CX + " " + CY, duration: SWEEP, ease: SWEEP_EASE }, SWEEP_AT);
+      tl.fromTo(progEl, { strokeDashoffset: progLen }, { strokeDashoffset: 0, duration: SWEEP, ease: SWEEP_EASE }, SWEEP_AT);
+      tl.fromTo("#f03-count", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power1.out" }, SWEEP_AT - 0.1);
+      var countEl = q("#f03-count");
+      var state = { v: 0 };
+      tl.fromTo(state, { v: 0 }, {
+        v: 58, duration: SWEEP, ease: SWEEP_EASE,
+        onUpdate: function () { countEl.textContent = String(Math.round(state.v)); }
+      }, SWEEP_AT);
+      tl.fromTo(countEl, { scale: 0.5 }, { scale: 1, duration: SWEEP, ease: SWEEP_EASE }, SWEEP_AT);
+      tl.fromTo("#f03-unit", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, SWEEP_AT + SWEEP);
+      tl.fromTo("#f03-mark58", { opacity: 0, scale: 0.6, svgOrigin: f(m0[0]) + " " + f(m0[1]) }, { opacity: 1, scale: 1, svgOrigin: f(m0[0]) + " " + f(m0[1]), duration: 0.35, ease: "power2.out" }, SWEEP_AT + SWEEP - 0.1);
+      tl.fromTo("#f03-metric", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, SWEEP_AT + SWEEP + 0.1);
+
+      // Scene 2 — on "But most hunts": the hunt panel drafts in
+      var S2 = 3.28;
+      tl.fromTo("#f03-chart-title", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, S2);
+      tl.fromTo(ayEl, { strokeDashoffset: ayLen }, { strokeDashoffset: 0, duration: 0.45, ease: "power2.out" }, S2);
+      tl.fromTo(axEl, { strokeDashoffset: axLen }, { strokeDashoffset: 0, duration: 0.55, ease: "power2.out" }, S2 + 0.1);
+      tl.fromTo(qa(".f03-gridline"), { opacity: 0 }, { opacity: 0.8, duration: 0.4, stagger: 0.08, ease: "power1.out" }, S2 + 0.15);
+      tl.fromTo(qa(".f03-atick"), { opacity: 0 }, { opacity: 1, duration: 0.2, stagger: 0.03, ease: "power1.out" }, S2 + 0.15);
+      tl.fromTo(qa(".f03-axis-num"), { opacity: 0 }, { opacity: 1, duration: 0.3, stagger: 0.04, ease: "power1.out" }, S2 + 0.2);
+      tl.fromTo(["#f03-unit-y", "#f03-unit-x"], { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power1.out" }, S2 + 0.35);
+
+      var dashes = qa(".f03-dash");
+      tl.fromTo(dashes, { opacity: 0 }, { opacity: 1, duration: 0.1, stagger: 0.5 / dashes.length, ease: "none" }, S2 + 0.12);
+      tl.fromTo("#f03-toplabel", { opacity: 0, x: 16 }, { opacity: 1, x: 0, duration: 0.5, ease: "power2.out" }, S2 + 0.4);
+
+      // hunt trace draws left→right with a pen dot at its tip
+      var TR_AT = 3.9, TR_DUR = 1.75;
+      var pen = q("#f03-pen");
+      var pstate = { p: 0 };
+      tl.fromTo(pen, { opacity: 0 }, { opacity: 1, duration: 0.15, ease: "power1.out" }, TR_AT);
+      tl.fromTo(pstate, { p: 0 }, {
+        p: 1, duration: TR_DUR, ease: "sine.inOut",
+        onUpdate: function () {
+          var l = traceLen * pstate.p;
+          trace.style.strokeDashoffset = traceLen - l;
+          var pt2 = trace.getPointAtLength(l);
+          pen.setAttribute("cx", pt2.x.toFixed(2));
+          pen.setAttribute("cy", pt2.y.toFixed(2));
+        }
+      }, TR_AT);
+      tl.fromTo("#f03-source", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.out" }, 4.2);
+
+      // On "moderate": the field note writes on, leader points to the plateau
+      tl.fromTo("#f03-note", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.7, ease: "power1.inOut" }, 5.3);
+      tl.fromTo(leadEl, { strokeDashoffset: leadLen }, { strokeDashoffset: 0, duration: 0.35, ease: "power2.out" }, 5.8);
+      tl.fromTo("#f03-arrow", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power1.out" }, 6.1);
+      // hold to the end (no exit — the root transition owns it)
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines[FID] = tl;
+    })();
+  </script>
+</template>

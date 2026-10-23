@@ -1,0 +1,344 @@
+<template>
+  <div
+    id="root"
+    data-composition-id="04-american-cheetah"
+    data-start="0"
+    data-duration="9.618"
+    data-width="1080"
+    data-height="1920"
+  >
+    <style>
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500-italic.woff2") format("woff2");font-weight:500;font-style:italic;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600-italic.woff2") format("woff2");font-weight:600;font-style:italic;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+#root, #root * { font-variant-numeric: lining-nums; }
+
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+      }
+      #root * { box-sizing: border-box; }
+
+      .f04-layer { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+
+      /* ---------- photo camera ---------- */
+      #f04-cam { overflow: hidden; transform-origin: 540px 1056px; }
+      #f04-pan { position: absolute; left: 0; top: 0; width: 2892px; height: 1920px; }
+      #f04-pan img { position: absolute; left: 0; top: 0; width: 2892px; height: 1920px; display: block; }
+      .f04-sepia { filter: sepia(0.85) contrast(1.14) brightness(0.84) saturate(0.85); }
+
+      /* ---------- old-film grade ---------- */
+      #f04-grade { pointer-events: none; }
+      .f04-topgrad { position: absolute; left: 0; top: 0; width: 1080px; height: 480px; background: linear-gradient(to bottom, rgba(0,0,0,0.45), rgba(0,0,0,0)); }
+      .f04-botgrad { position: absolute; left: 0; top: 1450px; width: 1080px; height: 470px; background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.5)); }
+      .f04-vignette { position: absolute; inset: 0; background: radial-gradient(ellipse 75% 60% at 50% 52%, rgba(20,12,4,0) 55%, rgba(20,12,4,0.55) 100%); }
+      #f04-dark { position: absolute; inset: 0; background: #0d0905; opacity: 0; }
+      #f04-flicker { position: absolute; inset: 0; background: #000; opacity: 0; }
+      #f04-grain { position: absolute; left: -54px; top: -96px; width: 1188px; height: 2112px; mix-blend-mode: overlay; opacity: 0; }
+      .f04-scratch { position: absolute; top: 0; left: 0; width: 2px; height: 1920px; background: rgba(255,244,222,0.55); opacity: 0; }
+
+      /* ---------- chase layer ---------- */
+      #f04-track { position: absolute; left: 0; top: 1140px; width: 1080px; height: 110px; overflow: visible; clip-path: inset(0px 1080px 0px 0px); }
+      .f04-speed { position: absolute; left: 0; height: 3px; border-radius: 2px; transform-origin: 100% 50%; }
+      .f04-speed.w { background: rgba(255,250,240,0.85); }
+      .f04-speed.r { background: #C2412D; }
+      #f04-ghost { position: absolute; left: 0; top: 883px; width: 540px; height: 325px; }
+      #f04-gbob { position: absolute; inset: 0; transform-origin: 50% 100%; }
+      #f04-gbob img { position: absolute; left: 0; top: 0; width: 540px; height: 325px; display: block; }
+      .f04-gblur { filter: invert(1) brightness(1.15) blur(4px); opacity: 0.2; }
+      .f04-gmain { filter: invert(1) brightness(1.15) drop-shadow(0 0 18px rgba(255,255,255,0.55)); opacity: 0.5; }
+
+      /* ---------- readout card ---------- */
+      #f04-readout {
+        position: absolute; left: 72px; top: 500px; width: 760px;
+        background: rgba(239,230,210,0.92); border: 2px solid #B9A98C;
+        padding: 24px 34px 30px; transform-origin: 0 0;
+      }
+      .f04-rrow { display: flex; align-items: center; gap: 14px; height: 34px; }
+      .f04-rline { flex: 1; height: 2px; background: #B9A98C; }
+      #f04-num {
+        font-family: "Courier Prime", monospace; font-weight: 700; font-size: 176px; line-height: 0.95;
+        color: #C2412D; letter-spacing: -0.02em; white-space: nowrap; margin-top: 8px;
+        font-variant-numeric: lining-nums tabular-nums; transform-origin: 0 60%;
+      }
+      #f04-uline { height: 6px; width: 634px; background: #C2412D; transform-origin: 0 50%; margin-top: 2px; }
+      #f04-suffix {
+        font-family: "Courier Prime", monospace; font-weight: 700; font-size: 58px; line-height: 1.1;
+        color: #2B2118; letter-spacing: 0.06em; margin-top: 10px; white-space: nowrap;
+      }
+      .f04-scrub { position: relative; height: 34px; margin-top: 18px; }
+      .f04-scrub-line { position: absolute; left: 0; right: 0; top: 16px; height: 2px; background: #B9A98C; }
+      .f04-tick { position: absolute; top: 10px; width: 2px; height: 14px; background: #B9A98C; }
+      #f04-head { position: absolute; left: 682px; top: 0; width: 6px; height: 34px; background: #C2412D; }
+
+      /* ---------- specimen label ---------- */
+      #f04-label {
+        position: absolute; left: 72px; top: 1312px; width: 640px;
+        background: rgba(228,215,188,0.96); border: 2px solid #B9A98C; padding: 20px 30px 22px;
+      }
+      .f04-genus {
+        font-family: "Cormorant Garamond", serif; font-weight: 600; font-size: 60px; line-height: 1.0;
+        letter-spacing: 0.06em; color: #2B2118; white-space: nowrap;
+      }
+      .f04-common {
+        font-family: "Cormorant Garamond", serif; font-style: italic; font-weight: 600; font-size: 46px;
+        line-height: 1.1; color: #5C4A36; margin-top: 6px; white-space: nowrap;
+      }
+      #f04-stamp {
+        position: absolute; right: -30px; bottom: -30px;
+        font-family: "Courier Prime", monospace; font-weight: 700; font-size: 40px; line-height: 1;
+        letter-spacing: 0.14em; color: #C2412D; border: 4px solid #C2412D;
+        padding: 8px 12px 8px 18px; background: rgba(239,230,210,0.9);
+      }
+
+      /* ---------- source chip ---------- */
+      #f04-chip {
+        position: absolute; left: 72px; top: 1488px;
+        background: rgba(239,230,210,0.92); border: 2px solid #B9A98C; padding: 4px 14px;
+        font-family: "Source Sans 3", sans-serif; font-weight: 700; font-size: 30px; line-height: 1.2;
+        letter-spacing: 0.12em; color: #5C4A36; white-space: nowrap;
+      }
+
+      /* ---------- field note ---------- */
+      #f04-note {
+        position: absolute; left: 420px; top: 1218px; display: flex; align-items: center; gap: 14px;
+        white-space: nowrap; clip-path: inset(-30px 700px -30px -30px);
+      }
+      #f04-note svg.f04-arrow { width: 96px; height: 44px; overflow: visible; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.7)); }
+      .f04-notetext {
+        font-family: "Caveat", cursive; font-weight: 700; font-size: 68px; line-height: 1.0; color: #FFFFFF;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.8), 0 0 3px rgba(0,0,0,0.6);
+      }
+      .f04-speedword { position: relative; display: inline-block; }
+      .f04-speedword svg { position: absolute; left: -4px; bottom: -8px; width: calc(100% + 8px); height: 16px; overflow: visible; }
+    </style>
+
+    <!-- 0: photo (full-bleed, moving) -->
+    <div id="f04-cam" class="f04-layer clip" data-start="0" data-duration="9.618" data-track-index="0">
+      <div id="f04-pan">
+        <img src="public/ph-69184911.jpg" alt="" />
+        <img id="f04-sepia" class="f04-sepia" src="public/ph-69184911.jpg" alt="" />
+      </div>
+    </div>
+
+    <!-- 1: old-film grade -->
+    <div id="f04-grade" class="f04-layer clip" data-start="0" data-duration="9.618" data-track-index="1">
+      <div class="f04-vignette"></div>
+      <div id="f04-dark"></div>
+      <div class="f04-topgrad"></div>
+      <div class="f04-botgrad"></div>
+      <canvas id="f04-grain" width="540" height="960"></canvas>
+      <div id="f04-scr1" class="f04-scratch"></div>
+      <div id="f04-scr2" class="f04-scratch"></div>
+      <div id="f04-flicker"></div>
+    </div>
+
+    <!-- 2: chase — red telemetry track + ghost cheetah -->
+    <div id="f04-chase" class="f04-layer clip" data-start="0" data-duration="9.618" data-track-index="2">
+      <svg id="f04-track" viewBox="0 0 1080 110" xmlns="http://www.w3.org/2000/svg">
+        <polyline points="-10,64 120,58 300,68 480,58 660,62 840,54 940,57"
+          fill="none" stroke="#C2412D" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="18 14" />
+        <g fill="#C2412D" stroke="#EFE6D2" stroke-width="2">
+          <circle cx="120" cy="58" r="7" />
+          <circle cx="300" cy="68" r="7" />
+          <circle cx="480" cy="58" r="7" />
+          <circle cx="660" cy="62" r="7" />
+          <circle cx="840" cy="54" r="7" />
+        </g>
+        <polyline points="918,38 962,57 918,76" fill="none" stroke="#C2412D" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      <div id="f04-sp0" class="f04-speed w" style="top: 930px; left: 20px; width: 300px;"></div>
+      <div id="f04-sp1" class="f04-speed r" style="top: 972px; left: 0px; width: 340px;"></div>
+      <div id="f04-sp2" class="f04-speed w" style="top: 1018px; left: 60px; width: 260px;"></div>
+      <div id="f04-sp3" class="f04-speed w" style="top: 1062px; left: 0px; width: 330px;"></div>
+      <div id="f04-sp4" class="f04-speed r" style="top: 1108px; left: 40px; width: 270px;"></div>
+      <div id="f04-sp5" class="f04-speed w" style="top: 1150px; left: 0px; width: 300px;"></div>
+      <div id="f04-ghost">
+        <div id="f04-gbob">
+          <img id="f04-gblur" class="f04-gblur" src="public/cheetah-ink.png" alt="" />
+          <img id="f04-gmain" class="f04-gmain" src="public/cheetah-ink.png" alt="" />
+        </div>
+      </div>
+    </div>
+
+    <!-- 3: time readout -->
+    <div id="f04-readlayer" class="f04-layer clip" data-start="0" data-duration="9.618" data-track-index="3">
+      <div id="f04-readout">
+        <div class="f04-rrow">
+          <svg width="52" height="32" viewBox="0 0 52 32" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="26,2 2,16 26,30" fill="#C2412D" />
+            <polygon points="50,2 26,16 50,30" fill="#C2412D" />
+          </svg>
+          <div class="f04-rline"></div>
+        </div>
+        <div id="f04-num">TODAY</div>
+        <div id="f04-uline"></div>
+        <div id="f04-suffix">YEARS AGO</div>
+        <div class="f04-scrub">
+          <div class="f04-scrub-line"></div>
+          <div class="f04-tick" style="left: 0px;"></div>
+          <div class="f04-tick" style="left: 137px;"></div>
+          <div class="f04-tick" style="left: 274px;"></div>
+          <div class="f04-tick" style="left: 411px;"></div>
+          <div class="f04-tick" style="left: 548px;"></div>
+          <div class="f04-tick" style="left: 686px;"></div>
+          <div id="f04-head"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4: specimen label + source chip + field note -->
+    <div id="f04-cards" class="f04-layer clip" data-start="0" data-duration="9.618" data-track-index="4">
+      <div id="f04-note">
+        <svg class="f04-arrow" viewBox="0 0 96 44" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 24 C 26 19, 52 27, 84 21" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" />
+          <path d="M66 8 L 88 21 L 68 36" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <div class="f04-notetext">evolved for <span class="f04-speedword">speed<svg viewBox="0 0 100 16" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path id="f04-speedline" d="M2 10 C 24 5, 50 13, 98 6" pathLength="100" fill="none" stroke="#C2412D" stroke-width="6" stroke-linecap="round" stroke-dasharray="100" stroke-dashoffset="100" /></svg></span></div>
+      </div>
+      <div id="f04-label">
+        <div class="f04-genus">MIRACINONYX</div>
+        <div class="f04-common">the &lsquo;American cheetah&rsquo;</div>
+        <div id="f04-stamp">EXTINCT</div>
+      </div>
+      <div id="f04-chip">NATIONAL PARK SERVICE</div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        var FID = "04-american-cheetah";
+        var D = 9.118;
+        var $ = function (id) { return document.getElementById(id); };
+
+        // ---- seeded PRNG (deterministic) ----
+        function mulberry32(a) {
+          return function () {
+            a |= 0; a = (a + 0x6d2b79f5) | 0;
+            var t = Math.imul(a ^ (a >>> 15), 1 | a);
+            t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+            return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+          };
+        }
+        var rnd = mulberry32(40411);
+
+        // ---- seeded film grain, drawn once at setup ----
+        var cv = $("f04-grain");
+        var ctx = cv.getContext("2d");
+        var gw = cv.width, gh = cv.height;
+        var im = ctx.createImageData(gw, gh);
+        var px = im.data;
+        for (var i = 0; i < gw * gh; i++) {
+          var v = Math.floor(rnd() * 256);
+          px[i * 4] = v; px[i * 4 + 1] = v; px[i * 4 + 2] = v; px[i * 4 + 3] = 255;
+        }
+        ctx.putImageData(im, 0, 0);
+
+        window.__timelines = window.__timelines || {};
+        var tl = gsap.timeline({ paused: true });
+        function cont(o) { o.immediateRender = false; return o; }
+
+        // ================= CAMERA (multi-leg, one state per element) =================
+        var cam = $("f04-cam"), pan = $("f04-pan");
+        // Leg 1 — slow push while the clock rewinds
+        tl.fromTo(cam, { scale: 1 }, { scale: 1.025, duration: 2.3, ease: "sine.inOut" }, 0);
+        tl.fromTo(pan, { x: 0 }, { x: -30, duration: 2.3, ease: "sine.inOut" }, 0);
+        // Leg 2 — the chase: camera travels with the herd as the ghost arrives
+        tl.fromTo(cam, { scale: 1.025 }, cont({ scale: 1.05, duration: 1.6, ease: "power2.inOut" }), 2.3);
+        tl.fromTo(pan, { x: -30 }, cont({ x: -90, duration: 1.6, ease: "power2.inOut" }), 2.3);
+        // Leg 3 — documentary drift, holds never die
+        tl.fromTo(cam, { scale: 1.05 }, cont({ scale: 1.065, duration: D - 3.9, ease: "sine.inOut" }), 3.9);
+        tl.fromTo(pan, { x: -90 }, cont({ x: -125, duration: D - 3.9, ease: "sine.inOut" }), 3.9);
+
+        // ================= GRADE: colour -> sepia, grain, flicker, scratches =================
+        tl.fromTo("#f04-sepia", { opacity: 0 }, { opacity: 1, duration: 1.5, ease: "power1.inOut" }, 0.15);
+        tl.fromTo(cv, { opacity: 0 }, { opacity: 0.22, duration: 1.2, ease: "power1.inOut" }, 0.3);
+        tl.fromTo("#f04-dark", { opacity: 0 }, { opacity: 0.2, duration: 0.7, ease: "power2.inOut" }, 2.5);
+
+        var steps = Math.floor(D * 12);
+        for (var s = 0; s <= steps; s++) {
+          var ts = s / 12;
+          tl.set(cv, { x: Math.round(rnd() * 80 - 40), y: Math.round(rnd() * 80 - 40) }, ts);
+          tl.set("#f04-flicker", { opacity: ts < 0.4 ? 0 : +(rnd() * 0.05).toFixed(3) }, ts);
+        }
+        var sSteps = Math.floor(D * 6);
+        for (var k = 0; k <= sSteps; k++) {
+          var tk = k / 6;
+          var on1 = tk > 1.0 && rnd() > 0.55;
+          var on2 = tk > 1.0 && rnd() > 0.7;
+          tl.set("#f04-scr1", { x: Math.round(rnd() * 1060), opacity: on1 ? +(0.08 + rnd() * 0.14).toFixed(3) : 0 }, tk);
+          tl.set("#f04-scr2", { x: Math.round(rnd() * 1060), opacity: on2 ? +(0.06 + rnd() * 0.1).toFixed(3) : 0 }, tk);
+        }
+
+        // ================= SCENE 1: readout rewinds TODAY -> 12,000 YEARS AGO =================
+        var numEl = $("f04-num");
+        var cnt = { v: 0 };
+        function fmt(val) {
+          if (val < 1) return "TODAY";
+          var n = val >= 11999.5 ? 12000 : Math.round(val / 50) * 50;
+          if (n < 1) n = Math.max(1, Math.round(val));
+          return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        tl.fromTo("#f04-suffix", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }, 0.5);
+        tl.fromTo(cnt, { v: 0 }, {
+          v: 12000, duration: 0.94, ease: "power2.out",
+          onUpdate: function () { numEl.textContent = fmt(cnt.v); }
+        }, 0.56);
+        tl.fromTo("#f04-head", { x: 0 }, { x: -682, duration: 0.94, ease: "power2.out" }, 0.56);
+        // land on "years ago"
+        tl.fromTo(numEl, { scale: 1.1 }, cont({ scale: 1, duration: 0.45, ease: "expo.out" }), 1.5);
+        tl.fromTo("#f04-uline", { scaleX: 0 }, { scaleX: 1, duration: 0.35, ease: "power3.out" }, 1.5);
+        // tuck the readout to make room for the chase ("these plains")
+        tl.fromTo("#f04-readout", { scale: 1, y: 0 }, cont({ scale: 0.5, y: -6, duration: 0.65, ease: "power3.inOut" }), 2.3);
+
+        // ================= SCENE 2: ghost streaks in on "hunted"; track; specimen label =================
+        tl.fromTo("#f04-ghost", { x: -760, opacity: 0 }, { x: -150, opacity: 1, duration: 0.85, ease: "expo.out" }, 2.95);
+        tl.fromTo("#f04-gblur", { x: -170 }, { x: -40, duration: 0.85, ease: "expo.out" }, 2.95);
+        tl.fromTo("#f04-ghost", { x: -150 }, cont({ x: -160, duration: D - 3.8, ease: "sine.inOut" }), 3.8);
+        // gallop bob (deterministic sequence of arcs)
+        var gb = $("f04-gbob");
+        for (var b = 3.8; b + 0.42 <= D; b += 0.42) {
+          tl.fromTo(gb, { y: 0, rotation: 0 }, cont({ y: -10, rotation: -0.8, duration: 0.21, ease: "sine.out" }), b);
+          tl.fromTo(gb, { y: -10, rotation: -0.8 }, cont({ y: 0, rotation: 0, duration: 0.21, ease: "sine.in" }), b + 0.21);
+        }
+        // speed lines trailing the streak
+        for (var sl = 0; sl < 6; sl++) {
+          var el = "#f04-sp" + sl;
+          tl.fromTo(el, { scaleX: 0, opacity: 1 }, { scaleX: 1, duration: 0.28, ease: "power2.out" }, 3.0 + sl * 0.03);
+          tl.fromTo(el, { opacity: 1 }, cont({ opacity: 0, duration: 0.3, ease: "power1.out" }), 3.5 + sl * 0.04);
+        }
+        // red telemetry track draws under the chase
+        tl.fromTo("#f04-track",
+          { clipPath: "inset(0px 1080px 0px 0px)" },
+          { clipPath: "inset(0px 0px 0px 0px)", duration: 1.5, ease: "power2.inOut" }, 3.0);
+        // specimen label drops in on "American cheetah"
+        tl.fromTo("#f04-label", { y: -40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, 3.7);
+        tl.fromTo("#f04-stamp", { scale: 1.4, rotation: -8, opacity: 0 }, { scale: 1, rotation: -8, opacity: 0.9, duration: 0.3, ease: "expo.out" }, 4.5);
+
+        // ================= SCENE 3: "Scientists think..." — source, note, hold with chase =================
+        tl.fromTo("#f04-chip", { x: -30, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 5.12);
+        tl.fromTo("#f04-note",
+          { clipPath: "inset(-30px 700px -30px -30px)" },
+          { clipPath: "inset(-30px -30px -30px -30px)", duration: 1.35, ease: "none" }, 5.45);
+        // underline "speed" on "fast"
+        tl.fromTo("#f04-speedline", { strokeDashoffset: 100 }, { strokeDashoffset: 0, duration: 0.45, ease: "power2.out" }, 7.36);
+        // ghost flares on "it."
+        tl.fromTo("#f04-gmain", { opacity: 0.5 }, cont({ opacity: 0.78, duration: 0.22, ease: "power2.out" }), 8.4);
+        tl.fromTo("#f04-gmain", { opacity: 0.78 }, cont({ opacity: 0.56, duration: 0.45, ease: "power2.inOut" }), 8.62);
+
+        window.__timelines[FID] = tl;
+      })();
+    </script>
+  </div>
+</template>

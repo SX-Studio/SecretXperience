@@ -1,0 +1,46 @@
+{
+  "provider": "auto",
+  "speed": "0.97",
+  "lines": [
+    {
+      "id": "01",
+      "text": "Two hundred and forty-two miles an hour."
+    },
+    {
+      "id": "02",
+      "text": "The fastest any animal has ever been clocked. Not a cheetah. A bird. And it isn't escaping. It's hunting."
+    },
+    {
+      "id": "03",
+      "text": "The peregrine falcon climbs high above its prey, folds its wings, and drops. It's called the stoop."
+    },
+    {
+      "id": "04",
+      "text": "Last time, we saw the cheetah slow down to win. The falcon does the opposite. Physics simulations show that diving faster gives it more force to steer. The faster it falls, the harder it can turn."
+    },
+    {
+      "id": "05",
+      "text": "So how does it aim? Scientists in Wales put GPS trackers and tiny cameras on falcons. They steer with the same rule as most guided missiles."
+    },
+    {
+      "id": "06",
+      "text": "Sailors know it. If a ship holds the same bearing as it closes in, you're on a collision course. The falcon turns just enough to keep its target right there."
+    },
+    {
+      "id": "07",
+      "text": "Yet this perfect hunter nearly vanished. The pesticide DDT thinned its eggshells. By 1975, just three hundred and twenty-four breeding pairs were left in North America."
+    },
+    {
+      "id": "08",
+      "text": "After DDT was banned, and with years of captive breeding, the falcon came back. Today it nests on skyscrapers, hunting pigeons above our cities."
+    },
+    {
+      "id": "09",
+      "text": "So next time you're downtown, look up. The fastest chase on Earth might be right above you."
+    }
+  ],
+  "bgm": {
+    "mode": "none"
+  },
+  "voice": "bm_george"
+}
