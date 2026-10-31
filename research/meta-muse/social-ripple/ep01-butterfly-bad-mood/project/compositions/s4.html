@@ -1,0 +1,107 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #s4-svg { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+    #s4-svg text { font-family: "Nunito"; }
+  </style>
+  <div id="root" data-composition-id="s4" data-width="1920" data-height="1080">
+    <svg id="s4-svg" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" data-layout-ignore></svg>
+  </div>
+  <script>
+    (function () {
+      const SR = window.SR; const { el, Set, Character, Crowd, Camera, Bubble, Badge, Ripple, PAL, EASE, clamp, sampleTrack, drive } = SR;
+      const svg = document.getElementById("s4-svg");
+      const world = el("g", {}, svg);
+      const bg = el("g", {}, world), board = el("g", {}, world), back = el("g", {}, world), counterL = el("g", {}, world), front = el("g", {}, world), fx = el("g", {}, world);
+      const G = 900, D = 31.2;
+      el("rect", { x: -600, y: -300, width: 3200, height: 1600, fill: "#EADBC6" }, bg); el("rect", { x: -600, y: G, width: 3200, height: 600, fill: "#B98E6A" }, bg);
+      Set.cafeInterior(bg, G, 1920);
+      // window onto the street
+      el("rect", { x: 300, y: 300, width: 520, height: 420, fill: "#F7D3B5", stroke: PAL.ink, "stroke-width": 8 }, bg);
+      Set.building(el("g", { transform: "translate(300,0)" }, bg), 30, 160, 260, 720, PAL.sage, { cols: 2 });
+      Set.building(el("g", { transform: "translate(300,0)" }, bg), 240, 200, 330, 720, PAL.plum, { cols: 2 });
+      el("path", { d: "M560,300 L560,720 M300,510 L820,510", stroke: PAL.ink, "stroke-width": 6 }, bg);
+      const door = Set.door(bg, 160, G, PAL.teal);
+      // chalkboard (the phenomenon card lives here)
+      Set.chalkboard(board, 870, 110, 640, 420);
+      const chalk = el("g", {}, board);
+      const ch = (txt, x, y, size, weight, col) => { const t = el("text", { x, y, "font-family": "Nunito", "font-weight": weight || 800, "font-size": size, fill: col || "#F4F1EA", "text-anchor": "middle", "dominant-baseline": "central" }, chalk); t.textContent = txt; return t; };
+      const title = ch("EMOTIONAL CONTAGION", 1190, 190, 50, 900);
+      const sub = ch("bad moods spread like colds", 1190, 248, 30, 700, "#D9D2C4");
+      // chalk diagram: rude A -> B -> C (+7 days)
+      const dg = el("g", { fill: "none", stroke: "#F4F1EA", "stroke-width": 5, "stroke-linecap": "round", "stroke-linejoin": "round" }, chalk);
+      const headPath = (cx, cy) => `M${cx - 26},${cy} a26,26 0 1,0 52,0 a26,26 0 1,0 -52,0 M${cx},${cy + 26} L${cx},${cy + 80} M${cx - 28},${cy + 50} L${cx + 28},${cy + 50} M${cx},${cy + 80} L${cx - 20},${cy + 116} M${cx},${cy + 80} L${cx + 20},${cy + 116}`;
+      const strokes = [
+        el("path", { d: headPath(980, 330) }, dg), el("path", { d: "M1020,360 Q1080,320 1140,360 M1126,346 L1140,360 L1122,370", stroke: "#F08A7A" }, dg), el("path", { d: headPath(1190, 330) }, dg),
+        el("path", { d: "M1230,360 Q1290,320 1350,360 M1336,346 L1350,360 L1332,370", stroke: "#F08A7A" }, dg), el("path", { d: headPath(1400, 330) }, dg),
+      ];
+      const lbl1 = ch("rude", 1080, 318, 26, 800, "#F08A7A"), lbl2 = ch("rated rude", 1290, 318, 26, 800, "#F08A7A");
+      const week = ch("…even a week later", 1300, 462, 32, 900, "#F2D28A");
+      const src = ch("Foulk, Woolum & Erez (2016), J. Applied Psychology", 1190, 506, 27, 800, "#BFB8AA");
+      const reveal = [[title, 15.5], [sub, 16.4], [strokes[0], 18.5], [lbl1, 19.3], [strokes[1], 19.2], [strokes[2], 19.9], [strokes[3], 21.0], [lbl2, 21.6], [strokes[4], 21.8], [week, 23.4], [src, 24.6]];
+      reveal.forEach(([n]) => n.setAttribute("opacity", 0));
+      strokes.forEach((p) => { p.setAttribute("stroke-dasharray", "0 2000"); });
+      // seated customers by the window, a standing one with a phone
+      Set.table(back, 380, 180, G); Set.table(back, 640, 160, G);
+      const seated = [
+        Character(back, { id: "s4-a", color: PAL.plum, hair: "bun", seed: 41, scale: 0.92, x: [[0, 360]], y: [[0, G + 30]], facing: [[0, 1]], pose: [[0, "sitPhone", 0]], mood: [[0, "content", 0], [28.6, "shock", 0.12], [29.6, "worried", 0.3]], prop: { kind: "phone" } }),
+        Character(back, { id: "s4-b", color: PAL.sage, hair: "short", seed: 42, scale: 0.92, x: [[0, 590]], y: [[0, G + 30]], facing: [[0, 1]], pose: [[0, "sit", 0]], mood: [[0, "neutral", 0], [28.7, "shock", 0.12], [29.6, "worried", 0.3]], glasses: true, prop: { kind: "cup" } }),
+        Character(back, { id: "s4-c", color: "#9A8AB0", hair: "long", seed: 43, scale: 0.92, x: [[0, 840]], y: [[0, G + 30]], facing: [[0, -1]], pose: [[0, "sit", 0]], mood: [[0, "content", 0], [28.6, "shock", 0.12], [29.6, "annoyed", 0.3]], prop: { kind: "cup" } }),
+      ];
+      // Leo behind the counter
+      const leo = Character(counterL, { id: "s4-leo", color: PAL.mustard, hair: "curly", glasses: true, seed: 9, x: [[0, 1420], [27.0, 1420], [27.6, 1360, "out"]], y: [[0, G - 64]], facing: [[0, -1]], noWalk: true,
+        pose: [[0, "relaxed", 0], [5.8, "wave", 0.3], [7.0, "hold", 0.35], [8.1, "point", 0.25], [9.0, "startle", 0.12], [10.2, "relaxed", 0.4], [12.75, "hipsHands", 0.3], [27.8, "relaxed", 0.25], [28.25, "startle", 0.12], [28.55, "facepalm", 0.25], [29.6, "hipsHands", 0.35]],
+        mood: [[0, "happy", 0], [5.8, "joy", 0.2], [9.0, "surprised", 0.12], [10.2, "content", 0.3], [12.75, "annoyed", 0.2], [28.0, "tired", 0.2], [28.25, "closed", 0.1], [28.7, "annoyed", 0.3]],
+        squash: [[12.72, 0.08], [28.3, 0.12]], look: [[0, { x: 1, y: 0 }]] });
+      Set.counter(counterL, 1100, 760, G);
+      Set.espressoMachine(counterL, 1700, G);
+      const cupOnCounter = el("g", {}, counterL);
+      // Maya enters through the door and walks to the counter
+      const maya = Character(front, { id: "s4-maya", color: PAL.teal, hair: "ponytail", seed: 5, x: [[0, 120], [0.4, 140], [5.0, 1010, "inOut"]], y: [[0, G + 60]], scale: 1.05,
+        pose: [[0, "relaxed", 0], [5.2, "crossed", 0.35], [8.9, "shout", 0.15], [10.2, "crossed", 0.35]],
+        mood: [[0, "annoyed", 0], [6.9, "annoyed", 0.1], [8.9, "angry", 0.12], [10.4, "annoyed", 0.4]], squash: [[8.9, 0.06]], look: [[0, { x: 1, y: 0 }]] });
+      const mark = el("circle", { r: 62, fill: "none", stroke: PAL.rude, "stroke-width": 6 }, fx);
+      const leoMark = el("circle", { r: 62, fill: "none", stroke: PAL.rude, "stroke-width": 6, opacity: 0 }, fx);
+      const jump = Ripple(fx, { color: PAL.rude, t: 12.6, dur: 1.0, maxR: 160, rings: 2, width: 7, tThread: 12.62, threadDur: 0.45, threadHold: 0.2, arc: 140 });
+      const badge1 = Badge(fx, { text: "1°", t0: 0.9, t1: 5.4, lift: 120 });
+      const badge2 = Badge(fx, { text: "2°", t0: 12.95, t1: 14.6, lift: 120 });
+      const bubbles = [
+        Bubble(fx, { text: "Morning! The usual?", t0: 5.8, t1: 7.0, side: -1 }),
+        Bubble(fx, { text: "Obviously.", t0: 7.0, t1: 8.0, side: 1 }),
+        Bubble(fx, { text: "Oat or—", t0: 8.1, t1: 8.85, side: -1 }),
+        Bubble(fx, { text: "OAT.", t0: 8.9, t1: 10.3, side: 1, shout: true, size: 46 }),
+      ];
+      const owner = [1, 0, 1, 0]; // 1 = Leo, 0 = Maya
+      // the sneeze: a red puff cloud
+      const puff = el("g", { opacity: 0 }, fx);
+      [[0, 0, 40], [50, -20, 34], [70, 26, 30], [110, 0, 28], [140, -30, 22], [160, 20, 20]].forEach(([x, y, r]) => el("circle", { cx: -x, cy: y, r, fill: PAL.rude, opacity: 0.55 }, puff));
+      const cam = Camera(world, [[0, { x: 760, y: 600, z: 1.1, r: 0 }], [5.2, { x: 1180, y: 640, z: 1.42, r: 0 }, "inOut"], [12.4, { x: 1220, y: 640, z: 1.5, r: 0 }, "linear"],
+        [12.7, { x: 1300, y: 620, z: 1.62, r: 0 }, "out"], [14.2, { x: 1300, y: 620, z: 1.62, r: 0 }], [15.3, { x: 1190, y: 318, z: 2.05, r: 0 }, "inOut"],
+        [25.8, { x: 1190, y: 322, z: 2.12, r: 0 }, "linear"], [26.8, { x: 1050, y: 640, z: 1.25, r: 0 }, "inOut"], [D, { x: 1020, y: 640, z: 1.3, r: 0 }, "linear"]],
+        { shake: [[12.68, 0], [12.72, 5], [13.2, 0, "out"], [28.25, 0], [28.3, 6], [28.9, 0, "out"]] });
+      const tl = gsap.timeline({ paused: true });
+      drive(tl, D, (t) => {
+        cam.update(t);
+        door.open(clamp((t - 0.1) / 0.3, 0, 1) * (1 - clamp((t - 1.6) / 0.4, 0, 1)));
+        seated.forEach((c) => c.update(t));
+        const l = leo.update(t), m = maya.update(t);
+        const mh = { x: m.headX, y: m.headY }, lh = { x: l.headX, y: l.headY };
+        mark.setAttribute("cx", mh.x); mark.setAttribute("cy", mh.y); mark.setAttribute("r", 62 + 5 * Math.sin(t * 5));
+        leoMark.setAttribute("cx", lh.x); leoMark.setAttribute("cy", lh.y); leoMark.setAttribute("r", 62 + 5 * Math.sin(t * 5 + 1));
+        leoMark.setAttribute("opacity", clamp((t - 12.9) / 0.3, 0, 1) * 0.9);
+        jump.update(t, mh, lh);
+        badge1.update(t, mh); badge2.update(t, lh);
+        bubbles.forEach((b, i) => b.update(t, owner[i] ? lh : mh));
+        reveal.forEach(([n, t0]) => {
+          const k = clamp((t - t0) / 0.7, 0, 1);
+          if (n.tagName === "path") { n.setAttribute("opacity", k > 0 ? 1 : 0); n.setAttribute("stroke-dasharray", `${k * 600} 2000`); }
+          else n.setAttribute("opacity", k);
+        });
+        const kp = clamp((t - 28.3) / 0.6, 0, 1);
+        puff.setAttribute("opacity", t > 28.3 ? 1 - clamp((t - 29.4) / 0.6, 0, 1) : 0);
+        puff.setAttribute("transform", `translate(${lh.x - 60 - kp * 160},${lh.y + 20}) scale(${0.3 + EASE.out(kp) * 1.1})`);
+      });
+      window.__timelines["s4"] = tl;
+    })();
+  </script>
+</template>

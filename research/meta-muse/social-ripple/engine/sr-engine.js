@@ -85,6 +85,7 @@
     sitPhone: { crouch: 62, head: 16, hipF: 88, knF: -88, hipB: 84, knB: -86, shF: 30, elF: 95, shB: 10, elB: 30 },
     hug: { lean: 8, shF: 85, elF: 60, shB: 80, elB: 60, armOut: 0 },
     drive: { crouch: 50, hipF: 80, knF: -60, hipB: 78, knB: -62, shF: 75, elF: 25, shB: 70, elB: 25 },
+    driveWave: { crouch: 50, hipF: 80, knF: -60, hipB: 78, knB: -62, shF: 150, elF: 25, shB: 70, elB: 25, head: -4 },
     honk: { crouch: 50, lean: 10, hipF: 80, knF: -60, hipB: 78, knB: -62, shF: 60, elF: 40, shB: 70, elB: 25, head: -6 },
     kneel: { crouch: 40, hipF: 80, knF: -80, hipB: -20, knB: -100, shF: 40, elF: 30, shB: 10, elB: 20, lean: 10 },
   };
@@ -119,6 +120,14 @@
     const LEG1 = 64, LEG2 = 60, ARM1 = 54, ARM2 = 50, TORSO = 96, HEADR = 36, NECK = 10;
     const strokeW = 10;
     const shadow = el("ellipse", { cx: 0, cy: 2, rx: 46, ry: 8, fill: "rgba(30,27,34,0.16)" }, body);
+    let wingG = null;
+    if (s.wings) {
+      wingG = el("g", {}, body);
+      const W = (sx, c) => { el("path", { d: `M0,0 C${40 * sx},-80 ${110 * sx},-70 ${96 * sx},-14 C${86 * sx},14 ${30 * sx},14 0,0 Z`, fill: c, stroke: PAL.ink, "stroke-width": 4, "stroke-linejoin": "round" }, wingG);
+        el("path", { d: `M0,6 C${50 * sx},16 ${80 * sx},44 ${56 * sx},72 C${30 * sx},86 ${8 * sx},48 0,6 Z`, fill: c, stroke: PAL.ink, "stroke-width": 4, "stroke-linejoin": "round" }, wingG);
+        el("circle", { cx: 62 * sx, cy: -28, r: 9, fill: PAL.ink, opacity: 0.85 }, wingG); };
+      W(-1, "#E09A2C"); W(1, PAL.kind);
+    }
     const legB = el("path", { fill: "none", stroke: s.pants, "stroke-width": strokeW + 1, "stroke-linecap": "round", "stroke-linejoin": "round" }, body);
     const armB = el("path", { fill: "none", stroke: PAL.ink, "stroke-width": strokeW - 1, "stroke-linecap": "round", "stroke-linejoin": "round" }, body);
     const sleeveB = el("path", { fill: "none", stroke: s.color, "stroke-width": strokeW + 7, "stroke-linecap": "round" }, body);
@@ -131,6 +140,7 @@
     const hairBack = el("path", { fill: s.hairColor }, headG);
     const head = el("circle", { r: HEADR, fill: PAL.ink }, headG);
     const hairFront = el("path", { fill: s.hairColor }, headG);
+    if (s.wings) el("path", { d: "M-10,-32 Q-20,-62 -34,-70 M10,-32 Q22,-62 36,-68", fill: "none", stroke: PAL.ink, "stroke-width": 4, "stroke-linecap": "round" }, headG);
     const eyes = [0, 1].map((i) => {
       const eg = el("g", {}, headG);
       const white = el("ellipse", { rx: 9, ry: 11, fill: PAL.white }, eg);
@@ -169,7 +179,7 @@
     const xs = s.x || [[0, 0]];
     const T_END = Math.max(30, xs[xs.length - 1][0] + 5);
     const dist = [];
-    { let d = 0, px = sampleTrack(xs, 0, 0); for (let i = 0; i <= T_END * 60; i++) { const xv = sampleTrack(xs, i / 60, 0); d += Math.abs(xv - px); px = xv; dist.push(d); } }
+    { let d = 0, px = sampleTrack(xs, 0, 0), py = sampleTrack(s.y, 0, 900); for (let i = 0; i <= T_END * 60; i++) { const xv = sampleTrack(xs, i / 60, 0), yv = sampleTrack(s.y, i / 60, 900); d += Math.hypot(xv - px, (yv - py) * 1.6); px = xv; py = yv; dist.push(d); } }
     function distAt(t) { const i = clamp(t * 60, 0, dist.length - 1); const i0 = Math.floor(i); return lerp(dist[i0], dist[Math.min(dist.length - 1, i0 + 1)], i - i0); }
     function speedAt(t) { return Math.abs(distAt(t + 0.05) - distAt(t - 0.05)) / 0.1; }
 
@@ -215,7 +225,7 @@
       const spd = speedAt(t);
       const run = s.walk === "run";
       const w = clamp(spd / (run ? 260 : 120), 0, 1) * (s.noWalk ? 0 : 1);
-      const stride = run ? 260 : 190;
+      const stride = (run ? 305 : 218) * sc;
       const ph = (distAt(t) / stride) * Math.PI * 2;
       const amp = run ? 38 : 26;
       const sw = Math.sin(ph);
@@ -298,19 +308,20 @@
       mouth.setAttribute("opacity", clamp(M.mouth, 0, 1));
       if (glasses) glasses.setAttribute("transform", "translate(7,0)");
       // prop in front hand
-      if (s.prop) {
+      if (s.prop && s.prop.kind) {
         const pk = sampleTrack(s.prop.show, t, 1);
         if (!prop) prop = buildProp(propG, s.prop.kind);
         propG.setAttribute("transform", `translate(${hxF},${hyF}) rotate(${(P.shF + P.elF) * -0.0 + (s.prop.rot || 0)})`);
         propG.setAttribute("opacity", pk);
       }
+      if (wingG) { const [wx, wy] = P2(0, nyU + 34); const fl = 0.75 + 0.25 * Math.abs(Math.cos(t * Math.PI * (s.flap || 1.6))); wingG.setAttribute("transform", `translate(${wx},${wy}) scale(${fl},1)`); }
       const sy = 1 - squash * 0.5;
       g.setAttribute("transform", `translate(${x},${y}) scale(${sc * facing},${sc * sy})`);
       g.setAttribute("opacity", vis);
       shadow.setAttribute("rx", 46 - Math.abs(bob) * 1.2);
       return { x, y, headX: x + hX * sc * facing, headY: y + hY * sc, handX: x + hxF * sc * facing, handY: y + hyF * sc };
     }
-    return { g, update, spec: s };
+    return { g, update, spec: s, hair: [hairBack, hairFront] };
   }
 
   function buildProp(g, kind) {
@@ -372,7 +383,8 @@
       const n = Math.floor(w / 60);
       for (let i = 0; i < n; i++) el("path", { d: `M${x + i * (w / n)},${groundY - 300} l${w / n},0 l0,40 q${-w / n / 2},18 ${-w / n},0 Z`, fill: i % 2 ? PAL.white : (opts.awning || PAL.rude) }, aw);
       if (sign) {
-        el("rect", { x: x + w / 2 - 120, y: groundY - 370, width: 240, height: 56, rx: 8, fill: PAL.ink }, sg);
+        const sw = Math.max(240, sign.length * 21 + 50);
+        el("rect", { x: x + w / 2 - sw / 2, y: groundY - 370, width: sw, height: 56, rx: 8, fill: PAL.ink }, sg);
         const tx = el("text", { x: x + w / 2, y: groundY - 332, "text-anchor": "middle", "font-family": "Nunito", "font-weight": 900, "font-size": 30, fill: PAL.paper, "letter-spacing": "2" }, sg);
         tx.textContent = sign;
       }
@@ -403,9 +415,10 @@
     },
     car(g, x, groundY, color = PAL.slate, facing = 1, opts = {}) {
       const cg = el("g", { transform: `translate(${x},${groundY}) scale(${facing},1)` }, g);
-      el("path", { d: "M-170,-30 L-170,-80 Q-160,-96 -120,-100 L-80,-150 Q-70,-160 -40,-160 L70,-160 Q96,-160 110,-140 L140,-100 Q176,-96 180,-70 L180,-30 Z", fill: color, stroke: PAL.ink, "stroke-width": 5, "stroke-linejoin": "round" }, cg);
-      el("path", { d: "M-66,-142 L-36,-142 L-36,-102 L-100,-102 Z", fill: PAL.glass, stroke: PAL.ink, "stroke-width": 4 }, cg);
-      el("path", { d: "M-24,-142 L64,-142 Q80,-142 90,-130 L110,-102 L-24,-102 Z", fill: PAL.glass, stroke: PAL.ink, "stroke-width": 4 }, cg);
+      const W1 = "M-66,-142 L-36,-142 L-36,-102 L-100,-102 Z", W2 = "M-24,-142 L64,-142 Q80,-142 90,-130 L110,-102 L-24,-102 Z";
+      el("path", { d: "M-170,-30 L-170,-80 Q-160,-96 -120,-100 L-80,-150 Q-70,-160 -40,-160 L70,-160 Q96,-160 110,-140 L140,-100 Q176,-96 180,-70 L180,-30 Z" + (opts.holes ? " " + W1 + " " + W2 : ""), "fill-rule": "evenodd", fill: color, stroke: PAL.ink, "stroke-width": 5, "stroke-linejoin": "round" }, cg);
+      el("path", { d: W1, fill: PAL.glass, "fill-opacity": opts.holes ? 0.28 : 1, stroke: PAL.ink, "stroke-width": 4 }, cg);
+      el("path", { d: W2, fill: PAL.glass, "fill-opacity": opts.holes ? 0.28 : 1, stroke: PAL.ink, "stroke-width": 4 }, cg);
       for (const wx of [-100, 110]) { el("circle", { cx: wx, cy: -28, r: 34, fill: PAL.ink }, cg); el("circle", { cx: wx, cy: -28, r: 14, fill: "#9A9590" }, cg); }
       el("rect", { x: 168, y: -84, width: 14, height: 14, rx: 3, fill: "#FFE08A" }, cg);
       return cg;
@@ -427,6 +440,76 @@
       el("rect", { x, y: groundY - 70, width: w, height: 14, rx: 4, fill: PAL.wood, stroke: PAL.ink, "stroke-width": 4 }, g);
       el("rect", { x, y: groundY - 140, width: w, height: 12, rx: 4, fill: PAL.wood, stroke: PAL.ink, "stroke-width": 4 }, g);
       for (const lx of [x + 20, x + w - 30]) el("rect", { x: lx, y: groundY - 140, width: 10, height: 140, fill: PAL.ink }, g);
+    },
+
+    crosswalk(g, x, groundY, w = 420, n = 7) {
+      for (let i = 0; i < n; i++) el("rect", { x: x + i * (w / n), y: groundY + 92, width: (w / n) * 0.55, height: 300, fill: "#EDE6DA" }, g);
+    },
+    trafficLight(g, x, groundY, state = "red") {
+      const tg = el("g", {}, g);
+      el("rect", { x: x - 6, y: groundY - 330, width: 12, height: 330, fill: PAL.ink }, tg);
+      el("rect", { x: x - 26, y: groundY - 450, width: 52, height: 130, rx: 10, fill: PAL.ink }, tg);
+      const lamps = ["#E2412F", "#F2B33D", "#5DBB63"].map((c, i) => el("circle", { cx: x, cy: groundY - 425 + i * 40, r: 14, fill: c }, tg));
+      return { g: tg, set: (st) => lamps.forEach((l, i) => l.setAttribute("opacity", ["red", "amber", "green"][i] === st ? 1 : 0.22)) };
+    },
+    clockSign(g, x, y, text = "7:42") {
+      const cg = el("g", {}, g);
+      el("rect", { x: x - 92, y: y - 44, width: 184, height: 88, rx: 12, fill: PAL.ink, stroke: "#3A3540", "stroke-width": 6 }, cg);
+      const t = el("text", { x, y: y + 2, "text-anchor": "middle", "dominant-baseline": "central", "font-family": "Space Mono", "font-weight": 700, "font-size": 54, fill: "#FF6B4A" }, cg);
+      t.textContent = text; return { g: cg, text: t };
+    },
+    cafeInterior(g, groundY = 900, W = 1920) {
+      Set.floor(g, groundY, "#B98E6A", W, "#EADBC6");
+      for (let i = 0; i < W; i += 90) el("rect", { x: i, y: groundY, width: 4, height: 1080 - groundY, fill: "rgba(0,0,0,0.06)" }, g);
+      el("rect", { x: 0, y: groundY - 380, width: W, height: 8, fill: "rgba(0,0,0,0.06)" }, g);
+      // pendant lamps
+      for (const lx of [420, 900, 1380]) { el("path", { d: `M${lx},0 L${lx},150`, stroke: PAL.ink, "stroke-width": 3 }, g); el("path", { d: `M${lx - 40},190 Q${lx},130 ${lx + 40},190 Z`, fill: PAL.mustard, stroke: PAL.ink, "stroke-width": 4 }, g); }
+    },
+    chalkboard(g, x, y, w, h) {
+      const cg = el("g", {}, g);
+      el("rect", { x: x - 14, y: y - 14, width: w + 28, height: h + 28, rx: 6, fill: PAL.wood, stroke: PAL.ink, "stroke-width": 5 }, cg);
+      el("rect", { x, y, width: w, height: h, fill: "#2F3B36" }, cg);
+      return cg;
+    },
+    espressoMachine(g, x, groundY) {
+      const eg = el("g", {}, g); const y = groundY - 186;
+      el("rect", { x: x - 90, y: y - 150, width: 180, height: 150, rx: 10, fill: "#C8CDD0", stroke: PAL.ink, "stroke-width": 5 }, eg);
+      el("rect", { x: x - 90, y: y - 162, width: 180, height: 16, rx: 4, fill: "#9AA1A6", stroke: PAL.ink, "stroke-width": 4 }, eg);
+      for (const dx of [-40, 40]) { el("rect", { x: x + dx - 14, y: y - 60, width: 28, height: 26, fill: PAL.ink }, eg); el("circle", { cx: x + dx, cy: y - 110, r: 12, fill: PAL.ink }, eg); }
+      return eg;
+    },
+    stage(g, groundY = 760, W = 1920) {
+      el("rect", { x: 0, y: 0, width: W, height: 1080, fill: "#3B2F3F" }, g);
+      el("rect", { x: 260, y: 120, width: W - 520, height: groundY - 120, fill: "#F1D9A8" }, g);
+      el("path", { d: `M200,90 L${W - 200},90 L${W - 200},160 Q${W / 2},230 200,160 Z`, fill: "#A63A3A", stroke: PAL.ink, "stroke-width": 5 }, g);
+      el("path", { d: `M120,90 L330,90 Q300,${groundY / 2} 330,${groundY + 20} L120,${groundY + 20} Z`, fill: "#B8453F", stroke: PAL.ink, "stroke-width": 5 }, g);
+      el("path", { d: `M${W - 120},90 L${W - 330},90 Q${W - 300},${groundY / 2} ${W - 330},${groundY + 20} L${W - 120},${groundY + 20} Z`, fill: "#B8453F", stroke: PAL.ink, "stroke-width": 5 }, g);
+      el("rect", { x: 160, y: groundY, width: W - 320, height: 40, fill: PAL.wood, stroke: PAL.ink, "stroke-width": 5 }, g);
+      el("rect", { x: 0, y: groundY + 40, width: W, height: 1080 - groundY - 40, fill: "#4A3B4D" }, g);
+      // painted cardboard flowers on stage
+      for (const fx of [420, 560, 1360, 1500]) { el("path", { d: `M${fx},${groundY} L${fx},${groundY - 120}`, stroke: PAL.forest, "stroke-width": 8 }, g); el("circle", { cx: fx, cy: groundY - 130, r: 30, fill: PAL.rose, stroke: PAL.ink, "stroke-width": 4 }, g); el("circle", { cx: fx, cy: groundY - 130, r: 10, fill: PAL.kind }, g); }
+    },
+    audienceRows(g, rows = 3, y0 = 900, W = 1920, seed = 5) {
+      const R = mulberry32(seed); const heads = [];
+      for (let r = 0; r < rows; r++) {
+        const y = y0 + r * 70, sc = 1 + r * 0.18;
+        for (let x = 40 + (r % 2) * 50; x < W; x += 100 * sc) {
+          const c = CROWD_COLS[Math.floor(R() * CROWD_COLS.length)];
+          el("path", { d: `M${x - 44 * sc},${y + 90 * sc} Q${x - 46 * sc},${y + 10 * sc} ${x},${y + 8 * sc} Q${x + 46 * sc},${y + 10 * sc} ${x + 44 * sc},${y + 90 * sc} Z`, fill: c }, g);
+          const h = el("circle", { cx: x, cy: y - 22 * sc, r: 34 * sc, fill: PAL.ink }, g);
+          heads.push({ x, y: y - 22 * sc, el: h });
+        }
+      }
+      return heads;
+    },
+    door(g, x, groundY, color = PAL.wood) {
+      const dg = el("g", {}, g);
+      el("rect", { x: x - 70, y: groundY - 250, width: 140, height: 250, fill: "#5A4A40", stroke: PAL.ink, "stroke-width": 5 }, dg);
+      const leaf = el("g", {}, dg);
+      el("rect", { x: x - 66, y: groundY - 246, width: 132, height: 246, fill: color, stroke: PAL.ink, "stroke-width": 4 }, leaf);
+      el("rect", { x: x - 44, y: groundY - 220, width: 88, height: 110, fill: PAL.glass, stroke: PAL.ink, "stroke-width": 4 }, leaf);
+      el("circle", { cx: x + 46, cy: groundY - 120, r: 7, fill: PAL.ink }, leaf);
+      return { g: dg, leaf, open: (k) => leaf.setAttribute("transform", `translate(${x - 66},0) scale(${1 - 0.72 * k},1) translate(${-(x - 66)},0)`) };
     },
     grain(g, id = "srgrain", amount = 0.06, W = 1920, H = 1080) {
       const f = el("filter", { id, x: 0, y: 0, width: "100%", height: "100%" }, el("defs", {}, g));
@@ -501,6 +584,98 @@
     return { g, update };
   }
 
+
+  // ---------- camera: a world group framed by keyed {x,y,z,r} (world point at screen centre) ----------
+  function Camera(world, keys, opts = {}) {
+    const W = opts.w || 1920, H = opts.h || 1080;
+    function update(t) {
+      const c = sampleTrack(keys, t, { x: W / 2, y: H / 2, z: 1, r: 0 });
+      let sx = 0, sy = 0;
+      if (opts.shake) { const a = sampleTrack(opts.shake, t, 0); sx = a * (Math.sin(t * 23.1) + Math.sin(t * 37.7) * 0.5); sy = a * (Math.cos(t * 19.3) + Math.sin(t * 41.9) * 0.5); }
+      world.setAttribute("transform", `translate(${W / 2 + sx},${H / 2 + sy}) rotate(${c.r || 0}) scale(${c.z}) translate(${-c.x},${-c.y})`);
+      return c;
+    }
+    return { update };
+  }
+
+  // ---------- speech bubble that follows an anchor (e.g. a head); pops in, fades out ----------
+  // spec: { text, t0, t1, side: 1 (bubble to the right of the anchor) | -1, size, shout, color }
+  function Bubble(parent, spec) {
+    const s = Object.assign({ side: 1, size: 34, color: PAL.white, ink: PAL.ink }, spec);
+    const g = el("g", { opacity: 0 }, parent);
+    const inner = el("g", {}, g);
+    const body = el("path", { fill: s.color, stroke: s.shout ? PAL.rude : PAL.ink, "stroke-width": s.shout ? 6 : 4, "stroke-linejoin": "round" }, inner);
+    const tx = el("text", { "font-family": "Nunito", "font-weight": 900, "font-size": s.size, fill: s.ink, "text-anchor": "middle", "dominant-baseline": "central" }, inner);
+    tx.textContent = s.text;
+    let w = s.text.length * s.size * 0.56 + 44;
+    try { const bb = tx.getComputedTextLength(); if (bb > 0) w = bb + 48; } catch (e) {}
+    const h = s.size + 34, r = 22;
+    function shape() {
+      const x0 = s.side > 0 ? 18 : -18 - w, y0 = -h - 46;
+      const tailX = s.side > 0 ? x0 + 34 : x0 + w - 34;
+      if (s.shout) {
+        let d = ""; const n = 18;
+        for (let i = 0; i <= n; i++) { const a = (i / n) * Math.PI * 2; const rr = i % 2 ? 1.0 : 1.16; d += (i ? "L" : "M") + (x0 + w / 2 + Math.cos(a) * (w / 2 + 14) * rr) + "," + (y0 + h / 2 + Math.sin(a) * (h / 2 + 16) * rr); }
+        return d + "Z";
+      }
+      return `M${x0 + r},${y0} H${x0 + w - r} Q${x0 + w},${y0} ${x0 + w},${y0 + r} V${y0 + h - r} Q${x0 + w},${y0 + h} ${x0 + w - r},${y0 + h} H${tailX + 14} L${s.side > 0 ? tailX - 26 : tailX + 26},${y0 + h + 34} L${tailX - 6},${y0 + h} H${x0 + r} Q${x0},${y0 + h} ${x0},${y0 + h - r} V${y0 + r} Q${x0},${y0} ${x0 + r},${y0} Z`;
+    }
+    body.setAttribute("d", shape());
+    const x0 = s.side > 0 ? 18 : -18 - w, y0 = -h - 46;
+    tx.setAttribute("x", x0 + w / 2); tx.setAttribute("y", y0 + h / 2 + 1);
+    function update(t, anchor) {
+      const kin = clamp((t - s.t0) / 0.22, 0, 1), kout = clamp((t - s.t1) / 0.2, 0, 1);
+      const vis = t >= s.t0 && t < s.t1 + 0.2;
+      g.setAttribute("opacity", vis ? 1 - kout : 0);
+      const sc = EASE.back(kin) * (1 - 0.1 * kout);
+      const ox = s.side > 0 ? 18 : -18;
+      g.setAttribute("transform", `translate(${anchor.x},${anchor.y}) translate(${ox},-46) scale(${Math.max(0.001, sc)}) translate(${-ox},46)`);
+    }
+    return { g, update };
+  }
+
+  // ---------- degree badge ("1°") that pops above a head ----------
+  function Badge(parent, spec) {
+    const s = Object.assign({ color: PAL.rude, r: 34 }, spec);
+    const g = el("g", { opacity: 0 }, parent);
+    el("circle", { r: s.r, fill: s.color, stroke: PAL.ink, "stroke-width": 4 }, g);
+    const tx = el("text", { "font-family": "Outfit", "font-weight": 900, "font-size": s.r * 1.05, fill: PAL.white, "text-anchor": "middle", "dominant-baseline": "central", x: 2, y: 1 }, g);
+    tx.textContent = s.text;
+    function update(t, anchor) {
+      const k = clamp((t - s.t0) / 0.3, 0, 1), ko = s.t1 ? clamp((t - s.t1) / 0.25, 0, 1) : 0;
+      g.setAttribute("opacity", t >= s.t0 ? 1 - ko : 0);
+      g.setAttribute("transform", `translate(${anchor.x},${anchor.y - (s.lift || 92)}) scale(${Math.max(0.001, EASE.back(k))})`);
+    }
+    return { g, update };
+  }
+
+  // ---------- crowd: many walkers/standers in muted colours (never the ripple red or gold) ----------
+  const CROWD_COLS = [PAL.slate, PAL.sage, PAL.plum, PAL.navy, PAL.forest, "#8A7F72", "#B07A63", "#5E7C99", "#9A8AB0", "#7B9E87", "#C2A27A"];
+  const HAIRS = ["none", "short", "ponytail", "bun", "curly", "cap", "long", "none", "short"];
+  function Crowd(parent, spec) {
+    const s = Object.assign({ n: 12, seed: 11, x0: -200, x1: 2120, y: 900, ySpread: 0, dur: 30, speed: [70, 120], scale: [0.82, 1.0], stand: 0 }, spec);
+    const R = mulberry32(s.seed); const people = [];
+    for (let i = 0; i < s.n; i++) {
+      const dir0 = R() < 0.5 ? 1 : -1, dir = s.dir || dir0, sp = s.speed[0] + R() * (s.speed[1] - s.speed[0]);
+      const standing = R() < s.stand;
+      const startX = s.x0 + R() * (s.x1 - s.x0);
+      const endX = standing ? startX : startX + dir * sp * s.dur;
+      const sc = s.scale[0] + R() * (s.scale[1] - s.scale[0]);
+      people.push(Character(parent, {
+        id: `${s.idp || "crowd"}-${i}`, color: CROWD_COLS[Math.floor(R() * CROWD_COLS.length)], hair: HAIRS[Math.floor(R() * HAIRS.length)],
+        hairColor: R() < 0.7 ? PAL.ink : ["#6B4A35", "#B7884F", "#8E8A86"][Math.floor(R() * 3)], seed: Math.floor(R() * 1000),
+        scale: sc, x: [[0, startX], [s.dur, endX, "linear"]], y: [[0, s.y + (R() - 0.5) * s.ySpread]], facing: [[0, dir]],
+        pose: [[0, standing ? (R() < 0.5 ? "phone" : "relaxed") : "relaxed", 0]], mood: [[0, ["neutral", "content", "tired"][Math.floor(R() * 3)], 0]],
+        prop: standing && R() < 0.6 ? { kind: "phone" } : (R() < 0.25 ? { kind: "bag" } : null), glasses: R() < 0.2,
+      }));
+    }
+    people.sort((a, b) => a.spec.scale - b.spec.scale).forEach((p) => parent.appendChild(p.g));
+    return { people, update: (t) => people.forEach((p) => p.update(t)) };
+  }
+
+  // clipPath helper: returns url(#id)
+  function clip(parent, id, d) { const cp = el("clipPath", { id }, parent); el("path", { d }, cp); return `url(#${id})`; }
+
   // ---------- scene driver ----------
   // Builds one proxy tween so every frame is draw(t) — seek-safe in HyperFrames.
   function drive(tl, duration, draw) {
@@ -509,5 +684,5 @@
     draw(0);
   }
 
-  window.SR = { PAL, SKY, el, EASE, clamp, lerp, sampleTrack, Character, Set, Ripple, Butterfly, drive, POSES, MOODS, hash };
+  window.SR = { PAL, SKY, el, EASE, clamp, lerp, sampleTrack, mulberry32, Character, Set, Ripple, Butterfly, Camera, Bubble, Badge, Crowd, clip, drive, POSES, MOODS, hash };
 })();
