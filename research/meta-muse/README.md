@@ -153,3 +153,11 @@ The user wants a new channel making anime scenes reimagined as realistic films. 
 - costs.
 
 `ai-video-workflow/PROMPTER.md` is our reusable prompter for Sora, Seedance, Kling and Veo, with a worked Chase Scene 101 example.
+
+## Social Ripple (new channel, 2026-10-31)
+
+`social-ripple/` holds the plan for the user's new channel:
+- the study of two tutorials on Claude-made stick-figure films, with format evidence from Ifverse (4.6M views) and Last Soul (935k);
+- the concept: one small act travelling three degrees through strangers, backed by real research;
+- three pilot storylines waiting on the user's pick;
+- `engine/sr-engine.js`, a reusable stick-figure rig and set library, with a rendered look test.
