@@ -131,13 +131,15 @@
     const hairBack = el("path", { fill: s.hairColor }, headG);
     const head = el("circle", { r: HEADR, fill: PAL.ink }, headG);
     const hairFront = el("path", { fill: s.hairColor }, headG);
-    const eyes = [0, 1].map(() => {
+    const eyes = [0, 1].map((i) => {
       const eg = el("g", {}, headG);
       const white = el("ellipse", { rx: 9, ry: 11, fill: PAL.white }, eg);
-      const pupil = el("circle", { r: 4.6, fill: PAL.ink }, eg);
-      const lid = el("path", { fill: PAL.ink }, eg);
+      const cp = el("clipPath", { id: `${s.id}-eyeclip${i}` }, eg);
+      const clipE = el("ellipse", { rx: 9.6, ry: 11.6 }, cp);
+      const pupil = el("circle", { r: 4.6, fill: PAL.ink, "clip-path": `url(#${s.id}-eyeclip${i})` }, eg);
+      const lid = el("path", { fill: PAL.ink, "clip-path": `url(#${s.id}-eyeclip${i})` }, eg);
       const arc = el("path", { fill: "none", stroke: PAL.white, "stroke-width": 4.5, "stroke-linecap": "round" }, eg);
-      return { eg, white, pupil, lid, arc };
+      return { eg, white, pupil, lid, arc, clipE };
     });
     const mouth = el("path", { fill: PAL.white, stroke: PAL.white, "stroke-width": 3.4, "stroke-linecap": "round", "stroke-linejoin": "round" }, headG);
     const glasses = s.glasses ? el("g", {}, headG) : null;
@@ -276,7 +278,7 @@
         const ex = side * 13 + 7, ey = -4;
         const sz = M.size;
         E.eg.setAttribute("transform", `translate(${ex},${ey}) scale(${sz})`);
-        E.white.setAttribute("ry", Math.max(0.8, 11 * open));
+        E.white.setAttribute("ry", Math.max(0.8, 11 * open)); E.clipE.setAttribute("ry", Math.max(0.8, 11.6 * open));
         E.white.setAttribute("opacity", 1 - M.happy);
         const px = clamp(look.x, -1, 1) * 4 + 1.5, py = clamp(look.y + M.look, -1, 1) * 4.5;
         E.pupil.setAttribute("cx", px); E.pupil.setAttribute("cy", py * open);
@@ -471,6 +473,34 @@
     return { g, update, spec: s };
   }
 
+
+  // ---------- the butterfly: the channel's recurring mark (hidden in every film) ----------
+  // spec: { x:[[t,x]], y:[[t,y]], scale, flap (Hz), color, rot }
+  function Butterfly(parent, spec) {
+    const s = Object.assign({ scale: 1, flap: 3.2, color: PAL.kind, rot: -12 }, spec);
+    const g = el("g", {}, parent);
+    const wingsB = el("g", {}, g), wingsF = el("g", {}, g);
+    const wing = (gg, sx, shade) => {
+      el("path", { d: `M0,0 C${18 * sx},-34 ${46 * sx},-30 ${40 * sx},-6 C${36 * sx},6 ${14 * sx},6 0,0 Z`, fill: shade, stroke: PAL.ink, "stroke-width": 3, "stroke-linejoin": "round" }, gg);
+      el("path", { d: `M0,2 C${22 * sx},6 ${34 * sx},18 ${24 * sx},30 C${14 * sx},36 ${4 * sx},20 0,2 Z`, fill: shade, stroke: PAL.ink, "stroke-width": 3, "stroke-linejoin": "round" }, gg);
+      el("circle", { cx: 26 * sx, cy: -12, r: 4.5, fill: PAL.ink, opacity: 0.85 }, gg);
+    };
+    wing(wingsB, -1, "#E09A2C"); wing(wingsF, 1, s.color);
+    el("path", { d: "M0,-14 L0,26", stroke: PAL.ink, "stroke-width": 6, "stroke-linecap": "round" }, g);
+    el("path", { d: "M0,-14 Q-6,-30 -12,-34 M0,-14 Q6,-30 12,-34", fill: "none", stroke: PAL.ink, "stroke-width": 2.5, "stroke-linecap": "round" }, g);
+    function update(t) {
+      const x = sampleTrack(s.x, t, 0), y = sampleTrack(s.y, t, 0);
+      const f = s.flap ? Math.abs(Math.cos(t * Math.PI * s.flap)) : 1;
+      const k = 0.25 + 0.75 * f;
+      wingsF.setAttribute("transform", `scale(${k},1)`);
+      wingsB.setAttribute("transform", `scale(${k * 0.92},1)`);
+      g.setAttribute("transform", `translate(${x},${y}) rotate(${sampleTrack(s.rotT, t, s.rot)}) scale(${s.scale})`);
+      g.setAttribute("opacity", sampleTrack(s.opacity, t, 1));
+    }
+    update(0);
+    return { g, update };
+  }
+
   // ---------- scene driver ----------
   // Builds one proxy tween so every frame is draw(t) — seek-safe in HyperFrames.
   function drive(tl, duration, draw) {
@@ -479,5 +509,5 @@
     draw(0);
   }
 
-  window.SR = { PAL, SKY, el, EASE, clamp, lerp, sampleTrack, Character, Set, Ripple, drive, POSES, MOODS, hash };
+  window.SR = { PAL, SKY, el, EASE, clamp, lerp, sampleTrack, Character, Set, Ripple, Butterfly, drive, POSES, MOODS, hash };
 })();
