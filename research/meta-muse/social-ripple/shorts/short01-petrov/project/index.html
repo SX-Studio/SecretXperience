@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script src="assets/sr-engine-v1.js"></script>
+    <script src="assets/sr-v3.js"></script>
+    <script src="assets/lips.js"></script>
+    <script src="assets/t.js"></script>
+    <script src="assets/ep2-sets.js"></script>
+    <script src="assets/v3-fx.js"></script>
+    <script src="assets/cine.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #0B0A12; }
+      #root { width: 100%; height: 100%; position: relative; }
+      #fontwarm { position: absolute; left: -9999px; top: 0; font-family: "Outfit"; font-weight: 900; }
+      #fontwarm b { font-family: "Nunito"; font-weight: 900; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="46.55" data-width="1080" data-height="1920">
+      <div id="fontwarm" data-layout-ignore>Aa <b>Aa СТАРТ</b></div>
+      <audio id="mix" class="clip" src="assets/mix.wav" data-start="0" data-duration="46.55" data-track-index="2" data-volume="1"></audio>
+      <div id="short" data-composition-id="short" data-composition-src="compositions/short.html" data-start="0" data-duration="46.55" data-track-index="1" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
+
+    </div>
+    <script>window.__timelines["main"] = gsap.timeline({ paused: true });</script>
+  </body>
+</html>
