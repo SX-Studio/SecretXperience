@@ -23,6 +23,9 @@ Episode 1, "The Butterfly Effect of a Bad Mood", built this pipeline. Every late
   - Every episode shows *Event → Lens → Reaction → Ripple*, with one Lens moment: a freeze, a push into the eyes, the same frame seen through a red lens and then a gold one.
   - Each episode teaches one micro-skill (name it, body check, three other reasons, talk to yourself like a friend, fuel not threat, change it or reframe it).
   - Validate first, no toxic positivity, action when the situation can be changed, honest science, never therapy or diagnosis.
+- **Clarity over confusion.**
+  - In stories, ambiguity is where the lens matters most: show the fog (blur, flickering "maybe" bubbles), then the focus pull.
+  - In craft, every open question gets resolved, there is one core idea per episode, every new term gets a picture, and there's a short recap per act.
 - **Viral-style sounds, but original.** The kit has a bass boom, record scratch, fail trombone, ka-ching, "dun dun dunnn" sting, boing, dings and whooshes. All are synthesized in `tools/sound_kit.py`, so nothing can be Content-ID claimed. Trending audio clips can't be used, because a copyright claim takes the ad revenue.
 - **Light comedy, never stressful.** Each heavy beat gets a gag: the hair going grey, the "FREE" price tag on the bad mood, the sneeze, Dev still honking outside the window.
 - **Current keywords, used honestly:**

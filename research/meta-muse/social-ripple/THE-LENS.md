@@ -64,11 +64,37 @@ This is the channel's signature device, and it matches the split-face branding.
 7. **Safety.** We are *not* therapy, and we never diagnose. Episodes avoid graphic depictions of self-harm or crisis. If a story touches heavy distress, the description includes a line such as: *"If you're struggling, talking to someone you trust or a professional helps. You don't have to carry it alone."* Don't make claims like "this cures anxiety".
 8. **Respect real circumstances.** Poverty, unfairness and discrimination aren't "interpretation problems". The lens helps us respond; it doesn't excuse the system. This matters especially in the money and politics episodes.
 
+## Clarity vs confusion (user, 2026-11-01)
+
+**Confusion is where the lens does the most work.** When a situation is clear, most people react alike. When it's *ambiguous* (a short text, a look, a silence), the brain fills the gap, and a stressed, tired or hurt lens fills it with the worst story. So a lot of conflict starts not from what happened but from **not knowing**, plus a fast guess.
+
+**What the research says (verified):**
+- **Not knowing is more stressful than bad news.** In a UCL study (de Berker et al. 2016, *Nature Communications*, 45 people), stress, sweat and pupil size peaked when the chance of a mild shock was about **50%**, and were lowest when a shock was certain (100%) or impossible (0%). *"It's much worse not knowing you're going to get a shock than knowing you definitely will or won't."*
+- **We seize and freeze.** When we badly want an answer (high "need for closure", Kruglanski), we grab the first explanation and stop testing it. Confusion ends fast, but often with the wrong story.
+- **Text strips out tone, and we don't notice.** In Kruger, Epley et al. (2005, *Journal of Personality and Social Psychology*), senders were far more confident their sarcasm came across than recipients were accurate. Recipients were near chance by email and better by voice. Reading your own message aloud in a neutral voice before sending made senders more realistic. *This is the group chat from episode 2.*
+- **Confusion can be good if it gets resolved.** Learners who were confused and then worked through it learned more (D'Mello et al. 2014, *Learning and Instruction*). It only helps when the confusion is tied to the point, the person tries to resolve it, and help is there when they struggle.
+
+**Two more micro-skills (7 and 8):**
+
+7. **Ask, don't assume.** When a message or look is ambiguous, the gold path is one question ("Hey, did I upset you?"), not a story. On screen, the character's imagined worst case plays out in red, then the real answer arrives and it's something mundane ("my phone died lol"). It's an easy comedy beat.
+8. **Name the not-knowing.** "I don't know yet" is an honest, calming sentence. It turns a 50/50 fog into a plan: *what's one thing I can find out?*
+
+**The visual language: fog and focus.** Our v3 engine already has depth of field, so it becomes a meaning device:
+- **Confusion** looks like fog or blur over the scene, with several red "maybe" thought bubbles flickering.
+- **Clarity** is a **focus pull**: the blur clears on the real detail, a soft chime plays, and colour returns.
+- The rack focus we built for camera work becomes the shot where a character's understanding sharpens.
+
+**The rule for our own craft: every episode must leave the viewer clearer than it found them.**
+- Use **productive confusion** only: open a question in the hook ("Why do we tip?"), let viewers feel the puzzle, and **always resolve it** on screen. An unresolved open loop is a broken promise.
+- **One core idea per episode.** Each new term gets a picture the first time it's said, and there's a 10-second recap at the end of each act.
+- **No ambiguity that could mislead.** Numbers come with context ("about", "in one study"). Debated findings are labelled.
+- **Captions on every video.** Clarity is also accessibility.
+
 ## Season 1: one lens skill per episode (studies to verify while scripting)
 
 | Ep | Topic | Lens skill | Research to verify |
 |---|---|---|---|
-| 1 ✔ | Bad mood | (retro) three other reasons for the honk | Hostile attribution, Orobio de Castro 2002 |
+| 1 ✔ | Bad mood | (retro) three other reasons for the honk; ask, don't assume | Hostile attribution, Orobio de Castro 2002 |
 | 2 ✔ | Popularity | (retro) social referencing: we read the room through others | Sorce 1985 |
 | 3 | Money | Change it or reframe it? Plus how money worry narrows attention | Troy 2013; scarcity research (Mani et al. 2013, *Science*; replication debated, label it so) |
 | 4 | 5-day week | Fuel, not threat: the stress mindset | Crum 2013; Jamieson 2010 |
@@ -76,10 +102,15 @@ This is the channel's signature device, and it matches the split-face branding.
 | 6 | Lonely cities | The body check, plus how loneliness makes the brain scan for threat | Cacioppo's loneliness research |
 | 7 | Capitalism vs socialism | Three other reasons the other side believes what they do | Perception-gap research (More in Common) |
 | 8 | Rich and poor countries | Explanatory style: "permanent" vs "changeable" (institutions can change) | Seligman; Acemoglu & Robinson |
-| 9 | Bank run | Social referencing at scale: panic as a shared lens | Sorce 1985; Diamond–Dybvig |
+| 9 | Bank run | Social referencing at scale: panic as a shared lens; uncertainty is worse than bad news (de Berker 2016) | Sorce 1985; Diamond–Dybvig |
 | 10 | Birth rates | Distanced self-talk about the future: zoom out | Kross 2014 |
 
 ## Sources (verified 2026-11-01)
+
+- [de Berker et al. 2016, uncertainty and stress (UCL)](https://www.ucl.ac.uk/news/2016/mar/uncertainty-can-cause-more-stress-inevitable-pain), [paper](https://pmc.ncbi.nlm.nih.gov/articles/PMC4820542)
+- [Kruger, Epley et al. 2005, egocentrism over email (NYU Stern)](https://www.stern.nyu.edu/experience-stern/faculty-research/justin-kruger-email-research)
+- [D'Mello et al. 2014, confusion can be beneficial for learning](https://home.cs.colorado.edu/~mozer/Teaching/syllabi/TopicsInCognitiveScience/DMelloConfusion-Reprint.pdf)
+- [Need for cognitive closure: seizing and freezing (Frontiers 2017)](https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2017.00114/pdf)
 
 - [Yoo et al. 2007, sleep loss and the amygdala (UC Berkeley release)](https://newsarchive.berkeley.edu/news/media/releases/2007/10/22_sleeploss.shtml)
 - [Orobio de Castro et al. 2002, hostile attribution meta-analysis](https://research-portal.uu.nl/en/publications/hostile-intent-attribution-and-aggressive-behavior-in-children-re/) and the [2019 follow-up](https://pmc.ncbi.nlm.nih.gov/articles/PMC6851691)
