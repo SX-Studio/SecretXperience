@@ -5,7 +5,8 @@
 | File | What it is |
 |---|---|
 | `social-ripple-ep02-7-levels-of-school-popularity.mp4` | The film (repo copy, re-encoded to stay under GitHub's 100 MB limit; the full-quality render was sent in chat) |
-| `thumbnail-1280x720.jpg` and `thumbnail-source.html` | Thumbnail: "WHICH LEVEL ARE YOU?" plus the ladder and the −1000 aura sticker |
+| `thumbnail-B-seat-taken-1280x720.jpg` and its source | **Recommended thumbnail**, in the style of Krunchy History: a full scene, a 2-word hook ("SEAT TAKEN?"), Jordan alone at the top table and Nia with her tray |
+| `thumbnail-1280x720.jpg` and `thumbnail-source.html` | Alternative thumbnail: "WHICH LEVEL ARE YOU?" plus the ladder and the −1000 aura sticker |
 | `ep2-captions.srt` | Captions (169 cues, from the script and the word clock) |
 | `project/` | The HyperFrames project: 16 scenes, the ep2 sets and timing, the sound kit and mixer |
 
