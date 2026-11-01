@@ -69,3 +69,32 @@ Episode 1, "The Butterfly Effect of a Bad Mood", built this pipeline. Every late
 8. **Render:** `npx hyperframes render --quality looks`.
 9. **Captions:** an SRT built from the scripted text and the word clock (phrase-split, at most 9 words per cue). Upload it to YouTube instead of burning captions in.
 10. **Thumbnail:** a 1280×720 still from the engine: one big face looking at the viewer, a short hook of 6 words or fewer with a number, and the red/gold device. The project is `hf/videos/sr-thumb`.
+
+## The 3D-world pipeline (episode 3 onwards, 2026-11-01)
+
+This is the method from the tutorial the user shared: 2D characters lit inside a real 3D world built in code, with ink, warm key light and violet shadows, a gliding camera, measuring instead of guessing, and many agents split by files.
+
+**Engine.** `ep03-how-money-actually-works/project/assets/sr3d.js`:
+- a three.js r158 toon world with a 3-step ramp;
+- ink lines from a depth-Laplacian (1/z) and normal-edge pass;
+- depth of field focused on the camera target;
+- SVG rig characters projected into the world as depth-sorted billboards, clipped behind counters and desks, with an inner-rim "lit" filter per scene light.
+
+**Camera.** `W3.keys([{t, p, l, f, dof, fn, ff, e}])` interpolates yaw and pitch, so 180° turns are safe. `shot(t0, t1, A, B, {in})` gives a creeping hold, entered by a cut or a glide.
+
+**Sets by agents, one file each.** For example `ep3-town.js`, `ep3-interiors.js` and `ep3-props.js`. Each agent tests in its own copy of the project, following `BRIEF-SETS.md` (the API contract, palette, budget and test loop).
+
+**Timing.**
+- `tools/plan.py` aligns the script words to the Parakeet transcript with difflib, so numbers like "1,000" or "97%" still get exact times.
+- `K.W(word, nth, line)` normalizes punctuation. Validate every lookup with the node check before rendering.
+
+**Rendering on this box (4 CPU cores, software WebGL):**
+- Use `--workers 3` and a **full streamed render, detached with `setsid nohup`**, so the 2-hour limit on background tasks can't kill it.
+- Speed is about 0.8 frames/s at 1080p (about 5.5 h for 8.5 min at 30 fps), so budget the render first.
+- `--start/--end` span renders store every frame as a JPEG of about 1 MB on disk, which is far too much for our space.
+- Never run two renders at once.
+- Use `samples: 2`, `dofTaps: 14`. Keep `ndScale` at 1, because 0.75 makes the ink jagged.
+
+**Mixing.** Never use `np.convolve` for envelopes on whole-film buffers: it takes about 50 minutes. Use `uniform_filter1d` and a one-pole `lfilter`, which take 20 seconds.
+
+**Never `pkill -f` a pattern that also matches the calling shell.** Kill by PID instead, with bracketed patterns.
