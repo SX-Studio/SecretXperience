@@ -1,0 +1,62 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #t1-svg { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+    #t1-svg text { font-family: "Nunito"; }
+  </style>
+  <div id="root" data-composition-id="t1" data-width="1920" data-height="1080">
+    <svg id="t1-svg" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" data-layout-ignore></svg>
+  </div>
+  <script>
+    (function () {
+      const SR = window.SR; const { el, Scene2, Character, Crowd, Camera, Bubble, FX, Life, Ripple, Butterfly, PAL, clamp, sampleTrack, drive } = SR;
+      const svg = document.getElementById("t1-svg");
+      const D = 8, G = 860;
+      const skyL = el("g", {}, svg); Scene2.sky(svg, skyL, "morning", 1920, 1080, { x: 1520, y: 190, r: 70 });
+      const cloudL = el("g", {}, svg), clouds = Life.clouds(cloudL, 5, 70, 260);
+      const birdsL = el("g", {}, svg), birds = Life.birds(birdsL, 4);
+      const far = el("g", {}, svg);
+      [[-300, 380, 520, "#B9C7C9"], [60, 300, 420, "#CDB7A6"], [340, 420, 600, "#B7B3C4"], [740, 360, 480, "#C9BBA5"], [1080, 400, 560, "#B9C7C9"], [1460, 340, 470, "#CDB7A6"], [1780, 420, 580, "#B7B3C4"], [2180, 360, 520, "#C9BBA5"], [2520, 400, 600, "#B9C7C9"]]
+        .forEach(([x, w, h, c]) => Scene2.building(far, x, w, h, G - 70, c, { far: true, haze: "#F7DCC4", hazeK: 0.45 }));
+      const world = el("g", {}, svg);
+      const mid = el("g", {}, world), road = el("g", {}, world), walkers = el("g", {}, world), hero = el("g", {}, world), fx = el("g", {}, world);
+      Scene2.building(mid, -260, 460, 640, G, "#9DB49A", { cols: 4 });
+      Scene2.building(mid, 200, 340, 520, G, "#E8C79B", { cols: 3 });
+      Scene2.awningShop(mid, 540, 760, G, "#D9785B", "THE DAILY GRIND", "#3F7F87");
+      Scene2.building(mid, 1300, 420, 700, G, "#6F8299", { cols: 4, lit: 0.3 });
+      Scene2.building(mid, 1720, 480, 600, G, "#8C5E78", { cols: 4 });
+      Scene2.building(mid, 2200, 460, 640, G, "#E8C79B", { cols: 4 });
+      Scene2.street(mid, G, -1000, 3400);
+      Scene2.tree(mid, 470, G, 0.85); Scene2.lamp(mid, 1360, G); Scene2.hydrant(mid, 1270, G + 30); Scene2.bin(mid, 160, G + 26); Scene2.planter(mid, 520, G + 24, 0.8); Scene2.planter(mid, 1280 + 0, G - 0, 0.0001); Scene2.bike(mid, 1850, G + 28); Scene2.tree(mid, 2120, G, 0.9);
+      const traffic = Life.traffic(road, G + 250, 3, 12, 2400);
+      const crowd = Crowd(walkers, { n: 9, seed: 404, x0: -200, x1: 2600, y: G + 18, dur: D, speed: [60, 120], scale: [0.72, 0.82], idp: "t1c" });
+      const leaves = Life.leaves(fx, 300, 640, 560, G + 40, 6);
+      const maya = Character(hero, { id: "t1-maya", color: "#3F7F87", outfit: "hoodie", hair: "ponytail", hairColor: "#3B2B22", seed: 5, scale: 1.08,
+        x: [[0, 120], [4.4, 860, "out"]], y: [[0, G + 64]],
+        pose: [[0, "relaxed", 0], [4.6, "wave", 0.3], [6.4, "relaxed", 0.4]], mood: [[0, "content", 0], [4.6, "joy", 0.3]], look: [[0, { x: 1, y: 0 }]], lips: [[4.9, "morning_f"], [6.95, "haha_f"]], prop: { kind: "cup" } });
+      const leo = Character(hero, { id: "t1-leo", color: "#D9A441", outfit: "apron", hair: "curly", hairColor: "#2A2228", glasses: true, seed: 9, scale: 1.08,
+        x: [[0, 1220], [2.6, 1260], [4.2, 1130, "out"]], y: [[0, G + 64]], facing: [[0, -1]], pants: "#5A4E44",
+        pose: [[0, "relaxed", 0], [4.4, "wave", 0.3], [6.2, "give", 0.3]], mood: [[0, "happy", 0], [4.5, "joy", 0.3]], lips: [[6.35, "usual_m"]] });
+      const dustM = FX.dust(fx), dustL = FX.dust(fx);
+      const hearts = FX.hearts(fx), spark = FX.sparkles(fx);
+      const hi = Bubble(fx, { text: "Morning, Leo!", t0: 4.8, t1: 6.2, side: 1 });
+      const yo = Bubble(fx, { text: "Your usual — on me!", t0: 6.3, t1: 7.8, side: -1 });
+      const gold = Ripple(fx, { color: PAL.kind, t: 6.4, dur: 1.2, maxR: 240, rings: 3, width: 8 });
+      const bf = Butterfly(fx, { x: [[0, 1500], [3, 1100], [6, 760], [8, 640]], y: [[0, 420], [3, 360], [6, 520], [8, 470]], scale: 0.9, flap: 3.2 });
+      const vigL = el("g", {}, svg); Scene2.vignette(svg, vigL, 0.18);
+      const cam = Camera(world, [[0, { x: 700, y: 640, z: 1.15, r: 0 }], [4.4, { x: 960, y: 640, z: 1.3, r: 0 }, "inOut"], [D, { x: 1000, y: 650, z: 1.45, r: 0 }, "linear"]]);
+      const tl = gsap.timeline({ paused: true });
+      drive(tl, D, (t) => {
+        const c = cam.update(t);
+        far.setAttribute("transform", `translate(${960 - c.x * 0.5 * c.z},${540 - 640 * c.z + 60}) scale(${c.z})`);
+        clouds.update(t); birds.update(t); traffic.update(t); crowd.update(t); leaves.update(t);
+        const m = maya.update(t), l = leo.update(t);
+        dustM.update(t, m, G + 64); dustL.update(t, l, G + 64);
+        hi.update(t, { x: m.headX, y: m.headY }); yo.update(t, { x: l.headX, y: l.headY });
+        gold.update(t, { x: l.headX, y: l.headY }); hearts.update(t, m.headX, m.headY - 40, 6.8); spark.update(t, l.handX, l.handY, 6.4);
+        bf.update(t);
+      });
+      window.__timelines["t1"] = tl;
+    })();
+  </script>
+</template>
