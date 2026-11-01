@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1280, height=720" />
+    <script src="assets/sr-engine-v1.js"></script>
+    <script src="assets/sr-v2.js"></script>
+    <script src="assets/lips.js"></script>
+    <script src="assets/ep2-sets.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1280px; height: 720px; overflow: hidden; background: #E8DFC9; }
+      #root { position: relative; width: 1280px; height: 720px; }
+      #art { position: absolute; inset: 0; width: 1280px; height: 720px; }
+      .t { position: absolute; font-family: "Outfit"; font-weight: 900; letter-spacing: -0.03em; line-height: 0.9; white-space: nowrap; -webkit-text-stroke: 0; paint-order: stroke fill; }
+      #t1 { left: 560px; top: 34px; font-size: 92px; color: #1E1B22; text-shadow: 0 0 0 #fff, 5px 5px 0 #fff, -5px -5px 0 #fff, 5px -5px 0 #fff, -5px 5px 0 #fff; }
+      #t2 { left: 560px; top: 126px; font-size: 92px; color: #E2412F; text-shadow: 5px 5px 0 #fff, -5px -5px 0 #fff, 5px -5px 0 #fff, -5px 5px 0 #fff; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="1" data-width="1280" data-height="720" data-no-timeline>
+      <svg id="art" viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" data-layout-ignore></svg>
+      <div id="t1" class="t">WHICH LEVEL</div>
+      <div id="t2" class="t">ARE YOU?</div>
+    </div>
+    <script>
+      (function () {
+        const SR = window.SR, EP = window.EP; const { el, Character, Butterfly, PAL } = SR;
+        const svg = document.getElementById("art");
+        const bg = el("g", { transform: "translate(-200,-210) scale(0.95)" }, svg), fg = el("g", {}, svg), fx = el("g", {}, svg);
+        EP.hallway(svg, bg, 900, { items: ["lockers", "lockers", "lockers"], seed: 3 });
+        el("rect", { x: 0, y: 0, width: 1280, height: 720, fill: "rgba(232,223,201,0.25)" }, svg.insertBefore(el("g", {}), fg));
+        const j = Character(fg, EP.cast("jordan", { id: "th-j", scale: 2.5, x: [[0, 330]], y: [[0, 1180]], pose: [[0, "startle", 0]], mood: [[0, "shock", 0]], look: [[0, { x: 0.15, y: 0 }]] }));
+        const c = j.update(0.5);
+        
+        // ladder
+        const L = el("g", { transform: "translate(1000,265)" }, fx);
+        el("rect", { x: -160, y: -18, width: 330, height: 470, rx: 22, fill: "rgba(30,27,34,0.82)" }, L);
+        el("path", { d: "M-70,0 V430 M-10,0 V430", stroke: "#F4F1EA", "stroke-width": 9 }, L);
+        for (let i = 0; i < 7; i++) { const y = 430 - (i + 0.5) * 61; const hot = i === 5, low = i === 1, top = i === 6;
+          el("rect", { x: -82, y: y - 9, width: 84, height: 18, rx: 7, fill: top ? PAL.kind : hot ? PAL.rude : low ? "#8E8A86" : "#F4F1EA", stroke: PAL.ink, "stroke-width": 3 }, L);
+          EP.txt(L, 30, y, top ? "7 🔒" : String(i + 1), top || hot ? 44 : 34, top ? PAL.kind : hot ? "#FF8A7A" : "#F4F1EA", { font: "Outfit", anchor: "start" }); }
+        el("path", { d: "M100,85 C170,140 170,300 100,340", fill: "none", stroke: PAL.rude, "stroke-width": 12, "stroke-linecap": "round" }, L);
+        el("path", { d: "M78,318 L104,352 L128,316 Z", fill: PAL.rude, stroke: PAL.rude, "stroke-width": 6, "stroke-linejoin": "round" }, L);
+        // aura sticker
+        const A = el("g", { transform: "translate(660,610) rotate(-7)" }, fx);
+        el("rect", { x: -150, y: -52, width: 300, height: 104, rx: 18, fill: "#FFFFFF", stroke: PAL.ink, "stroke-width": 6 }, A);
+        EP.txt(A, 0, -8, "-1000", 54, PAL.rude, { font: "Outfit" }); EP.txt(A, 0, 34, "AURA", 28, PAL.ink, { font: "Outfit" });
+        Butterfly(fx, { x: [[0, 1225]], y: [[0, 690]], scale: 0.45, flap: 2 }).update(0.3);
+      })();
+    </script>
+  </body>
+</html>

@@ -11,6 +11,7 @@
 | `PRODUCTION.md` | The reusable episode pipeline and the user's standing rules for every episode |
 | `branding/` | Profile picture (800×800), banner (2560×1440) and their sources |
 | `ep01-butterfly-bad-mood/` | **Episode 1** (2:53): final MP4, thumbnail, upload kit, captions and the full HyperFrames project |
+| `ep02-7-levels-of-school-popularity/` | **Episode 2** (5:39): status, a rumour and the seat that changed it; 16 scenes on engine v2, a new school sound kit, 3 new music cues. Film, thumbnail, captions, research notes and the project |
 | `SEASON-PLAN.md` | The "everything social" umbrella, the 1,528-result second sweep, and Season 1, with each episode moving one step out in scale |
 | `v2-upgrade/` | **Engine v2** (fuller characters, lit layered sets, life and effects, lip-sync, sound v2), the Danny Why study, 10-year viral-topic research (`results.tsv`), the before/after and the style-test video |
 | `forensics/` | Gemini breakdowns of the two tutorials (`over_*`, `seg_*`) and of three reference films (`ref_*`) |

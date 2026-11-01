@@ -37,7 +37,7 @@ Each episode moves one step out in **scale** (person → group → institution �
 | # | Scale | Working title | Setting and cast | The ripple | Research to verify |
 |---|---|---|---|---|---|
 | 1 ✔ | **Strangers** | The Butterfly Effect of a Bad Mood | Street, café, school play | A mood passes through 3 strangers | Done |
-| 2 | **A group** | The 7 Levels of School Popularity (and Who Really Decides Them) | A high-school cafeteria, hallways, phones; a teen cast | One rumour reorders a whole grade | Prinstein's two kinds of popularity (likeability vs status) · hierarchies forming within days |
+| 2 ✔ | **A group** | The 7 Levels of School Popularity (and Who Really Decides Them) | A high-school cafeteria, hallways, phones; a teen cast | One rumour reorders a whole grade | Prinstein's two kinds of popularity (likeability vs status) · hierarchies forming within days |
 | 3 | **Money** | How Money Actually Works, Explained With One Sandwich | A tiny island town; a sandwich economy | One loan ripples through the town, then a credit cycle | Dalio's credit-cycle model · Bank of England 2014 "Money creation in the modern economy" |
 | 4 | **Work** | Why Do We Work 5 Days a Week? | A factory in 1926, then a modern office | Ford's weekend spreads to the world | Ford's 1926 five-day week · UK 4-day-week trial 2022 (56 of 61 firms continued) |
 | 5 | **Manners** | Why Do We Tip? The Strangest Custom in America | A diner across 150 years | A European custom → the Pullman porters → today's tip screens | Segrave's history of tipping · Pullman Company · tipped minimum wage |
@@ -47,7 +47,9 @@ Each episode moves one step out in **scale** (person → group → institution �
 | 9 | **History** | One Rumour, One Bank Run | 1930s and 2023 side by side | A whisper empties a bank in a day | SVB: $42B withdrawn in a day · Diamond–Dybvig |
 | 10 | **The future** | Why Birth Rates Are Falling Everywhere | A town that gets quieter every year | Fewer kids → fewer schools → fewer workers | UN World Population Prospects · South Korea's fertility rate of about 0.72 |
 
-**Recommended next:** episode 2, "School Popularity". It moves to a new audience (teens), a new setting and a new kind of ripple (status, not mood), and it's fun to animate. Episode 7, "Capitalism vs Socialism", is the flagship of the systems pillar and could come earlier if the user prefers.
+**Done:** episode 2, "School Popularity" (`ep02-7-levels-of-school-popularity/`).
+
+**Recommended next:** episode 3, "How Money Actually Works, Explained With One Sandwich". Episode 7, "Capitalism vs Socialism", is the flagship of the systems pillar and could come earlier if the user prefers.
 
 **Every episode still gets:**
 - the v2 engine and a living background soundscape;
