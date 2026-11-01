@@ -59,9 +59,9 @@
     return { at(t) { let i = 0; for (let k = 0; k < shots.length; k++) if (t >= shots[k].t) i = k; const s = shots[i], t1 = i + 1 < shots.length ? shots[i + 1].t : D, k = clamp((t - s.t) / Math.max(0.01, t1 - s.t), 0, 1), e = (EASE[s.ease || "inOut"] || EASE.inOut)(k), to = s.to || s.cam;
       const c = {}; for (const key of ["x", "y", "z", "r"]) c[key] = (s.cam[key] ?? 0) + ((to[key] ?? s.cam[key] ?? 0) - (s.cam[key] ?? 0)) * e; return { i, s, k, c, tin: t - s.t }; } };
   };
-  V3.apply = function (world, c, shake = 0, t = 0) {
+  V3.apply = function (world, c, shake = 0, t = 0, W = 1920, H = 1080) {
     const sx = shake * (Math.sin(t * 23.1) + Math.sin(t * 37.7) * 0.5), sy = shake * (Math.cos(t * 19.3) + Math.sin(t * 41.9) * 0.5);
-    world.setAttribute("transform", `translate(${960 + sx},${540 + sy}) rotate(${c.r || 0}) scale(${c.z}) translate(${-c.x},${-c.y})`);
+    world.setAttribute("transform", `translate(${W / 2 + sx},${H / 2 + sy}) rotate(${c.r || 0}) scale(${c.z}) translate(${-c.x},${-c.y})`);
   };
   window.V3 = V3;
 })();
