@@ -24,6 +24,7 @@
     const body = el("g", {}, g);
     const LEG1 = 56, LEG2 = 54, ARM1 = 48, ARM2 = 46, TORSO = 94, HEADR = 41, NECK = 9, ANK = 10;
     const OUT = 4.2;                                    // outline width
+    const SKIN0 = s.skin !== undefined ? s.skin : (SR.SKIN || null), SKIN = SKIN0 === "ink" ? null : SKIN0, FEAT = SKIN ? INK : "#FFFFFF";
     const dark = shade(s.color, -0.22), light = shade(s.color, 0.18), pantsD = shade(s.pants, -0.25);
     const shadow = el("ellipse", { cx: 0, cy: 2, rx: 50, ry: 9, fill: "rgba(30,27,34,0.18)" }, body);
     // wings (butterfly costume)
@@ -40,12 +41,14 @@
     const legB = tube(backG, 17, pantsD);
     const shoeB = el("path", { fill: shade(s.shoes, -0.1), stroke: INK, "stroke-width": OUT, "stroke-linejoin": "round" }, backG);
     const sleeveB = tube(backG, 17, dark);
-    const foreB = el("path", { fill: "none", stroke: INK, "stroke-width": 12, "stroke-linecap": "round" }, backG);
-    const handB = el("path", { fill: INK }, backG);
+    const foreBo = SKIN ? el("path", { fill: "none", stroke: INK, "stroke-width": 12 + OUT * 2, "stroke-linecap": "round" }, backG) : null;
+    const foreB = el("path", { fill: "none", stroke: SKIN || INK, "stroke-width": 12, "stroke-linecap": "round" }, backG);
+    const handB = el("path", SKIN ? { fill: SKIN, stroke: INK, "stroke-width": 3.4, "stroke-linejoin": "round" } : { fill: INK }, backG);
     const legF = tube(body, 17, s.pants);
     const shoeF = el("path", { fill: s.shoes, stroke: INK, "stroke-width": OUT, "stroke-linejoin": "round" }, body);
     const soleF = el("path", { fill: "none", stroke: "#EDE6DA", "stroke-width": 3, "stroke-linecap": "round" }, body);
-    const neck = el("path", { fill: "none", stroke: INK, "stroke-width": 15, "stroke-linecap": "round" }, body);
+    const neckO = SKIN ? el("path", { fill: "none", stroke: INK, "stroke-width": 15 + OUT * 2, "stroke-linecap": "round" }, body) : null;
+    const neck = el("path", { fill: "none", stroke: SKIN || INK, "stroke-width": 15, "stroke-linecap": "round" }, body);
     // torso (garment) with clipped cel-shade and details
     const torsoG = el("g", {}, body);
     const torsoClipId = id + "-tc";
@@ -58,7 +61,7 @@
     const torsoOut = el("path", { fill: "none", stroke: INK, "stroke-width": OUT, "stroke-linejoin": "round" }, torsoG);
     const headG = el("g", {}, body);
     const hairBack = el("path", { fill: s.hairColor, stroke: INK, "stroke-width": 3 }, headG);
-    const head = el("circle", { r: HEADR, fill: INK }, headG);
+    const head = el("circle", SKIN ? { r: HEADR, fill: SKIN, stroke: INK, "stroke-width": OUT } : { r: HEADR, fill: INK }, headG);
     const spec_ = el("path", { d: "", fill: "none", stroke: "#FFFFFF", "stroke-width": 5, "stroke-linecap": "round", opacity: 0.2 }, headG);
     const blush = [el("ellipse", { rx: 9, ry: 5, fill: "#E9778A", opacity: 0 }, headG), el("ellipse", { rx: 9, ry: 5, fill: "#E9778A", opacity: 0 }, headG)];
     const hairFront = el("path", { fill: s.hairColor, stroke: INK, "stroke-width": 3, "stroke-linejoin": "round" }, headG);
@@ -66,23 +69,24 @@
     if (s.wings) el("path", { d: "M-10,-36 Q-20,-66 -34,-74 M10,-36 Q22,-66 36,-72", fill: "none", stroke: INK, "stroke-width": 4, "stroke-linecap": "round" }, headG);
     const eyes = [0, 1].map((i) => {
       const eg = el("g", {}, headG);
-      const white = el("ellipse", { rx: 9.5, ry: 11.5, fill: "#FFFFFF" }, eg);
+      const white = el("ellipse", SKIN ? { rx: 9.5, ry: 11.5, fill: "#FFFFFF", stroke: INK, "stroke-width": 2.2 } : { rx: 9.5, ry: 11.5, fill: "#FFFFFF" }, eg);
       const cp = el("clipPath", { id: `${id}-e${i}` }, eg); const clipE = el("ellipse", { rx: 10, ry: 12 }, cp);
       const pupil = el("circle", { r: 4.9, fill: INK, "clip-path": `url(#${id}-e${i})` }, eg);
       const glint = el("circle", { r: 1.6, fill: "#FFFFFF", "clip-path": `url(#${id}-e${i})` }, eg);
-      const lid = el("path", { fill: INK, "clip-path": `url(#${id}-e${i})` }, eg);
-      const arc = el("path", { fill: "none", stroke: "#FFFFFF", "stroke-width": 4.6, "stroke-linecap": "round" }, eg);
-      const brow = el("path", { fill: "none", stroke: "#FFFFFF", "stroke-width": 4.2, "stroke-linecap": "round" }, eg);
+      const lid = el("path", { fill: SKIN || INK, "clip-path": `url(#${id}-e${i})` }, eg);
+      const arc = el("path", { fill: "none", stroke: FEAT, "stroke-width": 4.6, "stroke-linecap": "round" }, eg);
+      const brow = el("path", { fill: "none", stroke: FEAT, "stroke-width": 4.2, "stroke-linecap": "round" }, eg);
       return { eg, white, clipE, pupil, glint, lid, arc, brow };
     });
-    const mouth = el("path", { fill: "#FFFFFF", stroke: "#FFFFFF", "stroke-width": 3.4, "stroke-linecap": "round", "stroke-linejoin": "round" }, headG);
+    const mouth = el("path", { fill: SKIN ? "#5A2A2E" : "#FFFFFF", stroke: FEAT, "stroke-width": 3.4, "stroke-linecap": "round", "stroke-linejoin": "round" }, headG);
     const tongue = el("ellipse", { rx: 5, ry: 3, fill: "#E9778A", opacity: 0 }, headG);
     const glasses = s.glasses ? el("g", {}, headG) : null;
-    if (glasses) { el("circle", { cx: -13, cy: -4, r: 13.5, fill: "rgba(255,255,255,0.06)", stroke: "#FFFFFF", "stroke-width": 2.8 }, glasses); el("circle", { cx: 13, cy: -4, r: 13.5, fill: "rgba(255,255,255,0.06)", stroke: "#FFFFFF", "stroke-width": 2.8 }, glasses); el("path", { d: "M-1,-6 L1,-6", stroke: "#FFFFFF", "stroke-width": 2.8 }, glasses); }
+    if (glasses) { el("circle", { cx: -13, cy: -4, r: 13.5, fill: "rgba(255,255,255,0.06)", stroke: FEAT, "stroke-width": 2.8 }, glasses); el("circle", { cx: 13, cy: -4, r: 13.5, fill: "rgba(255,255,255,0.06)", stroke: FEAT, "stroke-width": 2.8 }, glasses); el("path", { d: "M-1,-6 L1,-6", stroke: "#FFFFFF", "stroke-width": 2.8 }, glasses); }
     const frontG = el("g", {}, body);
     const sleeveF = tube(frontG, 17, s.color);
-    const foreF = el("path", { fill: "none", stroke: INK, "stroke-width": 12, "stroke-linecap": "round" }, frontG);
-    const handF = el("path", { fill: INK }, frontG);
+    const foreFo = SKIN ? el("path", { fill: "none", stroke: INK, "stroke-width": 12 + OUT * 2, "stroke-linecap": "round" }, frontG) : null;
+    const foreF = el("path", { fill: "none", stroke: SKIN || INK, "stroke-width": 12, "stroke-linecap": "round" }, frontG);
+    const handF = el("path", SKIN ? { fill: SKIN, stroke: INK, "stroke-width": 3.4, "stroke-linejoin": "round" } : { fill: INK }, frontG);
     const propG = el("g", {}, frontG);
     let prop = null;
 
@@ -181,10 +185,10 @@
       const [cfx, cfy] = cuff(exF, eyF, hxF, hyF), [cbx, cby] = cuff(exB, eyB, hxB, hyB);
       const sF = `M${shX},${shY} L${exF + jit(6)},${eyF + jit(7)} L${cfx},${cfy}`, sB = `M${shXb},${shYb} L${exB + jit(8)},${eyB + jit(9)} L${cbx},${cby}`;
       sleeveF.o.setAttribute("d", sF); sleeveF.f.setAttribute("d", sF); sleeveB.o.setAttribute("d", sB); sleeveB.f.setAttribute("d", sB);
-      foreF.setAttribute("d", `M${cfx},${cfy} L${hxF},${hyF}`); foreB.setAttribute("d", `M${cbx},${cby} L${hxB},${hyB}`);
+      foreF.setAttribute("d", `M${cfx},${cfy} L${hxF},${hyF}`); foreB.setAttribute("d", `M${cbx},${cby} L${hxB},${hyB}`); if (foreFo) { foreFo.setAttribute("d", foreF.getAttribute("d")); foreBo.setAttribute("d", foreB.getAttribute("d")); }
       handF.setAttribute("d", mitten(hxF, hyF, P.shF + P.elF + P.lean)); handB.setAttribute("d", mitten(hxB, hyB, P.shB + P.elB + P.lean));
       const [nx0, ny0] = P2(0, nyU + 2), [hX, hY] = P2(0, nyU - NECK - HEADR + 4);
-      neck.setAttribute("d", `M${nx0},${ny0} L${hX},${hY + HEADR - 6}`);
+      neck.setAttribute("d", `M${nx0},${ny0} L${hX},${hY + HEADR - 6}`); if (neckO) neckO.setAttribute("d", neck.getAttribute("d"));
       // head
       const headLag = Math.sin(t * 2 * Math.PI / 3.4 + s.seed + 0.6) * 1.2;
       headG.setAttribute("transform", `translate(${hX},${hY + headLag}) rotate(${P.head * 0.6 + (s.hair === "ponytail" ? 0 : 0)}) scale(${1 + squash * 0.4},${1 - squash * 0.7})`);

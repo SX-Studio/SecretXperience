@@ -26,6 +26,11 @@ Episode 1, "The Butterfly Effect of a Bad Mood", built this pipeline. Every late
 - **Clarity over confusion.**
   - In stories, ambiguity is where the lens matters most: show the fog (blur, flickering "maybe" bubbles), then the focus pull.
   - In craft, every open question gets resolved, there is one core idea per episode, every new term gets a picture, and there's a short recap per act.
+- **Light-skinned characters from episode 3** (user, 2026-11-01).
+  - Pale cream heads and hands (`SR.SKIN = "#F1EBDD"` in `sr-v3.js`) with dark outlined features, so coloured light, tears, blush and shading read on faces.
+  - Light pale faces with a **multiply falloff gradient** centred on the light source (warm near it, deep purple away from it), not a "screen" glow; screen glows only show on dark surfaces.
+  - The old black heads stay available with `skin: "ink"`.
+- **Thumbnails in the Day One style:** one huge emotional face, a near-black scene, one glowing object that lights the face, and a 1–3 word scrawled title (Permanent Marker). No shame or fear titles.
 - **Viral-style sounds, but original.** The kit has a bass boom, record scratch, fail trombone, ka-ching, "dun dun dunnn" sting, boing, dings and whooshes. All are synthesized in `tools/sound_kit.py`, so nothing can be Content-ID claimed. Trending audio clips can't be used, because a copyright claim takes the ad revenue.
 - **Light comedy, never stressful.** Each heavy beat gets a gag: the hair going grey, the "FREE" price tag on the bad mood, the sneeze, Dev still honking outside the window.
 - **Current keywords, used honestly:**

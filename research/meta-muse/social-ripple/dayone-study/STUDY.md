@@ -61,3 +61,9 @@ Its tagline: *"Animated short films about discipline, struggle, ambition, and be
 - In episodes, **sticky notes or whispers become the visible red lens**, and gold arrives through a person's small act, which keeps the ripple.
 
 Notes: `forensics/a_discipline.md`, `a_overthinking.md`, `a_newest.md`. Thumbnails ranked by views: `dayone-thumbnails-by-views.jpg`.
+
+## Follow-up: light skin (user, 2026-11-01)
+
+The user loved Day One's thumbnails and pointed out that lighting effects barely show on black heads. `light-skin-test/black-vs-light.jpg` proves it: the same "SEAT TAKEN?" thumbnail with the red phone glow reads far better on a pale face, which shows the tears, the brows and the red light. The rig now supports `skin` (globally `SR.SKIN`), and episode 3 onward uses cream skin.
+
+Generating painted thumbnails with Gemini image models failed: **the API key has no image-generation quota**. Thumbnails are built in our own engine instead.
