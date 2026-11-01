@@ -18,6 +18,7 @@ Episode 1, "The Butterfly Effect of a Bad Mood", built this pipeline. Every late
   - crowd footsteps on the right surface (`crowd_steps_street`, `crowd_steps_cafe`);
   - distant, unintelligible talk (`far_talk_street`) plus the location bed;
   - target level in the gaps between lines: about −26 dB RMS after loudness normalisation. Measure it; don't guess. At −34 dB nobody hears it.
+- **Cinematic camera (v3, 2026-11-01).** Cut every 2–4 s on a word or an action, and mix wides, close-ups and top-down inserts. Close-ups blur the background, but **speaking characters always stay sharp**: the blur never touches the characters' layer.
 - **Viral-style sounds, but original.** The kit has a bass boom, record scratch, fail trombone, ka-ching, "dun dun dunnn" sting, boing, dings and whooshes. All are synthesized in `tools/sound_kit.py`, so nothing can be Content-ID claimed. Trending audio clips can't be used, because a copyright claim takes the ad revenue.
 - **Light comedy, never stressful.** Each heavy beat gets a gag: the hair going grey, the "FREE" price tag on the bad mood, the sneeze, Dev still honking outside the window.
 - **Current keywords, used honestly:**

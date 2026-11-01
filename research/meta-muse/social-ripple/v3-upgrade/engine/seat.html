@@ -13,7 +13,7 @@
       const svg = document.getElementById("seat-svg"), D = T.D, G = 900;
       const world = el("g", {}, svg);
       const bgL = el("g", {}, world), setL = el("g", {}, bgL), lights = el("g", {}, bgL), backK = el("g", {}, bgL), backT = el("g", {}, bgL);
-      const midL = el("g", {}, world), chairL = el("g", {}, midL), kidsL = el("g", {}, midL), tabL = el("g", {}, midL), fx = el("g", {}, world);
+      const midL = el("g", {}, world), chairL = el("g", {}, midL), kidsL = el("g", {}, world), tabL = el("g", {}, world), fx = el("g", {}, world);
       const fgL = el("g", {}, svg), insL = el("g", { opacity: 0 }, svg), post = el("g", {}, svg), hud = el("g", {}, svg);
       EP.cafeteria(svg, setL, G, { time: "12:31", menu: "Taco Wednesday", menuX: 1700, clockX: 2250 });
       [-1100, -660, -220].forEach((x) => V3.glow(svg, lights, x + 150, 230, 420, "#FFD9A0", 0.55));

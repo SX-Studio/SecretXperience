@@ -58,5 +58,6 @@ The test re-shoots episode 2's "Is this seat taken?" beat (3:40) with the same v
 
 - A cut every 2–4 s, on a word or an action. Each beat gets a wide, a close and an insert.
 - Close-ups get a blurred background and a rim light; wide shots get a light rim only.
+- **Whoever is speaking (and anyone they're talking to) is never blurred.** Characters sit in their own focus layer; only the set, the far crowd and the props defocus. (User feedback, 2026-11-01: faces were blurry in the first test. Fixed in `engine/seat.html`.)
 - One top-down or insert shot per scene (phones, trays, notes).
 - End on an A/B question. Aim for 8–10 minutes when the topic supports it.
