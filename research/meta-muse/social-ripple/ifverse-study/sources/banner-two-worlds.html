@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=2560, height=1440" />
+<script src="assets/sr-engine-v1.js"></script><script src="assets/sr-v3.js"></script><script src="assets/lips.js"></script><script src="assets/ep2-sets.js"></script><script src="assets/v3-fx.js"></script><script src="assets/cine.js"></script><script src="assets/split.js"></script>
+<style>* { margin: 0; padding: 0; } html, body { width: 2560px; height: 1440px; overflow: hidden; background: #0B0918; } #root { position: relative; width: 2560px; height: 1440px; } #art { position: absolute; inset: 0; width: 2560px; height: 1440px; }
+.t { position: absolute; font-family: "Outfit"; font-weight: 900; white-space: nowrap; text-align: center; }
+.wm { left: 0; width: 2560px; top: 512px; font-size: 62px; letter-spacing: 0.16em; background: linear-gradient(90deg, #FF8A6A 30%, #FFF4DC 50%, #FFC870 70%); -webkit-background-clip: text; color: transparent; filter: drop-shadow(0 0 14px rgba(255,200,140,0.35)); }
+.l { left: 560px; width: 560px; top: 584px; font-size: 38px; letter-spacing: 0.14em; color: #FF7A5C; }
+.r { left: 1440px; width: 560px; top: 584px; font-size: 38px; letter-spacing: 0.14em; color: #FFC860; }</style></head>
+<body><div id="root" data-composition-id="main" data-start="0" data-duration="1" data-width="2560" data-height="1440" data-no-timeline>
+<svg id="art" viewBox="0 0 2560 1440" xmlns="http://www.w3.org/2000/svg" data-layout-ignore></svg>
+<div class="t wm">SOCIAL RIPPLE</div><div class="t l">ONE BAD MOOD…</div><div class="t r">…OR ONE KIND ACT</div></div>
+<script>
+(function () {
+  const SR = window.SR, C = window.CINE, S = window.SPLIT, EP = window.EP; const { el, Character } = SR;
+  const svg = document.getElementById("art"), W = 2560, H = 1440, M = 1280;
+  S.worlds(svg, W, H, M, 930, 1.2);
+  const fx = el("g", {}, svg);
+  S.rings(svg, fx, M, 752, 6, 170, 110, S.RED, 1, -1); S.rings(svg, fx, M, 752, 6, 170, 110, S.GOLD, 1, 1);
+  const P = [];
+  const add = (who, x, sc, face, pose, mood, rim, extra) => { const c = Character(fx, EP.cast(who, Object.assign({ id: "b3-" + x, scale: sc, x: [[0, x]], y: [[0, 925]], facing: [[0, face]], noWalk: true, pose: [[0, pose, 0]], mood: [[0, mood, 0]] }, extra || {}))); c.g.setAttribute("filter", rim); c.update(0.3); P.push(c); return c; };
+  const redRim = C.rim(svg, "#FF6A50", -4, -1, 1.2, 0.5), goldRim = C.rim(svg, "#FFD27A", 4, -1, 1.2, 0.6);
+  add("jordan", 1070, 0.9, -1, "shout", "angry", redRim);
+  add("priya", 850, 0.86, -1, "crossed", "annoyed", redRim);
+  add("dev", 650, 0.7, 1, "slump", "sad", redRim, { color: "#E58A3A" });
+  add("marcus", 1490, 0.9, 1, "give", "happy", goldRim, { prop: { kind: "cup" } });
+  add("nia", 1710, 0.86, 1, "wave", "joy", goldRim);
+  add("eli", 1910, 0.7, -1, "holdBoth", "joy", goldRim, { color: "#A5B86A", outfit: "hoodie", hair: "short", hairColor: "#8A5A35", glasses: true });
+  // storm cloud over the smallest kid on the left, sparkles + butterfly over the one on the right
+  const cl = el("g", { filter: C.blur(svg, 1.2) }, fx); el("ellipse", { cx: 650, cy: 676, rx: 66, ry: 28, fill: "#5E4A5A" }, cl); el("circle", { cx: 622, cy: 664, r: 30, fill: "#5E4A5A" }, cl); el("circle", { cx: 675, cy: 656, r: 34, fill: "#5E4A5A" }, cl);
+  for (let i = 0; i < 7; i++) el("line", { x1: 608 + i * 13, y1: 700, x2: 603 + i * 13, y2: 726, stroke: "#9FB8D8", "stroke-width": 3.5, "stroke-linecap": "round" }, fx);
+  C.glint(fx, 1985, 690, 0.8, "#FFE9A8"); C.glint(fx, 1860, 720, 0.5, "#FFE9A8");
+  SR.Butterfly(el("g", { filter: C.bloom(svg, 4, 1.3) }, svg), { x: [[0, 1950]], y: [[0, 640]], scale: 0.8, flap: 2 }).update(0.2);
+  // the split face
+  const face = el("g", { transform: "translate(1280,752) scale(0.66)" }, svg);
+  const halo = el("g", {}, face); C.pool(svg, halo, -60, 0, 250, 250, "#FF5A3C", 0.45); C.pool(svg, halo, 60, 0, 250, 250, "#FFC860", 0.5);
+  const head = el("g", {}, face);
+  const d = svg.querySelector("defs");
+  const ld = el("clipPath", { id: "bhl" }, d); el("rect", { x: -300, y: -300, width: 300, height: 1600 }, ld);
+  const rd = el("clipPath", { id: "bhr" }, d); el("rect", { x: 0, y: -300, width: 300, height: 1600 }, rd);
+  const leftH = el("g", { "clip-path": "url(#bhl)", filter: C.rim(svg, "#FF5A3C", -7, -2, 3, 0.6) }, head), rightH = el("g", { "clip-path": "url(#bhr)", filter: C.rim(svg, "#FFD27A", 7, -2, 3, 0.6) }, head);
+  [leftH, rightH].forEach((g) => { el("path", { d: "M-138,1100 Q-138,190 -100,150 Q-50,118 0,118 Q50,118 100,150 Q138,190 138,1100 Z", fill: g === leftH ? "#B23A30" : "#3F9C93", stroke: "#1E1B22", "stroke-width": 7 }, g); el("circle", { r: 168, fill: "#1E1B22" }, g); });
+  // left (angry): slanted brow, glaring eye with red glint, frown
+  el("path", { d: "M-128,-62 L-36,-30", stroke: "#FFFFFF", "stroke-width": 14, "stroke-linecap": "round" }, leftH);
+  el("ellipse", { cx: -78, cy: 4, rx: 30, ry: 26, fill: "#FFFFFF" }, leftH); el("path", { d: "M-112,-22 L-44,-10 L-44,-24 L-112,-30 Z", fill: "#1E1B22" }, leftH); el("circle", { cx: -70, cy: 10, r: 13, fill: "#1E1B22" }, leftH); el("circle", { cx: -64, cy: 4, r: 4, fill: "#FF8A6A" }, leftH);
+  el("path", { d: "M-96,96 Q-50,66 0,78", fill: "none", stroke: "#FFFFFF", "stroke-width": 12, "stroke-linecap": "round" }, leftH);
+  el("path", { d: "M-128,-128 q8,8 0,16 M-112,-140 q-8,8 0,16 M-140,-116 q8,-8 16,0 M-128,-100 q8,8 16,0", fill: "none", stroke: "#FF6A50", "stroke-width": 7, "stroke-linecap": "round" }, leftH);
+  // right (kind): soft raised brow, happy closed eye, smile, blush, star glint
+  el("path", { d: "M36,-44 Q78,-66 124,-46", fill: "none", stroke: "#FFFFFF", "stroke-width": 13, "stroke-linecap": "round" }, rightH);
+  el("path", { d: "M50,8 Q80,-26 110,8", fill: "none", stroke: "#FFFFFF", "stroke-width": 13, "stroke-linecap": "round" }, rightH);
+  el("path", { d: "M0,78 Q60,124 104,80", fill: "none", stroke: "#FFFFFF", "stroke-width": 12, "stroke-linecap": "round" }, rightH);
+  el("ellipse", { cx: 120, cy: 52, rx: 22, ry: 12, fill: "#E9778A", opacity: 0.8 }, rightH);
+  C.glint(rightH, 116, -18, 0.9, "#FFF6D8");
+  // the seam through the face
+  el("path", { d: "M0,-175 L-8,-110 L7,-50 L-6,10 L8,70 L0,175", fill: "none", stroke: "#FFF3DA", "stroke-width": 5, filter: C.bloom(svg, 6, 1.6) }, face);
+
+  const post = el("g", { transform: "scale(1.3333,1.3333)" }, svg); window.V3.grade(svg, post, { lightK: 0.12, shadowK: 0.3, vignette: 0.45 });
+})();
+</script></body></html>

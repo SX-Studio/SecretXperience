@@ -96,3 +96,20 @@ Notes are in `forensics/`:
 6. Thumbnails: one hero face, dark background, one glowing prop, a 2-word caps hook in white and yellow.
 
 Don't copy their doors, red hoodie or "What If…" title formula. We keep our own world: ripples, a recurring cast, real research.
+
+## Branding v3: the user's idea (chosen)
+
+The user's concept: **one face split down the middle into two personalities, each rippling out to a person on its side.**
+
+- **Profile picture** (`new-branding-v3/social-ripple-profile-split-face-800.png`):
+  - the left half is angry and red-lit (glaring eye, slanted brow, frown, anger mark), and red ripples reach a gloomy kid under a rain cloud;
+  - the right half is kind and gold-lit (happy eye, star glint, smile, blush), and gold ripples reach a kid who waves back;
+  - a glowing crack of light runs down the seam.
+  - It reads at 48 px.
+- **Banner** (`new-branding-v3/social-ripple-banner-two-worlds-2560x1440.png`):
+  - the split character stands in the centre, with "SOCIAL RIPPLE / ONE BAD MOOD… …OR ONE KIND ACT";
+  - the left world is a stormy night where anger passes from person to person, ending in a sad kid under a cloud;
+  - the right world is a golden dawn where kindness passes along, ending in a happy kid, sparkles and the butterfly;
+  - everything readable sits inside the safe zone.
+
+It states the whole channel thesis in one picture: same person, two states of mind, two different worlds. It replaces the v2 ripple-at-dusk set.
