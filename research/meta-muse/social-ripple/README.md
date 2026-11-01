@@ -13,6 +13,7 @@
 | `ep01-butterfly-bad-mood/` | **Episode 1** (2:53): final MP4, thumbnail, upload kit, captions and the full HyperFrames project |
 | `ep02-7-levels-of-school-popularity/` | **Episode 2** (5:39): status, a rumour and the seat that changed it; 16 scenes on engine v2, a new school sound kit, 3 new music cues. Film, thumbnail, captions, research notes and the project |
 | `v3-upgrade/` | **Engine v3**: a shot list with cuts, rim light, depth of field, rack focus, whip-pans, grade and grain, plus eyebrows. Studies of IFANIME and the ODonovan method, and an 18 s before/after test |
+| `ifverse-study/` | In-depth Ifverse study (art style, lighting, camera, branding) + our **v2 banner and profile picture** and a night style frame |
 | `SEASON-PLAN.md` | The "everything social" umbrella, the 1,528-result second sweep, and Season 1, with each episode moving one step out in scale |
 | `v2-upgrade/` | **Engine v2** (fuller characters, lit layered sets, life and effects, lip-sync, sound v2), the Danny Why study, 10-year viral-topic research (`results.tsv`), the before/after and the style-test video |
 | `forensics/` | Gemini breakdowns of the two tutorials (`over_*`, `seg_*`) and of three reference films (`ref_*`) |

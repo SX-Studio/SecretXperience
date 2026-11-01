@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=2560, height=1440" />
+<script src="assets/sr-engine-v1.js"></script><script src="assets/sr-v3.js"></script><script src="assets/lips.js"></script><script src="assets/ep2-sets.js"></script><script src="assets/v3-fx.js"></script><script src="assets/cine.js"></script><script src="assets/scene.js"></script>
+<style>* { margin: 0; padding: 0; } html, body { width: 2560px; height: 1440px; overflow: hidden; background: #0B0918; } #root { position: relative; width: 2560px; height: 1440px; } #art { position: absolute; inset: 0; width: 2560px; height: 1440px; }
+.wm { position: absolute; left: 1090px; top: 598px; font-family: "Outfit"; font-weight: 900; font-size: 92px; letter-spacing: 0.08em; line-height: 1; background: linear-gradient(180deg, #FFF4DC 10%, #FFC870 60%, #F2A25E 100%); -webkit-background-clip: text; color: transparent; filter: drop-shadow(0 0 18px rgba(255,180,90,0.45)); white-space: nowrap; }
+.tag { position: absolute; left: 1096px; top: 712px; font-family: "Outfit"; font-weight: 700; font-size: 30px; letter-spacing: 0.3em; color: #F6E3C8; white-space: nowrap; }
+.sub { position: absolute; left: 1098px; top: 764px; font-family: "Nunito"; font-weight: 800; font-size: 22px; letter-spacing: 0.2em; color: #CDB4D8; white-space: nowrap; }</style></head>
+<body><div id="root" data-composition-id="main" data-start="0" data-duration="1" data-width="2560" data-height="1440" data-no-timeline>
+<svg id="art" viewBox="0 0 2560 1440" xmlns="http://www.w3.org/2000/svg" data-layout-ignore></svg>
+<div class="wm">SOCIAL RIPPLE</div><div class="tag">EVERY SMALL ACT TRAVELS</div><div class="sub">ANIMATED STORIES · REAL RESEARCH</div></div>
+<script>
+buildRippleScene(document.getElementById("art"), 2560, 1440, { horizon: 860, cx: 780, feetY: 905, s: 1.2, rings: 8, r0: 70, dr: 120, figScale: 1.0, moon: [520, 380, 44], bf: [940, 700, 0.7], stars: 320 });
+const svg = document.getElementById("art"), SR = window.SR; const d = svg.querySelector("defs"); const rg = SR.el("radialGradient", { id: "txtbk" }, d); SR.el("stop", { offset: 0, "stop-color": "#0B0918", "stop-opacity": 0.78 }, rg); SR.el("stop", { offset: 1, "stop-color": "#0B0918", "stop-opacity": 0 }, rg);
+const bk = SR.el("ellipse", { cx: 1560, cy: 700, rx: 640, ry: 190, fill: "url(#txtbk)" }); svg.appendChild(bk);
+</script></body></html>
