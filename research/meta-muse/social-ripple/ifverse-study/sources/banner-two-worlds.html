@@ -35,10 +35,10 @@
   const halo = el("g", {}, face); C.pool(svg, halo, -60, 0, 250, 250, "#FF5A3C", 0.45); C.pool(svg, halo, 60, 0, 250, 250, "#FFC860", 0.5);
   const head = el("g", {}, face);
   const d = svg.querySelector("defs");
-  const ld = el("clipPath", { id: "bhl" }, d); el("rect", { x: -300, y: -300, width: 300, height: 1600 }, ld);
-  const rd = el("clipPath", { id: "bhr" }, d); el("rect", { x: 0, y: -300, width: 300, height: 1600 }, rd);
+  const ld = el("clipPath", { id: "bhl" }, d); el("rect", { x: -700, y: -300, width: 700, height: 1600 }, ld);
+  const rd = el("clipPath", { id: "bhr" }, d); el("rect", { x: 0, y: -300, width: 700, height: 1600 }, rd);
   const leftH = el("g", { "clip-path": "url(#bhl)", filter: C.rim(svg, "#FF5A3C", -7, -2, 3, 0.6) }, head), rightH = el("g", { "clip-path": "url(#bhr)", filter: C.rim(svg, "#FFD27A", 7, -2, 3, 0.6) }, head);
-  [leftH, rightH].forEach((g) => { el("path", { d: "M-138,1100 Q-138,190 -100,150 Q-50,118 0,118 Q50,118 100,150 Q138,190 138,1100 Z", fill: g === leftH ? "#B23A30" : "#3F9C93", stroke: "#1E1B22", "stroke-width": 7 }, g); el("circle", { r: 168, fill: "#1E1B22" }, g); });
+  [leftH, rightH].forEach((g) => { el("path", { d: "M-420,1100 Q-260,330 -100,150 Q-50,118 0,118 Q50,118 100,150 Q260,330 420,1100 Z", fill: g === leftH ? "#B23A30" : "#3F9C93", stroke: "#1E1B22", "stroke-width": 7 }, g); el("circle", { r: 168, fill: "#1E1B22" }, g); });
   // left (angry): slanted brow, glaring eye with red glint, frown
   el("path", { d: "M-128,-62 L-36,-30", stroke: "#FFFFFF", "stroke-width": 14, "stroke-linecap": "round" }, leftH);
   el("ellipse", { cx: -78, cy: 4, rx: 30, ry: 26, fill: "#FFFFFF" }, leftH); el("path", { d: "M-112,-22 L-44,-10 L-44,-24 L-112,-30 Z", fill: "#1E1B22" }, leftH); el("circle", { cx: -70, cy: 10, r: 13, fill: "#1E1B22" }, leftH); el("circle", { cx: -64, cy: 4, r: 4, fill: "#FF8A6A" }, leftH);
