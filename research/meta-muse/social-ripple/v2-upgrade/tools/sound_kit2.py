@@ -38,3 +38,35 @@ for k in range(4): save(f"rustle_{k}", rustle(rng.uniform(0.3, 0.55)), 0.5)
 save("boop_a", boop(520), 0.5); save("boop_b", boop(660), 0.5)
 np.save(os.path.join(OUT, "ir_street.npy"), ir(0.35, 4000)); np.save(os.path.join(OUT, "ir_cafe.npy"), ir(0.9, 3000)); np.save(os.path.join(OUT, "ir_hall.npy"), ir(2.2, 2500))
 print("kit2 done")
+
+# ---- crowd beds: many soft footsteps + distant conversation, stereo-spread (added after user feedback) ----
+import glob
+from scipy.signal import resample_poly
+def crowd_steps(d=40, walkers=14, surface="concrete"):
+    out = np.zeros((int(d * SR), 2))
+    for w in range(walkers):
+        rate = rng.uniform(1.6, 2.1); pan = rng.uniform(-0.9, 0.9); g = rng.uniform(0.25, 0.7)
+        t0 = rng.uniform(0, d); dur = rng.uniform(4, 12); t = t0
+        while t < min(d - 0.3, t0 + dur):
+            s = step(surface, rng.integers(0, 6)) * g * rng.uniform(0.7, 1.0)
+            s = lp(s, 2500)
+            i = int(t * SR); j = min(len(out), i + len(s))
+            out[i:j, 0] += s[: j - i] * np.sqrt(0.5 * (1 - pan)); out[i:j, 1] += s[: j - i] * np.sqrt(0.5 * (1 + pan))
+            t += 1 / rate * rng.uniform(0.95, 1.05)
+        if rng.random() < 0.5: t0 = rng.uniform(0, d)
+    return out
+def far_talk(walla_dir, d=40, layers=16, cut=1500):
+    clips = []
+    for f in sorted(glob.glob(os.path.join(walla_dir, "w*.wav"))):
+        a, sr = sf.read(f); a = a.mean(1) if a.ndim > 1 else a; clips.append(resample_poly(a, SR, sr))
+    out = np.zeros((int(d * SR), 2))
+    for k in range(layers * int(d / 10)):
+        c = lp(clips[rng.integers(len(clips))], cut) * rng.uniform(0.15, 0.45); pan = rng.uniform(-1, 1)
+        i = int(rng.uniform(0, d - 3) * SR); j = min(len(out), i + len(c))
+        out[i:j, 0] += c[: j - i] * np.sqrt(0.5 * (1 - pan)); out[i:j, 1] += c[: j - i] * np.sqrt(0.5 * (1 + pan))
+    return out
+if len(sys.argv) > 2:
+    save("crowd_steps_street", crowd_steps(40, 16, "concrete"), 0.6)
+    save("crowd_steps_cafe", crowd_steps(40, 6, "wood"), 0.5)
+    save("far_talk_street", far_talk(sys.argv[2], 40, 14, 1300), 0.5)
+    print("crowd beds done")

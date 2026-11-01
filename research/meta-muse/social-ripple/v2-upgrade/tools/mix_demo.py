@@ -47,7 +47,7 @@ def verb(x, irname, wet):
     y = np.stack([fftconvolve(x[:, c], ir)[:N] for c in range(2)], 1); return x + wet * y
 mix = verb(street, "ir_street", 0.4) + verb(cafe, "ir_cafe", 0.8)
 # ---- ambience + music ----
-add(mix, X("amb_city"), 0.0, db(-19), dur=8.3, fout=0.4); add(mix, X("amb_cafe"), 7.9, db(-19), dur=7.1, fin=0.4)
+add(mix, X("amb_city"), 0.0, db(-19), dur=8.3, fout=0.4); add(mix, X("crowd_steps_street"), 0.0, db(-21), dur=8.3, fout=0.4); add(mix, X("far_talk_street"), 0.0, db(-25), dur=8.3, fout=0.4); add(mix, X("crowd_steps_cafe"), 7.9, db(-18), dur=7.1, fin=0.4); add(mix, X("amb_cafe"), 7.9, db(-5), dur=7.1, fin=0.4); add(mix, X("far_talk_street"), 7.9, db(-15), off=12.0, dur=7.1, fin=0.4)
 add(mix, load(MUS), 0.0, db(-21), off=18.0, dur=TOTAL, fin=0.6, fout=1.5)
 pk = np.abs(mix).max(); mix *= 0.9 / pk
 sf.write(OUT, mix.astype(np.float32), SR, subtype="FLOAT"); print("demo mix", OUT)
