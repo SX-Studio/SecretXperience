@@ -182,3 +182,17 @@ It steps through the whole video every 0.1 s using the card layout itself, witho
 - cards that cover a character's face (from `W3.faceRects`).
 
 Exit code 0 means clean. **A video doesn't render until the audit is clean.**
+
+## Interactive sounds are real recordings (user feedback on demo 1, 2026-11-02)
+
+- Steps, eating, drinking and handling sounds use **real licensed recordings** from `engine/real-foley/`.
+- They should sound realistic and not playful. Grass steps stay quiet, cobblestones sound like real shoes on stone, and there is no cartoon "ahh".
+- Synthesised sounds are allowed only for UI ticks on word cards, kept low.
+- **Never rip game audio** (Fortnite, Minecraft and the like): it risks copyright claims and strikes on a monetized channel.
+- When an `oga_*` file is used, add the CC-BY credit line from `engine/real-foley/README.md` to the video description.
+
+## The host is a regular cast character (user decision, 2026-11-02)
+
+- The narrator-host is a normal rig character, not the 3D satin stick figure: **Nia**, a black stick figure in a coral jacket (`skin: "ink"`).
+- She walks into scenes, addresses the viewer, lip-syncs the narration (`lips: [[t, id]]` + `SR_LIPS`) and presents the examples.
+- The 3D stick-figure host (`sr-host.js`) is shelved.
