@@ -224,3 +224,13 @@ Exit code 0 means clean. **A video doesn't render until the audit is clean.**
 - Targets: at least 70% still watching at 30 s, with a retention review after every upload.
 - Recurring cast and running gags build lore.
 
+## Seated characters: shoot benches from the side (user feedback on ep4, 2026-11-02)
+
+The rig characters are drawn side-on, so a seated figure only reads as sitting when the camera sees the seat from the side or at three-quarters.
+
+- **Face out of the seat.** Seat the figure about 4 cm forward of the bench centre, facing out of the seat (the bench's "out" direction).
+- **Camera angle.** Put the camera along the bench axis, with a little "out" offset: `cp(a, y, f)` = (along, height, out). Never film a seated figure from straight in front or behind.
+- **Two sitters.** Place them side by side along the bench, both facing out, and shoot at about 3/4 (a ≈ 0.6 × f).
+- **Clipping.** Seated figures skip the occluder clip (`b.noClip`), so the seat never cuts them.
+- **Check angles.** Use `engine/tools/test_cam.cjs` to try camera angles on a single frame before re-rendering.
+

@@ -15,7 +15,13 @@
   const hudSvg = document.getElementById("hud");
 
   // ======================= places =======================
-  const TB = V(-3.43, 0, 3.43), FB = V(3.43, 0, 3.43);                 // Theo's bench, Finn's bench (seat fronts, facing the fountain)
+  // bench frames: a = along the bench, f = toward the fountain (out of the seat). Sitters face f; cameras look from the side / 3-4 so the 2D rigs read as seated
+  const BC = V(-3.54, 0, 3.54), FD = { x: 0.7071, z: -0.7071 }, AX = { x: 0.7071, z: 0.7071 };
+  const bp = (a, f, y = 0) => [BC.x + AX.x * a + FD.x * f, y, BC.z + AX.z * a + FD.z * f], bv = (a, f) => V(BC.x + AX.x * a + FD.x * f, 0, BC.z + AX.z * a + FD.z * f);
+  const FC = V(3.54, 0, 3.54), FF = { x: -0.7071, z: -0.7071 }, FA = { x: 0.7071, z: -0.7071 };
+  const fp = (a, f, y = 0) => [FC.x + FA.x * a + FF.x * f, y, FC.z + FA.z * a + FF.z * f], fv = (a, f) => V(FC.x + FA.x * a + FF.x * f, 0, FC.z + FA.z * a + FF.z * f);
+  const cp = (a, y, f) => bp(a, f, y), cfp = (a, y, f) => fp(a, f, y);   // camera points: (along, height, out)
+  const TB = bv(0, 0.04), FB = fv(0, 0.04), AP = bv(0.95, 0.9), PE = bv(3.4, 1.7);   // Theo's seat, Finn's seat, Ana's hello spot, Ana's walk-past end
   const toC = (p) => { const l = Math.hypot(p.x, p.z); return { x: -p.x / l, z: -p.z / l }; };
   const MOD = A.moDoor || V(-9, 0, -9.9), ANAD = A.anaDoor || V(-11.7, 0, 12.65), FLAT = V(500, 0, 0);
   const HILL = V(-30, 6, -32), LD = V(-29.06, 6, -30.99), OUT = { x: 0.684, z: 0.73 };   // lighthouse door + outward direction
@@ -63,24 +69,24 @@
   {
     const tM = W("moved", 0, "n01"), tL = W("longest", 0, "n01"), tG = W("seagull", 0, "n01");
     theo.show(0, T.s09).show(T.theo_03 - 0.4, D).mood(0, "sad");
-    shot(0, tM - 0.05, [[2.6, 2.3, 9.8], [-2.6, 1.0, 3.2], 38], [[1.6, 1.9, 8.2], [-2.8, 0.95, 3.3], 36], { dof: 0.15 });
-    shot(tM - 0.05, tL - 0.1, [rp(TB, 2.0, 1.25, -1.0), rp(TB, 0, 0.85, 0), 34], [rp(TB, 1.7, 1.2, -0.85), rp(TB, 0, 0.85, 0), 32], { dof: 0.5 });
-    GULLK.push([0, null], [tL - 0.15, { x: TB.x - 0.75, y: 0.44, z: TB.z + 0.75, ry: Math.atan2(-0.7, 0.7), flap: 0 }]);
-    shot(tL - 0.1, T.ana_01 - 0.25, [rp(TB, 1.6, 1.05, -1.6), rp(TB, -0.35, 0.75, 0.35), 36], [rp(TB, 1.35, 1.0, -1.35), rp(TB, -0.35, 0.75, 0.35), 34], { dof: 0.45 });
+    shot(0, tM - 0.05, [cp(5.5, 2.6, 2.3), cp(0, 0.4, 0.7), 38], [cp(4.6, 2.2, 2.0), cp(0, 0.4, 0.7), 36], { dof: 0.15 });
+    shot(tM - 0.05, tL - 0.1, [cp(2.4, 1.2, 1.0), cp(0, 0.88, 0.2), 34], [cp(2.2, 1.18, 0.95), cp(0, 0.88, 0.2), 32], { dof: 0.5 });
+    GULLK.push([0, null], [tL - 0.15, { x: bp(-0.6, 0)[0], y: 0.5, z: bp(-0.6, 0)[2], ry: 0.785, flap: 0 }]);
+    shot(tL - 0.1, T.ana_01 - 0.25, [cp(2.4, 1.2, 1.2), cp(-0.3, 0.8, 0.2), 36], [cp(2.2, 1.18, 1.15), cp(-0.3, 0.8, 0.2), 34], { dof: 0.45 });
     card({ text: "LONGEST CHAT: 1 SEAGULL", mood: "funny", t0: tG, t1: T.ana_01 - 0.25, zone: "top" });
     // Ana walks past: "Morning!"
-    ana.show(T.ana_01 - 1.2, T.n03 + 2.5).jump(T.ana_01 - 1.2, V(-6.2, 0, 2.2)).at(T.ana_01 + 1.6, V(-1.6, 0, 5.6)).faceTo(T.ana_01 - 1.2, { x: 1, z: 0.4 }).pose(T.ana_01 - 0.1, "wave", 0.2).pose(E("ana_01") + 0.3, "relaxed", 0.3).mood(T.ana_01, "joy");
+    ana.show(T.ana_01 - 1.2, T.n03 + 2.5).jump(T.ana_01 - 1.2, bv(-3.8, 1.7)).at(T.ana_01 + 1.6, PE).faceTo(T.ana_01 - 1.2, { x: 0.71, z: 0.71 }).pose(T.ana_01 - 0.1, "wave", 0.2).pose(E("ana_01") + 0.3, "relaxed", 0.3).mood(T.ana_01, "joy");
     says(ana, "ana_01");
-    GULLK.push([T.ana_01 + 0.1, { x: TB.x - 0.75, y: 0.44, z: TB.z + 0.75, ry: -0.8, flap: 0, hop: 1 }], [T.ana_01 + 0.4, { x: TB.x - 0.6, y: 1.6, z: TB.z + 2.4, ry: -1.6, flap: 1 }], [T.ana_01 + 1.4, { x: TB.x + 3, y: 5, z: TB.z + 8, ry: -1.6, flap: 1 }], [T.ana_01 + 1.45, null]);
-    shot(T.ana_01 - 0.25, T.n02 + 0.4, [[-3.0, 1.6, 9.2], [-3.6, 0.9, 3.8], 40], [[-2.4, 1.6, 8.6], [-3.0, 0.9, 4.0], 40], { dof: 0.2 });
+    GULLK.push([T.ana_01 + 0.1, { x: bp(-0.6, 0)[0], y: 0.5, z: bp(-0.6, 0)[2], ry: 0.6, flap: 0, hop: 1 }], [T.ana_01 + 0.4, { x: bp(-1.2, 1.4)[0], y: 1.6, z: bp(-1.2, 1.4)[2], ry: -0.4, flap: 1 }], [T.ana_01 + 1.4, { x: bp(-4, 6)[0], y: 5, z: bp(-4, 6)[2], ry: -0.4, flap: 1 }], [T.ana_01 + 1.45, null]);
+    shot(T.ana_01 - 0.25, T.n02 + 0.4, [cp(4.2, 1.6, 3.2), cp(0, 0.9, 0.4), 40], [cp(3.8, 1.6, 3.0), cp(0.3, 0.9, 0.6), 40], { dof: 0.2 });
     // promise
-    shot(T.n02 + 0.4, T.n03 - 0.05, [rp(V(-1.6, 0, 5.6), -1.6, 1.4, 2.4), rp(V(-1.6, 0, 5.6), 0, 1.15, 0), 36], [rp(V(-1.6, 0, 5.6), -1.3, 1.4, 2.0), rp(V(-1.6, 0, 5.6), 0, 1.15, 0), 34], { dof: 0.4 });
+    shot(T.n02 + 0.4, T.n03 - 0.05, [rp(PE, -1.6, 1.4, 2.4), rp(PE, 0, 1.15, 0), 36], [rp(PE, -1.3, 1.4, 2.0), rp(PE, 0, 1.15, 0), 34], { dof: 0.4 });
     ana.faceTo(T.n02 + 0.3, { x: -0.6, z: 0.8 }).mood(T.n02 + 0.3, "hopeful").pose(W("starting", 0, "n02"), "hipsHands", 0.3);
     card({ text: "1 HELLO. EVERY DAY. 30 DAYS.", mood: "hype", t0: W("once", 0, "n02"), t1: T.n03 - 0.05, zone: "top" });
     // n03: rules, the calendar, the flash-forward
     const tK = W("keep", 0, "n03"), tB = W("because", 0, "n03");
-    shot(T.n03 - 0.05, tK - 0.05, [[0.4, 2.6, -6.5], [-3.2, 0.8, 3.6], 40], [[0.2, 2.4, -5.6], [-3.3, 0.8, 3.6], 40], { dof: 0.1 });
-    ana.at(T.n03, V(-1.6, 0, 5.6)).at(T.n03 + 2.4, V(-0.2, 0, 9.5)).faceTo(T.n03, { x: 0.3, z: 1 }).pose(T.n03, "relaxed", 0.3);
+    shot(T.n03 - 0.05, tK - 0.05, [cp(-6.5, 2.6, 4.2), cp(0, 0.8, 0.4), 40], [cp(-6.0, 2.4, 3.9), cp(0, 0.8, 0.4), 40], { dof: 0.1 });
+    ana.at(T.n03, PE).at(T.n03 + 2.4, V(1.8, 0, 8.8)).faceTo(T.n03, { x: 0.3, z: 1 }).pose(T.n03, "relaxed", 0.3);
     shot(tK - 0.05, tB - 0.05, [rp(cal.group.position, 0.25, 0.1, 1.1), rp(cal.group.position, 0, 0, 0), 30], [rp(cal.group.position, 0.1, 0.05, 0.8), rp(cal.group.position, 0, 0, 0), 28], { dof: 0.6, fn: 20 });
     // flash-forward: day 30, golden, Theo standing mid-hello (cut before we see who to)
     const ff = tB - 0.05; theo.jump(ff, V(1.2, 0, 3.4)).faceTo(ff, { x: 1, z: 0.2 }).pose(ff, "wave", 0.15).mood(ff, "happy", 0.1);
@@ -114,23 +120,23 @@
   // ---------- S04 day 1 + the guarded brain ----------
   {
     day(T.n06, 1, 0); day(T.ana_02 + 0.3, 1, 1); grade(T.s04, 0.55, -0.6);
-    ana.show(T.s04, E("n07") + 1.5).jump(T.s04, V(-7.2, 0, 1.6)).at(T.ana_02 - 0.2, V(-2.55, 0, 4.45)).at(E("n07") - 0.4, V(-2.55, 0, 4.45)).at(E("n07") + 1.4, V(-4.5, 0, 8.6))
-      .faceTo(T.s04, { x: 1, z: 0.35 }).faceTo(T.ana_02 - 0.25, { x: -0.6, z: -0.6 }).faceTo(E("n07") - 0.4, { x: -0.4, z: 1 })
+    ana.show(T.s04, E("n07") + 1.5).jump(T.s04, bv(-4.0, 1.7)).at(T.ana_02 - 0.2, AP).at(E("n07") - 0.4, AP).at(E("n07") + 1.4, bv(4.5, 2.2))
+      .faceTo(T.s04, { x: 0.71, z: 0.71 }).faceTo(T.ana_02 - 0.25, { x: -1, z: -0.05 }).faceTo(E("n07") - 0.4, { x: 0.71, z: 0.71 })
       .pose(T.ana_02, "wave", 0.2).pose(E("ana_02") + 0.2, "relaxed", 0.3).mood(T.ana_02, "joy", 0.2).mood(W("nothing", 0, "n07"), "embarrassed", 0.3);
     says(ana, "ana_02");
     theo.look; theo.mood(T.s04, "sad").faceTo(T.s04, toC(TB));
-    shot(T.s04, T.ana_02 - 0.2, [[-0.5, 1.7, 9.0], [-4.2, 0.9, 3.4], 40], [[-0.9, 1.65, 8.3], [-3.6, 0.9, 3.8], 40], { dof: 0.15 });
-    shot(T.ana_02 - 0.2, T.n07 + 0.1, [rp(TB, -0.4, 1.35, 2.4), rp(TB, 0.2, 0.95, -0.2), 36], [rp(TB, -0.3, 1.32, 2.1), rp(TB, 0.2, 0.95, -0.2), 34], { dof: 0.4 });
-    shot(T.n07 + 0.1, E("n07") + 0.3, [rp(TB, 1.4, 0.95, -1.3), rp(TB, 0, 0.9, 0), 30], [rp(TB, 1.2, 0.95, -1.1), rp(TB, 0, 0.9, 0), 28], { dof: 0.6 });
+    shot(T.s04, T.ana_02 - 0.2, [cp(5.6, 1.7, 1.6), cp(-0.5, 0.9, 0.3), 40], [cp(5.1, 1.65, 1.5), cp(-0.3, 0.9, 0.3), 40], { dof: 0.15 });
+    shot(T.ana_02 - 0.2, T.n07 + 0.1, [cp(3.6, 1.6, 1.6), cp(0.45, 1.0, 0.6), 38], [cp(3.3, 1.58, 1.5), cp(0.45, 1.0, 0.6), 36], { dof: 0.4 });
+    shot(T.n07 + 0.1, E("n07") + 0.3, [cp(-1.8, 1.0, 0.85), cp(0, 0.92, 0.1), 30], [cp(-1.65, 1.0, 0.8), cp(0, 0.92, 0.1), 28], { dof: 0.6 });
     // n08–n09: the shield
     const tA = W("alert", 0, "n08"), tS = W("smoke", 0, "n08"), tO = W("outside", 0, "n09"), tI = W("inside", 0, "n09");
     SHK.push([tA - 0.3, { k: 0, a: 0 }], [tA + 0.6, { k: 1, a: 0 }], [tS - 0.1, { k: 1, a: 0 }], [tS + 0.3, { k: 1, a: 1 }], [E("n08"), { k: 1, a: 1 }], [E("n08") + 0.4, { k: 1, a: 0.3 }], [E("n09"), { k: 1, a: 0.2 }], [E("n09") + 0.4, { k: 0, a: 0 }]);
-    shot(E("n07") + 0.3, tO - 0.05, [rp(TB, 2.6, 1.3, -2.6), rp(TB, 0, 0.75, 0), 38], [rp(TB, 2.1, 1.25, -2.1), rp(TB, 0, 0.8, 0), 36], { dof: 0.35 });
+    shot(E("n07") + 0.3, tO - 0.05, [cp(3.6, 1.45, 1.7), cp(0, 0.95, 0.1), 38], [cp(3.2, 1.42, 1.6), cp(0, 0.95, 0.1), 36], { dof: 0.35 });
     card({ text: "LONELY BRAIN: ON GUARD", sub: "extra alert to rejection", mood: "alert", t0: tA, t1: tO - 0.15, zone: "top" });
     src("Theory: Cacioppo & Hawkley (2009)", tA, tO - 0.15);
-    shot(tO - 0.05, tI - 0.05, [[-7.5, 2.4, 9.5], [-3.4, 0.8, 3.4], 42], [[-7.0, 2.3, 9.0], [-3.4, 0.8, 3.4], 42], { dof: 0.1 });
+    shot(tO - 0.05, tI - 0.05, [cp(-6.5, 2.4, 4.2), cp(0, 0.8, 0.3), 42], [cp(-6.1, 2.3, 4.0), cp(0, 0.8, 0.3), 42], { dof: 0.1 });
     card({ text: "OUTSIDE: LOOKS COLD", mood: "sad", t0: tO, t1: tI - 0.1, zone: "top" });
-    shot(tI - 0.05, E("n09") + 0.5, [rp(TB, 1.35, 1.05, -1.2), rp(TB, 0, 0.98, 0), 32], [rp(TB, 1.2, 1.05, -1.05), rp(TB, 0, 0.98, 0), 30], { dof: 0.6 });
+    shot(tI - 0.05, E("n09") + 0.5, [cp(1.95, 1.1, 0.95), cp(0, 0.98, 0.12), 34], [cp(1.8, 1.1, 0.9), cp(0, 0.98, 0.12), 32], { dof: 0.6 });
     card({ text: "INSIDE: PROTECTION", mood: "calm", t0: tI, t1: E("n09") + 0.45, zone: "top" });
     theo.mood(tI, "worried", 0.4);
   }
@@ -138,9 +144,9 @@
   {
     const tNod = W("nod", 0, "n10");
     day(T.n10, 2, 1); day(tNod, 2, 2); grade(T.s05, 0.6, -0.45);
-    ana.show(T.n10 - 0.1, E("n10") + 0.3).jump(T.n10 - 0.1, V(-6.4, 0, 2.6)).at(tNod + 0.2, V(-2.6, 0, 4.7)).at(E("n10") + 0.4, V(-0.2, 0, 7.6)).faceTo(T.n10, { x: 1, z: 0.4 }).pose(tNod - 0.4, "wave", 0.2).pose(tNod + 0.5, "relaxed", 0.3).mood(T.n10, "happy");
+    ana.show(T.n10 - 0.1, E("n10") + 0.3).jump(T.n10 - 0.1, bv(-4.0, 1.7)).at(tNod + 0.2, bv(0.6, 1.6)).at(E("n10") + 0.4, bv(4.5, 1.8)).faceTo(T.n10, { x: 0.71, z: 0.71 }).pose(tNod - 0.4, "wave", 0.2).pose(tNod + 0.5, "relaxed", 0.3).mood(T.n10, "happy");
     theo.mood(T.n10, "neutral", 0.3).nod(tNod + 0.05, 0.12).mood(E("n10"), "sad", 0.5);
-    shot(T.n10 - 0.1, E("n10") + 0.3, [rp(TB, 2.2, 1.2, -1.2), rp(TB, -0.3, 0.95, 0.4), 38], [rp(TB, 1.9, 1.2, -1.0), rp(TB, -0.3, 0.95, 0.4), 36], { dof: 0.35 });
+    shot(T.n10 - 0.1, E("n10") + 0.3, [cp(3.6, 1.25, 2.4), cp(0, 0.9, 0.6), 38], [cp(3.3, 1.25, 2.2), cp(0, 0.9, 0.6), 36], { dof: 0.35 });
     card({ text: "+1 NOD (TINY)", mood: "funny", t0: W("counting", 0, "n10"), t1: E("n10") + 0.3, zone: "top" });
     // day 3: Mo watching from his door with a sandwich
     day(T.n11, 3, 2); day(W("watching", 0, "n11"), 3, 3);
@@ -179,31 +185,31 @@
     says(mo, "mo_02"); mo.pose(T.mo_02, "give", 0.3).mood(T.mo_02, "joy", 0.2); says(ana, "ana_03"); ana.mood(T.ana_03, "joy", 0.2).pose(T.ana_03, "hipsHands", 0.3);
     shot(T.mo_02 - 0.05, E("ana_03") + 0.3, [rp(MH, 3.3, 1.5, 0.9), rp(MH, 0.45, 1.25, 0.6), 34], [rp(MH, 3.05, 1.5, 0.85), rp(MH, 0.45, 1.25, 0.6), 32], { dof: 0.4 });
     // "Theo sees that."
-    theo.faceTo(T.n16, { x: -0.38, z: -0.92 }).mood(T.n16, "curious", 0.4);
+    theo.mood(T.n16, "curious", 0.4);
     shot(E("ana_03") + 0.3, W("seven", 0, "n16") - 0.05, [[-2.2, 1.45, 5.0], [-8.2, 1.1, -9.0], 34], [[-2.35, 1.42, 4.7], [-8.2, 1.1, -9.0], 32], { dof: 0.35, fn: 6 });
     // day 7: "...Hey."
     const t7 = W("seven", 0, "n16"); day(t7, 7, 6); day(T.theo_01, 7, 7);
-    ana.jump(t7 - 0.05, V(-6.2, 0, 2.4)).at(T.theo_01 - 0.3, V(-2.6, 0, 4.6)).at(E("theo_01") + 0.7, V(-2.6, 0, 4.6)).at(E("n17") + 0.2, V(1.2, 0, 8.6))
-      .faceTo(t7, { x: 1, z: 0.4 }).faceTo(T.theo_01 - 0.35, { x: -0.6, z: -0.6 }).faceTo(E("theo_01") + 0.7, { x: 0.5, z: 0.9 }).pose(T.theo_01 - 0.5, "wave", 0.2).pose(T.theo_01 + 0.1, "startle", 0.15).pose(E("theo_01") + 0.6, "relaxed", 0.4)
+    ana.jump(t7 - 0.05, bv(-4.0, 1.7)).at(T.theo_01 - 0.3, AP).at(E("theo_01") + 0.7, AP).at(E("n17") + 0.2, V(1.2, 0, 8.6))
+      .faceTo(t7, { x: 0.71, z: 0.71 }).faceTo(T.theo_01 - 0.35, { x: -1, z: -0.05 }).faceTo(E("theo_01") + 0.7, { x: 0.5, z: 0.9 }).pose(T.theo_01 - 0.5, "wave", 0.2).pose(T.theo_01 + 0.1, "startle", 0.15).pose(E("theo_01") + 0.6, "relaxed", 0.4)
       .mood(t7, "happy").mood(T.theo_01 + 0.1, "starstruck", 0.15).mood(T.n17 + 0.2, "embarrassed", 0.3).mood(W("scream", 0, "n17"), "laughing", 0.2);
     ana.show(t7 - 0.05, E("n17") + 0.6); ana.rig.squash.push([W("scream", 0, "n17") - 0.01, 0], [W("scream", 0, "n17") + 0.1, 0.16], [W("scream", 0, "n17") + 0.4, 0]);
-    theo.faceTo(T.theo_01 - 0.3, { x: 0.6, z: 0.6 }).mood(T.theo_01 - 0.2, "neutral", 0.3).pose(T.theo_01, "sit", 0); says(theo, "theo_01");
-    shot(t7 - 0.05, T.theo_01 - 0.1, [[-0.6, 1.6, 9.0], [-3.6, 0.9, 3.8], 40], [[-0.9, 1.55, 8.4], [-3.4, 0.9, 3.9], 40], { dof: 0.15 });
-    shot(T.theo_01 - 0.1, E("theo_01") + 0.5, [rp(TB, 1.1, 1.0, 1.4), rp(TB, 0, 0.92, 0), 30], [rp(TB, 1.0, 1.0, 1.2), rp(TB, 0, 0.92, 0), 28], { dof: 0.6 });
+    theo.mood(T.theo_01 - 0.2, "neutral", 0.3).pose(T.theo_01, "sit", 0); says(theo, "theo_01");
+    shot(t7 - 0.05, T.theo_01 - 0.1, [cp(5.6, 1.6, 1.8), cp(0, 0.9, 0.4), 40], [cp(5.2, 1.55, 1.7), cp(0, 0.9, 0.5), 40], { dof: 0.15 });
+    shot(T.theo_01 - 0.1, E("theo_01") + 0.5, [cp(-2.05, 1.05, 0.85), cp(0, 0.96, 0.1), 32], [cp(-1.9, 1.05, 0.8), cp(0, 0.96, 0.1), 30], { dof: 0.6 });
     card({ text: "FIRST WORD!", mood: "hype", t0: E("theo_01") + 0.1, t1: E("theo_01") + 1.4, zone: "top" });
-    shot(E("theo_01") + 0.5, E("n17") + 0.6, [[0.6, 1.4, 11.2], [-0.8, 0.95, 7.4], 36], [[0.8, 1.4, 11.6], [0.2, 0.95, 8.0], 36], { dof: 0.3 });
+    shot(E("theo_01") + 0.5, E("n17") + 0.6, [[1.6, 1.4, 10.6], [0.5, 0.95, 5.6], 36], [[1.8, 1.4, 11.0], [1.0, 0.95, 6.6], 36], { dof: 0.3 });
     card({ text: "SHE IS FINE. TOTALLY FINE.", mood: "funny", t0: W("scream", 0, "n17"), t1: E("n17") + 0.55, zone: "top" });
   }
   // ---------- S07 days 10–14, doubt ----------
   {
     const t10 = W("ten", 0, "n18"), t12 = W("twelve", 0, "n18"), t14 = W("fourteen", 0, "n18");
     day(t10, 10, 10); day(t12, 12, 12); day(t14, 14, 14); grade(T.s07, 0.72, -0.2);
-    const pass = (t0, t1, from, to) => { ana.show(t0, t1).jump(t0, from).at(t1, to).faceTo(t0, { x: Math.sign(to.x - from.x) || 1, z: 0.3 }).pose(t0 + 0.2, "wave", 0.2).pose(t1 - 0.3, "relaxed", 0.2).mood(t0, "content"); };
-    pass(t10 - 0.05, t12 - 0.05, V(-6.4, 0, 2.6), V(-1.0, 0, 6.6)); pass(t12 - 0.05, t14 - 0.05, V(-0.8, 0, 7.4), V(-5.8, 0, 2.4)); pass(t14 - 0.05, E("n18") + 0.2, V(-6.4, 0, 2.6), V(-2.2, 0, 5.4));
+    const pass = (t0, t1, from, to) => { const dx = to.x - from.x, dz = to.z - from.z, dl = Math.hypot(dx, dz) || 1; ana.show(t0, t1).jump(t0, from).at(t1, to).faceTo(t0, { x: dx / dl, z: dz / dl }).pose(t0 + 0.2, "wave", 0.2).pose(t1 - 0.3, "relaxed", 0.2).mood(t0, "content"); };
+    pass(t10 - 0.05, t12 - 0.05, bv(-4, 1.7), bv(4, 1.7)); pass(t12 - 0.05, t14 - 0.05, bv(4, 1.7), bv(-4, 1.7)); pass(t14 - 0.05, E("n18") + 0.2, bv(-4, 1.7), bv(0.9, 1.1));
     [t10, t12, t14].forEach((tt) => theo.nod(tt + 0.5, 0.06).mood(tt + 0.3, "neutral", 0.2));
-    shot(t10 - 0.05, t12 - 0.05, [rp(TB, 2.4, 1.3, 1.6), rp(TB, -0.6, 0.95, 0.6), 38], [rp(TB, 2.2, 1.3, 1.4), rp(TB, -0.6, 0.95, 0.6), 38], { dof: 0.3 });
-    shot(t12 - 0.05, t14 - 0.05, [rp(TB, -1.2, 1.4, 3.2), rp(TB, 0, 0.95, 0), 36], [rp(TB, -1.0, 1.4, 2.9), rp(TB, 0, 0.95, 0), 36], { dof: 0.3 });
-    shot(t14 - 0.05, E("n18") + 0.2, [rp(TB, 2.8, 1.5, -0.4), rp(TB, -0.4, 0.95, 0.5), 40], [rp(TB, 2.6, 1.5, -0.3), rp(TB, -0.4, 0.95, 0.5), 40], { dof: 0.25 });
+    shot(t10 - 0.05, t12 - 0.05, [cp(3.0, 1.3, 1.8), cp(-0.3, 0.95, 0.6), 38], [cp(2.8, 1.3, 1.7), cp(-0.3, 0.95, 0.6), 38], { dof: 0.3 });
+    shot(t12 - 0.05, t14 - 0.05, [cp(-3.0, 1.4, 1.8), cp(0, 0.95, 0.5), 36], [cp(-2.8, 1.4, 1.7), cp(0, 0.95, 0.5), 36], { dof: 0.3 });
+    shot(t14 - 0.05, E("n18") + 0.2, [cp(3.2, 1.5, 2.2), cp(-0.3, 0.95, 0.6), 40], [cp(3.0, 1.5, 2.1), cp(-0.3, 0.95, 0.6), 40], { dof: 0.25 });
     ENVK.push([t14 - 0.06, "day"], [t14, "golden"]);
     // ana_04 on her doorstep, golden evening
     ana.show(E("n18") + 0.2, E("n19") + 0.3).jump(E("n18") + 0.2, add(ANAD, 0.3, 1.0)).faceTo(E("n18") + 0.2, { x: 0.3, z: 1 }).pose(E("n18") + 0.2, "slump", 0).mood(E("n18") + 0.2, "sad", 0);
@@ -280,16 +286,16 @@
     const s = T.s10; grade(s, 0.98, 0.45); ENVK.push([s - 0.01, "golden"], [s, "golden"]);
     const tq = W("question", 0, "n26"), tg = W("seagull", 0, "n26"), tl = W("laugh", 0, "n26");
     day(s, 20, 19); day(tq, 22, 21); day(tg, 25, 24); day(tl, 28, 27);
-    const AS = V(TB.x + 0.6, 0, TB.z - 0.6);
-    theo.jump(s, TB).faceTo(s, { x: 0.95, z: 0.3 }).pose(s, "sit", 0).mood(s, "content", 0).pose(tg, "shrug", 0.3).pose(tg + 1.2, "sit", 0.3).mood(tl, "laughing", 0.3).mood(E("n26") + 0.4, "happy", 0.4);
-    ana.show(s, E("n27") + 0.5).jump(s, AS).faceTo(s, { x: -0.95, z: -0.3 }).pose(s, "sit", 0).mood(s, "happy", 0).mood(tq, "curious", 0.3).mood(tl, "laughing", 0.3).mood(E("n26") + 0.4, "happy", 0.4);
-    GULLK.push([tg - 0.4, null], [tg - 0.39, { x: TB.x - 0.5, y: 0, z: TB.z + 1.3, ry: 0.4, flap: 0, hop: 1 }], [tl, { x: TB.x - 0.2, y: 0, z: TB.z + 1.1, ry: 0.9, flap: 0, hop: 1 }], [E("n27") + 0.5, null]);
-    shot(s, tg - 0.05, [rp(TB, 2.6, 1.3, 1.6), rp(TB, 0.3, 0.9, -0.3), 40], [rp(TB, 2.3, 1.28, 1.4), rp(TB, 0.3, 0.9, -0.3), 38], { dof: 0.3 });
-    shot(tg - 0.05, tl - 0.05, [rp(TB, -0.6, 1.0, 2.6), rp(TB, 0.3, 0.75, 0), 34], [rp(TB, -0.5, 1.0, 2.3), rp(TB, 0.3, 0.75, 0), 32], { dof: 0.45 });
-    shot(tl - 0.05, T.n27 + 0.2, [rp(TB, 2.3, 1.15, 1.5), rp(TB, 0.3, 0.85, -0.3), 34], [rp(TB, 2.1, 1.15, 1.35), rp(TB, 0.3, 0.85, -0.3), 32], { dof: 0.45 });
+    const AS = bv(0.45, 0.04), TS = bv(-0.42, 0.04);
+    theo.jump(s, TS).faceTo(s, FD).pose(s, "sit", 0).mood(s, "content", 0).pose(tg, "shrug", 0.3).pose(tg + 1.2, "sit", 0.3).mood(tl, "laughing", 0.3).mood(E("n26") + 0.4, "happy", 0.4);
+    ana.show(s, E("n27") + 0.5).jump(s, AS).faceTo(s, FD).pose(s, "sit", 0).mood(s, "happy", 0).mood(tq, "curious", 0.3).mood(tl, "laughing", 0.3).mood(E("n26") + 0.4, "happy", 0.4);
+    GULLK.push([tg - 0.4, null], [tg - 0.39, { x: bp(-0.3, 1.1)[0], y: 0, z: bp(-0.3, 1.1)[2], ry: 2.4, flap: 0, hop: 1 }], [tl, { x: bp(0.2, 1.0)[0], y: 0, z: bp(0.2, 1.0)[2], ry: 2.0, flap: 0, hop: 1 }], [E("n27") + 0.5, null]);
+    shot(s, tg - 0.05, [cp(1.9, 1.35, 3.3), cp(0, 0.95, 0.2), 40], [cp(1.7, 1.33, 3.0), cp(0, 0.95, 0.2), 38], { dof: 0.3 });
+    shot(tg - 0.05, tl - 0.05, [cp(-2.6, 1.3, 2.8), cp(0, 0.85, 0.6), 36], [cp(-2.3, 1.28, 2.5), cp(0, 0.85, 0.6), 34], { dof: 0.45 });
+    shot(tl - 0.05, T.n27 + 0.2, [cp(1.6, 1.25, 2.6), cp(0, 0.95, 0.15), 34], [cp(1.45, 1.25, 2.4), cp(0, 0.95, 0.15), 32], { dof: 0.45 });
     window.__meter = [s + 0.4, E("n27") + 0.4, [[s + 0.4, 10], [E("n26"), 95], [W("three", 0, "n27"), 180]]];
     const tf = W("fifty", 0, "n27"), tfr = W("friendship", 0, "n27");
-    shot(T.n27 + 0.2, E("n27") + 0.5, [[-8.5, 2.2, 10.5], [-2.8, 0.8, 3.0], 42], [[-7.6, 2.0, 9.4], [-2.8, 0.8, 3.0], 40], { dof: 0.15 });
+    shot(T.n27 + 0.2, E("n27") + 0.5, [cp(-6.8, 2.2, 4.6), cp(0, 0.8, 0.3), 42], [cp(-6.2, 2.0, 4.3), cp(0, 0.8, 0.3), 40], { dof: 0.15 });
     card({ text: "~50 HOURS TOGETHER", sub: "to become casual friends (one estimate)", mood: "fact", t0: tf, t1: tfr - 0.15, zone: "top" });
     src("Hall (2019)", tf, tfr - 0.15);
     card({ text: "FRIENDSHIP = HOURS, STACKED UP", mood: "calm", t0: tfr, t1: E("n27") + 0.45, zone: "lower", fixedZone: true });
@@ -310,7 +316,7 @@
   {
     const s = T.s11; day(T.n31, 30, 29); grade(s, 1.05, 0.3); ENVK.push([s - 0.01, "dusk"], [s, "day"]);
     const tIsnt = W("isn't", 0, "n31"), tAc = W("across", 0, "n32");
-    theo.jump(s, V(1.4, 0, 1.6)).faceTo(s, { x: 0.6, z: 0.5 }).pose(s, "relaxed", 0).mood(s, "content", 0).at(T.theo_04 - 0.6, V(2.75, 0, 2.85)).faceTo(T.theo_04 - 0.6, { x: 0.7, z: 0.7 });
+    theo.jump(s, V(1.4, 0, 1.6)).faceTo(s, { x: 0.6, z: 0.5 }).pose(s, "relaxed", 0).mood(s, "content", 0).at(T.theo_04 - 0.6, fv(0.1, 0.95)).faceTo(T.theo_04 - 0.6, { x: 0.7, z: 0.7 });
     finn.show(s, D).jump(s, FB).faceTo(s, toC(FB)).pose(s, "sit", 0).mood(s, "sad", 0);
     ana.show(s, D).jump(s, V(-6.2, 0, 2.4)).at(tIsnt - 0.2, V(-2.6, 0, 4.6)).faceTo(s, { x: 1, z: 0.4 }).mood(s, "happy").pose(tIsnt - 0.5, "wave", 0.2).pose(tIsnt + 0.1, "relaxed", 0.3).mood(tIsnt, "confused", 0.3).faceTo(tAc, { x: 1, z: -0.1 });
     shot(s, tAc - 0.05, [[-0.5, 1.7, 9.2], [-3.5, 0.9, 3.8], 40], [[-0.8, 1.65, 8.6], [-3.2, 0.9, 3.9], 40], { dof: 0.15 });
@@ -319,12 +325,13 @@
     says(theo, "theo_04"); theo.pose(T.theo_04 - 0.1, "wave", 0.2).mood(T.theo_04, "happy", 0.2).pose(E("theo_04") + 0.2, "relaxed", 0.3);
     finn.faceTo(T.theo_04, { x: -0.7, z: -0.7 }).mood(T.theo_04 + 0.2, "surprised", 0.2).mood(E("theo_04") + 0.4, "joy", 0.3);
     day(T.theo_04 + 0.4, 30, 30);
-    shot(T.theo_04 - 0.05, E("theo_04") + 0.9, [rp(FB, -0.4, 1.25, 2.3), rp(FB, -0.3, 1.0, -0.2), 32], [rp(FB, -0.35, 1.22, 2.0), rp(FB, -0.3, 1.0, -0.2), 30], { dof: 0.5 });
+    shot(T.theo_04 - 0.05, E("theo_04") + 0.9, [cfp(2.6, 1.3, 1.4), cfp(0, 1.0, 0.55), 32], [cfp(2.35, 1.25, 1.3), cfp(0, 1.0, 0.55), 30], { dof: 0.5 });
     ring(T.theo_04 + 0.3, V(3.0, 0.05, 3.1), "#FFC24A", 10, 2.6);
     // n33: callback to day 1, then Ana + Mo
     const tAgo = W("ago", 0, "n33"), tTd = W("today", 0, "n33");
     window.__day1 = [tAgo - 0.5, tTd - 0.05];
-    shot(tAgo - 0.5, tTd - 0.05, [rp(TB, 1.4, 0.95, -1.3), rp(TB, 0, 0.9, 0), 30], [rp(TB, 1.3, 0.95, -1.2), rp(TB, 0, 0.9, 0), 29], { dof: 0.6 });
+    shot(tAgo - 0.5, tTd - 0.05, [cp(1.75, 1.05, 0.8), cp(0, 0.95, 0.1), 30], [cp(1.65, 1.05, 0.75), cp(0, 0.95, 0.1), 29], { dof: 0.6 });
+    theo.jump(tAgo - 0.5, TB).faceTo(tAgo - 0.5, FD).pose(tAgo - 0.5, "sit", 0).mood(tAgo - 0.5, "sad", 0).jump(tTd - 0.05, fv(0.1, 0.95)).faceTo(tTd - 0.05, { x: 0.7, z: 0.7 }).pose(tTd - 0.05, "relaxed", 0).mood(tTd - 0.05, "happy", 0);
     mo.show(tTd - 0.05, D).jump(tTd - 0.05, add(MOD, 0.6, 0.4)).faceTo(tTd, { x: 0.55, z: 0.84 }).pose(tTd, "wave", 0.2).mood(tTd, "laughing", 0.2);
     ana.mood(tTd, "proud", 0.3).faceTo(tTd, { x: 0.9, z: -0.2 });
     shot(tTd - 0.05, E("n33") + 0.6, [[-5.2, 1.5, 7.4], [-2.6, 1.15, 4.6], 36], [[-4.9, 1.5, 7.0], [-2.6, 1.15, 4.6], 34], { dof: 0.35 });
