@@ -212,3 +212,15 @@ Exit code 0 means clean. **A video doesn't render until the audit is clean.**
 - Run `GAMEFEEL=1 python mix_demo_real.py` to get this mix.
 - Game files the user supplies are used **unchanged** or not at all. We don't slightly alter them to make them harder to recognize.
 
+## MrBeast concept DNA, Social Ripple pacing (2026-11-02; see `mrbeast-editor-study/`)
+
+- Borrow the *concept* DNA:
+  - a one-breath, visual title promise proven in 30 s;
+  - an on-screen counter;
+  - escalation every 60–90 s;
+  - a midpoint twist;
+  - a payoff that keeps the promise.
+- Do **not** borrow hyper-cut editing. MrBeast's own former lead editor says it is fading in favour of atmosphere, character and TV-friendly pacing.
+- Targets: at least 70% still watching at 30 s, with a retention review after every upload.
+- Recurring cast and running gags build lore.
+
