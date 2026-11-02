@@ -113,7 +113,7 @@
       const b = W3.card(Object.assign({ kind: "char", pref: 1, face: [[0, { x: 1, z: 0 }]] }, o));
       b.ch = SR.Character(b.wrap, Object.assign({ thin: true, scale: 1, x: xs, y: [[0, 0]], facing: [[0, 1]], noWalk: false, pose: [[0, "relaxed", 0]], mood: [[0, "neutral", 0]] }, o.rig || {}));
       if (o.extra) o.extra(b);
-      b.pos = (t) => sampleTrack(P, t, P[0][1]); return b; };
+      b.P = P; b.xs = xs; b.rigScale = (o.rig && o.rig.scale) || 1; b.pos = (t) => sampleTrack(P, t, P[0][1]); return b; };
     const tv = new TH.Vector3();
     const proj = W3.proj = (x, y, z) => { tv.set(x, y, z).applyMatrix4(cam.matrixWorldInverse); const d = -tv.z; tv.applyMatrix4(cam.projectionMatrix); return { sx: (tv.x + 1) * FW / 2, sy: (1 - tv.y) * FH / 2, d }; };
     // occluders: {axis:"z"|"x", a0, a1 (extent along the facing axis), b0, b1 (extent along the run), y (top)}; legacy {x0,x1,z0,z1,y} = axis z
@@ -140,13 +140,31 @@
         return { p: a.p.map((v, j) => lerp(v, b.p[j], k)), yaw: a.yaw + dy * k, pitch: lerp(a.pitch, b.pitch, k), d: lerp(a.d, b.d, k), f: lerp(a.f, b.f, k), dof: lerp(a.dof, b.dof, k), fn: lerp(a.fn, b.fn, k), ff: lerp(a.ff, b.ff, k) }; };
     };
 
+    W3.setCam = (c, sh = [0, 0], roll = 0) => { sh = sh || [0, 0];
+      cam.position.set(c.p[0] + sh[0], c.p[1] + sh[1], c.p[2]); cam.fov = c.f; cam.updateProjectionMatrix();
+      const dir = new TH.Vector3(Math.sin(c.yaw) * Math.cos(c.pitch), Math.sin(c.pitch), -Math.cos(c.yaw) * Math.cos(c.pitch));
+      cam.lookAt(cam.position.clone().add(dir)); if (roll) cam.rotateZ(roll); cam.updateMatrixWorld(); cam.matrixWorldInverse.copy(cam.matrixWorld).invert(); };
+    // ---------------- foley scan: every footstep of every visible person, without rendering ----------------
+    // returns [{t, who, kind:"step", surface, pan, gain}] — gain in dB from camera distance, pan from screen x
+    W3.foleyScan = function ({ camAt, D, fps = 120, surfaceAt, extra = [] }) {
+      const ev = [], last = new Map();
+      for (let f = 0; f <= D * fps; f++) { const t = f / fps; W3.setCam(camAt(t));
+        for (const b of BB) { if (!b.ch || !b.xs || !b.vis(t)) { last.delete(b); continue; }
+          const sc = b.rigScale, stride = 193 * sc, d = sampleTrack(b.xs, t, 0), d2 = sampleTrack(b.xs, t + 0.05, 0), d0 = sampleTrack(b.xs, t - 0.05, 0);
+          const speed = Math.abs(d2 - d0) / 0.1 / PXM; const k = Math.floor((d / stride) * 2);
+          if (last.has(b) && k !== last.get(b) && speed > 0.35) { const p = b.pos(t), s = proj(p.x, p.y, p.z);
+            if (s.d > 0.3 && s.sx > -300 && s.sx < FW + 300) ev.push({ t: +t.toFixed(3), who: b.id || "", kind: "step", surface: surfaceAt ? surfaceAt(p, t) : "stone", pan: +clamp((s.sx / FW) * 2 - 1, -0.9, 0.9).toFixed(2), gain: +clamp(-4 - 20 * Math.log10(Math.max(1, s.d / 2.5)), -30, -4).toFixed(1), run: speed > 2.6 }); }
+          last.set(b, k); } }
+      for (const e of extra) { const c = camAt(e.t); W3.setCam(c); let pan = 0, gain = e.gain ?? -6; if (e.pos) { const s = proj(e.pos.x, e.pos.y, e.pos.z); pan = +clamp((s.sx / FW) * 2 - 1, -0.9, 0.9).toFixed(2); gain = +clamp((e.gain ?? -4) - 20 * Math.log10(Math.max(1, s.d / 2.5)), -30, -2).toFixed(1); } ev.push(Object.assign({}, e, { pan, gain, pos: undefined })); }
+      return ev.sort((a, b) => a.t - b.t); };
+    // screen rects of visible faces at time t (for keeping words off faces). Changes the camera: call outside W3.frame.
+    W3.faceRects = (t, camAt, pad = 40) => { W3.setCam(camAt(t)); const out = [], fpx = (FH / 2) / Math.tan((cam.fov * Math.PI) / 360);
+      for (const b of BB) { if (!b.ch || !b.vis(t) || !b.pos) continue; const p = b.pos(t), s = proj(p.x, p.y + 1.55 * (b.rigScale || 1), p.z); if (s.d < 0.3) continue;
+        const r = fpx / s.d * 0.32 * (b.rigScale || 1) + pad; out.push({ x0: s.sx - r, y0: s.sy - r * 1.15, x1: s.sx + r, y1: s.sy + r }); } return out; };
     // ---------------- one frame ----------------
     // c = camera state from W3.keys(...)(t); o = { shake:[x,y], lightFor(b, t) → filter url | null }
     W3.frame = function (t, c, o = {}) {
-      const sh = o.shake || [0, 0];
-      cam.position.set(c.p[0] + sh[0], c.p[1] + sh[1], c.p[2]); cam.fov = c.f; cam.updateProjectionMatrix();
-      const dir = new TH.Vector3(Math.sin(c.yaw) * Math.cos(c.pitch), Math.sin(c.pitch), -Math.cos(c.yaw) * Math.cos(c.pitch));
-      cam.lookAt(cam.position.clone().add(dir)); if (o.roll) cam.rotateZ(o.roll); cam.updateMatrixWorld(); cam.matrixWorldInverse.copy(cam.matrixWorld).invert();
+      W3.setCam(c, o.shake, o.roll);
       fog.near = c.fn; fog.far = c.ff; comp.uniforms.focus.value = c.d; comp.uniforms.dofR.value = c.dof * 14; comp.uniforms.inkNear.value = c.fn * 1.3; comp.uniforms.inkFar.value = c.ff * 1.05;
       sky.position.copy(cam.position); W3.stars.position.copy(cam.position);
       if (o.before) o.before(cam);

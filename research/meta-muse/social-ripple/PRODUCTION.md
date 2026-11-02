@@ -98,3 +98,40 @@ This is the method from the tutorial the user shared: 2D characters lit inside a
 **Mixing.** Never use `np.convolve` for envelopes on whole-film buffers: it takes about 50 minutes. Use `uniform_filter1d` and a one-pole `lfilter`, which take 20 seconds.
 
 **Never `pkill -f` a pattern that also matches the calling shell.** Kill by PID instead, with bracketed patterns.
+
+## Words, foley and beds (user feedback on episode 3, 2026-11-02)
+
+**On-screen words: `sr-type.js`.**
+- Every card sizes itself to its text, measured with the real font after it loads. Long text wraps onto 2 balanced lines before it shrinks.
+- A layout pass gives each card a zone slot, so cards that are on screen at the same time never overlap. They stack instead.
+- Cards are kept off faces. `avoid: (t) => W3.faceRects(t, camAt)` moves a card to the opposite zone (top ↔ lower) if it would cover a face.
+- **Each card has a mood that matches what is being said.** Every mood has its own colours, per-letter entrance, idle motion, exit and suggested sound:
+
+  | Mood | Look | Sound |
+  |---|---|---|
+  | `hype` | gold punch-in, shake, starburst | boom |
+  | `money` | green coin-flip letters, sparkles | ka-ching |
+  | `alert` | red stamp slam, tilted | stamp |
+  | `calm` | soft warm rise with glow (the Lens / therapy moments) | chime |
+  | `sad` | blue; letters drop in and fall off on exit | steel down |
+  | `fact` | typewriter with a caret, taped paper | typing |
+  | `funny` | rainbow jelly wobble | boing |
+  | `question` | letters pop in, the "?" wiggles | pop |
+  | `title` | letter cascade | — |
+  | `source` | bottom-left citation tag | — |
+- **Readability:** minimum about 44 px at 1080p, thick border, high contrast, at most about 8 words per card. Sources go in the bottom-left tag.
+
+**Viral environment foley: `tools/foley_kit.py`.**
+- Synthesized from scratch in the spirit of block-game and battle-royale foley. Never use rips from Minecraft, Fortnite or anywhere else, because Content ID would take the revenue.
+- **Footsteps:** `step_{grass,stone,wood,sand,tile,water}_{0..5}`.
+- **Eating and drinking:** `crunch_*`, `bite_soft_*`, `chew_*`, `gulp_*` (glugs), `slurp_*` (straw), `sip_ahh_0`, `fizz`, `glass_set`.
+- **Game-feel:** `pickup`, `coin`, `level_up`, `chest_open`, `door_creak`, `leaves`, `splash_small`.
+- **Footsteps are automatic.** `W3.foleyScan({camAt, D, surfaceAt, extra})` walks the timeline without rendering and finds every footfall of every visible character from the rig's stride. It assigns a surface (`surfaceAt` maps world position to grass, stone, wood and so on), a pan from screen x, and a gain from camera distance.
+- **Eating and drinking events** go in `extra`.
+- Run `node tools/foley_scan.cjs <project>` (Playwright) to get `foley.json`; the mixer then places the sounds.
+- Any time characters walk, eat, drink, open doors or pick things up, they get this foley.
+
+**Crowd murmur.**
+- Only use it when a crowd is actually on screen, and keep it well under the other beds: about −30 dB RMS, not −26.
+- Episode 3's island murmur bed was too loud and too constant (user feedback).
+- Steps and ambience carry "living town" better than chatter.
