@@ -33,6 +33,21 @@
   };
   let UID = 0;
 
+  // viseme mouth shapes (rig units; mouth centre x=7, y=17): w half-width, top/bot opening above/below the lip line,
+  // round 0..1 (pucker), tt/tb upper/lower teeth, tg tongue, tup tongue raised, tip tongue between teeth, press lips pressed, lip lower-lip drop
+  const VIS = {
+    X: { w: 8.5, top: 0, bot: 0, round: 0, tt: 0, tb: 0, tg: 0, tup: 0, tip: 0, press: 0, lip: 0 },
+    P: { w: 7.6, top: 0, bot: 0, round: 0.1, tt: 0, tb: 0, tg: 0, tup: 0, tip: 0, press: 1, lip: 0.4 },
+    A: { w: 10, top: 4.2, bot: 10.5, round: 0.15, tt: 1, tb: 0.25, tg: 0.75, tup: 0, tip: 0, press: 0, lip: 1.2 },
+    E: { w: 12, top: 2.6, bot: 5, round: 0, tt: 1, tb: 0.9, tg: 0.2, tup: 0, tip: 0, press: 0, lip: 0.6 },
+    O: { w: 6.6, top: 4, bot: 8, round: 1, tt: 0.35, tb: 0, tg: 0.35, tup: 0, tip: 0, press: 0, lip: 1 },
+    U: { w: 4.6, top: 2.2, bot: 3.6, round: 1, tt: 0, tb: 0, tg: 0, tup: 0, tip: 0, press: 0, lip: 0.6 },
+    F: { w: 9.5, top: 1.4, bot: 2.2, round: 0, tt: 1, tb: 0, tg: 0, tup: 0, tip: 0, press: 0.3, lip: -0.6 },
+    L: { w: 9.2, top: 3, bot: 6.5, round: 0.1, tt: 1, tb: 0.4, tg: 1, tup: 1, tip: 0, press: 0, lip: 0.8 },
+    T: { w: 9.6, top: 2.2, bot: 3.8, round: 0, tt: 1, tb: 0.8, tg: 0.4, tup: 0.5, tip: 1, press: 0, lip: 0.5 },
+    C: { w: 10.2, top: 1.9, bot: 3.6, round: 0.05, tt: 1, tb: 1, tg: 0.15, tup: 0, tip: 0, press: 0, lip: 0.4 },
+    R: { w: 7.4, top: 2.4, bot: 4.2, round: 0.6, tt: 0.7, tb: 0.2, tg: 0.3, tup: 0.2, tip: 0, press: 0, lip: 0.6 },
+  };
   // ================= CHARACTER v2 =================
   // spec adds: outfit ('hoodie'|'tee'|'shirt'|'jacket'|'apron'|'dress'|'coat'), pants colour, shoes colour,
   //            skin ('ink' default — the channel's silhouette heads), blush (auto by mood), talk: [[t0,t1],...]
@@ -101,6 +116,15 @@
     });
     const mouth = el("path", { fill: SKIN ? "#5A2A2E" : "#FFFFFF", stroke: FEAT, "stroke-width": 3.4, "stroke-linecap": "round", "stroke-linejoin": "round" }, headG);
     const tongue = el("ellipse", { rx: 5, ry: 3, fill: "#E9778A", opacity: 0 }, headG);
+    // talking mouth (viseme lip-sync): cavity, clipped teeth + tongue, lip outline, lower-lip accent
+    const vmG = el("g", { opacity: 0 }, headG), vmCp = el("clipPath", { id: `${id}-vm` }, vmG), vmClip = el("path", {}, vmCp);
+    const LIPC = SKIN ? "#C9706E" : "#B8565E", LIPD = SKIN ? "#6E2E34" : "#E7A0A2";
+    const vmLips = el("path", { fill: LIPC, stroke: SKIN ? INK : "none", "stroke-width": 1.6, "stroke-linejoin": "round" }, vmG);
+    const vmCav = el("path", { fill: "#3A1019" }, vmG), vmClipG = el("g", { "clip-path": `url(#${id}-vm)` }, vmG);
+    const vmTongue = el("ellipse", { fill: "#E46F84" }, vmClipG), vmTT = el("rect", { fill: "#FFFFFF" }, vmClipG), vmTB = el("rect", { fill: "#F4F1EA" }, vmClipG);
+    const vmLip = el("path", { fill: "none", stroke: "#2A0C12", "stroke-width": 1.6, "stroke-linecap": "round", "stroke-linejoin": "round" }, vmG);
+    const vmLow = el("path", { fill: "none", stroke: LIPD, "stroke-width": 1.6, "stroke-linecap": "round", opacity: 0.85 }, vmG);
+    const vmTip = el("ellipse", { fill: "#E46F84", stroke: FEAT, "stroke-width": 1.2, opacity: 0 }, vmG);
     const FXG = el("g", {}, headG), TEAR = "#7EC8E3";
     const fx = { tears: [0, 1].map(() => el("path", { fill: TEAR, stroke: INK, "stroke-width": 2, opacity: 0 }, FXG)), drops: [0, 1].map(() => el("path", { d: "M0,-6 Q5,2 0,5 Q-5,2 0,-6 Z", fill: TEAR, stroke: INK, "stroke-width": 1.6, opacity: 0 }, FXG)),
       sweat: el("path", { d: "M0,-9 Q7,2 0,7 Q-7,2 0,-9 Z", fill: TEAR, stroke: INK, "stroke-width": 2, opacity: 0 }, FXG),
@@ -271,11 +295,32 @@
       let talkOpen = 0;
       if (s.lips && window.SR_LIPS) for (const [a, cid] of s.lips) { const L = window.SR_LIPS[cid]; if (!L) continue; const i = Math.floor((t - a) * L.fps); if (i >= 0 && i < L.env.length) talkOpen = Math.max(talkOpen, L.env[i]); }
       if (s.talk) for (const [a, b2] of s.talk) if (t >= a && t < b2) { talkOpen = 0.25 + 0.75 * Math.abs(Math.sin((t - a) * 17 + hash(Math.floor(t * 9), s.seed) * 2)); }
-      const mo = Math.max(M.mopen, talkOpen);
+      // viseme lip-sync (SR_LIPS[id].vis): real mouth shapes, energy-scaled, eased between phonemes
+      let VM = null;
+      if (s.lips && window.SR_LIPS) for (const [a, cid] of s.lips) { const L = window.SR_LIPS[cid]; if (!L || !L.vis) continue; const tl = t - a, last = L.vis[L.vis.length - 1][0];
+        if (tl < -0.05 || tl > last + 0.12) continue; let i = 0; while (i + 1 < L.vis.length && L.vis[i + 1][0] <= tl) i++;
+        const cur = VIS[L.vis[i][1]] || VIS.X, nx = L.vis[i + 1], nxt = nx ? (VIS[nx[1]] || VIS.X) : VIS.X, gap = nx ? nx[0] - L.vis[i][0] : 1;
+        const lead = Math.min(0.075, gap * 0.6), u = nx ? EASE.inOut(clamp((tl - (nx[0] - lead)) / lead, 0, 1)) : 0;
+        VM = {}; for (const k in VIS.X) VM[k] = lerp(cur[k], nxt[k], u);
+        const fi = Math.floor(tl * L.fps), en = fi >= 0 && fi < L.env.length ? L.env[fi] : 0, g = clamp(0.55 + 0.65 * en, 0.5, 1.15); VM.top *= g; VM.bot *= g; }
+      const mo = VM ? 0 : Math.max(M.mopen, talkOpen);
       const mw = 9 + mo * 2.5, cy = 17, curve = M.smile * 7, op = mo * 10;
       mouth.setAttribute("d", `M${7 - mw},${cy} Q7,${cy + curve} ${7 + mw},${cy} Q7,${cy + curve + op} ${7 - mw},${cy} Z`);
-      mouth.setAttribute("opacity", clamp(Math.max(M.mouth, talkOpen > 0 ? 1 : 0), 0, 1));
-      tongue.setAttribute("cx", 7); tongue.setAttribute("cy", cy + curve * 0.5 + op * 0.55); tongue.setAttribute("opacity", op > 6 ? 0.9 : 0);
+      mouth.setAttribute("opacity", VM ? 0 : clamp(Math.max(M.mouth, talkOpen > 0 ? 1 : 0), 0, 1));
+      tongue.setAttribute("cx", 7); tongue.setAttribute("cy", cy + curve * 0.5 + op * 0.55); tongue.setAttribute("opacity", !VM && op > 6 ? 0.9 : 0);
+      vmG.setAttribute("opacity", VM ? 1 : 0);
+      if (VM) { const MS = 1.3, cx = 7, w = VM.w * MS, sm = clamp(M.smile, -0.6, 1), cyc = cy + 1 - sm * 2.6, Ty = cy + 1 - VM.top * MS, By = cy + 1 + VM.bot * MS, kk = lerp(0.32, 0.04, VM.round), open = VM.top + VM.bot;
+        const shape = (lx, rx, ty, by, k) => { const ww = (rx - lx) / 2, c = (lx + rx) / 2; return `M${lx.toFixed(2)},${cyc.toFixed(2)} C${(lx + k * ww).toFixed(2)},${ty.toFixed(2)} ${(c - 0.45 * ww).toFixed(2)},${ty.toFixed(2)} ${c.toFixed(2)},${(ty + 1.1).toFixed(2)} C${(c + 0.45 * ww).toFixed(2)},${ty.toFixed(2)} ${(rx - k * ww).toFixed(2)},${ty.toFixed(2)} ${rx.toFixed(2)},${cyc.toFixed(2)} C${(rx - k * 0.8 * ww).toFixed(2)},${(by + 0.6).toFixed(2)} ${(lx + k * 0.8 * ww).toFixed(2)},${(by + 0.6).toFixed(2)} ${lx.toFixed(2)},${cyc.toFixed(2)} Z`; };
+        const Lx = cx - w, Rx = cx + w, closed = open < 1.2, d = shape(Lx, Rx, Ty, By, kk);
+        const lipT = 3.2 + 0.4 * VM.round, lipB = 4.2 + 0.5 * VM.round + 0.6 * VM.press;
+        vmLips.setAttribute("d", shape(Lx - 1.8 - VM.round * 1.2, Rx + 1.8 + VM.round * 1.2, Ty - lipT, By + lipB, Math.max(kk, 0.12)));
+        vmClip.setAttribute("d", d); vmCav.setAttribute("d", d); vmCav.setAttribute("opacity", closed ? 0 : 1); vmClipG.setAttribute("opacity", closed ? 0 : 1);
+        vmLip.setAttribute("d", closed ? `M${Lx.toFixed(2)},${cyc.toFixed(2)} Q${cx},${(cyc + 1.2 + sm * 1.6).toFixed(2)} ${Rx.toFixed(2)},${cyc.toFixed(2)}` : d); vmLip.setAttribute("stroke-width", (1.6 + VM.press * 0.8).toFixed(2));
+        vmTT.setAttribute("x", Lx); vmTT.setAttribute("width", 2 * w); vmTT.setAttribute("y", Ty - 3); vmTT.setAttribute("height", Math.max(0, 3 + VM.tt * 2.6));
+        vmTB.setAttribute("x", Lx); vmTB.setAttribute("width", 2 * w); vmTB.setAttribute("y", By - VM.tb * 2.0); vmTB.setAttribute("height", Math.max(0, VM.tb * 2.0 + 3));
+        vmTongue.setAttribute("cx", cx); vmTongue.setAttribute("rx", w * 0.55); vmTongue.setAttribute("ry", 3.4 + VM.tg * 1.6); vmTongue.setAttribute("cy", lerp(By - 1, Ty + 4, VM.tup)); vmTongue.setAttribute("opacity", clamp(VM.tg, 0, 1));
+        vmTip.setAttribute("cx", cx); vmTip.setAttribute("cy", (Ty + By) / 2 + 0.6); vmTip.setAttribute("rx", 4.4); vmTip.setAttribute("ry", 2.3); vmTip.setAttribute("opacity", VM.tip > 0.5 ? 1 : 0);
+        const ly = By + lipB * 0.42 + VM.lip * 0.25; vmLow.setAttribute("d", `M${(cx - 0.3 * w).toFixed(2)},${ly.toFixed(2)} Q${cx},${(ly + 0.9).toFixed(2)} ${(cx + 0.3 * w).toFixed(2)},${ly.toFixed(2)}`); }
       if (glasses) glasses.setAttribute("transform", "translate(7,-1)");
       if (wingG) { const [wx, wy] = P2(0, nyU + 34); const fl = 0.75 + 0.25 * Math.abs(Math.cos(t * Math.PI * (s.flap || 1.6))); wingG.setAttribute("transform", `translate(${wx},${wy}) scale(${fl},1)`); }
       if (s.prop && s.prop.kind) {

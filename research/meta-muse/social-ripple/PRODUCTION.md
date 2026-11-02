@@ -196,3 +196,19 @@ Exit code 0 means clean. **A video doesn't render until the audit is clean.**
 - The narrator-host is a normal rig character, not the 3D satin stick figure: **Nia**, a black stick figure in a coral jacket (`skin: "ink"`).
 - She walks into scenes, addresses the viewer, lip-syncs the narration (`lips: [[t, id]]` + `SR_LIPS`) and presents the examples.
 - The 3D stick-figure host (`sr-host.js`) is shelved.
+
+## Lip-sync with real mouth shapes (user request, 2026-11-02)
+
+- Talking characters use **visemes**, not a single open/close oval.
+- `engine/tools/visemes.py` turns each line's word times (Parakeet) and phonemes (espeak-ng through `phonemizer`, using `espeakng-loader`) into a track `[[t, code]]` in `SR_LIPS[id].vis`. The audio energy envelope scales how wide the mouth opens.
+- Codes: X rest, P (m b p, lips pressed), A (ah), E (ee/eh, teeth), O (oh), U (oo/w, pucker), F (f v, teeth on lip), L (tongue up), T (th, tongue tip), C (other consonants), R.
+- The rig (`sr-v3.js`) draws colored lips, a dark mouth, upper and lower teeth and a tongue, and eases into the next shape about 75 ms early.
+- Lines without `vis` fall back to the old mouth.
+- Usage: `python visemes.py <project> h1=assets/vo/h1.wav:.words/h1.json ...`, after `hyperframes transcribe <wav> --json` (copy `assets/vo/transcript.json` per line).
+
+## Game-feel eating and drinking (2026-11-02)
+
+- Default: real recordings arranged in the fast rhythm of game consumables. That means a crisp bite about every 0.17–0.23 s with slight pitch variation, and quick double gulps about every 0.32 s.
+- Run `GAMEFEEL=1 python mix_demo_real.py` to get this mix.
+- Game files the user supplies are used **unchanged** or not at all. We don't slightly alter them to make them harder to recognize.
+
