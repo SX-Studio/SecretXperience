@@ -153,3 +153,17 @@ This is the method from the tutorial the user shared: 2D characters lit inside a
 - **Cast:** mix black stick figures (`skin: "ink"`, with a light outline) and light ones. Use the 16 new emotions (crying, laughing, terrified, starstruck, inlove, determined, confused, embarrassed, exhausted, furious, dizzy, sleepy, hopeful, proud, disgusted) in addition to the existing set.
 - **Environment effects** (rifts, cracks and the like) appear only when the story calls for them. The craft lessons apply everywhere.
 - **Presenter (optional):** the `sr-host.js` 3D stick figure can walk into scenes, address the camera, lip-sync the narration and gesture at examples. It's still being trialled with the user.
+
+## Goldfish gate before every final render (2026-11-02)
+
+This is the method from Google's Elephant-Goldfish Model (`github.com/google/elephant-goldfish-model`), done with plain fresh subagents. The director is the "elephant": it knows what every shot means, so it can't see what a stranger would miss.
+
+**Before any final render:**
+1. Export storyboard stills, about one every 3–4 s, with the script and captions on them.
+2. Give the stills and the script **only**, with no other context, to three fresh reviewers in parallel:
+   1. **First-time viewer:** confusing moments, unclear jumps, slow stretches, and moments where they'd scroll away.
+   2. **Visual critic:** overlapping or overflowing words, faces covered or blocked, readability, framing and the quality bar in this file.
+   3. **Claims checker:** anything stated without backing, and wording that overstates a study.
+3. Fix everything that holds up, re-check those stills, and only then render.
+
+Rendering costs about 5 hours. Reviewing costs minutes.
