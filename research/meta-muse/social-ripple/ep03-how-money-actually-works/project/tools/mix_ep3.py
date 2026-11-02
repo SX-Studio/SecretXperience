@@ -144,9 +144,11 @@ e(W("forward", 0, "n40"), "steel_up", -7); e(W("vote", 0, "n42"), "shop_bell", -
 e(W("sandwich", 0, "n44"), "munch", -9); e(E_("n44") + 0.6, "gold_chime", -8)
 for t, n, g, p in EV: put(fx, sfx(n), t, g, p)
 # ---------------- duck music + beds under voice ----------------
-v = np.abs(voice).mean(1); win = int(0.05 * SR); env = np.convolve(v, np.ones(win) / win, mode="same")
+from scipy.ndimage import uniform_filter1d
+from scipy.signal import lfilter
+v = np.abs(voice).mean(1); win = int(0.05 * SR); env = uniform_filter1d(v, win)
 env = env / (np.percentile(env[env > 1e-4], 90) + 1e-9); env = np.clip(env, 0, 1)
-rel = int(0.35 * SR); k = np.exp(-np.arange(rel) / (rel / 4)); env = np.maximum(env, np.convolve(env, k / k.sum() * 4, mode="full")[: len(env)].clip(0, 1))
+rel = int(0.35 * SR); a1 = np.exp(-1 / (rel / 4)); env = np.maximum(env, (lfilter([1 - a1], [1, -a1], env) * 4).clip(0, 1))
 music *= (db(-9) ** env)[:, None]; beds *= (db(-4) ** env)[:, None]
 mix = voice + music + beds + fx
 sf.write(os.path.join(ROOT, "assets/mix_raw.wav"), mix.astype(np.float32), SR, subtype="FLOAT")

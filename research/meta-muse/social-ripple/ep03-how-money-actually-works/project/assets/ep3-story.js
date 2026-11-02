@@ -5,7 +5,7 @@
   const { el, clamp, EASE } = SR; const lerp = (a, b, k) => a + (b - a) * k, sst = (k) => k * k * k * (k * (k * 6 - 15) + 10);
   const W = (w, nth = 0, line) => { const v = K.W(w, nth, line); return v == null ? (line ? T[line] : 0) : v; };
   const E = (id) => T[id + "_e"], D = T.D;
-  const W3 = SR3D.create({ canvas: document.getElementById("bg"), ov: document.getElementById("ov"), width: 1920, height: 1080 });
+  const W3 = SR3D.create({ canvas: document.getElementById("bg"), ov: document.getElementById("ov"), width: 1920, height: 1080, samples: 2, ndScale: 1, dofTaps: 14 });
   const applyEnv = K.lights(W3);
   const town = window.EP3.town(W3), inner = window.EP3.interiors(W3), props = window.EP3.props(W3);
   const IA = inner.anchors || {}; const A = Object.assign({}, town.anchors || {}, IA.apt || {}, IA.bank || {}, IA.shop || {}, (props.yap && props.yap.anchors) || {});

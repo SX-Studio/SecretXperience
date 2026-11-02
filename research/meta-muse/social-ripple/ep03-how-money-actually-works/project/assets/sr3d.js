@@ -16,8 +16,8 @@
     // ---------------- renderer + passes ----------------
     const renderer = new TH.WebGLRenderer({ canvas: opt.canvas, antialias: false, preserveDrawingBuffer: true, powerPreference: "high-performance" });
     renderer.setPixelRatio(1); renderer.setSize(FW, FH, false);
-    const rtC = new TH.WebGLRenderTarget(FW, FH, { type: TH.HalfFloatType, samples: 4 });
-    const rtN = new TH.WebGLRenderTarget(FW, FH, { type: TH.HalfFloatType, minFilter: TH.NearestFilter, magFilter: TH.NearestFilter });
+    const NDS = opt.ndScale || 1, TAPS = opt.dofTaps || 24; const rtC = new TH.WebGLRenderTarget(FW, FH, { type: TH.HalfFloatType, samples: opt.samples ?? 4 });
+    const rtN = new TH.WebGLRenderTarget(Math.round(FW * NDS), Math.round(FH * NDS), { type: TH.HalfFloatType, minFilter: TH.NearestFilter, magFilter: TH.NearestFilter });
     const scene = new TH.Scene(); const fog = new TH.Fog(0x1b2246, 30, 160); scene.fog = fog;
     const cam = new TH.PerspectiveCamera(40, FW / FH, 0.05, 1500);
     const ndMat = new TH.ShaderMaterial({ blending: TH.NoBlending,
@@ -28,10 +28,10 @@
         vec4 mv = modelViewMatrix * p; vN = normalize(normalMatrix * n); vD = -mv.z; gl_Position = projectionMatrix * mv; }`,
       fragmentShader: `varying vec3 vN; varying float vD; void main(){ gl_FragColor = vec4(normalize(vN)*0.5+0.5, vD/1000.0); }` });
     const comp = new TH.ShaderMaterial({
-      uniforms: { tC: { value: rtC.texture }, tN: { value: rtN.texture }, res: { value: new TH.Vector2(FW, FH) }, focus: { value: 10 }, dofR: { value: 0 }, inkK: { value: 0.9 }, inkNear: { value: 40 }, inkFar: { value: 160 }, inkCol: { value: new TH.Color("#1E1830") },
+      defines: { TAPS: TAPS + ".0", TAPSI: TAPS }, uniforms: { tC: { value: rtC.texture }, tN: { value: rtN.texture }, res: { value: new TH.Vector2(FW, FH) }, resN: { value: new TH.Vector2(Math.round(FW * NDS), Math.round(FH * NDS)) }, focus: { value: 10 }, dofR: { value: 0 }, inkK: { value: 0.9 }, inkNear: { value: 40 }, inkFar: { value: 160 }, inkCol: { value: new TH.Color("#1E1830") },
         sat: { value: 1.12 }, lift: { value: new TH.Color("#120C22") } },
       vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`,
-      fragmentShader: `uniform sampler2D tC; uniform sampler2D tN; uniform vec2 res; uniform float focus, dofR, inkK, inkNear, inkFar, sat; uniform vec3 inkCol, lift; varying vec2 vUv;
+      fragmentShader: `uniform sampler2D tC; uniform sampler2D tN; uniform vec2 res; uniform vec2 resN; uniform float focus, dofR, inkK, inkNear, inkFar, sat; uniform vec3 inkCol, lift; varying vec2 vUv;
         float dep(vec2 uv){ return max(texture2D(tN, uv).a * 1000.0, 0.01); }
         vec3 nor(vec2 uv){ return texture2D(tN, uv).rgb * 2.0 - 1.0; }
         float cocAt(float d){ return clamp(abs(d - focus) / max(focus, 0.5), 0.0, 1.0) * dofR; }
@@ -39,13 +39,13 @@
           vec2 px = 1.0 / res; float d0 = dep(vUv); vec3 n0 = nor(vUv);
           vec3 col = texture2D(tC, vUv).rgb; float coc = cocAt(d0);
           if (coc > 0.6) { vec3 acc = col; float ws = 1.0;
-            for (int i = 0; i < 24; i++) { float fi = float(i); float r = sqrt((fi + 0.5) / 24.0) * coc; float a = fi * 2.39996; vec2 o = vec2(cos(a), sin(a)) * r * px;
+            for (int i = 0; i < TAPSI; i++) { float fi = float(i); float r = sqrt((fi + 0.5) / TAPS) * coc; float a = fi * 2.39996; vec2 o = vec2(cos(a), sin(a)) * r * px;
               float cn = cocAt(dep(vUv + o)); float w = clamp(cn / max(r, 0.5), 0.0, 1.0); acc += texture2D(tC, vUv + o).rgb * w; ws += w; }
             col = acc / ws; }
-          float l = dep(vUv - vec2(px.x, 0.0)), r2 = dep(vUv + vec2(px.x, 0.0)), u = dep(vUv + vec2(0.0, px.y)), dn = dep(vUv - vec2(0.0, px.y));
+          vec2 pn = 1.0 / resN; float l = dep(vUv - vec2(pn.x, 0.0)), r2 = dep(vUv + vec2(pn.x, 0.0)), u = dep(vUv + vec2(0.0, pn.y)), dn = dep(vUv - vec2(0.0, pn.y));
           float iz = 1.0 / d0; float lap = max(abs(1.0/l + 1.0/r2 - 2.0*iz), abs(1.0/u + 1.0/dn - 2.0*iz)) * d0;
           float eD = smoothstep(0.035, 0.09, lap);
-          float eN = 0.0; vec2 o4[4]; o4[0] = vec2(px.x, 0.0); o4[1] = vec2(-px.x, 0.0); o4[2] = vec2(0.0, px.y); o4[3] = vec2(0.0, -px.y);
+          float eN = 0.0; vec2 o4[4]; o4[0] = vec2(pn.x, 0.0); o4[1] = vec2(-pn.x, 0.0); o4[2] = vec2(0.0, pn.y); o4[3] = vec2(0.0, -pn.y);
           for (int i = 0; i < 4; i++) { vec2 uv2 = vUv + o4[i] * 1.2; float dd = dep(uv2); if (abs(dd - d0) / d0 < 0.2) eN = max(eN, 1.0 - clamp(dot(n0, nor(uv2)), 0.0, 1.0)); }
           eN = smoothstep(0.2, 0.42, eN);
           float e = max(eD, eN) * (1.0 - smoothstep(inkNear, inkFar, d0)) * (1.0 - smoothstep(1.0, 7.0, coc)) * step(d0, 900.0);
