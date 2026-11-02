@@ -17,7 +17,7 @@ def put(buf, x, at, g=0, p=0):
     i = int(at * SR); j = min(len(buf), i + len(x))
     if j > i: buf[i:j] += x[: j - i] * db(g)
 bank = lambda pat: [norm(load(f)) for f in sorted(glob.glob(os.path.join(LIB, pat)))]
-STEP = {"grass": ([lpf(x, 3500) for x in bank("oga_grass_*.wav")], -10.0), "stone": (bank("stoneA_*.wav") + bank("stoneB_*.wav"), -4.0), "wood": ([lpf(x, 3800) for x in bank("oga_wood_*.wav")], -2.0)}
+STEP = {"grass": ([lpf(x, 3500) for x in bank("oga_grass_*.wav")], -1.0), "stone": ([x for x in bank("cobble_*.wav")][:5], -11.0), "wood": ([lpf(x, 3800) for x in bank("oga_wood_*.wav")], 3.0)}
 GRIT = bank("oga_gravel_*.wav")  # a little grit under shoe-on-stone = cobbles
 BITE, CHEW = [lpf(x, 7000) for x in bank("crispR_*.wav")], [lpf(lpf(x, 1600), 1600) for x in bank("crunchR_*.wav")]
 SIP, SLURP, AHH = norm(load(f"{LIB}/mk_1307.wav")), norm(load(f"{LIB}/mk_3207.wav")), norm(load(f"{LIB}/mk_2832.wav"))
@@ -35,12 +35,11 @@ for e in F["events"]:
     elif k == "slurp": sl = SLURP[: int(0.55 * SR)].copy(); sl[-int(0.15 * SR):] *= np.linspace(1, 0, int(0.15 * SR))[:, None]; put(out, sl, t, -17, pan)
     elif k == "sip_ahh": pass  # no cartoon "ahh"
 from scipy.signal import fftconvolve
-out *= db(-6)  # foley sits back in the scene, camera perspective
 ir_t = np.arange(int(0.3 * SR)) / SR; IR = np.stack([rng.standard_normal(len(ir_t)), rng.standard_normal(len(ir_t))], 1) * np.exp(-ir_t / 0.07)[:, None]; IR /= np.abs(IR).sum(0)[None] ** 0.5 * 6
 out = out + np.stack([fftconvolve(out[:, c], IR[:, c])[:N] for c in (0, 1)], 1) * 0.35
 MOOD = {"hype": ("boom", -14), "money": ("ka_ching", -15), "alert": ("stamp", -12), "calm": ("gold_chime", -16), "sad": ("steel_down", -16), "fact": ("typing", -18), "funny": ("pop", -16), "question": ("pop", -13), "title": ("whoosh_b", -14)}
 for c in F.get("cards", []):
     if c["mood"] in MOOD: n, g = MOOD[c["mood"]]; put(out, load(os.path.join(SFX, n + ".wav")), c["t"] - 0.03, g)
-bed = load(os.path.join(SFX, "amb_island.wav"))[: N]; put(out, bed, 0, -22)
-if os.path.exists(MUS): m = load(MUS)[int(20 * SR): int(20 * SR) + N].copy(); m[-int(1.5 * SR):] *= np.linspace(1, 0, int(1.5 * SR))[:, None]; put(out, m, 0, -21)
+bed = load(os.path.join(SFX, "amb_island.wav"))[: N]; put(out, bed, 0, -25)
+if os.path.exists(MUS): m = load(MUS)[int(20 * SR): int(20 * SR) + N].copy(); m[-int(1.5 * SR):] *= np.linspace(1, 0, int(1.5 * SR))[:, None]; put(out, m, 0, -25)
 sf.write(os.path.join(ROOT, "assets/mix_raw_v2.wav"), out.astype(np.float32), SR, subtype="FLOAT"); print("ok", float(np.abs(out).max()))

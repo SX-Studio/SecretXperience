@@ -19,7 +19,7 @@ Real recordings of real eating, drinking and steps give the same satisfying feel
 |---|---|---|---|
 | `oga_grass_*`, `oga_wood_*`, `oga_boots_*` | "Footsteps on different surfaces", congusbongus, OpenGameArt; derived from freesound recordings by swuing | CC-BY 3.0 | Yes. See `LICENSE-oga-*.txt` |
 | `oga_gravel_*` | Same pack; derived from Ali_6868 (freesound) | CC0 | No |
-| `stoneA_*`, `stoneB_*` (cobbles), `grassR_*`, `grassT_*`, `chip_*`, `crunchR_*`, `crispR_*`, `pave_*` | Mixkit (sliced from "Footsteps on stones loop", "Walking on stones loop", "Walking on grass", "Footsteps on tall grass", "Human eating a potato chip", "Eating and biting crunchy food", "Human eating delicious crispy food") | Mixkit Free SFX licence (commercial use OK; not committed, rebuild with `tools/fetch_mixkit.sh lib`) | No |
+| `cobble_*` (clean single footfalls), `stoneA_*`, `stoneB_*`, `grassR_*`, `grassT_*`, `chip_*`, `crunchR_*`, `crispR_*`, `pave_*` | Mixkit (sliced from "Footsteps on stones loop", "Walking on stones loop", "Walking on grass", "Footsteps on tall grass", "Human eating a potato chip", "Eating and biting crunchy food", "Human eating delicious crispy food") | Mixkit Free SFX licence (commercial use OK; not committed, rebuild with `tools/fetch_mixkit.sh lib`) | No |
 | `mk_1307` sip of water, `mk_3207` soft slurp, `mk_2832` satisfied drink voice, `mk_2828` game potion drink | Mixkit | Mixkit Free SFX licence | No |
 
 **Description credit line** (whenever an `oga_*` file is used):
@@ -43,3 +43,17 @@ Real recordings of real eating, drinking and steps give the same satisfying feel
 | Drinking | A real sip, then a short slurp (about 0.55 s). No cartoon "ahh" |
 | Placement | Foley sits 6 dB back, in the camera's perspective, with a 0.3 s outdoor air tail |
 | Ambience bed | Always under the foley, so no step plays in a vacuum |
+
+## Lesson from demo 1 v2
+
+- Spiky clips (cobbles) peak far above soft ones (grass) once loudness-matched, and the final limiter then flattens them, so they vanish.
+- Balance steps on **peak**, not RMS:
+
+  | Surface | Raw-mix peak |
+  |---|---|
+  | Grass | about −13 dB |
+  | Cobbles | about −10 dB |
+  | Wood | about −8 dB |
+
+- Footsteps should end up 12–20 dB above the gaps between them.
+- Only use slices whose first 20 ms is the loudest, with no second footfall inside them.
