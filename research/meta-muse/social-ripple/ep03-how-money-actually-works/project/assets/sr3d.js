@@ -163,9 +163,9 @@
       for (const e of extra) { const c = camAt(e.t); W3.setCam(c); let pan = 0, gain = e.gain ?? -6; if (e.pos) { const s = proj(e.pos.x, e.pos.y, e.pos.z); pan = +clamp((s.sx / FW) * 2 - 1, -0.9, 0.9).toFixed(2); gain = +clamp((e.gain ?? -4) - 20 * Math.log10(Math.max(1, s.d / 2.5)), -30, -2).toFixed(1); } ev.push(Object.assign({}, e, { pan, gain, pos: undefined })); }
       return ev.sort((a, b) => a.t - b.t); };
     // screen rects of visible faces at time t (for keeping words off faces). Changes the camera: call outside W3.frame.
-    W3.faceRects = (t, camAt, pad = 40) => { W3.setCam(camAt(t)); const out = [], fpx = (FH / 2) / Math.tan((cam.fov * Math.PI) / 360);
+    W3.faceRects = (t, camAt, pad = 24) => { W3.setCam(camAt(t)); const out = [], fpx = (FH / 2) / Math.tan((cam.fov * Math.PI) / 360);
       for (const b of BB) { if (!b.ch || !b.vis(t) || !b.pos) continue; const p = b.pos(t), s = proj(p.x, p.y + 1.55 * (b.rigScale || 1), p.z); if (s.d < 0.3) continue;
-        const r = fpx / s.d * 0.32 * (b.rigScale || 1) + pad; out.push({ x0: s.sx - r, y0: s.sy - r * 1.15, x1: s.sx + r, y1: s.sy + r }); } return out; };
+        const r = fpx / s.d * 0.27 * (b.rigScale || 1) + pad; out.push({ x0: s.sx - r, y0: s.sy - r * 1.1, x1: s.sx + r, y1: s.sy + r }); } return out; };
     // ---------------- one frame ----------------
     // c = camera state from W3.keys(...)(t); o = { shake:[x,y], lightFor(b, t) → filter url | null }
     W3.frame = function (t, c, o = {}) {

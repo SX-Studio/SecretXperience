@@ -167,3 +167,18 @@ This is the method from Google's Elephant-Goldfish Model (`github.com/google/ele
 3. Fix everything that holds up, re-check those stills, and only then render.
 
 Rendering costs about 5 hours. Reviewing costs minutes.
+
+## Automatic text audit, a required step (user request, 2026-11-02)
+
+Every on-screen word goes through `sr-type.js`, and the page exposes `window.__TY`. Before the goldfish gate and again before the final render, run:
+
+`node tools/text_audit.cjs <project> <duration>`
+
+It steps through the whole video every 0.1 s using the card layout itself, without rendering, and lists:
+- cards that overlap;
+- text that overflows its card;
+- fonts that are too small;
+- cards outside the safe area;
+- cards that cover a character's face (from `W3.faceRects`).
+
+Exit code 0 means clean. **A video doesn't render until the audit is clean.**

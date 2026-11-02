@@ -143,6 +143,21 @@
           c.caret.setAttribute("opacity", shown < n || Math.floor(t * 2.5) % 2 ? 1 : 0); }
       }
     };
+    // ---- audit: step through the timeline and report every on-screen word problem (pure layout math, no rendering)
+    TY.audit = (D, step = 0.1) => { if (!laidOut) layout(); const issues = [], SAFE = { x0: 48, y0: 40, x1: W - 48, y1: H - 40 };
+      const rect = (c) => ({ x0: c.cx - c.w / 2, y0: c.cy - c.h / 2, x1: c.cx + c.w / 2, y1: c.cy + c.h / 2 });
+      const hit = (a, b) => a.x0 < b.x1 && a.x1 > b.x0 && a.y0 < b.y1 && a.y1 > b.y0;
+      const seen = new Set(), push = (key, o) => { if (!seen.has(key)) { seen.add(key); issues.push(o); } };
+      for (const c of cards) { // text wider than its box?
+        const tw = Math.max(...c.lines.map((l) => measure(l, c.fs, c.M.font, c.M.weight))); if (tw > c.w - 20) push("ovf" + c.text, { t: c.t0, kind: "text overflows card", text: c.text });
+        if (c.fs < 26 && c.zone !== "source") push("small" + c.text, { t: c.t0, kind: "font too small (" + c.fs.toFixed(0) + "px)", text: c.text }); }
+      for (let t = 0; t <= D; t += step) { const vis = cards.filter((c) => t >= c.t0 && t < c.t1);
+        for (let i = 0; i < vis.length; i++) { const a = rect(vis[i]);
+          if (a.x0 < SAFE.x0 || a.x1 > SAFE.x1 || a.y0 < SAFE.y0 || a.y1 > SAFE.y1) push("safe" + vis[i].text, { t: +t.toFixed(2), kind: "outside safe area", text: vis[i].text });
+          for (let j = i + 1; j < vis.length; j++) if (hit(a, rect(vis[j]))) push("ov" + vis[i].text + vis[j].text, { t: +t.toFixed(2), kind: "cards overlap", text: vis[i].text + "  ×  " + vis[j].text });
+          if (opt.avoid && vis[i].zone !== "source") for (const f of opt.avoid(t) || []) if (hit(a, f)) push("face" + vis[i].text + Math.round(t), { t: +t.toFixed(2), kind: "covers a face", text: vis[i].text }); } }
+      return issues; };
+    window.__TY = TY;
     return TY;
   }
   window.SRType = { create, MOODS };
