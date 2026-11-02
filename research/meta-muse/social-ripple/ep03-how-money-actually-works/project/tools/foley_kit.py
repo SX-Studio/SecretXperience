@@ -99,6 +99,20 @@ def splash_small():
 def glass_set():
     t = t_(0.5); return sum(np.sin(2 * np.pi * f * t) * np.exp(-t / dc) for f, dc in ((2650, 0.12), (4100, 0.08), (6900, 0.04))) * 0.4 + thump(0.5, 200, 120, 0.02) * 0.4
 
+def rift_hum(d=4.0):  # low drone that slowly pitches up (pair with rift_close at the end)
+    t = t_(d); f = 55 * (1 + 1.6 * (t / d) ** 2); ph = 2 * np.pi * np.cumsum(f) / SR
+    x = np.sin(ph) + 0.5 * np.sin(2 * ph) + 0.25 * np.sin(3.01 * ph) + bp(noise(len(t)), 80, 600) * 0.3
+    return x * np.minimum(1, t / 0.4) * (0.6 + 0.4 * (t / d))
+def rift_close():  # zip + snap + shimmering tail
+    d = 1.6; out = np.zeros(int(d * SR)); zt = t_(0.35); f = 900 + 5000 * (zt / 0.35) ** 2
+    place(out, bp(noise(len(zt)), 1500, 9000) * (0.4 + 0.6 * (zt / 0.35)) * np.abs(np.sin(2 * np.pi * np.cumsum(f / 60) / SR)) * 0.8, 0.0)
+    place(out, (bp(noise(int(0.05 * SR)), 1000, 8000) * env(int(0.05 * SR), 0.0005, 0.01)) * 1.4 + 0, 0.35)
+    place(out, thump(0.3, 160, 60, 0.05) * 0.9, 0.35)
+    st = t_(1.2); place(out, sum(np.sin(2 * np.pi * fr * st) * np.exp(-st / 0.5) for fr in (2093, 2637, 3136)) * 0.18, 0.38)
+    return out
+def rift_open():
+    d = 1.0; n = int(d * SR); return crackle(d, 500, 400, 5000, 0.006) * np.minimum(1, t_(d) / 0.5) * 0.8 + thump(d, 50, 90, 0.4) * 0.6
+
 if __name__ == "__main__":
     for kind, fn in (("grass", step_grass), ("stone", step_stone), ("wood", step_wood), ("sand", step_sand), ("tile", step_tile), ("water", step_water)):
         for k in range(6): save(f"step_{kind}_{k}", fn(k), 0.85)
@@ -107,4 +121,5 @@ if __name__ == "__main__":
     for k in range(2): save(f"slurp_{k}", slurp(k), 0.8)
     save("sip_ahh_0", sip_ahh(0), 0.7); save("fizz", fizz(), 0.6); save("pickup", pickup(), 0.7); save("coin", coin(), 0.7); save("level_up", level_up(), 0.7)
     save("chest_open", chest_open(), 0.8); save("door_creak", door_creak(), 0.7); save("leaves", leaves(), 0.7); save("splash_small", splash_small(), 0.8); save("glass_set", glass_set(), 0.7)
+    save("rift_hum", rift_hum(), 0.7); save("rift_close", rift_close(), 0.85); save("rift_open", rift_open(), 0.8)
     print("foley kit done")

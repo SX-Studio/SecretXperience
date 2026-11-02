@@ -29,9 +29,10 @@
       fragmentShader: `varying vec3 vN; varying float vD; void main(){ gl_FragColor = vec4(normalize(vN)*0.5+0.5, vD/1000.0); }` });
     const comp = new TH.ShaderMaterial({
       defines: { TAPS: TAPS + ".0", TAPSI: TAPS }, uniforms: { tC: { value: rtC.texture }, tN: { value: rtN.texture }, res: { value: new TH.Vector2(FW, FH) }, resN: { value: new TH.Vector2(Math.round(FW * NDS), Math.round(FH * NDS)) }, focus: { value: 10 }, dofR: { value: 0 }, inkK: { value: 0.9 }, inkNear: { value: 40 }, inkFar: { value: 160 }, inkCol: { value: new TH.Color("#1E1830") },
-        sat: { value: 1.12 }, lift: { value: new TH.Color("#120C22") } },
+        sat: { value: 1.12 }, lift: { value: new TH.Color("#120C22") }, shadowTint: { value: new TH.Color(opt.shadowTint || "#2A1F4A") }, shadowK: { value: opt.shadowK ?? 0.5 }, grain: { value: opt.grain ?? 0.04 }, gseed: { value: 0 } },
       vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`,
-      fragmentShader: `uniform sampler2D tC; uniform sampler2D tN; uniform vec2 res; uniform vec2 resN; uniform float focus, dofR, inkK, inkNear, inkFar, sat; uniform vec3 inkCol, lift; varying vec2 vUv;
+      fragmentShader: `uniform sampler2D tC; uniform sampler2D tN; uniform vec2 res; uniform vec2 resN; uniform float focus, dofR, inkK, inkNear, inkFar, sat, shadowK, grain, gseed; uniform vec3 inkCol, lift, shadowTint; varying vec2 vUv;
+        float hash12(vec2 p){ vec3 p3 = fract(vec3(p.xyx) * 0.1031); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.x + p3.y) * p3.z); }
         float dep(vec2 uv){ return max(texture2D(tN, uv).a * 1000.0, 0.01); }
         vec3 nor(vec2 uv){ return texture2D(tN, uv).rgb * 2.0 - 1.0; }
         float cocAt(float d){ return clamp(abs(d - focus) / max(focus, 0.5), 0.0, 1.0) * dofR; }
@@ -50,7 +51,11 @@
           eN = smoothstep(0.2, 0.42, eN);
           float e = max(eD, eN) * (1.0 - smoothstep(inkNear, inkFar, d0)) * (1.0 - smoothstep(1.0, 7.0, coc)) * step(d0, 900.0);
           col = mix(col, inkCol, e * inkK);
-          float g = dot(col, vec3(0.2126, 0.7152, 0.0722)); col = max(mix(vec3(g), col, sat), lift * 0.0) ; col = col + lift * (1.0 - smoothstep(0.0, 0.25, g)) * 0.35;
+          float g = dot(col, vec3(0.2126, 0.7152, 0.0722)); col = mix(vec3(g), col, sat);
+          // shadows shift toward a saturated indigo instead of grey/black (Ifverse-style)
+          float dk = 1.0 - smoothstep(0.02, 0.32, g); col = mix(col, col * 0.55 + shadowTint * 0.45, dk * shadowK); col += lift * (1.0 - smoothstep(0.0, 0.2, g)) * 0.3;
+          // fine film grain (3-5%), re-seeded slowly so it reads as texture, not noise
+          float n = hash12(floor(vUv * res) + gseed * 17.0) - 0.5; col += n * grain * (0.6 + 0.8 * g);
           gl_FragColor = vec4(col, 1.0);
           #include <colorspace_fragment>
         }` });
@@ -165,7 +170,7 @@
     // c = camera state from W3.keys(...)(t); o = { shake:[x,y], lightFor(b, t) → filter url | null }
     W3.frame = function (t, c, o = {}) {
       W3.setCam(c, o.shake, o.roll);
-      fog.near = c.fn; fog.far = c.ff; comp.uniforms.focus.value = c.d; comp.uniforms.dofR.value = c.dof * 14; comp.uniforms.inkNear.value = c.fn * 1.3; comp.uniforms.inkFar.value = c.ff * 1.05;
+      comp.uniforms.gseed.value = Math.floor(t * 8) % 64; fog.near = c.fn; fog.far = c.ff; comp.uniforms.focus.value = c.d; comp.uniforms.dofR.value = c.dof * 14; comp.uniforms.inkNear.value = c.fn * 1.3; comp.uniforms.inkFar.value = c.ff * 1.05;
       sky.position.copy(cam.position); W3.stars.position.copy(cam.position);
       if (o.before) o.before(cam);
       cam.layers.enableAll(); renderer.setRenderTarget(rtC); renderer.setClearColor(0x0b0a12, 1); renderer.clear(); renderer.render(scene, cam);

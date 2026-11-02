@@ -135,3 +135,21 @@ This is the method from the tutorial the user shared: 2D characters lit inside a
 - Only use it when a crowd is actually on screen, and keep it well under the other beds: about −30 dB RMS, not −26.
 - Episode 3's island murmur bed was too loud and too constant (user feedback).
 - Steps and ambience carry "living town" better than chatter.
+
+## Visual quality bar (Ifverse study 2, 2026-11-02; see `ifverse-study-2/`)
+
+- **Shading:**
+  - shadows go indigo, never grey (`shadowTint` in `sr3d.js`);
+  - an inner rim on every character (cool at night, warm near light);
+  - a contact shadow under every foot and prop.
+- **Texture:** fine grain at about 4%, built into `sr3d.js`. Paper props get gradients.
+- **Colour:** one accent colour per hero. Gold is reserved for energy, key props and UI.
+- **Energy and light:** glowing objects get glowing edges, not ink outlines (put them on layer 1). Glow is two layers: a core plus a halo. Light spills onto nearby surfaces.
+- **Motion:**
+  - nothing is ever frozen: idle breathing is on by default;
+  - blinks every 2.5–4 s;
+  - slow ambient drift (dust, debris, `sr-fx3d.js`);
+  - impacts get a 1-frame squash and a 2-frame overshoot.
+- **Cast:** mix black stick figures (`skin: "ink"`, with a light outline) and light ones. Use the 16 new emotions (crying, laughing, terrified, starstruck, inlove, determined, confused, embarrassed, exhausted, furious, dizzy, sleepy, hopeful, proud, disgusted) in addition to the existing set.
+- **Environment effects** (rifts, cracks and the like) appear only when the story calls for them. The craft lessons apply everywhere.
+- **Presenter (optional):** the `sr-host.js` 3D stick figure can walk into scenes, address the camera, lip-sync the narration and gesture at examples. It's still being trialled with the user.
