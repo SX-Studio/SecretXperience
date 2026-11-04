@@ -19,3 +19,28 @@ The samples are tiny, so these are signals, not conclusions.
 - Verify the channel at youtube.com/verify, then upload thumbnails A, B and C and run Test & Compare.
 - From Episode 5: open on the consequence or emotion in the first 3 s (the DOOMPERK lesson), with no slow establishing shot. Say the premise by 0:10.
 - Re-check retention for Ep4 on 2026-11-05/06.
+
+## Update: impressions (user screenshot, Ep4 at 30 h)
+
+| Measure | Value |
+|---|---|
+| Ep4 thumbnail impressions | **1.8K** in 30 h |
+| Ep2 (previous best) | under 600 |
+
+**The curve:** flat at about 300 for roughly the first 15 h, then a jump to about 1.6K between hours 15 and 25. YouTube widened its test of the video, mostly through Suggested (80%).
+
+**The math:**
+
+| CTR | Views from 1.8K impressions |
+|---|---|
+| 0.7% (actual, auto-frame thumbnail) | ~13 |
+| 4% (a normal designed-thumbnail CTR) | ~70 |
+| 6% | ~110 |
+
+The algorithm is willing to show the video, so the click is the bottleneck. Custom thumbnails (phone verification) are the highest-leverage fix.
+
+**Likely reasons Ep4 got more reach:**
+- One high-demand word ("Loneliness") in the "Psychology of [Word]" frame. The topic research found this frame's median is 6× the channel norm.
+- A 3–6 minute length.
+
+**Keep for Ep5+:** a "The Psychology of [Word]…" title, with the day-by-day or "what if" story inside.
