@@ -234,3 +234,13 @@ The rig characters are drawn side-on, so a seated figure only reads as sitting w
 - **Clipping.** Seated figures skip the occluder clip (`b.noClip`), so the seat never cuts them.
 - **Check angles.** Use `engine/tools/test_cam.cjs` to try camera angles on a single frame before re-rendering.
 
+## Episode length: 3–6 minutes is the default (user's channel data, 2026-11-04)
+
+The user reports that videos between 3 and 6 minutes get the most views on the channel. From Episode 5 on:
+
+- **Target 4–5 minutes**, with a hard ceiling of 6. Episode 4 (3:55) is the model.
+- **Budget:** about 550–750 words of voice-over, one story arc, 3–4 research beats, 1 midpoint twist, and the payoff last.
+- **Cut, don't compress:** if a script runs long, drop a whole beat rather than speeding up pacing or narration.
+- **Trade-off:** mid-roll ads need 8+ minutes, so revenue per view is lower. Volume makes up for it: a 4-minute episode renders in about 3 hours, so we can ship more often.
+- **Re-check after every upload:** views, average view duration % and CTR in YouTube Studio. An occasional longer flagship episode stays an option to A/B test.
+
