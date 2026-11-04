@@ -14,27 +14,43 @@
     for (const w of words) { const t = cur ? cur + " " + w : w; if (cv.measureText(t).width > maxW && cur) { lines.push(cur); cur = w; } else cur = t; } if (cur) lines.push(cur);
     return { lines, w: Math.max(...lines.map((l) => cv.measureText(l).width)) }; }
 
+  const REG = { t: -1, r: [] };
   function thought(svg, o) {
     const S = STY[o.style || "warm"], size = o.size || 38, g = el("g", { display: "none" }, svg);
     const body = el("g", {}, g); const txt = el("g", {}, g); const dots = [0, 1, 2].map(() => el("circle", { fill: S.fill, stroke: S.stroke, "stroke-width": 5 }, g));
     let built = false, W = 0, H = 0;
-    function build() { const { lines, w } = wrap(o.text, S.font, size, 520); W = w + 70; H = lines.length * size * 1.15 + 54; built = true;
+    function build() { const { lines, w } = wrap(o.text, S.font, size, 520); W = w + 70; H = lines.length * size * 1.15 + 54 + (o.style === "critic" ? 26 : 0); built = true; const ty0 = o.style === "critic" ? 12 : 0;
       // cloud: a rounded rect plus bumps around the rim
       const bumps = Math.max(5, Math.round(W / 70)), r = 30;
       for (let i = 0; i < bumps; i++) { const x = -W / 2 + 20 + (i * (W - 40)) / (bumps - 1); el("circle", { cx: x, cy: -H / 2 + 6, r, fill: S.fill, stroke: S.stroke, "stroke-width": 5 }, body); el("circle", { cx: x, cy: H / 2 - 6, r, fill: S.fill, stroke: S.stroke, "stroke-width": 5 }, body); }
       [-1, 1].forEach((s) => el("circle", { cx: s * (W / 2 - 4), cy: 0, r: H / 2 - 4, fill: S.fill, stroke: S.stroke, "stroke-width": 5 }, body));
       el("rect", { x: -W / 2 + 6, y: -H / 2 + 4, width: W - 12, height: H - 8, rx: 26, fill: S.fill }, body);
-      lines.forEach((l, i) => { const t = el("text", { x: 0, y: -((lines.length - 1) * size * 1.15) / 2 + i * size * 1.15 + size * 0.36, "text-anchor": "middle", "font-family": S.font, "font-weight": 900, "font-size": size, fill: S.ink }, txt); t.textContent = l; });
-      if (o.style === "critic") el("text", { x: -W / 2 + 18, y: -H / 2 - 8, "font-family": "Outfit", "font-weight": 900, "font-size": 20, fill: "#B9A4F0", "letter-spacing": 2 }, txt).textContent = "BEA'S INNER VOICE"; }
+      lines.forEach((l, i) => { const t = el("text", { x: 0, y: ty0 - ((lines.length - 1) * size * 1.15) / 2 + i * size * 1.15 + size * 0.36, "text-anchor": "middle", "font-family": S.font, "font-weight": 900, "font-size": size, fill: S.ink }, txt); t.textContent = l; });
+      if (o.style === "critic") el("text", { x: 0, y: -H / 2 + 26, "text-anchor": "middle", "font-family": "Outfit", "font-weight": 900, "font-size": 20, fill: "#B9A4F0", "letter-spacing": 2 }, txt).textContent = "BEA'S INNER VOICE"; }
     return { update(t) {
       const on = t >= o.t0 && t < o.t1, head = o.who && o.who.b && o.who.b.head && o.who.b.outer.getAttribute("display") !== "none" ? o.who.b.head : null;
       if (!on || (!head && !o.at)) { g.setAttribute("display", "none"); return; } if (!built) build(); g.setAttribute("display", "inline");
       const k = clamp((t - o.t0) / 0.35, 0, 1), out = clamp((o.t1 - t) / 0.3, 0, 1), sc = (0.55 + 0.45 * back(k)) * (o.scale || 1);
       const hx = head ? head.x : o.at.x, hy = head ? head.y : o.at.y, side = o.side || 1, hk = head ? head.k || 1 : 1;
-      let cx = hx + side * (W / 2 * 0.55 + 60 * hk), cy = hy - 120 * hk - H / 2 - 40 - (o.lift || 0) * (H * 0.9 + 20); cx = clamp(cx, W / 2 + 40, 1920 - W / 2 - 40); cy = clamp(cy, H / 2 + 40, 1080 - H / 2 - 40); if (cx - W / 2 < 340 && cy - H / 2 < 290) cx = 340 + W / 2;
+      const s0 = o.scale || 1, EW = (W / 2 + H / 2 - 4) * s0, EH = (H / 2 + 26) * s0, lift = (o.lift || 0) * (2 * EH + 18);
+      const R = REG.t === t ? REG : (REG.t = t, REG.r = [], REG);
+      const ov = (a, b) => Math.max(0, Math.min(a[2], b[2]) - Math.max(a[0], b[0])) * Math.max(0, Math.min(a[3], b[3]) - Math.max(a[1], b[1]));
+      const fit = (x, y) => [clamp(x, EW + 24, 1920 - EW - 24), clamp(y, EH + 24, 1080 - EH - 24)];
+      const C = [[hx + side * (EW * 0.45 + 50 * hk), hy - 130 * hk - EH - lift], [hx + side * (EW + 95 * hk), hy - 70 * hk - lift], [hx - side * (EW + 95 * hk), hy - 70 * hk - lift], [hx + side * (EW * 0.45 + 50 * hk), hy - 130 * hk - EH - lift - 2 * EH - 18]];
+      const FR = o.avoid ? o.avoid(t) || [] : []; let best = null, bs = 1e18;
+      C.forEach(([x0, y0], i) => { const [x, y] = fit(x0, y0), rc = [x - EW, y - EH, x + EW, y + EH]; let sc2 = Math.hypot(x - x0, y - y0) * 40 + i * 900;
+        sc2 += ov(rc, [0, 0, 330, 270]) * 60; R.r.forEach((q) => (sc2 += ov(rc, q) * 60));
+        sc2 += ov(rc, [hx - 70 * hk, hy - 90 * hk, hx + 70 * hk, hy + 60 * hk]) * 30; FR.forEach((f) => (sc2 += ov(rc, [f.x0, f.y0, f.x1, f.y1]) * 30)); if (sc2 < bs) { bs = sc2; best = [x, y]; } });
+      if (o.place) best = fit(o.place.x, o.place.y);
+      const cx = best[0], cy = best[1]; R.r.push([cx - EW - 10, cy - EH - 10, cx + EW + 10, cy + EH + 10]);
       g.setAttribute("opacity", (Math.min(k * 2, 1) * out).toFixed(3)); const bob = Math.sin(t * 2.2 + (o.t0 % 3)) * 4;
       body.setAttribute("transform", `translate(${cx.toFixed(1)},${(cy + bob).toFixed(1)}) scale(${sc.toFixed(3)})`); txt.setAttribute("transform", `translate(${cx.toFixed(1)},${(cy + bob).toFixed(1)}) scale(${sc.toFixed(3)})`);
-      [0, 1, 2].forEach((i) => { const u = (i + 1) / 4, x = cx + (hx - cx) * u * 0.9, y = (cy + H / 2) + (hy - 30 * hk - (cy + H / 2)) * u * 0.9; const d = dots[i]; d.setAttribute("cx", x.toFixed(1)); d.setAttribute("cy", y.toFixed(1)); d.setAttribute("r", (16 - i * 4) * Math.min(1, sc)); });
+      const tx = hx, ty = hy - 40 * hk, hk2 = Math.min(1.3, Math.max(0.6, hk)), capW = (W / 2 - 4) * s0, capR = (H / 2 + 26) * s0;
+      const prev = R.r.slice(0, -1), out2 = (x, y, m) => Math.hypot(Math.max(0, Math.abs(x - cx) - capW), y - cy) > capR + m;
+      let u0 = 1; for (let u = 0; u <= 1; u += 0.02) if (out2(cx + (tx - cx) * u, cy + (ty - cy) * u, 14 * hk2)) { u0 = u; break; }
+      [0, 1, 2].forEach((i) => { const u = u0 + (1 - u0) * [0.14, 0.42, 0.66][i], x = cx + (tx - cx) * u, y = cy + (ty - cy) * u, d = dots[i], r = [13, 9.5, 6.5][i] * Math.min(1, sc) * hk2;
+        const hidden = u0 >= 0.97 || prev.some((q) => x > q[0] - r && x < q[2] + r && y > q[1] - r && y < q[3] + r);
+        d.setAttribute("cx", x.toFixed(1)); d.setAttribute("cy", y.toFixed(1)); d.setAttribute("r", hidden ? 0 : r.toFixed(1)); });
     } };
   }
 
@@ -61,8 +77,8 @@
       r3.setAttribute("opacity", rv ? 1 : clamp((t - (o.rowT ? o.rowT[2] : a + 1.6)) / 0.25, 0, 1));
       // reveal: the fine print grows to full size under a magnifier
       const z = rv ? clamp((t - a - 0.6) / 0.9, 0, 1) : 0, zz = z * z * (3 - 2 * z);
-      fine.setAttribute("font-size", (15 + zz * 37).toFixed(1)); fine.setAttribute("fill", zz > 0.5 ? "#D23A2A" : "#6A5E52"); fine.setAttribute("font-weight", zz > 0.5 ? 900 : 800);
-      lens.setAttribute("opacity", rv && z < 1 ? 1 - z * 0.6 : 0); lens.setAttribute("transform", `translate(${X - 250 + zz * 120},${Y + 135}) scale(${0.8 + zz * 0.4})`);
+      fine.setAttribute("font-size", (15 + zz * 37).toFixed(1)); { const L = fine.getComputedTextLength ? fine.getComputedTextLength() : 0, maxL = 930; if (L > maxL) fine.setAttribute("font-size", ((15 + zz * 37) * maxL / L).toFixed(1)); } fine.setAttribute("fill", zz > 0.5 ? "#D23A2A" : "#6A5E52"); fine.setAttribute("font-weight", zz > 0.5 ? 900 : 800);
+      lens.setAttribute("opacity", rv && z < 1 ? 1 - z * 0.6 : 0); lens.setAttribute("transform", `translate(${X - 250 + zz * 160},${Y + 135}) scale(${0.8 + zz * 0.4})`);
     } };
   }
   window.EP5K = { thought, rules };

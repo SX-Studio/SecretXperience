@@ -244,3 +244,18 @@ The user reports that videos between 3 and 6 minutes get the most views on the c
 - **Trade-off:** mid-roll ads need 8+ minutes, so revenue per view is lower. Volume makes up for it: a 4-minute episode renders in about 3 hours, so we can ship more often.
 - **Re-check after every upload:** views, average view duration % and CTR in YouTube Studio. An occasional longer flagship episode stays an option to A/B test.
 
+
+## QA before the full render (added after Ep5)
+The full render costs about 4 hours on this machine, so problems must be found before it, not after.
+- **Motion check:** run `engine/tools/qa_consistency.cjs <project> <outdir> 99999 0 999 1` with `NOHUD=1`. It is pure math, takes about 1 minute, and flags slides and teleports (any character moving over 6 m/s within a continuous shot).
+- **Preview spans:** render a 2–3 s span (`hyperframes render --start a --end b`) at every bubble, card, reveal and emotional beat. That's about 10 minutes in total. Check each one for:
+  - overlapping text or bubbles, and text covering the day counter;
+  - text overflowing its box or running off-screen;
+  - **who a bubble belongs to:** it sits by the thinker, and its dots lead to them. Watch over-the-shoulder shots, where the thinker's head is off-frame;
+  - faces covered at reaction beats (the counter steps aside for big close-ups);
+  - **moods that read wrong:** for example, laughing while thinking something sympathetic reads as mockery.
+- **Fix-ups after a render:** re-render only the affected spans and overlay them frame-exactly (`tools/splice.sh`, which keeps the audio). That's 5–10 minutes per span instead of a 4-hour full render.
+- **Disk:** keep finished renders out of the project folder. Span renders copy the whole project, and start only with more than 1.3 GB free.
+- **Thought bubbles:**
+  - Several bubbles in one shot show one at a time, unless they are pinned with `place`.
+  - Bubbles that pile up while the camera pushes in get fixed `place` spots, so they don't jump.

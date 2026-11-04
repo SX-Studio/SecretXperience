@@ -50,7 +50,7 @@
   const CK = [[0, 0, 0]], GK = [[0, 1.0, 0.1]], ENVK = [[0, "day"]];
   const day = (t, d, h) => CK.push([t, d, h]), grade = (t, s, w) => GK.push([t, s, w]);
   const CARDS = [], card = (o) => CARDS.push(o), src = (text, t0, t1) => CARDS.push({ text, t0, t1, zone: "source", mood: "plain" });
-  const THOUGHTS = [], thought = (o) => THOUGHTS.push(o);
+  const THOUGHTS = [], thought = (o) => THOUGHTS.push(Object.assign({ avoid: (t) => W3.faceRects(t, camAt) }, o));
   const FREEZE = []; // [t0,t1] windows where the scene is "frozen" (desaturated, crowd still)
 
   // ============================================================================================
@@ -59,7 +59,7 @@
   // ---------- S01 cold open: the crash, frozen mid-air ----------
   {
     const tf = 0.9;  // freeze moment
-    bea.show(0, T.s02).jump(0.001, V(9, 0, -9.3)).at(0.55, BEA0).faceTo(0, { x: 0, z: 1 }).pose(0, "holdBoth", 0).mood(0, "content", 0).pose(0.62, "startle", 0.12).mood(0.6, "terrified", 0.12);
+    bea.show(0, T.s02).jump(0, V(9, 0, -9.3)).at(0.55, BEA0).faceTo(0, { x: 0, z: 1 }).pose(0, "holdBoth", 0).mood(0, "content", 0).pose(0.62, "startle", 0.12).mood(0.6, "terrified", 0.12);
     crowd.forEach((c, i) => c.show(0, T.s02).mood(0, "neutral", 0).mood(0.75, "surprised", 0.12).faceTo(0.7, { x: (9 - CROWD[i].x) * 0.3, z: -1 }));
     TRK.push([0.55, { on: 1, k: 0 }], [tf, { on: 1, k: 0.36 }], [T.s02 - 0.01, { on: 1, k: 0.36 }], [T.s02, { on: 0, k: 0 }]);
     FREEZE.push([tf, T.s02]); day(tf, 3, 0); day(T.s02, 0, 0);
@@ -127,13 +127,13 @@
     const s = T.s05, tu = T.n13 + 0.9; day(s, 3, 2);
     bea.show(s, T.s06).jump(s, BEA0).faceTo(s, { x: 0, z: 1 }).pose(s, "startle", 0).mood(s, "terrified", 0).mood(tu + 0.9, "embarrassed", 0.3).pose(tu + 0.9, "facepalm", 0.3).pose(T.n14, "relaxed", 0.4).mood(T.n15, "laughing", 0.3);
     crowd.forEach((c, i) => c.show(s, T.s06).jump(s, CROWD[i]).faceTo(s, { x: (9 - CROWD[i].x) * 0.3, z: -1 }).mood(s, "surprised", 0));
-    kai.mood(T.kai_t1, "laughing", 0.2); ana.mood(T.ana_t1, "worried", 0.2); theo.mood(T.theo_t1, "determined", 0.2);
+    kai.mood(T.kai_t1, "embarrassed", 0.2).mood(E("theo_t1") + 1.0, "laughing", 0.4); ana.mood(T.ana_t1, "worried", 0.2); theo.mood(T.theo_t1, "determined", 0.2);
     TRK.push([s - 0.01, { on: 0, k: 0 }], [s, { on: 1, k: 0.36 }], [tu, { on: 1, k: 0.36 }], [tu + 0.9, { on: 1, k: 1 }], [T.s06 - 0.01, { on: 1, k: 1 }], [T.s06, { on: 0, k: 0 }]);
     FREEZE.push([s, tu]);
     shot(s, tu + 1.0, [[12.6, 1.7, -4.4], [9.0, 1.2, -7.8], 42], [[12.3, 1.65, -4.7], [9.0, 1.2, -7.8], 40], { dof: 0.2 });
     day(T.kai_t1 + 0.2, 3, 3); day(T.ana_t1 + 0.2, 3, 4); day(T.theo_t1 + 0.2, 3, 5);
-    thought({ text: "Oof. That happens to me all the time.", who: kai, t0: T.kai_t1 - 0.05, t1: E("theo_t1") + 1.0, side: -1 });
-    thought({ text: "Is she okay?", who: ana, t0: T.ana_t1 - 0.05, t1: E("theo_t1") + 1.0, side: -1, scale: 0.9 });
+    thought({ text: "Oof. That happens to me all the time.", who: kai, t0: T.kai_t1 - 0.05, t1: T.ana_t1 - 0.1, side: 1 });
+    thought({ text: "Is she okay?", who: ana, t0: T.ana_t1 - 0.05, t1: T.theo_t1 - 0.1, side: 1, scale: 0.9 });
     thought({ text: "I should help.", who: theo, t0: T.theo_t1 - 0.05, t1: E("theo_t1") + 1.0, side: 1, scale: 0.9 });
     shot(tu + 1.0, T.n14, [[9.0, 2.6, -2.4], [9.0, 1.1, -7.0], 44], [[9.0, 2.5, -2.8], [9.0, 1.1, -7.0], 42], { dof: 0.15 });
     card({ text: "THEY JUDGE LESS HARSHLY", sub: "than we expect them to", mood: "fact", t0: W("harshly", 0, "n14") - 0.3, t1: E("n14") + 0.3, zone: "lower", fixedZone: true });
@@ -163,7 +163,7 @@
     bea.show(s, T.s08).jump(s, V(9, 0, -9.0)).faceTo(s, { x: 0, z: 1 }).pose(s, "give", 0).mood(s, "happy", 0).mood(T.cust2_t1 + 0.3, "sad", 0.25).pose(T.n20, "relaxed", 0.3).mood(W("buns", 0, "n20"), "determined", 0.4);
     cust2.show(s, E("n20")).jump(s, CUST).faceTo(s, { x: 0, z: -1 }).mood(s, "neutral", 0).pose(s, "relaxed", 0);
     shot(s, T.cust2_t1 + 0.2, [[12.6, 1.55, -8.25], [9.05, 1.25, -8.25], 34], [[12.3, 1.53, -8.25], [9.05, 1.25, -8.25], 32], { dof: 0.4 });
-    thought({ text: "The buns are a bit dry today.", who: cust2, t0: T.cust2_t1 - 0.05, t1: E("cust2_t1") + 0.8, side: 1 });
+    thought({ text: "The buns are a bit dry today.", who: cust2, t0: T.cust2_t1 - 0.05, t1: E("cust2_t1") + 0.8, side: 1, place: { x: 420, y: 600 } }); // over-the-shoulder: keep the bubble on the customer's side
     shot(T.cust2_t1 + 0.2, T.n21, [[10.2, 1.5, -6.9], [9.0, 1.25, -9.0], 34], [[10.0, 1.48, -7.2], [9.0, 1.25, -9.0], 32], { dof: 0.45 });
     card({ text: "ABOUT THE BUNS.", sub: "not about Bea", mood: "calm", t0: W("buns", 0, "n20"), t1: E("n20") + 0.3, zone: "top" });
     // day 6: the quay at golden hour, a hug
@@ -184,8 +184,9 @@
     // her own count: the tally rolls up from 7 into the thousands
     const r0 = T.n25 + 0.4; for (let i = 0; i <= 14; i++) day(r0 + i * 0.09, 7, Math.round(7 + Math.pow(i / 14, 2.2) * 3405));
     shot(E("n25") + 1.1, T.n27, [[FLAT.x + 0.55, 1.25, 1.5], [SEAT.x, 1.05, SEAT.z], 32], [[FLAT.x + 0.45, 1.22, 1.25], [SEAT.x, 1.05, SEAT.z], 30], { dof: 0.5 });
-    [["They're laughing at you.", "bea_c2", 1], ["You always mess things up.", "bea_c3", -1], ["Why are you like this?", "bea_c4", 1]].forEach(([tx, id, sd], i) =>
-      thought({ text: tx, who: bea, t0: T[id] - 0.05, t1: E("bea_c4") + 0.6, style: "critic", side: sd, scale: 0.92, lift: i }));
+    // fixed spots around her head (the camera pushes in, so free placement would make earlier voices jump)
+    [["They're laughing at you.", "bea_c2", 1, { x: 1490, y: 190 }], ["You always mess things up.", "bea_c3", -1, { x: 650, y: 175 }], ["Why are you like this?", "bea_c4", 1, { x: 1500, y: 430 }]].forEach(([tx, id, sd, pl], i) =>
+      thought({ text: tx, who: bea, t0: T[id] - 0.05, t1: E("bea_c4") + 0.6, style: "critic", side: sd, scale: 0.92, place: pl }));
     grade(T.bea_c2 - 0.3, 1.0, 0.1); grade(T.bea_c2, 0.55, -0.6); grade(E("bea_c4") + 0.5, 0.55, -0.6); grade(T.n26 + 1.0, 0.95, 0.2);
     window.__critic = [T.bea_c2 - 0.1, E("bea_c4") + 0.8];
     card({ text: "THE HARSHEST VOICE", sub: "was her own", mood: "sad", t0: W("harshest", 0, "n26"), t1: E("n26") + 0.5, zone: "top" });
@@ -195,7 +196,7 @@
     shot(T.n27 - 0.05, W("experiments", 0, "n27") - 0.05, [rp(NQ, -0.8, 1.5, 4.8), rp(NQ, 0, 1.15, 0), 36], [rp(NQ, -0.6, 1.45, 4.1), rp(NQ, 0, 1.15, 0), 34], { dof: 0.35 });
     shot(W("experiments", 0, "n27") - 0.05, E("n27") + 0.8, [rp(NQ, 1.3, 1.55, 5.6), rp(NQ, -0.6, 1.15, 0), 36], [rp(NQ, 1.1, 1.52, 5.1), rp(NQ, -0.6, 1.15, 0), 34], { dof: 0.35 });
     card({ text: "ANSWER IT LIKE A FRIEND WOULD", mood: "calm", t0: W("answering", 0, "n27"), t1: W("experiments", 0, "n27") - 0.15, zone: "top" });
-    card({ text: "KINDNESS TO YOURSELF", sub: "raised motivation to improve (lab experiments)", mood: "calm", t0: W("experiments", 0, "n27"), t1: E("n27") + 0.7, zone: "left", fixedZone: true });
+    card({ text: "KINDNESS TO YOURSELF", sub: "raised motivation to improve (lab experiments)", mood: "calm", t0: W("experiments", 0, "n27"), t1: E("n27") + 0.7, zone: "left", fixedZone: true, at: { x: 520, y: 430 } }); // below the day counter, clear of Nia
     src("Breines & Chen (2012)", W("experiments", 0, "n27"), E("n27") + 0.7);
   }
   // ---------- S09 day 8: that's okay ----------
@@ -246,7 +247,7 @@
     const hand = (g, who, win) => { const b = CAST[who].b, on = win && t > win[0] && t < win[1] && b.hand && b.outer.getAttribute("display") !== "none"; g.setAttribute("display", on ? "inline" : "none"); if (on) g.setAttribute("transform", `translate(${b.hand.x.toFixed(1)},${(b.hand.y - 6).toFixed(1)}) scale(${(b.k || 1).toFixed(3)})`); };
     hand(broom, "theo", window.__broom); hand(sandwich, "mo", window.__sand);
     thoughtsU.forEach((u) => u.update(t)); if (rulesCard) rulesCard.update(t);
-    TY.update(t); counter.update(t); if (t > D - 3) counter.g.setAttribute("opacity", clamp((D - 0.5 - t) / 2.5, 0, 1));
+    TY.update(t); counter.update(t); { const hideC = K.win(t, T.mum_t1 - 0.03, T.s07 - 0.03, 0.35, 0.02); counter.g.setAttribute("opacity", (+(counter.g.getAttribute("opacity") || 0) * (1 - hideC) * (t > D - 3 ? clamp((D - 0.5 - t) / 2.5, 0, 1) : 1)).toFixed(3)); } // counter steps aside for Mum's thought so Bea's face reads
     // looks: freeze (desaturated, cool), spotlight vignette, critic tint, rewind streaks
     gradeF.update(t); const bg = document.getElementById("bg");
     const fz = FREEZE.some(([a, b]) => t >= a && t < b); if (fz) bg.style.filter = "saturate(0.35) brightness(0.95) contrast(1.05)";
