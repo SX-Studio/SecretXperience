@@ -44,3 +44,23 @@ The algorithm is willing to show the video, so the click is the bottleneck. Cust
 - A 3–6 minute length.
 
 **Keep for Ep5+:** a "The Psychology of [Word]…" title, with the day-by-day or "what if" story inside.
+
+## 2026-11-04: channel verified
+
+Custom thumbnails are now on Ep3 and Ep4.
+
+| Episode | Thumbnail plan |
+|---|---|
+| Ep1 | `thumbnail-1280x720.jpg` |
+| Ep2 | Test & Compare A vs B ("seat taken") |
+| Ep4 | Test & Compare A (Day 1 vs Day 30), B "HELLO?", C "HE KEPT COUNT" |
+
+**Baselines to beat:**
+
+| Episode | CTR before custom thumbnails | Impressions |
+|---|---|---|
+| Ep4 | 0.7% | 1.8K |
+| Ep3 | 1.2% | — |
+| Ep2 | 2.1% | — |
+
+Re-check after 48–72 h.
