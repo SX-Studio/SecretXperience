@@ -35,9 +35,10 @@ None, on purpose.
 ## Pinned comment
 Who's a "Mo" in your life, someone whose small kindness you never forgot? Tell them. 👇
 
-## Thumbnails (Test & Compare)
-- thumbnail-A-he-had-no-idea-1280x720.jpg: the island at night, threads, labels over the houses (WELCOMED / STAYED / BUILT HERE).
-- thumbnail-B-1-sandwich-1280x720.jpg: Mo in the burst of light, "1 SANDWICH / 347 LIVES HE NEVER KNEW ABOUT".
+## Thumbnails (Test & Compare): use the v2 set (niche style)
+- thumbnail-v2-A-i-did-that-1280x720.jpg: Mo starstruck, gold threads to Theo, Kai and Bea with labels (STAYED / WELCOMED / HELPED), "I DID THAT?"
+- thumbnail-v2-B-1-sandwich-1280x720.jpg: Mo holding a glowing sandwich with threads bursting out, a LIVES TOUCHED 347 counter, "1 SANDWICH."
+(The v1 render-frame thumbnails remain in the folder as a fallback.)
 
 ## End screen
 The final ~7 s aerial over the morning island is clean: subscribe element plus a "best for viewer" video.
