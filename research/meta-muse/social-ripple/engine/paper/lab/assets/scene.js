@@ -1,0 +1,49 @@
+/* Paper style test: Ep7 cold open rebuilt with "something every second". Line clock in window.DT = {id:[start,dur]}, window.DUR. */
+(function () {
+  const { el, clamp, lerp } = SR, K = window.PK, T = window.DT, D = window.DUR, S = (i) => T[i][0], E = (i) => T[i][0] + T[i][1];
+  const svg = document.getElementById("ov"); const svgDefs = el("defs", {}, svg);
+  const world = el("g", {}, svg), back = el("g", {}, world), chars = el("g", {}, world), wx = el("g", {}, world), front = el("g", {}, world);
+  const set = K.square(back, front);
+  const ANA = { skin: "#9A6440", shirt: "#3FA7A0", pants: "#2E5A74", shoes: "#F2EDE4", hair: "#2A1A14", hairStyle: "bun", seed: 5, body: "slim" }, YOU = { skin: "#E3AE85", shirt: "#6C5CE7", pants: "#2E3A5A", shoes: "#F2EDE4", hair: "#1E1B22", hairStyle: "short", seed: 51 };
+  const X = (i) => { const r = SR.mulberry32(100 + i * 7), pk = (a) => a[Math.floor(r() * a.length)]; return { skin: pk(["#F6D2B4", "#E3AE85", "#C98B5E", "#B07448", "#7A4A32"]), shirt: pk(["#E8834A", "#F2C14E", "#5E9E5A", "#D85A8A", "#4F7FB0", "#7B6BB0"]), pants: pk(["#3A4A63", "#5A4E44", "#2E5A74"]), shoes: "#3B3446", hair: pk(["#1E1B22", "#6A4A3A", "#C79A5A"]), hairStyle: pk(["short", "curly", "ponytail", "long", "afro", "spiky", "cap"]), seed: 30 + i, body: pk(["avg", "round", "broad", "slim", "lanky"]) }; };
+  const stranger = { skin: "#E3AE85", shirt: "#4F7FB0", pants: "#5A4E44", shoes: "#3B3446", hair: "#6A4A3A", hairStyle: "short", seed: 77, body: "round" };
+  const tStormAna = S("ana_01") + 0.72, tCrowd = S("n01"), tCard = S("n02") + T.n02[1] - 0.15, tStr = S("str_01") - 0.9, tCrumble = E("n06") + 0.2, tLift = tCrumble + 3.4, tTitle = tLift + 1.6;
+  // cast
+  const ana = SR.Paper(chars, Object.assign({}, ANA, { scale: 1.9, x: [[0, 1180]], y: [[0, 960]], facing: [[0, -1]], noWalk: true, lips: [[S("ana_01"), "ana_01"]],
+    mood: [[0, "grin", 0], [tStormAna + 0.1, "forced", 0.5], [tCrumble, "nervous", 1.0], [tCrumble + 1.0, "sad", 1.0], [tCrumble + 2.0, "crying", 1.2], [tLift + 0.2, "surprised", 0.3, "back"], [tLift + 0.8, "relieved", 1.0], [tLift + 1.5, "happy", 0.8]],
+    pose: [[0, "wave", 0], [E("ana_01") + 0.4, "relaxed", 0.6], [tCrumble + 0.6, "slump", 1.6], [tLift + 0.3, "relaxed", 0.8]], look: [[0, { x: 0, y: 0 }], [tCrumble + 1, { x: 0.3, y: 0.6 }], [tLift + 0.2, { x: 0, y: -0.2 }]] }));
+  const you = SR.Paper(chars, Object.assign({}, YOU, { scale: 1.9, x: [[0, 700], [tLift - 0.5, 700], [tLift + 0.2, 830, "out"]], y: [[0, 960]], facing: [[0, 1]], noWalk: true,
+    mood: [[0, "happy", 0], [tStormAna + 0.15, "shock", 0.25, "back"], [tStormAna + 1.0, "worried", 0.8], [tStr + 1.2, "skeptic", 0.5], [S("n06"), "deadpan", 0.4], [tCrumble + 0.8, "worried", 1.0], [tLift, "hopeful", 0.6], [tLift + 1.2, "happy", 0.8]],
+    pose: [[0, "relaxed", 0], [tStormAna + 0.15, "startle", 0.3, "back"], [tStormAna + 1.2, "relaxed", 0.8], [tLift - 0.2, "give", 0.5]], look: [[0, { x: 0.2, y: 0 }]] }));
+  const crowd = [[-120, 1.5], [220, 1.55], [470, 1.45], [1500, 1.5], [1760, 1.55], [2020, 1.45], [60, 1.9], [2150, 1.9]].map(([x, k], i) => SR.Paper(chars, Object.assign({}, X(i), { scale: k, x: [[0, x]], y: [[0, i > 5 ? 1040 : 950]], facing: [[0, x < 960 ? 1 : -1]], noWalk: true, mood: [[0, ["grin", "happy", "cheeky", "content"][i % 4], 0]], pose: [[0, ["wave", "relaxed", "proud", "hipsHands"][i % 4], 0]] })));
+  const str = SR.Paper(chars, Object.assign({}, stranger, { scale: 1.9, x: [[0, 2300], [tStr, 2300], [tStr + 1.1, 1240, "out"], [E("n06") - 0.3, 1240], [E("n06") + 1.1, 2400, "in"]], y: [[0, 960]], facing: [[0, -1], [E("n06") - 0.2, 1]], lips: [[S("str_01"), "str_01"]], mood: [[0, "grin", 0], [S("str_01") + 1.0, "forced", 0.4]], pose: [[0, "relaxed", 0], [S("str_01") + 0.3, "wave", 0.3], [E("str_01") + 0.2, "relaxed", 0.5]] }));
+  // weather
+  const W = []; const wxOn = (c, lv, pop, k, dy = 0) => { const w = K.weather(wx, W.length + 1); W.push({ w, c, lv, pop, k, dy }); return w; };
+  wxOn(ana, [[0, 4], [tLift + 0.2, 4], [tLift + 1.6, 2.2], [tTitle, 1.4]], tStormAna, 1.5, -20); wxOn(str, [[0, 4]], tStr + 0.9, 1.3);
+  crowd.forEach((c, i) => wxOn(c, [[0, [4, 3, 1, 4, 2, 4, 3, 1][i]]], tCrowd + 0.5 + i * 0.22, 1.1));
+  wxOn(you, [[0, 1.3]], tTitle + 0.2, 1.2);
+  const youTag = K.tag(world, "YOU", { fs: 34 }), bub = K.bubble(world, "Doing great!", { fs: 36 });
+  // cards + grade
+  const card1 = K.card(svg, ["THEY'RE", "NOT."], { fs: 190 }), title = K.card(svg, ["WHAT IF YOU COULD SEE", "EVERYONE'S", "INNER WEATHER?"], { fs: 110, bg: "#2B2140", fg: "#FFE3A0" });
+  const grade = el("rect", { x: 0, y: 0, width: 1920, height: 1080, style: "mix-blend-mode:multiply", "pointer-events": "none" }, svg), flash = el("rect", { x: 0, y: 0, width: 1920, height: 1080, fill: "#fff", opacity: 0, "pointer-events": "none" }, svg);
+  const grain = SR.paperGrain(svg);
+  // camera: snap zooms + pushes; "something every second"
+  const F = (c, z, dy = 0, dx = 0) => ({ who: c, z, dy, dx });
+  const shots = [[0, F(ana, 2.4, 20, -20), F(ana, 2.7, 10, -20)], [tStormAna + 0.12, F(ana, 1.8, -150, -10)], [tStormAna + 0.75, F(you, 2.6, 20, 30)], [tCrowd + 0.3, [960, 600, 0.95], [960, 580, 1.05]], [tCrowd + 1.9, [300, 700, 1.6], [420, 700, 1.5], "lin"], [tCrowd + 3.0, [1650, 700, 1.6], [1560, 700, 1.5], "lin"], [tCrowd + 4.0, [960, 620, 1.0]],
+    [tCard + 0.9, [1050, 620, 1.2]], [S("str_01") + 0.2, F(str, 2.1, -60, -20)], [S("str_01") + 1.5, F(str, 1.8, -140, -30), F(str, 2.0, -140, -30)], [S("n06"), F(you, 2.8, 20, 40)], [tCrumble, F(ana, 1.8, -110, -10), F(ana, 2.4, -60, -10)], [tLift - 0.3, [990, 540, 1.08]], [tLift + 1.3, [990, 540, 1.08], [990, 520, 1.16]]];
+  const cam = K.camera(shots, D); const res = (c) => Array.isArray(c) ? c : [c.who.joints.headX + (c.dx || 0), c.who.joints.headY + (c.dy || 0), c.z];
+  const coldK = [[0, 0.05], [tStormAna, 0.05], [tStormAna + 0.3, 0.35], [tCrowd + 1, 0.3], [tCrumble, 0.35], [tCrumble + 2, 0.6], [tLift + 0.6, 0.6], [tLift + 1.8, 0.0], [D, 0]];
+  function draw(t) {
+    [you, ana, str, ...crowd].forEach((c) => { const on = !(c === str && (t < tStr - 0.1 || t > E("n06") + 1.2)); c.g.setAttribute("display", on ? "inline" : "none"); if (on) c.update(t); });
+    const shake = Math.max(0, 1 - (t - tStormAna) * 2.5) * (t >= tStormAna ? 1 : 0) + Math.max(0, 1 - (t - tCrumble - 2.0) * 3) * (t >= tCrumble + 2.0 ? 0.4 : 0);
+    world.setAttribute("transform", cam.at(t, res, shake)); set.update(t, 1 - 0.7 * K.sm(tCrumble, tCrumble + 2, t) * (1 - K.sm(tLift + 0.6, tLift + 1.8, t)));
+    W.forEach((o) => { const J = o.c.joints, on = o.c.g.getAttribute("display") !== "none"; o.w.g.setAttribute("display", on ? "inline" : "none"); if (!on) return; const pop = clamp((t - o.pop) / 0.4, 0, 1), lv = SR.sampleTrack(o.lv, t, o.lv[0][1]);
+      o.w.g.setAttribute("transform", `translate(${J.headX.toFixed(1)},${(J.headY - J.headR - 110 * o.k + o.dy + Math.sin(t * 2.1 + o.pop) * 4).toFixed(1)})`); o.w.set(lv, t, o.k, pop); });
+    const cur = cam.cur(); const anaClose = cur[1] && cur[1].who === ana; youTag.setAttribute("display", anaClose ? "none" : "inline"); youTag.setAttribute("transform", `translate(${you.joints.headX.toFixed(1)},${(you.joints.headY - you.joints.headR - 40).toFixed(1)})`);
+    const bk = K.win(t, S("str_01") + 0.9, E("str_01") + 0.3, 0.15, 0.2); bub.setAttribute("opacity", bk.toFixed(2)); bub.setAttribute("transform", `translate(${(str.joints.headX - 230).toFixed(1)},${(str.joints.headY - 60).toFixed(1)}) scale(${K.back(bk).toFixed(3)})`);
+    card1.set(K.win(t, tCard, tCard + 0.95, 0.04, 0.12), clamp((t - tCard) / 0.5, 0, 1)); title.set(K.win(t, tTitle, D, 0.15, 0.4), clamp((t - tTitle) / 0.8, 0, 1));
+    grade.setAttribute("fill", K.mix("#FFFFFF", "#8FA2C8", SR.sampleTrack(coldK, t, 0))); flash.setAttribute("opacity", (Math.max(0, 1 - Math.abs(t - tStormAna) * 8) * 0.5).toFixed(2));
+    if (window.__QA) { const iss = []; [you, ana, str].forEach((c) => { if (c.g.getAttribute("display") !== "none") c.check(960).forEach((m) => iss.push(`${t.toFixed(2)} ${c.spec.seed}: ${m}`)); }); window.__QA.push(...iss); }
+  }
+  const tl = gsap.timeline({ paused: true }); SR.drive(tl, D, draw); window.__timelines["main"] = tl; window.__SCENE = { draw, ana, you, str, crowd, shots, marks: { tStormAna, tCrowd, tCard, tStr, tCrumble, tLift, tTitle } };
+})();

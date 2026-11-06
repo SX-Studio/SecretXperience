@@ -1,7 +1,21 @@
 # Art direction: from "3D rendered" to artistic, expressive characters (2026-11-06)
 Why: every top channel in our niche uses expressive cartoon/anime-style art. Our own 2D-style Episode 2 still has our best CTR (2.1%). Our characters are already vector drawings; the 3D world and camera are what read as "rendered".
 
-## Character redesign v5 (2026-11-06): real bodies, human faces, emotional arcs
+## Art direction v3 (2026-11-06, decided): paper cut-out storybook
+**Why we changed course.** Ep4 analytics: half the viewers gone by 0:05, average view 30 s (12.8%) of 3:55; every upload shows the same curve. The owner also didn't find the cartoon look appealing. Four directions were prototyped on one moment (`paper/stylelab/styles_2x2.png`: painted anime, paper cut-out, bold flat, sketch + wash); **paper cut-out** was chosen, with the one hard requirement that *every feeling must read from the face at a glance*.
+
+**The look** (`paper/paper-rig.js`, `paper/paper-sets.js`):
+- Flat paper shapes, no outlines, soft drop shadows between layers (`#pshadow`, `#pshadowL`), a paper-grain overlay on the frame (`SR.paperGrain`).
+- Storybook proportions: big round head (radius 92 at scale 1), short legs, chunky limbs, six body types.
+- Faces: white eyes with dark irises and a glint, paper lids that drop and angle, thick paper-strip brows, a mouth that opens into a dark shape with teeth and tongue, cheeks, tears, sweat. Driven by the same blendable expression dials as before (`SR.F5`), so ~40 moods blend progressively (`paper/expression-and-pose-sheet.png`).
+- Poses tuned to the proportions (`SR.PAPER_POSES`) and a **joint checker** (`c.check(ground)`) that flags hands inside heads, elbows bending backward, knees bending forward and feet off the ground. Run it over every frame before rendering (`tools/stills.cjs` prints the issues).
+- Paper weather icons (sun → storm) with a pop-in, black word cards, a camera helper with snap zooms, pushes and shake.
+
+**"Something every second."** The 19-second cold-open test (`paper/lab/`, `paper/paper-test-cold-open.mp4`) averages one visual event per second: a visual contradiction in second one (a beaming "I'm fine!" and a storm pops over her head, flash + thunder + shake), snap zoom to YOU's shock, the whole square's storms popping one by one, a black card ("THEY'RE NOT."), a stranger's "Doing great!" under rain, a punch-in on YOU's deadpan, Ana's face drifting forced → nervous → sad → crying as the colour cools, then a hand on her shoulder and the title card.
+
+**Still to do:** remake Ep7 in this look (sets: bedroom, street, bakery, harbour, site, bench, classroom, café, reflection, host), kinetic word-by-word captions, the opening audit and scorecard from `studies/VISUAL-ENERGY-RESEARCH.md`, a Short, then measure retention.
+
+## Character redesign v5 (superseded by v3 above, kept for reference) (2026-11-06): real bodies, human faces, emotional arcs
 Feedback: the stick-figure bodies weren't appealing enough to carry our messages, and the faces didn't read as human expressions.
 
 **Bodies** (`rig-v5/sr-v3.js`, opt in with `build: "v5"`; old episodes render unchanged):
