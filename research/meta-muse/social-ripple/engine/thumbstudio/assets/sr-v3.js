@@ -48,6 +48,19 @@
     C: { w: 10.2, top: 1.9, bot: 3.6, round: 0.05, tt: 1, tb: 1, tg: 0.15, tup: 0, tip: 0, press: 0, lip: 0.4 },
     R: { w: 7.4, top: 2.4, bot: 4.2, round: 0.6, tt: 0.7, tb: 0.2, tg: 0.3, tup: 0.2, tip: 0, press: 0, lip: 0.6 },
   };
+  // v5 body types: shoulder/waist/hip half-widths, torso length, leg length factor, limb radii [root, joint, end], hand size, belly bulge
+  const BODY5 = {
+    avg:   { sh: 31, wa: 27, hp: 29, T: 84, leg: 1, legR: [15, 12.5, 10.5], armR: [11.5, 9.5, 8], handK: 1.15 },
+    round: { sh: 34, wa: 41, hp: 37, T: 86, leg: 0.9, legR: [17, 14, 11.5], armR: [12.5, 10.5, 8.8], handK: 1.22, belly: 1 },
+    broad: { sh: 43, wa: 31, hp: 30, T: 92, leg: 1.04, legR: [16.5, 13.5, 11.5], armR: [14, 11.5, 9.5], handK: 1.3 },
+    slim:  { sh: 26, wa: 21, hp: 26, T: 82, leg: 1.04, legR: [13.5, 11, 9], armR: [10, 8.5, 7.2], handK: 1.05 },
+    pear:  { sh: 27, wa: 27, hp: 37, T: 84, leg: 0.95, legR: [16, 12.5, 10], armR: [10.5, 9, 7.5], handK: 1.08 },
+    lanky: { sh: 28, wa: 22, hp: 24, T: 96, leg: 1.16, legR: [13.5, 11, 9.5], armR: [10.5, 8.8, 7.4], handK: 1.12 },
+  };
+  SR.BODY5 = BODY5;
+  // tapered capsule from (x0,y0) radius r0 to (x1,y1) radius r1, as a closed path (limbs with volume)
+  const cap = (x0, y0, r0, x1, y1, r1) => { const dx = x1 - x0, dy = y1 - y0, L = Math.hypot(dx, dy) || 1e-3, nx = -dy / L, ny = dx / L, f = (v) => v.toFixed(1);
+    return `M${f(x0 + nx * r0)},${f(y0 + ny * r0)} L${f(x1 + nx * r1)},${f(y1 + ny * r1)} A${f(r1)},${f(r1)} 0 0 0 ${f(x1 - nx * r1)},${f(y1 - ny * r1)} L${f(x0 - nx * r0)},${f(y0 - ny * r0)} A${f(r0)},${f(r0)} 0 0 0 ${f(x0 + nx * r0)},${f(y0 + ny * r0)} Z `; };
   // ================= CHARACTER v2 =================
   // spec adds: outfit ('hoodie'|'tee'|'shirt'|'jacket'|'apron'|'dress'|'coat'), pants colour, shoes colour,
   //            skin ('ink' default — the channel's silhouette heads), blush (auto by mood), talk: [[t0,t1],...]
@@ -56,7 +69,9 @@
     const id = (s.id || "c") + "-" + (UID++);
     const g = el("g", { id: s.id }, parent);
     const body = el("g", {}, g);
-    const LEG1 = 56, LEG2 = 54, ARM1 = 48, ARM2 = 46, TORSO = 94, HEADR = 41, NECK = 9, ANK = 10;
+    // build "v5" (2026-11-06 redesign): full cartoon bodies (tapered limbs with volume, real hands, chunky shoes, body types) instead of stick limbs
+    const V5 = s.build === "v5", BT = V5 ? Object.assign({}, BODY5[s.body || "avg"] || BODY5.avg) : null;
+    const LEG1 = V5 ? 42 * BT.leg : 56, LEG2 = V5 ? 40 * BT.leg : 54, ARM1 = V5 ? 38 : 48, ARM2 = V5 ? 36 : 46, TORSO = V5 ? BT.T : 94, HEADR = 41, NECK = V5 ? 3 : 9, ANK = 10;
     const OUT = 4.2;                                    // outline width
     const SKIN0 = s.skin !== undefined ? s.skin : (SR.SKIN || null), SKIN = SKIN0 === "ink" ? null : SKIN0, FEAT = SKIN ? INK : "#FFFFFF";
     const dark = shade(s.color, -0.22), light = shade(s.color, 0.18), pantsD = shade(s.pants, -0.25);
@@ -70,7 +85,8 @@
         el("circle", { cx: 62 * sx, cy: -28, r: 9, fill: INK, opacity: 0.85 }, wingG); };
       W(-1, "#E09A2C"); W(1, PAL.kind);
     }
-    const THIN = !!s.thin, TW = s.thinW || 5.5;
+    const LK = (LEG1 + LEG2) / 110;   // leg-length factor (v5 legs are shorter: crouch + stride scale with it)
+    const THIN = !!s.thin && !V5, TW = s.thinW || 5.5;
     const tube = (parentG, w, col) => THIN ? ({ o: el("path", { fill: "none", stroke: INK, "stroke-width": TW, "stroke-linecap": "round", "stroke-linejoin": "round" }, parentG), f: el("path", { fill: "none", stroke: INK, "stroke-width": TW, "stroke-linecap": "round", "stroke-linejoin": "round" }, parentG) }) : ({ o: el("path", { fill: "none", stroke: INK, "stroke-width": w + OUT * 2, "stroke-linecap": "round", "stroke-linejoin": "round" }, parentG), f: el("path", { fill: "none", stroke: col, "stroke-width": w, "stroke-linecap": "round", "stroke-linejoin": "round" }, parentG) });
     const backG = el("g", {}, body);
     const legB = tube(backG, 17, pantsD);
@@ -79,11 +95,20 @@
     const foreBo = SKIN && !THIN ? el("path", { fill: "none", stroke: INK, "stroke-width": 12 + OUT * 2, "stroke-linecap": "round" }, backG) : null;
     const foreB = el("path", { fill: "none", stroke: THIN ? INK : (SKIN || INK), "stroke-width": THIN ? TW : 12, "stroke-linecap": "round" }, backG);
     const handB = el("path", SKIN && !THIN ? { fill: SKIN, stroke: INK, "stroke-width": 3.4, "stroke-linejoin": "round" } : { fill: INK }, backG);
+    const SK5 = SKIN || "#5E3B2A", LONG = ["hoodie", "jacket", "coat", "shirt"].includes(s.outfit);
+    const mk5leg = (pg, col) => ({ o: el("path", { fill: INK, stroke: INK, "stroke-width": OUT * 2, "stroke-linejoin": "round" }, pg), f: el("path", { fill: col }, pg), crease: el("path", { fill: "none", stroke: shade(col, -0.3), "stroke-width": 2.4, "stroke-linecap": "round", opacity: 0.7 }, pg),
+      shoe: el("path", { fill: s.shoes === INK ? "#3B3446" : s.shoes, stroke: INK, "stroke-width": OUT, "stroke-linejoin": "round" }, pg), sole: el("path", { fill: "#F4EFE6", stroke: INK, "stroke-width": 3, "stroke-linejoin": "round" }, pg) });
+    const mk5arm = (pg, col) => ({ o: el("path", { fill: INK, stroke: INK, "stroke-width": OUT * 2, "stroke-linejoin": "round" }, pg), skin: el("path", { fill: SK5 }, pg),
+      sl: el("path", { fill: col, stroke: INK, "stroke-width": 3, "stroke-linejoin": "round" }, pg), slS: el("path", { fill: "none", stroke: shade(col, -0.28), "stroke-width": 2.4, "stroke-linecap": "round", opacity: 0.75 }, pg),
+      hand: el("path", { fill: SK5, stroke: INK, "stroke-width": 3.2, "stroke-linejoin": "round" }, pg), fing: el("path", { fill: "none", stroke: INK, "stroke-width": 2.2, "stroke-linecap": "round" }, pg) });
+    const L5B = V5 ? mk5leg(backG, pantsD) : null, A5B = V5 ? mk5arm(backG, dark) : null;
     const legF = tube(body, 17, s.pants);
     const shoeF = el("path", { fill: s.shoes, stroke: INK, "stroke-width": OUT, "stroke-linejoin": "round" }, body);
     const soleF = el("path", { fill: "none", stroke: "#EDE6DA", "stroke-width": 3, "stroke-linecap": "round" }, body);
+    const L5F = V5 ? mk5leg(body, s.pants) : null;
+    if (V5) [legB.o, legB.f, shoeB, sleeveB.o, sleeveB.f, foreBo, foreB, handB, legF.o, legF.f, shoeF, soleF].forEach((n) => n && n.setAttribute("display", "none"));
     const neckO = SKIN ? el("path", { fill: "none", stroke: INK, "stroke-width": 15 + OUT * 2, "stroke-linecap": "round" }, body) : null;
-    const neck = el("path", { fill: "none", stroke: SKIN || INK, "stroke-width": 15, "stroke-linecap": "round" }, body);
+    const neck = el("path", { fill: "none", stroke: SKIN || INK, "stroke-width": V5 ? 17 : 15, "stroke-linecap": "round" }, body);
     // torso (garment) with clipped cel-shade and details
     const torsoG = el("g", {}, body);
     const torsoClipId = id + "-tc";
@@ -139,11 +164,16 @@
     fx.q.textContent = "?"; fx.zs.forEach((z) => (z.textContent = "z"));
     const glasses = s.glasses ? el("g", {}, headG) : null;
     if (glasses) { el("circle", { cx: -13, cy: -4, r: 13.5, fill: "rgba(255,255,255,0.06)", stroke: FEAT, "stroke-width": 2.8 }, glasses); el("circle", { cx: 13, cy: -4, r: 13.5, fill: "rgba(255,255,255,0.06)", stroke: FEAT, "stroke-width": 2.8 }, glasses); el("path", { d: "M-1,-6 L1,-6", stroke: "#FFFFFF", "stroke-width": 2.8 }, glasses); }
+    // v5 face: blendable human-like expression dials (face5rig.js); the old eyes/mouth stay built but hidden
+    const F5 = V5 && SR.Face5 ? SR.Face5(headG, hairFront, { skin: SKIN || "#5E3B2A", ink: false, id }) : null;
+    if (F5) [...eyes.map((E) => E.eg), mouth, tongue, vmG, ...blush, ...fx.tears, ...fx.drops, fx.sweat].forEach((n) => n.setAttribute("display", "none"));
     const frontG = el("g", {}, body);
     const sleeveF = tube(frontG, 17, s.color);
     const foreFo = SKIN && !THIN ? el("path", { fill: "none", stroke: INK, "stroke-width": 12 + OUT * 2, "stroke-linecap": "round" }, frontG) : null;
     const foreF = el("path", { fill: "none", stroke: THIN ? INK : (SKIN || INK), "stroke-width": THIN ? TW : 12, "stroke-linecap": "round" }, frontG);
     const handF = el("path", SKIN && !THIN ? { fill: SKIN, stroke: INK, "stroke-width": 3.4, "stroke-linejoin": "round" } : { fill: INK }, frontG);
+    const A5F = V5 ? mk5arm(frontG, s.color) : null;
+    if (V5) [sleeveF.o, sleeveF.f, foreFo, foreF, handF].forEach((n) => n && n.setAttribute("display", "none"));
     const propG = el("g", {}, frontG);
     let prop = null;
 
@@ -195,7 +225,7 @@
       const sc = sampleTrack(s.scaleT, t, s.scale), vis = sampleTrack(s.opacity, t, 1);
       const P = blend(s.pose, t, "stand", poseOf), M = blend(s.mood, t, "neutral", moodOf), look = sampleTrack(s.look, t, { x: 0, y: 0 });
       const spd = speedAt(t), run = s.walk === "run", w = clamp(spd / ((run ? 260 : 120) * sc), 0, 1) * (s.noWalk ? 0 : 1);
-      const stride = (run ? 271 : 193) * sc, ph = (distAt(t) / stride) * Math.PI * 2, amp = run ? 38 : 26, sw = Math.sin(ph);
+      const stride = (run ? 271 : 193) * sc * LK, ph = (distAt(t) / stride) * Math.PI * 2, amp = run ? 38 : 26, sw = Math.sin(ph);
       P.hipF += amp * sw * w; P.hipB -= amp * sw * w;
       P.knF -= (run ? 70 : 36) * Math.max(0, Math.cos(ph)) * w; P.knB -= (run ? 70 : 36) * Math.max(0, -Math.cos(ph)) * w;
       P.shF -= (run ? 40 : 22) * sw * w; P.shB += (run ? 40 : 22) * sw * w; P.elF += (run ? 70 : 20) * w; P.elB += (run ? 70 : 20) * w;
@@ -205,7 +235,7 @@
       let squash = 0;
       if (s.mood) for (const [t0] of s.mood) { const k = (t - t0) / 0.28; if (k > 0 && k < 1) squash += Math.sin(k * Math.PI) * 0.035; }
       if (s.squash) for (const [t0, a] of s.squash) { const k = (t - t0) / 0.32; if (k > 0 && k < 1) squash += Math.sin(k * Math.PI) * a; }
-      const hipY = -(LEG1 + LEG2 + ANK) + P.crouch + bob, leanR = (P.lean * Math.PI) / 180;
+      const hipY = -(LEG1 + LEG2 + ANK) + P.crouch * LK + bob, leanR = (P.lean * Math.PI) / 180;
       const P2 = (px, py) => { const dy = py - hipY; return [px * Math.cos(leanR) - dy * Math.sin(leanR), hipY + px * Math.sin(leanR) + dy * Math.cos(leanR)]; };
       const nyU = hipY - TORSO + breath;
       // legs + shoes
@@ -215,12 +245,22 @@
       const dF = legD(5, kxF, kyF, axF, ayF, 1), dB = legD(-5, kxB, kyB, axB, ayB, 3);
       legF.o.setAttribute("d", dF); legF.f.setAttribute("d", dF); legB.o.setAttribute("d", dB); legB.f.setAttribute("d", dB);
       shoeF.setAttribute("d", shoe(axF, ayF + ANK, 1)); shoeB.setAttribute("d", shoe(axB, ayB + ANK, 1));
+      if (V5) { const hx = BT.hp * 0.42, R = BT.legR;
+        const leg5 = (L, sx, hip, kx, ky, ax, ay) => { const d = cap(sx * hx, hipY, R[0], kx + sx * (hx - 5), ky, R[1]) + cap(kx + sx * (hx - 5), ky, R[1], ax + sx * (hx - 5), ay, R[2]);
+          L.o.setAttribute("d", d); L.f.setAttribute("d", d); const ux = kx + sx * (hx - 5); L.crease.setAttribute("d", `M${ux - R[1] * 0.5},${ky - 2} q${R[1] * 0.5},3 ${R[1]},0`);
+          const fx = ax + sx * (hx - 5), fy = ay + ANK; L.shoe.setAttribute("d", `M${fx - 12},${fy - 4} Q${fx - 13},${fy - 16} ${fx - 2},${fy - 17} Q${fx + 8},${fy - 17} ${fx + 14},${fy - 9} Q${fx + 27},${fy - 7} ${fx + 27},${fy - 1} L${fx - 12},${fy - 1} Z`);
+          L.sole.setAttribute("d", `M${fx - 14},${fy - 3} L${fx + 28},${fy - 3} Q${fx + 29},${fy + 4} ${fx + 24},${fy + 4} L${fx - 11},${fy + 4} Q${fx - 15},${fy + 4} ${fx - 14},${fy - 3} Z`); };
+        leg5(L5F, 1, 0, kxF, kyF, axF, ayF); leg5(L5B, -1, 0, kxB, kyB, axB, ayB); }
       soleF.setAttribute("d", `M${axF - 11},${ayF + ANK + 2} L${axF + 16},${ayF + ANK + 2}`);
       // torso: a bean, narrower at the waist; dress flares
       const botY = s.outfit === "dress" ? hipY + 52 : hipY + 14, hb = s.outfit === "dress" ? 48 : 30;
       const pts = [[-16, nyU - 3], [16, nyU - 3], [31, nyU + 12], [30, nyU + 46], [hb, botY], [-hb, botY], [-30, nyU + 46], [-31, nyU + 12]].map(([a, b]) => P2(a, b));
       const torsoD = `M${pts[0]} L${pts[1]} Q${P2(30, nyU - 1)} ${pts[2]} Q${P2(34, nyU + 30)} ${pts[3]} Q${P2(26, (nyU + botY) / 2 + 20)} ${pts[4][0] + jit(5) * 0.4},${pts[4][1]} Q${P2(0, botY + 8)} ${pts[5]} Q${P2(-26, (nyU + botY) / 2 + 20)} ${pts[6]} Q${P2(-34, nyU + 30)} ${pts[7]} Q${P2(-30, nyU - 1)} ${pts[0]} Z`;
-      torso.setAttribute("d", torsoD); torsoOut.setAttribute("d", torsoD); clipP.setAttribute("d", torsoD);
+      let tD = torsoD;
+      if (V5) { const dr = s.outfit === "dress", hp = dr ? BT.hp * 1.55 : BT.hp, by = dr ? hipY + 50 : hipY + 12, T = by - nyU, sh = BT.sh, wa = BT.wa, bl = BT.belly || 0, F = (a, b) => P2(a, b).map((v) => v.toFixed(1)).join(",");
+        const side = (k) => `${F(k * sh, nyU + 15)} C${F(k * (sh + 1 + bl * 4), nyU + T * 0.36)} ${F(k * (wa + bl * 10), nyU + T * 0.5)} ${F(k * wa, nyU + T * 0.66)} C${F(k * (wa - bl * 2), nyU + T * 0.8)} ${F(k * hp, by - 10)} ${F(k * hp, by)}`;
+        tD = `M${F(-13, nyU - 3)} L${F(13, nyU - 3)} Q${F(sh - 3, nyU - 3)} ${side(1)} Q${F(0, by + 7)} ${F(-hp, by)} C${F(-hp, by - 10)} ${F(-(wa - bl * 2), nyU + T * 0.8)} ${F(-wa, nyU + T * 0.66)} C${F(-(wa + bl * 10), nyU + T * 0.5)} ${F(-(sh + 1 + bl * 4), nyU + T * 0.36)} ${F(-sh, nyU + 15)} Q${F(-(sh - 3), nyU - 3)} ${F(-13, nyU - 3)} Z`; }
+      torso.setAttribute("d", tD); torsoOut.setAttribute("d", tD); clipP.setAttribute("d", tD);
       const sh = [[-40, nyU - 10], [-12, nyU - 10], [-20, botY + 20], [-60, botY + 20]].map(([a, b]) => P2(a, b));
       shadeP.setAttribute("d", `M${sh[0]} L${sh[1]} Q${P2(-4, (nyU + botY) / 2)} ${sh[2]} L${sh[3]} Z`);
       const hi = [[10, nyU + 6], [24, nyU + 8], [26, nyU + 40], [16, nyU + 44]].map(([a, b]) => P2(a, b));
@@ -237,7 +277,7 @@
       else if (s.outfit === "dress") det = `M${D2(-24, nyU + 50)} Q${D2(0, nyU + 58)} ${D2(24, nyU + 50)}`;
       detail.innerHTML = ""; if (det) el("path", { d: det, fill: s.outfit === "apron" ? "rgba(255,255,255,0.75)" : "none" }, detail);
       // arms
-      const [shX, shY] = P2(18, nyU + 14), [shXb, shYb] = P2(-18, nyU + 14), out = P.armOut;
+      const shO = V5 ? BT.sh - BT.armR[0] * 0.55 : 18, [shX, shY] = P2(shO, nyU + 16), [shXb, shYb] = P2(-shO, nyU + 16), out = P.armOut;
       const [exF, eyF, hxF, hyF] = limb(shX, shY, P.shF + out * 0.2 + P.lean, ARM1, P.elF, ARM2);
       const [exB, eyB, hxB, hyB] = limb(shXb, shYb, P.shB - out * 0.2 + P.lean, ARM1, P.elB, ARM2);
       const cuff = (ex, ey, hx, hy) => [ex + (hx - ex) * 0.35, ey + (hy - ey) * 0.35];
@@ -246,12 +286,23 @@
       sleeveF.o.setAttribute("d", sF); sleeveF.f.setAttribute("d", sF); sleeveB.o.setAttribute("d", sB); sleeveB.f.setAttribute("d", sB);
       foreF.setAttribute("d", `M${cfx},${cfy} L${hxF},${hyF}`); foreB.setAttribute("d", `M${cbx},${cby} L${hxB},${hyB}`); if (foreFo) { foreFo.setAttribute("d", foreF.getAttribute("d")); foreBo.setAttribute("d", foreB.getAttribute("d")); }
       handF.setAttribute("d", mitten(hxF, hyF, P.shF + P.elF + P.lean)); handB.setAttribute("d", mitten(hxB, hyB, P.shB + P.elB + P.lean));
+      if (V5) { const R = BT.armR;
+        const arm5 = (A, sx, sy, ex, ey, hx, hy, ang) => { const d = cap(sx, sy, R[0], ex, ey, R[1]) + cap(ex, ey, R[1], hx, hy, R[2]);
+          A.o.setAttribute("d", d); A.skin.setAttribute("d", d);
+          if (LONG) { const wx = ex + (hx - ex) * 0.84, wy = ey + (hy - ey) * 0.84; A.sl.setAttribute("d", cap(sx, sy, R[0] + 1.5, ex, ey, R[1] + 1.5) + cap(ex, ey, R[1] + 1.5, wx, wy, R[2] + 2.2));
+            A.slS.setAttribute("d", `M${ex - 4},${ey - 3} q4,4 8,0`); }
+          else { const ux = sx + (ex - sx) * 0.62, uy = sy + (ey - sy) * 0.62; A.sl.setAttribute("d", cap(sx, sy, R[0] + 2, ux, uy, R[1] + 3.2)); A.slS.setAttribute("d", ""); }
+          A.hand.setAttribute("transform", `translate(${hx},${hy}) rotate(${-ang}) scale(${BT.handK})`); A.fing.setAttribute("transform", A.hand.getAttribute("transform"));
+          A.hand.setAttribute("d", "M-7,-2 C-11,5 -11,14 -8,19 C-5,24 6,24 8,19 C10,14 10,9 9,5 L13,3 C18,0 17,-6 12,-5 L7,-3 C3,-5 -4,-5 -7,-2 Z");
+          A.fing.setAttribute("d", "M-3,14 L-3,21 M2,14 L2,21.5"); };
+        arm5(A5F, shX, shY, exF, eyF, hxF, hyF, P.shF + P.elF + P.lean); arm5(A5B, shXb, shYb, exB, eyB, hxB, hyB, P.shB + P.elB + P.lean); }
       const [nx0, ny0] = P2(0, nyU + 2), [hX, hY] = P2(0, nyU - NECK - HEADR + 4);
       neck.setAttribute("d", `M${nx0},${ny0} L${hX},${hY + HEADR - 6}`); if (neckO) neckO.setAttribute("d", neck.getAttribute("d"));
       // head
       const headLag = Math.sin(t * 2 * Math.PI / 3.4 + s.seed + 0.6) * 1.2;
       const trm = (M.tremble || 0) * 1.6, tjx = trm * Math.sin(t * 61 + s.seed), tjy = trm * Math.cos(t * 53 + s.seed * 2);
-      headG.setAttribute("transform", `translate(${hX + tjx},${hY + headLag + tjy}) rotate(${P.head * 0.6 + (s.hair === "ponytail" ? 0 : 0)}) scale(${1 + squash * 0.4},${1 - squash * 0.7})`);
+      const D5 = F5 ? SR.F5of && blend(s.mood, t, "neutral", SR.F5of) : null, sq5 = D5 ? D5.sq : 0;
+      headG.setAttribute("transform", `translate(${hX + tjx},${hY + headLag + tjy}) rotate(${P.head * 0.6 + (s.hair === "ponytail" ? 0 : 0)}) scale(${(1 + squash * 0.4 + sq5) * (V5 ? 1.08 : 1)},${(1 - squash * 0.7 - sq5) * (V5 ? 1.08 : 1)})`);
       const [hb2, hf2, hh2] = hairPaths();
       const sway = Math.sin(t * 5 + s.seed) * 4 * (0.4 + w) + spd * 0.01;
       hairBack.setAttribute("d", hb2); hairBack.setAttribute("transform", s.hair === "ponytail" ? `rotate(${sway},-28,-6)` : "");
@@ -321,6 +372,7 @@
         vmTongue.setAttribute("cx", cx); vmTongue.setAttribute("rx", w * 0.55); vmTongue.setAttribute("ry", 3.4 + VM.tg * 1.6); vmTongue.setAttribute("cy", lerp(By - 1, Ty + 4, VM.tup)); vmTongue.setAttribute("opacity", clamp(VM.tg, 0, 1));
         vmTip.setAttribute("cx", cx); vmTip.setAttribute("cy", (Ty + By) / 2 + 0.6); vmTip.setAttribute("rx", 4.4); vmTip.setAttribute("ry", 2.3); vmTip.setAttribute("opacity", VM.tip > 0.5 ? 1 : 0);
         const ly = By + lipB * 0.42 + VM.lip * 0.25; vmLow.setAttribute("d", `M${(cx - 0.3 * w).toFixed(2)},${ly.toFixed(2)} Q${cx},${(ly + 0.9).toFixed(2)} ${(cx + 0.3 * w).toFixed(2)},${ly.toFixed(2)}`); }
+      if (F5) F5.update(t, D5, VM, blink, { x: look.x + dart, y: look.y });
       if (glasses) glasses.setAttribute("transform", "translate(7,-1)");
       if (wingG) { const [wx, wy] = P2(0, nyU + 34); const fl = 0.75 + 0.25 * Math.abs(Math.cos(t * Math.PI * (s.flap || 1.6))); wingG.setAttribute("transform", `translate(${wx},${wy}) scale(${fl},1)`); }
       if (s.prop && s.prop.kind) {
