@@ -11,7 +11,8 @@
     const r = el("filter", { id: "rim", x: "-30%", y: "-30%", width: "160%", height: "160%" }, d); el("feMorphology", { operator: "dilate", radius: 7, in: "SourceAlpha", result: "dl" }, r); el("feFlood", { "flood-color": "#FFE08A", result: "fc" }, r);
     el("feComposite", { in: "fc", in2: "dl", operator: "in", result: "rim" }, r); el("feGaussianBlur", { in: "rim", stdDeviation: 6, result: "rb" }, r); const m2 = el("feMerge", {}, r); el("feMergeNode", { in: "rb" }, m2); el("feMergeNode", { in: "SourceGraphic" }, m2);
     return d; };
-  TS.thread = (svg, x1, y1, x2, y2, w = 6, bend = -120) => { const mx = (x1 + x2) / 2, my = Math.min(y1, y2) + bend, d = `M${x1},${y1} Q${mx},${my} ${x2},${y2}`;
+  TS.thread = (svg, x1, y1, x2, y2, w = 6, bend = -120, dark = false) => { const mx = (x1 + x2) / 2, my = Math.min(y1, y2) + bend, d = `M${x1},${y1} Q${mx},${my} ${x2},${y2}`;
+    if (dark) el("path", { d, fill: "none", stroke: "#B8560C", "stroke-width": w + 6, "stroke-linecap": "round", opacity: 0.85 }, svg);   // outline so it reads on bright daytime art
     el("path", { d, fill: "none", stroke: "#FF9E2C", "stroke-width": w * 4, opacity: 0.35, filter: "url(#glow)", "stroke-linecap": "round" }, svg);
     el("path", { d, fill: "none", stroke: "#FFE7A0", "stroke-width": w, "stroke-linecap": "round" }, svg); };
   TS.label = (svg, x, y, text, o = {}) => { const g = el("g", { transform: `translate(${x},${y}) rotate(${o.rot || 0})` }, svg); const w = text.length * (o.fs || 34) * 0.62 + 40;

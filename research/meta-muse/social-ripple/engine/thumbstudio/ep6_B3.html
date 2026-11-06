@@ -1,0 +1,31 @@
+<!doctype html><html><head><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@900&display=swap" rel="stylesheet">
+<script src="assets/sr-engine-v1.js"></script><script src="assets/sr-v3.js"></script><script src="studio.js"></script>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{width:1280px;height:720px;overflow:hidden;background:#123}
+#bg{position:absolute;left:-60px;top:-30px;width:1400px;height:788px;background:url(day_191.5.png) center/cover;filter:saturate(1.35) brightness(1.08) contrast(1.05)}
+#warm{position:absolute;inset:0;background:radial-gradient(circle at 70% 70%,rgba(255,200,90,.55) 0%,rgba(255,170,60,.15) 30%,rgba(0,0,0,0) 55%),radial-gradient(ellipse at 50% 50%,rgba(0,0,0,0) 60%,rgba(20,10,40,.45) 100%)}
+svg{position:absolute;inset:0}
+.t{position:absolute;left:26px;top:14px;font-family:Outfit;font-weight:900;line-height:.92;color:#FFD23F;font-size:132px;-webkit-text-stroke:16px #1E1B22;paint-order:stroke fill;text-shadow:0 10px 0 #1E1B22}
+.ui{position:absolute;left:34px;bottom:30px;background:#2B2140;border:7px solid #FFC94A;border-radius:26px;padding:10px 26px 4px;font-family:Outfit;font-weight:900;color:#fff;box-shadow:0 0 36px #ffc94acc,0 10px 0 rgba(0,0,0,.4)}
+.ui small{display:block;font-size:26px;color:#FFE3A0;letter-spacing:4px}.ui b{font-size:84px;line-height:1}</style></head>
+<body><div id="bg"></div><div id="warm"></div><svg id="art" viewBox="0 0 1280 720"></svg>
+<div class="t">1 SANDWICH.</div><div class="ui"><small>LIVES TOUCHED</small><b>347</b></div>
+<script>
+const svg=document.getElementById('art'); TS.defs(svg); const {el}=SR;
+const LOOKS={theo:{color:"#8A93A6",outfit:"hoodie",hair:"short",hairColor:"#6A4A3A",pants:"#3A4050",seed:21},kai:{color:"#FF8A2A",outfit:"jacket",hair:"cap",hairColor:"#E0B020",pants:"#3A4A63",seed:6},
+ bea:{skin:"ink",color:"#F2C14E",outfit:"apron",hair:"ponytail",hairColor:"#1E1B22",pants:"#6A4A8A",seed:4},ana:{color:"#3FA7A0",outfit:"tee",hair:"bun",hairColor:"#5A3A2A",pants:"#2E7A74",seed:5},
+ finn:{color:"#F4C430",outfit:"coat",hair:"cap",hairColor:"#2E4A6A",pants:"#3A4A63",seed:11},nia:{skin:"ink",color:"#E8634A",outfit:"jacket",hair:"curly",hairColor:"#1E1B22",pants:"#2E3A5A",seed:9},
+ x1:{color:"#5A7FD8",outfit:"shirt",hair:"short",hairColor:"#3A2A22",pants:"#2A3050",seed:31},x2:{skin:"ink",color:"#E05A8A",outfit:"dress",hair:"long",hairColor:"#1E1B22",pants:"#4A3A5A",seed:32},
+ x3:{color:"#7DBA5A",outfit:"tee",hair:"curly",hairColor:"#8A5A2E",pants:"#3A4A63",seed:41}};
+const MO={color:"#E8834A",outfit:"apron",hair:"short",hairColor:"#3A2A22",pants:"#3A4A63",seed:7};
+const sx=760, sy=500;   // the sandwich in Mo's hands
+// the crowd across the square: [look, x, feetY, scale]
+const C=[["x1",190,540,0.6],["ana",330,600,0.76],["theo",470,545,0.64],["kai",615,505,0.56],["x3",520,440,0.46],["x2",250,445,0.44],["finn",90,700,0.95],["bea",300,770,1.05],["nia",560,790,1.08]];
+// threads first (behind people)
+C.forEach(([k,x,y,s],i)=>TS.thread(svg,sx,sy,x+(x<sx?14:-14)*s,y-128*s,4+s*3,-120-(i%4)*40,true));
+[[300,170],[520,120],[880,90],[1100,160],[1240,320],[150,300]].forEach(([x,y],i)=>{TS.thread(svg,sx,sy,x,y,4,-60-(i%3)*40,true);el("circle",{cx:x,cy:y,r:12,fill:"#FFF2C0",filter:"url(#glow)"},svg);});
+C.sort((a,b)=>a[2]-b[2]).forEach(([k,x,y,s],i)=>{TS.char(svg,LOOKS[k],{id:k+i,x,y,scale:s,mood:["happy","joy","content","happy","inlove"][i%5],facing:x<sx?1:-1,pose:i%3==0?"wave":"relaxed"}); el("circle",{cx:x+(x<sx?14:-14)*s,cy:y-128*s,r:5+4*s,fill:"#FFC94A",stroke:"#B8560C","stroke-width":2,filter:"url(#glow)"},svg);});
+const hg=el("g",{filter:"url(#rim)"},svg); TS.char(hg,MO,{id:"mo",x:1010,y:1260,scale:3.0,pose:"give",mood:"starstruck",facing:-1,look:{x:-0.3,y:0.1}});
+const s=el("g",{transform:`translate(${sx},${sy}) scale(2.1)`,filter:"url(#glow)"},svg);
+el("path",{d:"M-38,4 Q0,-36 38,4 Z",fill:"#E8B06A",stroke:"#1E1B22","stroke-width":5},s);el("rect",{x:-40,y:4,width:80,height:9,rx:4,fill:"#7DBA5A",stroke:"#1E1B22","stroke-width":4},s);
+el("rect",{x:-38,y:13,width:76,height:8,rx:4,fill:"#E2574C",stroke:"#1E1B22","stroke-width":4},s);el("rect",{x:-38,y:21,width:76,height:13,rx:6,fill:"#E8B06A",stroke:"#1E1B22","stroke-width":5},s);
+</script></body></html>

@@ -35,7 +35,10 @@ None, on purpose.
 ## Pinned comment
 Who's a "Mo" in your life, someone whose small kindness you never forgot? Tell them. 👇
 
-## Thumbnails (Test & Compare): use the v2 set (niche style)
+## Thumbnails (Test & Compare)
+Preferred: thumbnail-v4-B-1-sandwich-lives-1280x720.jpg (a translucent person at the end of every thread, each satisfied in their own way). Alternative: thumbnail-v3-B-1-sandwich-town-1280x720.jpg (full-bleed bright town with a crowd).
+
+Earlier v2 set:
 - thumbnail-v2-A-i-did-that-1280x720.jpg: Mo starstruck, gold threads to Theo, Kai and Bea with labels (STAYED / WELCOMED / HELPED), "I DID THAT?"
 - thumbnail-v2-B-1-sandwich-1280x720.jpg: Mo holding a glowing sandwich with threads bursting out, a LIVES TOUCHED 347 counter, "1 SANDWICH."
 (The v1 render-frame thumbnails remain in the folder as a fallback.)
