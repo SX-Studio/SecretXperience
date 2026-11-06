@@ -271,7 +271,7 @@
         const lidY = -11.5 + 23 * M.lid, sl = M.slant * 7 * (i === 0 ? -1 : 1);
         E.lid.setAttribute("d", `M-14,-16 L14,-16 L14,${lidY - sl} L-14,${lidY + sl} Z`); E.lid.setAttribute("opacity", 1 - M.happy);
         E.arc.setAttribute("d", "M-8,3 Q0,-8 8,3"); E.arc.setAttribute("opacity", M.happy);
-        { const lift = (M.size - 1) * 26 + (M.happy * 2) + ((M.smug || 0) * (i === 1 ? 7 : -3)), tilt = (M.slant + (M.brow || 0) * 0.6) * 5 * (i === 0 ? 1 : -1), by = -19 - lift;
+        { const lift = Math.min((M.size - 1) * 26, 10) + (M.happy * 2)   /* capped: exaggerated eye sizes kept brows flying off the head */ + ((M.smug || 0) * (i === 1 ? 7 : -3)), tilt = (M.slant + (M.brow || 0) * 0.6) * 5 * (i === 0 ? 1 : -1), by = Math.max((-19 - lift) * sz, -40) / sz;   /* keep brows on the forehead at exaggerated eye sizes (unchanged for normal moods) */
           E.brow.setAttribute("d", `M-9,${by - tilt} Q0,${by - 3 - Math.max(0, -M.slant) * 2} 9,${by + tilt}`); E.brow.setAttribute("opacity", 0.95); }
       });
       const bl = clamp(M.smile, 0, 1) * 0.55 + (s.blush || 0);

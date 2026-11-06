@@ -13,5 +13,14 @@ Why: every top channel in our niche uses expressive cartoon/anime-style art. Our
    - blush, sweat and sparkle FX at larger sizes;
    - line-weight variation.
    It applies to both the 3D-world billboards and the panels.
-3. **Test a fully 2D-illustrated episode.** The 2D Scene2 engine from Ep1–2 already exists. Use illustrated backgrounds instead of the 3D island for one episode, and compare retention and CTR.
-4. **Thumbnails** follow the system in `thumbstudio/SYSTEM.md`, with the size gate.
+3. **Exaggerated expressions** (sheet: `thumbstudio/exaggerated-expressions-sheet.png`, moods in `thumbstudio/xmoods.js`):
+   - `shockX`: popping eyes, shock lines, "!!", sweat;
+   - `laughX`: "HA HA", tears of laughter;
+   - `sobX`: tear rivers, gloom lines;
+   - `loveX`: heart eyes, floating hearts;
+   - `starX`: star eyes, sparkle burst;
+   - `forcedX`: smile, giant sweat drop, nervous lines.
+   These are the same face controls pushed past their normal range, plus anime FX drawn around the head (`TS.fx`). Use them on every emotional beat, in panels and thumbnails.
+   Rig fix: brows are clamped to the forehead at large eye sizes, so normal moods are unchanged.
+4. **Test a fully 2D-illustrated episode.** The 2D Scene2 engine from Ep1–2 already exists. Use illustrated backgrounds instead of the 3D island for one episode, and compare retention and CTR.
+5. **Thumbnails** follow the system in `thumbstudio/SYSTEM.md`, with the size gate.
