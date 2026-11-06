@@ -31,7 +31,7 @@ const mini=(x,y,k)=>{const g=el("g",{transform:`translate(${x},${y}) scale(${k*0
 G.forEach(([hx,hy,k],i)=>{ const feet=hy+175*k, chestY=hy+70*k, [pose,mood,ex]=WAYS[i%WAYS.length], dir=hx<sx?1:-1;
   TS.thread(svg,sx,sy,hx,chestY,3+k*4,-(60+(i*37)%110));
   TS.char(ghosts,LOOKS[i%LOOKS.length],{id:"g"+i,x:hx,y:feet+18*k,scale:k,mood,facing:dir,pose});
-  el("circle",{cx:hx,cy:chestY,r:5+5*k,fill:"#FFE7A0"},gl);
+  {const hg=el("g",{transform:`translate(${hx},${chestY-12*k}) scale(${0.9+1.1*k})`},gl); el("path",{d:"M0,6 C-10,-4 -22,6 -11,16 L0,26 L11,16 C22,6 10,-4 0,6 Z",fill:"#FF5A7A",stroke:"#FFE7A0","stroke-width":3},hg);}
   if(ex==="heart"){heart(hx-26*k,hy-70*k,1.1*k);heart(hx+30*k,hy-92*k,0.8*k);}
   if(ex==="spark"){spark(hx-34*k,hy-64*k,1.2*k);spark(hx+36*k,hy-80*k,0.9*k);}
   if(ex==="sand"){mini(hx+dir*46*k,hy+86*k,0.55*k);} });
