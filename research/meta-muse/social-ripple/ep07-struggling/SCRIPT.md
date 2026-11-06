@@ -40,7 +40,7 @@ ana_03 (Ana): Would anyone be able to help on Saturday?
 theo_01 (Theo): Of course.
 mo_01 (Mo): I'll bring sandwiches.
 kai_01 (Kai): I've got a van.
-n22: In one experiment, people guessed they'd have to ask about twenty strangers to get five to help. They needed about ten.
+n22: In one experiment, people guessed they'd have to ask about twenty strangers to get five to do a small favor. They needed about ten.
 n23: We're sure we'll be a burden. But people say yes far more often than we expect.
 
 ## S07 payoff: rule three

@@ -32,7 +32,7 @@
     inlove: { eo: 0, arc: -0.5, sm: 0.9, bl: 1, ch: 0.6, br: 4, ba: -8 }, disgusted: { ld: 0.45, lb: 0.4, sm: -0.7, asym: -0.5, brL: -4, brR: 2, baL: 12, baR: -8 },
     deadpan: { ld: 0.45, sm: 0 }, proud: { ld: 0.32, sm: 0.85, ch: 0.6, br: 2, gy: -0.2 }, confused: { ldL: 0.3, sm: -0.2, asym: -0.4, wob: 0.3, brL: -2, brR: 10, baL: 6, baR: -10 },
     terrified: { eo: 1.35, pup: 0.55, mo: 0.75, sm: -0.6, teeth: 1, tb: 1, br: 11, ba: -14, sw: 1, sq: -0.06 }, crying: { ld: 0.3, la: -1, sm: -0.9, mo: 0.3, wob: 0.6, tr: 1, br: 6, ba: -20 },
-    laughing: { eo: 0, arc: 1, sm: 1, mo: 1, teeth: 1, tg: 0.9, ch: 1, br: 6, ba: -8, sq: 0.07, tr: 0.35 }, exhausted: { ld: 0.65, sm: -0.35, mo: 0.15, br: -2, gy: 0.4 },
+    laughing: { eo: 0, arc: 1, sm: 1, mo: 1, teeth: 1, tg: 0.9, ch: 1, br: 6, ba: -8, sq: 0.07, tr: 0.12 }, exhausted: { ld: 0.65, sm: -0.35, mo: 0.15, br: -2, gy: 0.4 },
     furious: { ld: 0.42, la: 1, lb: 0.35, sm: -1, mo: 0.6, teeth: 1, tb: 1, br: -6, ba: 28, sq: 0.04 }, embarrassedSmile: { ld: 0.15, gy: 0.4, sm: 0.6, bl: 1, ch: 0.4 },
     relieved: { ld: 0.35, la: -0.4, sm: 0.6, ch: 0.5, br: 4, ba: -10, gy: -0.1 }, nervous: { eo: 1.1, sm: 0.35, wob: 0.6, sw: 0.8, br: 5, ba: -14, ch: 0.2 },
     touched: { ld: 0.2, la: -0.6, sm: 0.55, wob: 0.2, tr: 0.45, br: 6, ba: -16, bl: 0.6 }, sleepy: { eo: 0, arc: -0.3, sm: 0.1 }, dizzy: { eo: 1.1, pup: 0.5, sm: -0.2, mo: 0.35, wob: 0.6 },
