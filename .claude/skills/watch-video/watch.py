@@ -107,8 +107,10 @@ if has_audio and not A.no_transcript:
         r = run([hf, "transcribe", os.path.join(OUT, "audio.wav"), "--json"], env=env, timeout=1800)
         for line in (r.stdout + "\n" + r.stderr).splitlines():
             if '"type":"words"' in line:
-                d = json.loads(line); words = [{"t": t0 + w["start"], "e": t0 + w["end"], "w": w["text"]} for w in d.get("words", [])]
-        if not words: print("transcript: none (", (r.stderr or "")[-200:], ")")
+                try: d = json.loads(line[line.index("{"):]); words += [{"t": t0 + w["start"], "e": t0 + w["end"], "w": w["text"]} for w in d.get("words", [])]
+                except Exception as e: print("transcript parse:", e)
+        words.sort(key=lambda w: w["t"])
+        if not words: print(f"transcript: none (rc {r.returncode}, out {len(r.stdout)} chars, err tail: {(r.stderr or '')[-300:]})")
     else: print("transcript: hyperframes not found (set HF_BIN)")
 
 # ---------- 5. sheets: each window = 4x4 frames + its sound strip (loudness + spectrogram) ----------
@@ -201,5 +203,5 @@ for a_, b_, p in sheet_info:
         L += ["- words:"] + [f"  - {o}" for o in out_]
     L.append("")
 if ears: L += ["## What Gemini heard (ears.md)", "See ears.md for the full listening log."]
-open(os.path.join(OUT, "timeline.md"), "w").write("\n".join(L)); json.dump({"cuts": cuts, "hits": hits, "silences": sil, "words": words, "sheets": [p for _, _, p in sheet_info]}, open(os.path.join(OUT, "watch.json"), "w"))
+open(os.path.join(OUT, "timeline.md"), "w").write("\n".join(L)); json.dump({"t0": t0, "t1": t1, "dur": dur, "w": W, "h": H, "src": os.path.abspath(src), "cuts": cuts, "hits": hits, "silences": sil, "words": words, "sheets": [p for _, _, p in sheet_info], "hop": HOP, "loud": [round(float(x), 1) for x in lou], "pitch": [None if np.isnan(x) else round(float(x)) for x in pitch], "mhop": MH, "motion": [round(float(x), 2) for x in motion]}, open(os.path.join(OUT, "watch.json"), "w"))
 print(f"OK {len(sheet_info)} sheets, {len(frames)} frames, {len(cuts)} cuts, {len(words)} words -> {OUT}/timeline.md")
