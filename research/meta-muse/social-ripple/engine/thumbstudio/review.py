@@ -17,5 +17,7 @@ for t in sys.argv[2:]:
     q = f"""You are a YouTube thumbnail expert for animated 'What If...?' story channels. Image 1 is a thumbnail at full size; image 2 is the same thumbnail at phone size (as most viewers see it).
 STEP 1 (before reading the premise below): in one sentence, what do you think this video is about, judging ONLY from the phone-size image?
 STEP 2: The real premise is: "{prem}". Score 1-10 for each: (a) concept clarity: does it portray this premise at a glance; (b) fills the frame: no empty/dead areas; (c) phone-size readability of the text and hero face; (d) click curiosity. 
-STEP 3: List the 3 most important concrete fixes (positions, sizes, what to add or remove). Under 180 words."""
+STEP 3: MEASURE (numbers): hero head height as % of image height; % of image area covered by ALL characters; % of image that is empty plain background.
+GATE (niche benchmarks from top channels): hero head >= 45%, all characters >= 55%, empty <= 15%. Say PASS or FAIL for each.
+STEP 4: List the 3 most important concrete fixes (positions, sizes, what to add or remove). Under 220 words."""
     print("=====", os.path.basename(t)); print(ask([img(t), img(ph), {"text": q}]))

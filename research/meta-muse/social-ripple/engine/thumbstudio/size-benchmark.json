@@ -1,0 +1,16 @@
+```json
+[
+  {"img": 1, "hero_head_height_pct": 52, "hero_body_crop": "waist-up", "hero_area_pct": 38, "all_characters_area_pct": 38, "num_characters": 1, "empty_area_pct": 35},
+  {"img": 2, "hero_head_height_pct": 54, "hero_body_crop": "waist-up", "hero_area_pct": 35, "all_characters_area_pct": 62, "num_characters": 2, "empty_area_pct": 20},
+  {"img": 3, "hero_head_height_pct": 51, "hero_body_crop": "waist-up", "hero_area_pct": 30, "all_characters_area_pct": 36, "num_characters": 2, "empty_area_pct": 50},
+  {"img": 4, "hero_head_height_pct": 43, "hero_body_crop": "waist-up", "hero_area_pct": 38, "all_characters_area_pct": 74, "num_characters": 2, "empty_area_pct": 12},
+  {"img": 5, "hero_head_height_pct": 39, "hero_body_crop": "waist-up", "hero_area_pct": 35, "all_characters_area_pct": 35, "num_characters": 1, "empty_area_pct": 10},
+  {"img": 6, "hero_head_height_pct": 42, "hero_body_crop": "waist-up", "hero_area_pct": 38, "all_characters_area_pct": 70, "num_characters": 2, "empty_area_pct": 15},
+  {"img": 7, "hero_head_height_pct": 43, "hero_body_crop": "waist-up", "hero_area_pct": 38, "all_characters_area_pct": 75, "num_characters": 2, "empty_area_pct": 10},
+  {"img": 8, "hero_head_height_pct": 41, "hero_body_crop": "full-body", "hero_area_pct": 28, "all_characters_area_pct": 82, "num_characters": 8, "empty_area_pct": 8},
+  {"img": 9, "hero_head_height_pct": 38, "hero_body_crop": "waist-up", "hero_area_pct": 28, "all_characters_area_pct": 45, "num_characters": 12, "empty_area_pct": 30},
+  {"img": 10, "hero_head_height_pct": 35, "hero_body_crop": "waist-up", "hero_area_pct": 25, "all_characters_area_pct": 38, "num_characters": 4, "empty_area_pct": 45},
+  {"img": 11, "hero_head_height_pct": 30, "hero_body_crop": "waist-up", "hero_area_pct": 18, "all_characters_area_pct": 35, "num_characters": 8, "empty_area_pct": 40},
+  {"img": 12, "hero_head_height_pct": 34, "hero_body_crop": "waist-up", "hero_area_pct": 20, "all_characters_area_pct": 42, "num_characters": 10, "empty_area_pct": 40}
+]
+```

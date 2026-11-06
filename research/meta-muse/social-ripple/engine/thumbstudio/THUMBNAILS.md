@@ -22,6 +22,16 @@ Reference: `niche-board.jpg` (Stick Saga + Jeremy Bearimy hits and flops vs. our
 
 **Note:** AI-illustrated backgrounds (Gemini image models) would add an anime look, but the API key is on the free tier, where image generation is blocked (limit 0). It needs a paid plan before we can use it.
 
+## Size and closeness (measured, `size-benchmark.json`)
+| | Niche hits | Our old ones | Ep6 v5 |
+|---|---|---|---|
+| Hero head height | 39–54% (avg ~46%) | 30–38% | **52%** |
+| All characters' area | 35–82% (avg ~59%) | 35–45% | **59%** |
+| Empty background | 8–50% (avg ~20%) | 30–45% | **14%** |
+
+12. **Gate:** hero head ≥ **45%** of frame height (crop at the waist or chest; the face is the thumbnail), all characters ≥ **55%** of the frame, empty ≤ **15%**. `review.py` measures these and reports PASS or FAIL.
+13. **Use 1–2 big characters, or a few large ones packed close, rather than many tiny ones.** Supporting figures should be large enough to read a reaction at phone size.
+
 ## What we keep from our brand
 - Our cast, lore and Crumb Island palette (gold threads, island light).
 - No shame or fear framing. Attitude means wonder, mischief and confidence, never humiliation.

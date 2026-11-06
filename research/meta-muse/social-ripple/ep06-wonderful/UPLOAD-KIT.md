@@ -36,7 +36,7 @@ None, on purpose.
 Who's a "Mo" in your life, someone whose small kindness you never forgot? Tell them. 👇
 
 ## Thumbnails (Test & Compare)
-Preferred: thumbnail-v4-B-1-sandwich-lives-1280x720.jpg (a translucent person at the end of every thread, each satisfied in their own way). Alternative: thumbnail-v3-B-1-sandwich-town-1280x720.jpg (full-bleed bright town with a crowd).
+Preferred: **thumbnail-v5-B-1-sandwich-close-1280x720.jpg** (meets the size gate: hero head 52%, characters 59%, empty 14%). Previous: thumbnail-v4-B-1-sandwich-lives-1280x720.jpg (a translucent person at the end of every thread, each satisfied in their own way). Alternative: thumbnail-v3-B-1-sandwich-town-1280x720.jpg (full-bleed bright town with a crowd).
 
 Earlier v2 set:
 - thumbnail-v2-A-i-did-that-1280x720.jpg: Mo starstruck, gold threads to Theo, Kai and Bea with labels (STAYED / WELCOMED / HELPED), "I DID THAT?"
