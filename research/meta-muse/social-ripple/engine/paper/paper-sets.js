@@ -9,23 +9,25 @@
   const P = (p, d, fill, o = {}) => el("path", Object.assign({ d, fill }, o), p);
   const L = (p, big) => el("g", { filter: big ? "url(#pshadowL)" : "url(#pshadow)" }, p);
   // ---------- square ----------
-  K.square = (back, front) => {
-    const sky = R(back, -800, -600, 3520, 1600, "#BFE3F2");
-    const sun = L(back); el("circle", { cx: 1500, cy: 160, r: 90, fill: "#FFD27A" }, sun);
-    const clouds = [[-300, 140, 1.3], [500, 90, 1.0], [1200, 60, 1.1], [2000, 150, 1.2]].map(([x, y, k]) => { const g = L(back); g.setAttribute("transform", `translate(${x},${y}) scale(${k})`); P(g, "M0,40 C-50,40 -50,-20 0,-20 C10,-70 90,-80 110,-30 C150,-50 200,0 170,40 Z", "#FFFFFF"); return [g, x, y, k]; });
-    const house = (x, w, h, wall, roof, i) => { const g = L(back, true); R(g, x, 820 - h, w, h, wall, 6); P(g, `M${x - 16},${820 - h + 6} L${x + w / 2},${820 - h - 80} L${x + w + 16},${820 - h + 6} Z`, roof);
+  K.square = (back, front, lay = {}) => {
+    const SKY = lay.sky || back, MID = lay.mid || back;
+    const sky = R(SKY, -800, -600, 3520, 1600, "#BFE3F2");
+    const sun = L(SKY); el("circle", { cx: 1500, cy: 160, r: 90, fill: "#FFD27A" }, sun);
+    const CR = SR.mulberry32(11), clouds = Array.from({ length: 11 }, (_, i) => { const x = -700 + CR() * 3300, y = 30 + CR() * 300, k = 0.35 + CR() * 1.1, sp = 5 + CR() * 14; const g = L(SKY); g.setAttribute("opacity", (0.75 + CR() * 0.25).toFixed(2));
+      const shapes = ["M0,40 C-50,40 -50,-20 0,-20 C10,-70 90,-80 110,-30 C150,-50 200,0 170,40 Z", "M0,30 C-40,30 -40,-10 0,-10 C20,-50 80,-50 90,-10 C130,-20 140,30 110,30 Z", "M0,24 C-30,24 -30,0 0,0 C10,-30 60,-30 70,0 C100,0 100,24 80,24 Z"]; P(g, shapes[i % 3], "#FFFFFF"); return [g, x, y, k, sp]; });
+    const house = (x, w, h, wall, roof, i) => { const g = L(MID, true); R(g, x, 820 - h, w, h, wall, 6); P(g, `M${x - 16},${820 - h + 6} L${x + w / 2},${820 - h - 80} L${x + w + 16},${820 - h + 6} Z`, roof);
       for (let r = 0; r < Math.floor((h - 120) / 110) + 1; r++) for (let c = 0; c < Math.max(1, Math.floor(w / 110)); c++) { const wx = x + 26 + c * ((w - 52) / Math.max(1, Math.floor(w / 110))) + ((w - 52) / Math.max(1, Math.floor(w / 110)) - 56) / 2, wy = 820 - h + 40 + r * 110; R(g, wx, wy, 56, 66, (r + c + i) % 3 ? "#9FD3EA" : "#FFE7A0", 8); }
       R(g, x + w / 2 - 30, 820 - 120, 60, 120, roof === "#C8553D" ? "#7A4E32" : "#8E6440", 26); };
     [[-640, 300, 330, "#F2C14E", "#C8553D"], [-320, 280, 400, "#9FD8C8", "#3A6F8F"], [-20, 330, 360, "#F4A6A0", "#7A4E32"], [330, 300, 430, "#FFF1D6", "#2F6F73"], [1180, 320, 390, "#CDB6E8", "#C8553D"], [1520, 300, 350, "#F2C14E", "#3A6F8F"], [1840, 330, 420, "#9FD8C8", "#7A4E32"], [2180, 300, 360, "#F4A6A0", "#2F6F73"]].forEach((h, i) => house(...h, i));
-    const cafe = L(back, true); R(cafe, 650, 470, 520, 350, "#FFF6E3", 8); for (let i = 0; i < 8; i++) P(cafe, `M${650 + i * 65},440 L${715 + i * 65},440 L${715 + i * 65},500 Q${682 + i * 65},530 ${650 + i * 65},500 Z`, i % 2 ? "#FFFFFF" : "#E8634A"); R(cafe, 720, 560, 380, 170, "#9FD3EA", 10);
+    const cafe = L(MID, true); R(cafe, 650, 470, 520, 350, "#FFF6E3", 8); for (let i = 0; i < 8; i++) P(cafe, `M${650 + i * 65},440 L${715 + i * 65},440 L${715 + i * 65},500 Q${682 + i * 65},530 ${650 + i * 65},500 Z`, i % 2 ? "#FFFFFF" : "#E8634A"); R(cafe, 720, 560, 380, 170, "#9FD3EA", 10);
     el("text", { x: 910, y: 428, "text-anchor": "middle", "font-family": "Fredoka", "font-weight": 700, "font-size": 40, fill: "#3a2e2a" }, cafe).textContent = "CRUMB CAFÉ";
     const ground = L(back, true); R(ground, -800, 820, 3520, 700, "#E2CDA8"); const rnd = SR.mulberry32(3); for (let i = 0; i < 160; i++) el("ellipse", { cx: -800 + rnd() * 3520, cy: 850 + rnd() * 400, rx: 30 + rnd() * 20, ry: 10 + rnd() * 5, fill: "#D6BE96", opacity: 0.7 }, ground);
-    const bunt = (x0, x1, y) => { const g = L(back); const cols = ["#E8634A", "#FFC93C", "#3FA7A0", "#6C5CE7", "#F2EDE4"], flags = []; for (let i = 1; i < 16; i++) { const u = i / 16, x = lerp(x0, x1, u), yy = y + 90 * u * (1 - u); const f = P(g, "M-14,0 L14,0 L0,30 Z", cols[i % 5]); flags.push([f, x, yy, i]); } return (t) => flags.forEach(([f, x, yy, i]) => f.setAttribute("transform", `translate(${x},${yy}) rotate(${(Math.sin(t * 2.4 + i) * 8).toFixed(2)})`)); };
+    const bunt = (x0, x1, y) => { const g = L(MID); const cols = ["#E8634A", "#FFC93C", "#3FA7A0", "#6C5CE7", "#F2EDE4"], flags = []; for (let i = 1; i < 16; i++) { const u = i / 16, x = lerp(x0, x1, u), yy = y + 90 * u * (1 - u); const f = P(g, "M-14,0 L14,0 L0,30 Z", cols[i % 5]); flags.push([f, x, yy, i]); } return (t) => flags.forEach(([f, x, yy, i]) => f.setAttribute("transform", `translate(${x},${yy}) rotate(${(Math.sin(t * 2.4 + i) * 8).toFixed(2)})`)); };
     const b1 = bunt(-500, 640, 300), b2 = bunt(1180, 2400, 290);
     const fo = L(front, true); el("ellipse", { cx: 960, cy: 880, rx: 230, ry: 40, fill: "#B9C7CF" }, fo); el("ellipse", { cx: 960, cy: 870, rx: 200, ry: 28, fill: "#7EC8F2" }, fo); R(fo, 940, 740, 40, 130, "#B9C7CF", 10); el("ellipse", { cx: 960, cy: 740, rx: 70, ry: 16, fill: "#B9C7CF" }, fo);
     const jets = [-1, 1].map(() => P(fo, "", "none", { stroke: "#BFE8FF", "stroke-width": 8, "stroke-linecap": "round" }));
     return { update(t, m = 1) { b1(t); b2(t); jets.forEach((j, i) => { const s = i ? 1 : -1, h = 70 + Math.sin(t * 3 + i) * 6; j.setAttribute("d", `M960,728 Q${960 + s * 70},${728 - h} ${960 + s * 150},862`); });
-      clouds.forEach(([g, x, y, k], i) => g.setAttribute("transform", `translate(${x + ((t * (8 + i * 3)) % 400) - 100},${y}) scale(${k})`)); sky.setAttribute("fill", K.mix("#9FA8B8", "#BFE3F2", m)); } };
+      clouds.forEach(([g, x, y, k, sp]) => g.setAttribute("transform", `translate(${(x + ((t * sp) % 600) - 150).toFixed(1)},${y}) scale(${k})`)); sky.setAttribute("fill", K.mix("#9FA8B8", "#BFE3F2", m)); } };
   };
   // ---------- paper weather icon: level 0 sun .. 4 storm, with pop ----------
   K.weather = (parent, seed = 1) => { const g = el("g", {}, parent), inner = L(g); const sun = el("g", {}, inner); for (let i = 0; i < 8; i++) { const a = (i / 8) * Math.PI * 2; R(sun, -6, -52, 12, 22, "#FFC93C", 6, { transform: `rotate(${(a * 180) / Math.PI})` }); } el("circle", { r: 28, fill: "#FFD84A" }, sun);
@@ -45,6 +47,14 @@
   // camera: shots [t, [cx, cy, z] | {who, z, dy}, next?, ease]; snap when no next; shake(t) added
   K.camera = (shots, D) => { let CUR = shots[0]; return { cur: () => CUR, at(t, res, shake = 0) { let i = 0; while (i + 1 < shots.length && t >= shots[i + 1][0]) i++; CUR = shots[i]; const t0 = shots[i][0], t1 = i + 1 < shots.length ? shots[i + 1][0] : D;
       const A = res(shots[i][1]), B = shots[i][2] ? res(shots[i][2]) : A, u = clamp((t - t0) / Math.max(0.01, t1 - t0), 0, 1), k = shots[i][2] ? (shots[i][3] === "lin" ? u : shots[i][3] === "out" ? 1 - Math.pow(1 - u, 3) : u * u * (3 - 2 * u)) : 0;
-      const z = lerp(A[2], B[2], k), sx = (Math.sin(t * 61) * 9 + Math.cos(t * 47) * 6) * shake, sy = (Math.cos(t * 53) * 7) * shake;
-      return `translate(960,540) scale(${z.toFixed(4)}) translate(${(-lerp(A[0], B[0], k) + sx).toFixed(1)},${(-lerp(A[1], B[1], k) + sy).toFixed(1)})`; } }; };
+      const z = lerp(A[2], B[2], k), sx = (Math.sin(t * 61) * 9 + Math.cos(t * 47) * 6) * shake, sy = (Math.cos(t * 53) * 7) * shake, cx = lerp(A[0], B[0], k) - sx, cy = lerp(A[1], B[1], k) - sy;
+      const tf = (depth) => `translate(960,540) scale(${z.toFixed(4)}) translate(${(-(960 + (cx - 960) * depth)).toFixed(1)},${(-(540 + (cy - 540) * depth)).toFixed(1)})`;   // depth 1 = subject plane; <1 moves less (far), >1 more (near)
+      return { z, cx, cy, tf }; } }; };
+  // birds + a background walker give the world life
+  K.birds = (parent, n = 3) => { const B = Array.from({ length: n }, (_, i) => { const g = el("g", {}, parent); const p = el("path", { d: "", fill: "none", stroke: "#3a2e2a", "stroke-width": 5, "stroke-linecap": "round" }, g); return { g, p, x0: -300 + i * 500, y: 90 + i * 70, sp: 120 + i * 30, ph: i * 1.7 }; });
+    return (t) => B.forEach((b) => { const x = b.x0 + ((t * b.sp) % 2800), y = b.y + Math.sin(t * 1.4 + b.ph) * 14, fl = Math.sin(t * 9 + b.ph) * 8; b.g.setAttribute("transform", `translate(${x.toFixed(1)},${y.toFixed(1)})`); b.p.setAttribute("d", `M-18,${(fl).toFixed(1)} q9,-10 18,0 q9,-10 18,${(fl).toFixed(1)}`); }); };
+  // kinetic captions: 1-3 words, keywords yellow, pop per chunk, bottom centre (never over faces: the stage keeps faces above y=900)
+  K.captions = (svg, caps) => { const g = el("g", {}, svg); const nodes = caps.map((c) => { const t = el("text", { x: 960, y: 1000, "text-anchor": "middle", "font-family": "Fredoka", "font-weight": 700, "font-size": 68, stroke: "#1a1512", "stroke-width": 9, "paint-order": "stroke", "letter-spacing": 1, opacity: 0 }, g);
+      c.w.forEach(([w, key]) => { const sp = el("tspan", { fill: key ? "#FFD84A" : "#FFFFFF" }, t); sp.textContent = w + " "; }); return t; });
+    return (t) => nodes.forEach((n, i) => { const c = caps[i], on = t >= c.t && t < c.e; n.setAttribute("opacity", on ? 1 : 0); if (on) { const k = clamp((t - c.t) / 0.12, 0, 1), sc = 0.8 + 0.25 * K.back(k) * (k < 1 ? 1 : 0.8) + (k >= 1 ? 0.2 : 0); n.setAttribute("transform", `translate(960,1000) scale(${(k < 1 ? 0.8 + 0.2 * K.back(k) : 1).toFixed(3)}) translate(-960,-1000)`); } }); };
 })();

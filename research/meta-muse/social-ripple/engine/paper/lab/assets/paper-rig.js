@@ -17,14 +17,14 @@
   // poses tuned for these proportions (angles in degrees from "down"; + = forward). Front arm: shF/elF, back arm: shB/elB, legs hipF/knF/hipB/knB
   const BASE = { lean: 0, head: 0, crouch: 0, shF: -6, elF: 10, shB: 6, elB: 10, hipF: 3, knF: 0, hipB: -3, knB: 0, armOut: 8 };
   const POSES = SR.PAPER_POSES = {
-    stand: {}, relaxed: { shF: -4, elF: 8, shB: 4, elB: 8 }, slump: { lean: 12, head: 14, crouch: 6, shF: 6, elF: 6, shB: 4, elB: 6 },
+    stand: {}, relaxed: { shF: -4, elF: 8, shB: 4, elB: 8 }, slump: { lean: 12, head: 14, hipF: 8, knF: -10, hipB: 4, knB: -8, shF: 6, elF: 6, shB: 4, elB: 6 },
     proud: { lean: -5, head: -6, shF: -16, elF: 4, shB: 16, elB: 4, armOut: 14 }, hold: { shF: 34, elF: 70, shB: 6, elB: 10 }, holdBoth: { shF: 40, elF: 66, shB: 36, elB: 66 },
     give: { lean: 5, shF: 66, elF: 22, shB: 6, elB: 10 }, point: { shF: 86, elF: 4, shB: 4, elB: 8 }, wave: { shF: 118, elF: 58, shB: 6, elB: 8, head: -3 },
     shrug: { shF: 36, elF: 104, shB: -36, elB: -104, head: 5, armOut: 26 }, hipsHands: { shF: 30, elF: -112, shB: -30, elB: 112, armOut: 22 }, crossed: { shF: 38, elF: 98, shB: 34, elB: 102, armOut: 0 },
-    startle: { lean: -10, head: -8, shF: 56, elF: 56, shB: -46, elB: -56, crouch: 3, armOut: 30 }, shout: { lean: 12, head: -5, shF: 26, elF: 38, shB: -18, elB: -28, armOut: 20 },
+    startle: { lean: -10, head: -8, shF: 56, elF: 56, shB: -46, elB: -56, armOut: 30 }, shout: { lean: 12, head: -5, shF: 26, elF: 38, shB: -18, elB: -28, armOut: 20 },
     facepalm: { head: 16, lean: 5, shF: 112, elF: 142, shB: 6, elB: 8 }, hug: { lean: 7, shF: 66, elF: 70, shB: 58, elB: 64, armOut: 0 }, phone: { head: 12, lean: 3, shF: 28, elF: 96, shB: 6, elB: 8 },
     sit: { crouch: 1, hipF: 88, knF: -88, hipB: 84, knB: -86, shF: 20, elF: 50, shB: 16, elB: 46 }, sitSlump: { crouch: 1, lean: 14, head: 18, hipF: 88, knF: -88, hipB: 84, knB: -86, shF: 28, elF: 24, shB: 24, elB: 22 },
-    think: { head: 8, shF: 40, elF: 118, shB: 6, elB: 10 }, cheer: { lean: -6, head: -8, shF: 138, elF: 6, shB: -138, elB: -6, armOut: 34 },
+    think: { head: 8, shF: 40, elF: 118, shB: 6, elB: 10 }, flinch: { lean: -14, head: -12, hipF: 22, knF: -30, hipB: 10, knB: -20, shF: 74, elF: 84, shB: -44, elB: -74, armOut: 32 }, duck: { head: 16, lean: 8, hipF: 34, knF: -48, hipB: 24, knB: -40, shF: 44, elF: 112, shB: 40, elB: 112, armOut: 10 }, leanIn: { lean: 10, head: 4, shF: 40, elF: 30, shB: 4, elB: 8 }, cheer: { lean: -6, head: -8, shF: 138, elF: 6, shB: -138, elB: -6, armOut: 34 },
   };
   const FXD = { tears: 0 };
   function Paper(parent, spec) {
@@ -83,9 +83,12 @@
       const P = blend(s.pose, t, "stand", poseOf), D = blend(s.mood, t, "neutral", moodOf), look = sampleTrack(s.look, t, { x: 0, y: 0 });
       const spd = speedAt(t), w = clamp(spd / (150 * sc), 0, 1) * (s.noWalk ? 0 : 1), stride = 150 * sc, ph = (distAt(t) / stride) * Math.PI * 2, sw = Math.sin(ph);
       P.hipF += 28 * sw * w; P.hipB -= 28 * sw * w; P.knF -= 40 * Math.max(0, Math.cos(ph)) * w; P.knB -= 40 * Math.max(0, -Math.cos(ph)) * w; P.shF -= 22 * sw * w; P.shB += 22 * sw * w; P.elF += 16 * w; P.elB += 16 * w; P.lean += 3 * w;
-      const bob = -Math.abs(Math.cos(ph)) * 5 * w, breath = Math.sin(t * 2 * Math.PI / 3.6 + s.seed) * 2 * (1 - w);
-      let squash = 0; if (s.mood) for (const [t0] of s.mood) { const k = (t - t0) / 0.3; if (k > 0 && k < 1) squash += Math.sin(k * Math.PI) * 0.04; }
-      const sitting = P.hipF > 60, hipY = -(L1 + L2 + 10) + (sitting ? L1 + 4 : 0) + P.crouch + bob, leanR = P.lean * Math.PI / 180;
+      const bob = -Math.abs(Math.cos(ph)) * 5 * w, breath = Math.sin(t * 2 * Math.PI / 3.6 + s.seed) * 3.5 * (1 - w);
+      let squash = 0, hop = 0; if (s.mood) for (const [t0] of s.mood) { const k = (t - t0) / 0.3; if (k > 0 && k < 1) squash += Math.sin(k * Math.PI) * 0.04; }
+      if (s.squash) for (const [t0, a] of s.squash) { const k = (t - t0) / 0.34; if (k > 0 && k < 1) squash += Math.sin(k * Math.PI) * a; }
+      if (s.hop) for (const [t0, h] of s.hop) { const k = (t - t0) / 0.42; if (k > -0.25 && k < 0) squash += (0.25 + k) * 0.5 * 0.5; else if (k >= 0 && k < 1) { hop = Math.sin(k * Math.PI) * h; squash -= Math.sin(k * Math.PI) * 0.06; } }
+      const sitting = P.hipF > 60, ext = (h, k) => Math.cos(h * Math.PI / 180) * L1 + Math.cos((h + k) * Math.PI / 180) * L2, legExt = Math.max(ext(P.hipF, P.knF), ext(P.hipB, P.knB));
+      const hipY = (sitting ? -(L1 + L2 + 10) + L1 + 4 + P.crouch : -(legExt + 10)) + bob, leanR = P.lean * Math.PI / 180;
       const P2 = (px, py) => { const dy = py - hipY; return [px * Math.cos(leanR) - dy * Math.sin(leanR), hipY + px * Math.sin(leanR) + dy * Math.cos(leanR)]; };
       const nyU = hipY - TORSO + breath;
       // legs
@@ -105,7 +108,7 @@
       // neck + head
       const [nx, ny] = P2(0, nyU - 4); neck.setAttribute("x", f(nx - 17)); neck.setAttribute("y", f(ny - 36)); const [hX, hY] = P2(0, nyU - 30 - HR + 6);
       const trm = 0, tilt = P.head * 0.5 + Math.sin(t * 1.1 + s.seed) * 1.2;
-      const headTf = `translate(${f(hX)},${f(hY)}) rotate(${f(tilt)}) scale(${f(1 + squash + D.sq)},${f(1 - squash - D.sq)})`; headL.setAttribute("transform", headTf); faceL.setAttribute("transform", headTf); hairL.setAttribute("transform", headTf);
+      const headTf = `translate(${f(hX)},${f(hY)}) rotate(${f(tilt)}) scale(${f(1 + squash + D.sq)},${f(1 - squash - D.sq)})`; headL.setAttribute("transform", headTf); faceL.setAttribute("transform", headTf); hairL.setAttribute("transform", headTf + ` rotate(${f(-tilt * 0.35 + Math.sin(t * 2.6 + s.seed) * 0.8)},0,-40)`);
       const [hf, hb, hextra, hh] = hairPaths(); hairFront.setAttribute("d", hf + " " + hextra); hairBack.setAttribute("d", hb); hairHi.setAttribute("d", hh ? hh + " l0,0" : ""); hairHi.setAttribute("stroke", light(s.hair, 0.3)); hairHi.setAttribute("stroke-width", 8); hairHi.setAttribute("fill", "none"); hairHi.setAttribute("stroke-linecap", "round");
       // ---- face from dials ----
       const blink = ((t + s.seed * 1.37) % 3.9) < 0.1 ? 1 - Math.sin((((t + s.seed * 1.37) % 3.9) / 0.1) * Math.PI) : 1, dart = (hash(Math.floor((t + s.seed) / 1.9), s.seed + 5) - 0.5) * 0.4;
@@ -140,8 +143,8 @@
         let i = 0; while (i + 1 < Lp.vis.length && Lp.vis[i + 1][0] <= tl) i++; const VIS = SR.VIS5; const cur = VIS[Lp.vis[i][1]] || VIS.X, nx = Lp.vis[i + 1], nxt = nx ? (VIS[nx[1]] || VIS.X) : VIS.X, gap = nx ? nx[0] - Lp.vis[i][0] : 1, lead = Math.min(0.075, gap * 0.6), u = nx ? EASE.inOut(clamp((tl - (nx[0] - lead)) / lead, 0, 1)) : 0;
         VISM = {}; for (const kk in VIS.X) VISM[kk] = lerp(cur[kk], nxt[kk], u); const fi = Math.floor(tl * Lp.fps), en = fi >= 0 && fi < Lp.env.length ? Lp.env[fi] : 0, gg = clamp(0.55 + 0.65 * en, 0.5, 1.15); VISM.top *= gg; VISM.bot *= gg; }
       if (s.prop && s.prop.kind) { propG.setAttribute("transform", `translate(${f(hxF)},${f(hyF)})`); if (!propG.firstChild && SR.buildProp) SR.buildProp(propG, s.prop.kind); propG.setAttribute("opacity", sampleTrack(s.prop.show, t, 1)); }
-      const idle = (1 - w) * 0.012 * Math.sin(t * 2.3 + s.seed * 1.7);
-      g.setAttribute("transform", `translate(${f(x)},${f(y)}) scale(${f(sc * facing)},${f(sc * (1 - squash * 0.5 + idle))})`); g.setAttribute("opacity", vis);
+      const idle = (1 - w) * 0.012 * Math.sin(t * 2.3 + s.seed * 1.7), rotP = (1 - w) * 2.2 * Math.sin(t * 1.3 + s.seed * 2.1) + w * 3 * Math.sin(ph);   // puppet sway: paper figures never stand dead still
+      g.setAttribute("transform", `translate(${f(x)},${f(y - hop * sc)}) rotate(${f(rotP)}) scale(${f(sc * facing * (1 + squash * 0.6))},${f(sc * (1 - squash * 0.5 + idle))})`); g.setAttribute("opacity", vis);
       joints = { x, y, sc, facing, sitting, headX: x + hX * sc * facing, headY: y + hY * sc, headR: HR * sc, handF: [x + hxF * sc * facing, y + hyF * sc], handB: [x + hxB * sc * facing, y + hyB * sc], elbowF: P.elF, elbowB: P.elB, kneeF: P.knF, kneeB: P.knB,
         footF: [x + axF * sc * facing, y + (ayF + 12) * sc], footB: [x + axB * sc * facing, y + (ayB + 12) * sc], hipY: y + hipY * sc, walk: w, step: Math.floor((distAt(t) / stride) * 2) };
       return joints;
