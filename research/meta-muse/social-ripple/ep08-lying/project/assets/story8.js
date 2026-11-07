@@ -146,7 +146,9 @@
   const t09 = SC.SC09;
   shot(t09, "square", C(900, 560, 1.15, 900, 540, 1.2, "lin"), Object.assign({ you: Pp(0.27, 0.40, 0.30, 1), mo: Pp(0.70, 0.42, 0.18, -1) }, crowd(sqCrowd.slice(0, 6))), 1, "SC09 coffee again");
   Lips("mo", "mo_d"); ["mo", "pip"].forEach((n) => prop(n, t09, null)); M("mo", t09, "happy"); Po("mo", t09, "give", 0.2); prop("mo", t09, "mug"); prop("mo", W("mo_d", 2.0), null); prop("you", W("mo_d", 2.0), "mug"); Po("you", W("mo_d", 2.0), "sip", 0.3);
-  M("mo", W("mo_d", 1.0), "cheeky", 0.3); num("mo", t09, 0); M("you", E("mo_d") + 0.1, "laughing", 0.2); Hop("you", E("mo_d") + 0.15, 10); say(E("mo_d") + 0.35, S("n24") - 0.15, "Honestly? It's great.");
+  M("mo", W("mo_d", 1.0), "cheeky", 0.3); num("mo", t09, 0);
+  // after midnight every counter is back at zero (nobody's number carries over to the next day)
+  for (let i = 0; i < EXN; i++) num("x" + i, SC.SC07, 0); ["mo", "ana", "theo", "kai", "bea", "finn", "pip"].forEach((n) => num(n, SC.SC07, 0)); M("you", E("mo_d") + 0.1, "laughing", 0.2); Hop("you", E("mo_d") + 0.15, 10); say(E("mo_d") + 0.35, S("n24") - 0.15, "Honestly? It's great.");
   const tEnd = S("n24") - 0.1; const closer = sqCrowd.map(([i, wx, wy, s]) => { let x = 960 + (wx - 960) * 0.62; if (wy > 860 && x > 760 && x < 1180) x += x < 960 ? -260 : 260; return [i, x, wy, s]; });
   shot(tEnd, "square", C(960, 560, 1.12, 960, 540, 1.0, "lin"), Object.assign({ you: Wd(1240, 985, 0.6, 1), mo: Wd(1500, 975, 0.58, -1), pip: Wd(1700, 975, 0.56, -1) }, crowd(closer)), 1, "SC09 all honest");
   sqCrowd.forEach(([i]) => num("x" + i, tEnd, 0)); num("mo", tEnd, 0); num("pip", tEnd, 0); Po("pip", tEnd + 0.4, "wave", 0.3); M("pip", tEnd, "happy"); prop("you", tEnd, null); Po("you", tEnd, "relaxed", 0); M("you", tEnd, "happy", 0.4);
