@@ -73,7 +73,7 @@ put(FOL, X["heartbeat"], MK["tStorm"] - 0.6, -18); put(FOL, X["boom"], MK["tStor
 put(FOL, X["door_slam"], MK["tDoorShut"] - 0.1, -16)
 put(FOL, knock, MK["tKnock"] + 0.12, -12); put(FOL, knock, MK["tKnock"] + 0.52, -12)
 put(FOL, X["scribble"], MK["tList"], -24)
-for i in range(9): put(FOL, X["tick"], MK["tTicks"] + 0.2 + i * 0.25, -20)
+for i in range(3): put(FOL, X["tick"], MK["tTicks"] + 0.2 + i * 0.25, -19)   # three yeses
 for k in ("theo_01", "mo_01", "kai_01"): put(FOL, X["ding"], S(k) - 0.15, -27)
 put(FOL, X["sparkle"], MK["tFine"] + 0.3, -22)
 put(FOL, X["boom"][: int(1.4 * SR)], MK["tReflB"] + 0.8, -21); put(FOL, X["shimmer"], W("n26", 0.6), -22)   # your own storm, then it eases

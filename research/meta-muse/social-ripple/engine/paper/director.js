@@ -38,8 +38,10 @@
       shots.forEach((s) => api.log.push([s.t, "cut"])); for (const a of Object.values(actors)) { a.mood.slice(1).forEach((m) => api.log.push([m[0], "expr"])); a.pose.slice(1).forEach((m) => api.log.push([m[0], "pose"])); a.hop.forEach((m) => api.log.push([m[0], "hop"])); }
     };
     // weather per actor: keys [[t, level]], pops [t...], k scale, dy
-    api.weather = (name, lv, pop, k = 1.3, dy = 0) => { const a = actors[name]; const w = a.wx ? a.wx.w : K.weather(wxL, Object.keys(actors).indexOf(name) + 3); w.g.setAttribute("display", "none");
-      if (a.wx) console.warn("weather redefined for " + name); a.wx = { w, lv, pop, k, dy }; api.log.push([pop, "pop"]); };
+    // weather per actor: keys [[t, level]] (lv < 0 hides), pop time, k scale, dy; `from` lets one actor carry several weather
+    // layers over the episode (e.g. an extra in SC01's crowd and again in SC03's town) -- the latest layer with from <= t is used
+    api.weather = (name, lv, pop, k = 1.3, dy = 0, from = 0) => { const a = actors[name]; const w = a.wx ? a.wx.w : K.weather(wxL, Object.keys(actors).indexOf(name) + 3); w.g.setAttribute("display", "none");
+      a.wx = a.wx || { w, layers: [] }; a.wx.layers.push({ lv, pop, k, dy, from }); a.wx.layers.sort((p, q) => p.from - q.from); api.log.push([pop, "pop"]); };
     api.curShot = (t) => { let i = 0; while (i + 1 < shots.length && t >= shots[i + 1].t) i++; return shots[i]; };
     api.toScreen = (cam, wx, wy) => [(wx - cam.x) * cam.z + 960, (wy - cam.y) * cam.z + 540];
     let active = null;
@@ -52,13 +54,14 @@
       const issues = [];
       for (const a of Object.values(actors)) { const on = a.vis.some(([t0, t1]) => t >= t0 && t < t1); a.c.g.setAttribute("display", on ? "inline" : "none"); if (a.wx) a.wx.w.g.setAttribute("display", "none"); if (!on) continue;
         const J = a.c.update(t);
-        if (a.wx) { const pop = a.wx.pop == null ? 0 : clamp((t - a.wx.pop) / 0.4, 0, 1), lv = SR.sampleTrack(a.wx.lv, t, a.wx.lv[0][1]); if (lv >= 0 && pop > 0) {
+        const WX = a.wx ? a.wx.layers.filter((L) => L.from <= t).pop() : null;
+        if (WX) { const pop = WX.pop == null ? 0 : clamp((t - WX.pop) / 0.4, 0, 1), lv = SR.sampleTrack(WX.lv, t, WX.lv[0][1]); if (lv >= 0 && pop > 0) {
           // size follows the head (never > ~1.8x on screen); sits fully ABOVE the hair; shrinks to fit headroom; only then moves beside the head, away from frame centre
           const HM = { bun: 0.8, afro: 0.4, curly: 0.3, spiky: 0.3, cap: 0.22 }, top = J.headY - J.headR * (1 + (HM[(a.spec || {}).hairStyle] || 0.1));
-          let ws = Math.min(a.wx.k * Math.max(0.6, J.sc), 1.8 / cam.z), wx = J.headX; const roomW = (((top - cam.y) * cam.z + 540) - 8) / cam.z;   // world units of headroom
+          let ws = Math.min(WX.k * Math.max(0.6, J.sc), 1.8 / cam.z), wx = J.headX; const roomW = (((top - cam.y) * cam.z + 540) - 8) / cam.z;   // world units of headroom
           if (roomW < 190 * ws) ws = Math.max(roomW / 190, 0);
-          let wy = top - 120 * ws + a.wx.dy + Math.sin(t * 2.1) * 3;
-          if (ws * cam.z < 0.55) { ws = Math.min(a.wx.k * Math.max(0.6, J.sc), 1.1 / cam.z); const hs = (J.headX - cam.x) * cam.z + 960; let side = hs > 960 ? 1 : -1; const off = J.headR + 100 * ws;
+          let wy = top - 120 * ws + WX.dy + Math.sin(t * 2.1) * 3;
+          if (ws * cam.z < 0.55) { ws = Math.min(WX.k * Math.max(0.6, J.sc), 1.1 / cam.z); const hs = (J.headX - cam.x) * cam.z + 960; let side = hs > 960 ? 1 : -1; const off = J.headR + 100 * ws;
             if (hs + side * off * cam.z > 1920 - 120 * ws * cam.z || hs + side * off * cam.z < 120 * ws * cam.z) side = -side; wx = J.headX + side * off; wy = Math.max(J.headY - J.headR * 0.6, (8 - 540) / cam.z + cam.y + 70 * ws); }
           if (a.extra) for (const b of Object.values(actors)) if (!b.extra && b !== a && b.c.g.getAttribute("display") !== "none" && b.c.joints.y > J.y && Math.abs(b.c.joints.x - J.headX) < 90 * b.c.joints.sc && J.headY > b.c.joints.headY - b.c.joints.headR) ws = 0;
           a.wx.w.g.setAttribute("display", ws > 0 ? "inline" : "none"); a.wx.w.g.setAttribute("transform", `translate(${wx.toFixed(1)},${wy.toFixed(1)})`); a.wx.w.set(lv, t, ws, pop); } }

@@ -88,14 +88,14 @@
 
   // =================== SC03 the guess (lighthouse) ===================
   const t03 = SC.SC03; const town = []; for (let i = 0; i < 12; i++) town.push([i, -400 + i * 260 + (i % 2) * 80, 860 + (i % 3) * 18, 0.26 + (i % 3) * 0.02]);
-  shot(t03, "lighthouse", C(960, 540, 1.0), { you: Wd(520, 880, 0.36, 1) }, null, "SC03 isolation"); M("you", t03, "smug", 0.5); Lk("you", t03, 0.6, 0.4);
+  shot(t03, "lighthouse", C(960, 540, 1.0, 760, 600, 1.18, "lin"), { you: Wd(520, 880, 0.36, 1) }, null, "SC03 isolation"); M("you", t03, "smug", 0.5); Lk("you", t03, 0.6, 0.4);
   const tFingers = E("n08") + 0.1; shot(tFingers, "lighthouse", C(560, 520, 1.6), { you: Pp(0.42, 0.42, 0.30, 1) }, null, "SC03 two fingers"); Po("you", tFingers + 0.05, "peace", 0.25); prop("you", tFingers + 0.05, "peace"); M("you", tFingers, "smug", 0.3); Hop("you", tFingers, 8);
   const tPan = tFingers + 1.4; shot(tPan, "lighthouse", C(-100, 640, 1.25, 1900, 640, 1.25, "lin"), crowd(town), null, "SC03 crowd pan");
   const townLv = [0, 1, 0, 0, 2.6, 0, 1, 0, 1, 0, 3, 1];
-  town.forEach(([i, wx], j) => Dr.weather("x" + i, [[0, townLv[j]]], tPan + 0.3 + (wx + 400) / 2400 * 3.0, 1.0));
+  town.forEach(([i, wx], j) => Dr.weather("x" + i, [[0, townLv[j]]], tPan + 0.3 + (wx + 400) / 2400 * 3.0, 1.0, 0, t03));   // town layer (same extras, new people)
   const tReact = S("n09") - 0.25; shot(tReact, "lighthouse", C(560, 520, 1.6), { you: Pp(0.42, 0.42, 0.30, 1) }, null, "SC03 reaction");
   Po("you", tReact + 0.1, "relaxed", 1.2, "inOut"); prop("you", tReact + 0.8, null); M("you", tReact, "surprised", 0.5); M("you", tReact + 1.4, "touched", 1.4);
-  shot(S("n10") - 0.15, "lighthouse", C(960, 560, 1.0, 960, 560, 1.06, "lin"), Object.assign({ you: Wd(520, 880, 0.36, 1) }, crowd(town.slice(0, 8))), null, "SC03 town wide");
+  shot(S("n10") - 0.15, "lighthouse", C(900, 560, 1.0, 1000, 580, 1.16, "lin"), Object.assign({ you: Wd(520, 880, 0.36, 1) }, crowd(town.slice(0, 8))), null, "SC03 town wide");
   shot(S("n11") - 0.1, "lighthouse", C(600, 500, 1.5), { you: Pp(0.44, 0.44, 0.28, 1) }, null, "SC03 button"); Lk("you", S("n11"), 0.8, 0.5); M("you", S("n11"), "confused", 0.4);
 
   // =================== SC04 the hat trick ===================
@@ -103,7 +103,7 @@
   shot(t04, "jetty", C(960, 540, 1.0), { finn: Wd(1260, 820, 0.62, -1), you: Wd(140, 820, 0.5, 1) }, null, "SC04 finn alone");
   M("finn", t04, "sad", 0.4); Dr.weather("finn", [[0, 2.2], [S("finn_a") - 0.2, 2.2], [S("finn_a") + 0.05, 0], [E("n12") + 1.0, 0], [E("n12") + 1.3, 2.2], [S("n14") + 2.0, 2.2], [S("n14") + 3.0, 1.2]], t04 + 0.1, 1.3);
   Po("you", t04 + 0.6, "wave", 0.3); Po("you", t04 + 1.6, "relaxed", 0.4);
-  const tCust = S("finn_a") - 1.0; shot(tCust, "jetty", C(1150, 560, 1.3), { finn: Pp(0.64, 0.40, 0.20, -1), cust: Wd(380, 828, 0.86, 1, { wx2: 640, d1: 0.5, e: "out", walk: 1 }) }, null, "SC04 cap trick");
+  const tCust = S("finn_a") - 1.0; shot(tCust, "jetty", C(1150, 660, 1.3), { finn: Pp(0.64, 0.40, 0.20, -1), cust: Wd(380, 828, 0.86, 1, { wx2: 640, d1: 0.5, e: "out", walk: 1 }) }, null, "SC04 cap trick");
   Po("finn", S("finn_a") - 0.25, "capTuck", 0.18); Sq("finn", S("finn_a") - 0.1, 0.1); Po("finn", S("finn_a") + 0.35, "proud", 0.3); M("finn", S("finn_a") - 0.05, "grin", 0.2, "back"); Lips("finn", "finn_a"); M("cust", 0, "happy");
   const tBea = S("bea_01") - 0.6; shot(tBea, "bakeryIn", C(900, 560, 1.15), { bea: Wd(780, 900, 0.9, 1) }, null, "SC04 bea tuck");
   Dr.weather("bea", [[0, 1.6], [S("bea_01") - 0.05, 1.6], [S("bea_01") + 0.1, 0]], tBea + 0.05, 1.2); M("bea", tBea, "worried", 0.3); Po("bea", tBea + 0.25, "duck", 0.2); Po("bea", S("bea_01"), "hold", 0.25, "back"); prop("bea", S("bea_01"), "tray"); M("bea", S("bea_01"), "grin", 0.2); Lips("bea", "bea_01"); Hop("bea", S("bea_01"), 10);
@@ -117,12 +117,12 @@
 
   // =================== SC05 the fixer ===================
   const t05 = SC.SC05;
-  shot(t05, "jetty", C(1100, 560, 1.25), { you: Pp(0.24, 0.42, 0.20, 1), finn: Pp(0.58, 0.40, 0.20, -1) }, null, "SC05 tea");
+  shot(t05, "jetty", C(1100, 660, 1.25), { you: Pp(0.24, 0.42, 0.20, 1), finn: Pp(0.58, 0.40, 0.20, -1) }, null, "SC05 tea");
   prop("you", t05, "mug"); Po("you", t05 + 0.2, "give", 0.3); Hop("you", W("n14", 1.4), 14); M("you", t05, "hopeful", 0.3); M("finn", S("n14") + 2.0, "relieved", 1.0); prop("you", S("n14") + 2.2, null);
-  const tTray = E("n14") + 0.35; shot(tTray, "square", C(960, 560, 1.15), { bea: Pp(0.36, 0.42, 0.20, 1), ana: Pp(0.95, 0.40, 0.21, -1, { fx2: 0.62, d1: 0.9, e: "out", walk: 1 }) }, 1, "SC05 the catch");
+  const tTray = E("n14") + 0.35; shot(tTray, "square", C(960, 560, 1.15), { bea: Pp(0.29, 0.42, 0.20, 1), ana: Pp(0.95, 0.40, 0.21, -1, { fx2: 0.62, d1: 0.9, e: "out", walk: 1 }) }, 1, "SC05 the catch");
   prop("bea", tTray, "tray"); Po("bea", tTray, "hold", 0); Po("bea", tTray + 0.4, "startle", 0.15); prop("bea", tTray + 0.45, null); M("bea", tTray + 0.4, "shock", 0.15);
   prop("ana", tTray, "boxstack"); Po("ana", tTray, "carry", 0); Po("ana", tTray + 0.5, "catch", 0.15, "back"); M("ana", tTray, "happy", 0.2); Lips("bea", "bea_b"); M("bea", S("bea_b"), "laugh", 0.3); Hop("bea", S("bea_b"), 10);
-  const tPeek = S("ana_a") - 0.4; shot(tPeek, "square", C(960, 560, 1.15), { you: Pp(0.30, 0.42, 0.22, 1, { fx2: 0.42, d1: 1.2, walk: 1 }), ana: Pp(0.66, 0.42, 0.21, -1, { fx2: 1.1, d0: 0.8, walk: 1 }) }, 1, "SC05 peek");
+  const tPeek = S("ana_a") - 0.4; shot(tPeek, "square", C(960, 560, 1.15), { you: Pp(0.26, 0.42, 0.22, 1, { fx2: 0.33, d1: 1.2, walk: 1 }), ana: Pp(0.66, 0.42, 0.21, -1, { fx2: 1.1, d0: 0.8, walk: 1 }) }, 1, "SC05 peek");
   prop("ana", tPeek, "boxstack"); Po("ana", tPeek, "carry", 0); Lips("ana", "ana_a"); Po("you", tPeek + 0.2, "give", 0.3); M("you", tPeek, "hopeful", 0.3);
   const tGone = E("ana_a") + 0.3; shot(tGone, "square", C(960, 540, 1.0), Object.assign({ ana: Wd(1500, 860, 0.38, 1, { wx2: 2300, walk: 1 }) }, crowd(sqCrowd.slice(0, 6))), 1, "SC05 gone");
   prop("ana", tGone, "boxstack"); Po("ana", tGone, "carry", 0);
@@ -155,7 +155,7 @@
   shot(t08, "doorstep", C(960, 540, 1.2), { ana: Pp(0.52, 0.42, 0.22, -1), you: Pp(0.14, 0.42, 0.30, 1) }, { open: 0.55 }, "SC08 barrier");
   Lips("ana", "ana_c"); M("ana", S("ana_c"), "forced", 0.2); Po("ana", S("ana_c"), "relaxed", 0.2);
   shot(S("n18") - 0.3, "kitchen", C(960, 540, 1.1), { you: Pp(0.05, 0.40, 0.52, 1), ana: Pp(0.66, 0.42, 0.22, -1) }, null, "SC08 confession-OTS");
-  Po("you", S("n18"), "give", 0.4); M("you", S("n18"), "touched", 0.5);
+  Po("you", S("n18"), "give", 0.4); M("you", S("n18"), "hopeful", 0.5); M("you", W("ana_d", 3.0), "sad", 1.0); M("you", S("n19"), "determined", 0.4);
   shot(S("ana_d") - 0.2, "kitchen", C(1180, 500, 1.5, 1220, 480, 1.75, "lin"), { you: Pp(-0.02, 0.40, 0.55, 1), ana: Pp(0.66, 0.42, 0.26, -1) }, null, "SC08 crack");
   Lips("ana", "ana_d"); M("ana", S("ana_d"), "nervous", 0.6); M("ana", W("ana_d", 2.2), "sad", 1.2); M("ana", W("ana_d", 4.4), "crying", 1.4); Po("ana", W("ana_d", 3.0), "slump", 1.4, "inOut"); Lk("ana", W("ana_d", 3), 0.2, 0.6);
   shot(S("n19") - 0.2, "kitchen", C(960, 560, 1.15), { you: Pp(0.40, 0.42, 0.22, 1, { fx2: 0.46, walk: 1 }), ana: Pp(0.64, 0.42, 0.22, -1) }, null, "SC08 closing-gap");
@@ -207,8 +207,9 @@
   const t13 = SC.SC13;
   shot(t13, "square", C(900, 560, 1.15, 900, 540, 1.2, "lin"), Object.assign({ you: Pp(0.27, 0.40, 0.30, 1), mo: Pp(0.70, 0.42, 0.17, -1) }, crowd(sqCrowd.slice(0, 6))), 1, "SC13 mirror");
   Lips("mo", "mo_a#2"); M("mo", t13, "happy"); ["mo", "theo", "kai", "ana", "you"].forEach((n) => prop(n, t13, null)); Po("mo", t13, "wave", 0.2); Po("mo", E("mo_a#2"), "relaxed", 0.4); Po("you", W("mo_a#2", 0.6), "thumbsHalf", 0.4); Po("you", W("mo_a#2", 1.6), "leanIn", 0.6, "inOut"); M("you", W("mo_a#2", 1.4), "content", 0.6);
-  const tNia = S("n28") - 0.4; shot(tNia, "square", C(1380, 520, 1.25), { nia: Pp(0.5, 0.36, 0.26, 1) }, 0.9, "SC13 narrator-address");
-  Lips("nia", "n28"); M("nia", tNia, "content"); M("nia", W("n28", 1.8), "hopeful", 0.8); M("nia", W("n28", 6.6), "touched", 0.8); M("nia", W("n28", 9.6), "happy", 0.6); Po("nia", W("n28", 2.2), "give", 0.4); Po("nia", W("n28", 4.6), "shrug", 0.4); Po("nia", W("n28", 6.4), "relaxed", 0.5); Po("nia", W("n28", 8.4), "hug", 0.6); Po("nia", W("n28", 10.6), "proud", 0.5);
+  const tNia = S("n28") - 0.4; shot(tNia, "square", C(1380, 520, 1.2, 1380, 470, 1.5, "lin"), { nia: Pp(0.5, 0.36, 0.25, 1) }, 0.9, "SC13 narrator-address");
+  Lips("nia", "n28"); M("nia", tNia, "content"); M("nia", W("n28", 1.8), "hopeful", 0.8); M("nia", W("n28", 6.6), "hopeful", 0.8); M("nia", W("n28", 9.6), "happy", 0.6); Po("nia", W("n28", 2.2), "give", 0.4); Po("nia", W("n28", 4.6), "shrug", 0.4); Po("nia", W("n28", 6.4), "relaxed", 0.5); Po("nia", W("n28", 8.4), "hug", 0.6); Po("nia", W("n28", 10.6), "proud", 0.5);
+  sqCrowd.forEach(([i], j) => Dr.weather("x" + i, [[0, lvMix[j]]], SC.SC13 - 1, 1.1, 0, SC.SC13));   // back in the square: the same crowd, same weather
   const tEnd = S("n29") - 0.3; const closer = sqCrowd.map(([i, wx, wy, s]) => { let x = 960 + (wx - 960) * 0.62; if (wy > 860 && x > 760 && x < 1180) x += x < 960 ? -260 : 260; return [i, x, wy, s]; });
   shot(tEnd, "square", C(960, 560, 1.12, 960, 540, 1.0, "lin"), Object.assign({ you: Wd(1240, 985, 0.6, 1), ana: Wd(1420, 985, 0.6, -1), mo: Wd(1660, 975, 0.58, -1) }, crowd(closer)), 1, "SC13 shared-view");
   Po("you", tEnd, "relaxed", 0); Po("ana", tEnd, "relaxed", 0); M("you", tEnd, "content", 0); M("ana", tEnd, "content", 0); M("you", tEnd + 2, "happy", 1.0); M("ana", tEnd + 2.2, "happy", 1.0); prop("ana", tEnd, null); prop("you", tEnd, null); prop("mo", tEnd, null);
@@ -242,7 +243,7 @@
     const rop = Math.max(r1, r2, r3, rf); rules.set(rop, [clamp((t - S("n03") + 0.1) / 0.4, 0, 1), clamp((t - S("n04") + 0.1) / 0.4, 0, 1), clamp((t - S("n05") + 0.1) / 0.4, 0, 1)], K.sm(tFine + 0.3, tFine + 1.0, t), K.sm(tFine + 0.2, tFine + 1.2, t) * (rf > 0 ? 1 : 0));
     const ph1 = K.win(t, tPhone, S("n07") - 0.1, 0.15, 0.2), ph2 = K.win(t, tRetype, Math.min(E("n24") + 0.3, SC.SC12 - 0.25), 0.15, 0.2);
     if (ph1 > 0) phone.set(ph1, typed(t, tPhone + 0.2), K.sm(tPhone + 2.9, tPhone + 3.2, t)); else if (ph2 > 0) phone.set(ph2, retyped(t, tRetype + 0.2), K.sm(E("n24") - 0.3, E("n24"), t) * 0); else phone.set(0, "", 0);
-    const l1 = K.win(t, tList, E("ana_e") + 0.2, 0.2, 0.2), l2 = K.win(t, tTicks, S("n22") + 1.4, 0.2, 0.2); list.set(Math.max(l1, l2), l1 > 0 ? (t - tList) / 1.6 * 20 : 20, l2 > 0 ? (t - tTicks - 0.2) / 0.25 : 0);
+    const l1 = K.win(t, tList, E("ana_e") + 0.2, 0.2, 0.2), l2 = K.win(t, tTicks, S("n22") + 1.4, 0.2, 0.2); list.set(Math.max(l1, l2), l1 > 0 ? (t - tList) / 1.6 * 20 : 20, l2 > 0 ? Math.min(3, (t - tTicks - 0.2) / 0.25) : 0);
     pov.setAttribute("opacity", (s.tag === "SC01 POV empty" ? K.sm(tPOV, tPOV + 0.3, t) : 0).toFixed(2));
     caps(t);
     grade.setAttribute("fill", K.mix("#FFFFFF", "#8FA2C8", SR.sampleTrack(coldK, t, 0))); flash.setAttribute("opacity", (Math.max(0, 1 - Math.abs(t - tStorm - 0.15) * 6) * 0.55 + Math.max(0, 1 - Math.abs(t - tPop) * 10) * 0.2).toFixed(2));

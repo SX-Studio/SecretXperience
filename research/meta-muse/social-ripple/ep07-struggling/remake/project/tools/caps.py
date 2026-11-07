@@ -1,5 +1,6 @@
 """Kinetic captions from word clocks: 1-3 word chunks, keywords yellow. Lines on the rule card are skipped (the card shows them)."""
-import json, re
+import json, re, sys, os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); from script_words import words
 T = json.loads(re.search(r"window.DT = (\{.*?\});", open("assets/t.js").read()).group(1))
 SKIP = {"n03", "n04", "n05"}
 KEY = {"fine", "fine!", "weather", "storm", "storms", "biggest", "own", "really", "ask", "help", "yes", "alone", "underestimate", "hiding", "nobody", "hard", "saturday", "twenty", "gently", "bad", "negative", "strangers", "less", "yours", "can't", "everyone", "everyone's", "bother", "myself", "one", "more", "expect", "expect.", "rough"}
@@ -8,7 +9,7 @@ for i, (t0, d) in sorted(T.items(), key=lambda kv: kv[1][0]):
     base = i.split("#")[0]
     if base in SKIP: continue
     if not __import__("os").path.exists(f".words/{base}.json"): print("NO WORDS", base); continue
-    W = json.load(open(f".words/{base}.json"))["words"]
+    W = words(base)[0] if base != "mo_a" else json.load(open(f".words/{base}.json"))["words"]   # script spelling on ASR timing
     FIX = {"Uops,": "Oops!"}; W = [dict(w, text=FIX.get(w["text"], w["text"])) for w in W]
     who = "n" if base.startswith("n") else "c"
     chunk = []

@@ -4,7 +4,7 @@ Morning, how you doing?
 
 2
 00:00:02,648 --> 00:00:03,648
-Me too.
+Me too!
 
 3
 00:00:04,891 --> 00:00:06,601
@@ -19,245 +19,285 @@ Now you can see their weather.
 Except yours.
 
 6
-00:00:10,614 --> 00:00:13,314
-Rule 1, you can see everyone's inner weather.
+00:00:10,614 --> 00:00:11,444
+Rule one.
 
 7
+00:00:11,494 --> 00:00:13,314
+You can see everyone's inner weather.
+
+8
 00:00:13,629 --> 00:00:14,459
 Morning!
 
-8
+9
 00:00:14,509 --> 00:00:16,041
 Doing great!
 
-9
+10
 00:00:16,091 --> 00:00:17,591
 He was not doing great.
 
-10
-00:00:17,899 --> 00:00:19,479
-Rule two they can't.
-
 11
+00:00:17,899 --> 00:00:18,569
+Rule two.
+
+12
+00:00:18,619 --> 00:00:19,545
+They can't.
+
+13
 00:00:19,595 --> 00:00:20,595
 What cloud?
 
-12
+14
 00:00:20,670 --> 00:00:21,500
-Rule 3.
+Rule three.
 
-13
+15
 00:00:21,550 --> 00:00:23,770
 The only weather you can't see is your own.
 
-14
+16
 00:00:27,150 --> 00:00:28,220
 And you've had a week.
 
-15
+17
 00:00:28,270 --> 00:00:31,290
 Yours is probably the biggest storm on the island.
 
-16
+18
 00:00:32,497 --> 00:00:35,087
-Guess how many people down there are having a hard week?
+Guess how many people down there are having a hard week.
 
-17
+19
 00:00:35,137 --> 00:00:36,137
 Go on.
 
-18
+20
 00:00:40,246 --> 00:00:45,346
 People consistently underestimate how often others are going through hard times.
 
-19
+21
 00:00:45,482 --> 00:00:51,302
 Even close friends tended to underestimate how much negative emotion someone was feeling.
 
-20
+22
 00:00:51,550 --> 00:00:53,850
 So why does everyone look so fine?
 
-21
+23
 00:00:56,283 --> 00:00:57,433
 Ahoy!
 
-22
-00:00:57,483 --> 00:00:58,983
-Lovely day for it.
-
-23
-00:00:59,835 --> 00:01:03,175
-Morning Fresh Rolls Still warm.
-
 24
+00:00:57,483 --> 00:00:58,983
+Lovely day for it!
+
+25
+00:00:59,835 --> 00:01:00,585
+Morning!
+
+26
+00:01:00,635 --> 00:01:03,175
+Fresh rolls, still warm!
+
+27
 00:01:05,296 --> 00:01:09,676
 People report hiding their bad feelings far more often than their good ones.
 
-25
+28
 00:01:09,863 --> 00:01:13,363
 Which means the biggest storms are the ones nobody shows.
 
-26
+29
 00:01:14,027 --> 00:01:16,327
 So you decide to fix everyone's weather.
 
-27
-00:01:17,675 --> 00:01:19,895
-Oh Thank you, Anna.
-
-28
-00:01:20,881 --> 00:01:21,711
-Can't stop.
-
-29
-00:01:21,761 --> 00:01:22,761
-I'm fine.
-
 30
+00:01:17,675 --> 00:01:18,345
+Oh!
+
+31
+00:01:18,395 --> 00:01:19,895
+Thank you, Ana!
+
+32
+00:01:20,881 --> 00:01:21,711
+Can't stop!
+
+33
+00:01:21,761 --> 00:01:22,761
+I'm fine!
+
+34
 00:01:29,532 --> 00:01:30,182
 Oops!
 
-31
+35
 00:01:30,232 --> 00:01:31,162
 oops.
 
-32
+36
 00:01:31,212 --> 00:01:32,872
 I'm fine, really.
 
-33
+37
 00:01:33,214 --> 00:01:36,714
 The one helping everyone has the biggest storm on the island.
 
-34
+38
 00:01:38,163 --> 00:01:40,273
 She said she's fine.
 
-35
+39
 00:01:40,323 --> 00:01:41,343
 Leave it.
 
-36
-00:01:41,520 --> 00:01:45,420
-You know what fine means now, so you ask one more time, gently.
+40
+00:01:41,520 --> 00:01:42,910
+You know what fine means now.
 
-37
-00:01:47,512 --> 00:01:49,252
-I'm fine, really.
+41
+00:01:42,960 --> 00:01:44,430
+So you ask one more time.
 
-38
+42
+00:01:44,480 --> 00:01:45,480
+Gently.
+
+43
+00:01:47,512 --> 00:01:48,502
+I'm fine!
+
+44
+00:01:48,552 --> 00:01:49,552
+Really!
+
+45
 00:01:49,698 --> 00:01:50,958
-How are you really?
+How are you, really?
 
-39
+46
 00:01:51,707 --> 00:01:54,537
 Mum's moving off the island on Saturday.
 
-40
+47
 00:01:54,587 --> 00:01:57,177
 I'm packing the whole house.
 
-41
+48
 00:01:57,227 --> 00:01:58,697
 By myself.
 
-42
+49
 00:01:58,747 --> 00:02:00,807
 I didn't want to bother anyone.
 
-43
+50
 00:02:01,250 --> 00:02:02,510
 You tell her to ask.
 
-44
+51
 00:02:03,941 --> 00:02:06,051
 Nobody's free on a Saturday.
 
-45
+52
 00:02:06,101 --> 00:02:09,601
 I'd have to ask all twenty of them to get even a couple.
 
-46
+53
 00:02:14,051 --> 00:02:16,751
 Would anyone be able to help on Saturday?
 
-47
+54
 00:02:17,205 --> 00:02:18,090
 Of course.
 
-48
+55
 00:02:18,140 --> 00:02:20,006
 I'll bring sandwiches.
 
-49
+56
 00:02:20,056 --> 00:02:21,316
-I've got of ham.
+I've got a van.
 
-50
-00:02:22,671 --> 00:02:27,421
-In one experiment, people guessed they'd have to ask about 2 strangers to get five to
+57
+00:02:22,671 --> 00:02:27,261
+In one experiment, people guessed they'd have to ask about twenty strangers to get five
 
-51
-00:02:27,471 --> 00:02:28,861
-do a small favor.
+58
+00:02:27,311 --> 00:02:28,861
+to do a small favor.
 
-52
+59
 00:02:28,911 --> 00:02:30,491
-They needed about 10.
+They needed about ten.
 
-53
+60
 00:02:30,708 --> 00:02:35,088
 When people ask strangers for help, more people say yes than they expect.
 
-54
+61
 00:02:36,450 --> 00:02:37,360
 What about you?
 
-55
+62
 00:02:37,410 --> 00:02:38,830
 How are you, really?
 
-56
-00:02:43,307 --> 00:02:47,687
-A cloud not the biggest, not the smallest, just weather like everyone's.
+63
+00:02:43,307 --> 00:02:43,977
+A cloud.
 
-57
+64
+00:02:44,027 --> 00:02:44,857
+Not the biggest.
+
+65
+00:02:44,907 --> 00:02:45,977
+Not the smallest.
+
+66
+00:02:46,027 --> 00:02:47,687
+Just weather, like everyone's.
+
+67
 00:02:48,238 --> 00:02:51,978
 We may think we're more alone in our hard times than we really are.
 
-58
+68
 00:02:52,558 --> 00:02:55,418
 And for the first time all week, you don't say fine.
 
-59
+69
 00:02:59,667 --> 00:03:02,367
 On Saturday, the boxes weigh a lot less.
 
-60
+70
 00:03:05,723 --> 00:03:07,623
 Morning, how you doing?
 
-61
+71
 00:03:10,011 --> 00:03:11,801
 You'll never see anyone's weather.
 
-62
+72
 00:03:11,851 --> 00:03:16,761
 But you can ask how someone's doing, and if they say fine, ask one more time.
 
-63
+73
 00:03:16,811 --> 00:03:19,881
 And if you're the one under the storm, let someone help.
 
-64
+74
 00:03:19,931 --> 00:03:22,391
 More people say yes than you'd expect.
 
-65
+75
 00:03:24,413 --> 00:03:26,123
 Everyone's carrying some weather.
 
-66
+76
 00:03:26,173 --> 00:03:27,853
 You don't have to carry yours alone.

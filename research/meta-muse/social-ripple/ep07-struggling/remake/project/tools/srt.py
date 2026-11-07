@@ -1,9 +1,10 @@
 """Upload captions (.srt) from the word clocks: one cue per sentence (split if > 84 chars), speaker lines included."""
-import json, re
+import json, re, sys, os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); from script_words import words
 T = json.loads(re.search(r"window.DT = (\{.*?\});", open("assets/t.js").read()).group(1))
 FIX = {"Uops,": "Oops!"}; cues = []
 for lid, (t0, d) in sorted(T.items(), key=lambda kv: kv[1][0]):
-    W = json.load(open(f".words/{lid.split('#')[0]}.json"))["words"]; W = [dict(w, text=FIX.get(w["text"], w["text"])) for w in W]; cur = []
+    b = lid.split('#')[0]; W = words(b)[0] if b != "mo_a" else json.load(open(f".words/{b}.json"))["words"]; W = [dict(w, text=FIX.get(w["text"], w["text"])) for w in W]; cur = []
     for w in W:
         cur.append(w)
         if re.search(r"[.!?]$", w["text"]) or len(" ".join(x["text"] for x in cur)) > 84: cues.append([t0 + cur[0]["start"], t0 + cur[-1]["end"], " ".join(x["text"] for x in cur)]); cur = []
