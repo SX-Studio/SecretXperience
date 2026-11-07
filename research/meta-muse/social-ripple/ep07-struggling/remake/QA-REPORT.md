@@ -10,7 +10,7 @@ Two review passes: (1) per-shot contact sheets (65 shots × 2 stills, three roun
 | Face under captions | pass |
 | Head cut at the top of frame | pass |
 | Scene order (no shot of scene N after scene N+1 starts) | pass (three label-only items: beats that sit in the gap before the next line, by design) |
-| Loudness | −14 LUFS target (loudnorm) |
+| Loudness | −14.1 LUFS integrated (two-pass loudnorm on the final file) |
 
 ## Found by eye and fixed
 **Pass 1 (contact sheets)**
