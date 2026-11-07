@@ -53,12 +53,12 @@
 
   // =================== SC01 "Fine." ===================
   const t01 = SC.SC01, tPop = W("mo_b", 0.25), tWide = E("mo_b") + 0.25;
-  const sqCrowd = [[0, -60, 880, 0.42], [1, 230, 860, 0.4], [2, 480, 870, 0.44], [3, 1400, 865, 0.42], [4, 1660, 880, 0.44], [5, 1940, 870, 0.4], [6, 120, 1000, 0.55], [7, 1820, 1010, 0.55], [8, 760, 850, 0.36], [9, 1150, 850, 0.36]];
+  const sqCrowd = [[0, -60, 880, 0.42], [1, 230, 860, 0.4], [2, 480, 870, 0.44], [3, 1400, 865, 0.42], [4, 1660, 880, 0.44], [5, 1940, 870, 0.4], [6, 250, 1000, 0.55], [7, 1700, 1010, 0.55], [8, 760, 850, 0.36], [9, 1150, 850, 0.36]];
   shot(t01, "square", C(900, 560, 1.15, 900, 540, 1.22, "lin"), Object.assign({ you: Pp(0.27, 0.40, 0.30, 1), mo: Pp(0.70, 0.42, 0.17, -1) }, crowd(sqCrowd.slice(0, 6))), 1, "SC01 depth-two");
   Lips("mo", "mo_a"); Lips("mo", "mo_b"); M("mo", 0, "happy"); Po("mo", 0, "wave"); Po("mo", E("mo_a"), "relaxed", 0.4);
   M("you", 0, "content"); Po("you", W("mo_a", 0.6), "thumbsUp", 0.22); Sq("you", W("mo_a", 0.6), 0.06); M("you", W("mo_a", 0.6), "grin", 0.2);
-  Dr.weather("mo", [[0, 2.6]], tPop, 1.3); M("you", tPop + 0.08, "shock", 0.2, "back"); Po("you", tPop + 0.08, "flinch", 0.18); Sq("mo", tPop, 0.06);
-  shot(tWide, "square", C(560, 650, 1.9, 960, 540, 1.0, "out"), Object.assign({ you: Wd(560, 960, 0.62, 1), mo: Wd(1560, 950, 0.6, -1), ana: Wd(1020, 880, 0.42, -1, { wx2: 0, walk: 1 }) }, crowd(sqCrowd)), 1, "SC01 crowd-reveal");
+  Dr.weather("mo", [[0, 2.6]], tPop, 1.3); M("you", tPop + 0.08, "shock", 0.2, "back"); Po("you", tPop + 0.08, "flinch", 0.18); Po("you", tPop + 0.75, "relaxed", 0.45, "inOut"); Sq("mo", tPop, 0.06);
+  shot(tWide, "square", C(600, 700, 1.5, 960, 540, 1.0, "out"), Object.assign({ you: Wd(560, 960, 0.62, 1), mo: Wd(1560, 950, 0.6, -1), ana: Wd(800, 880, 0.42, -1, { wx2: -250, walk: 1 }) }, crowd(sqCrowd)), 1, "SC01 crowd-reveal");
   // Ana crosses behind with her box stack (the plant)
   A.ana.keys.x.push(); prop("ana", tWide, "boxstack"); Po("ana", tWide, "carry", 0); M("ana", 0, "happy");
   const lvMix = [0, 1, 0, 4, 0, 1, 0, 2.6, 1, 0];
@@ -216,11 +216,11 @@
 
   // overlays (screen space): rule card, phone, list, POV "?", cards
   const rules = SETS.ruleCard(hud), phone = SETS.phone(hud), list = SETS.list(hud);
-  const pov = el("g", { opacity: 0 }, hud); el("path", { d: "M860,520 C800,520 800,460 860,460 C870,410 950,400 970,450 C1010,430 1060,470 1040,520 Z", fill: "none", stroke: "#3a2e2a", "stroke-width": 6, "stroke-dasharray": "14 12" }, pov); el("text", { x: 930, y: 505, "text-anchor": "middle", "font-family": "Fredoka", "font-weight": 700, "font-size": 70, fill: "#3a2e2a" }, pov).textContent = "?";
+  const pov = el("g", { opacity: 0, transform: "translate(950,470) scale(2.2) translate(-950,-470)" }, hud); el("path", { d: "M860,520 C800,520 800,460 860,460 C870,410 950,400 970,450 C1010,430 1060,470 1040,520 Z", fill: "none", stroke: "#3a2e2a", "stroke-width": 6, "stroke-dasharray": "14 12" }, pov); el("text", { x: 930, y: 505, "text-anchor": "middle", "font-family": "Fredoka", "font-weight": 700, "font-size": 70, fill: "#3a2e2a" }, pov).textContent = "?";
   const grade = el("rect", { x: 0, y: 0, width: 1920, height: 1080, style: "mix-blend-mode:multiply", "pointer-events": "none" }, svg);
   const flash = el("rect", { x: 0, y: 0, width: 1920, height: 1080, fill: "#fff", opacity: 0, "pointer-events": "none" }, svg);
   const caps = K.captions(hud, window.CAPS || []); SR.paperGrain(svg);
-  const tag = K.tag(svg, "YOU", { fs: 34 });
+  const tag = K.tag(svg, "YOU", { fs: 34 }), bubYou = K.bubble(hud, "Fine!", { fs: 54 });
   Dr.compile();
   // prop visibility tracks
   const propAt = (n, t) => { let k = null; for (const [t0, kk] of PROPK[n]) if (t >= t0) k = kk; return k; };
@@ -237,6 +237,8 @@
     // YOU tag: first appearances only (SC01-SC02), never over faces
     const ya = Dr.actors.you; const showTag = t < SC.SC03 && ya.c.g.getAttribute("display") !== "none" && !/eyes|POV/.test(s.tag || ""); tag.setAttribute("display", showTag ? "inline" : "none");
     if (showTag) { const [hx, hy] = Dr.toScreen(cam, ya.c.joints.headX, ya.c.joints.headY); tag.setAttribute("transform", `translate(${hx.toFixed(1)},${(hy - ya.c.joints.headR * cam.z - 40).toFixed(1)})`); }
+    { const bk = K.win(t, W("mo_a", 0.55), S("mo_b") + 0.45, 0.12, 0.2), ya2 = Dr.actors.you; bubYou.setAttribute("opacity", bk.toFixed(2));
+      if (bk > 0) { const [hx, hy] = Dr.toScreen(cam, ya2.c.joints.headX, ya2.c.joints.headY), hr = ya2.c.joints.headR * cam.z; bubYou.setAttribute("transform", `translate(${(hx + hr * 0.7 + 90).toFixed(1)},${(hy - hr - 50).toFixed(1)}) scale(${K.back(Math.min(1, bk * 1.4)).toFixed(3)})`); } }
     // overlays
     const cardK = (a, b) => K.win(t, a, b, 0.2, 0.25);
     const r1 = cardK(S("n03") - 0.3, E("n03") + 0.2), r2 = cardK(S("n04") - 0.2, E("n04") + 0.2), r3 = cardK(S("n05") - 0.2, E("n05") + 0.3), rf = cardK(tFine, tFine + 1.8);
