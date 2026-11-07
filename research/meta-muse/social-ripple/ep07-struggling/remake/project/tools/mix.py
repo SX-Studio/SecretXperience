@@ -52,7 +52,7 @@ for e in F["steps"]:
 nm = ["pop", "tick", "whoosh_a", "whoosh_b", "whoosh_c", "gold_chime", "shimmer", "boom", "shop_bell", "gull", "scribble", "swoosh_send", "tap", "sparkle", "heartbeat", "paper", "stamp", "typing", "door_slam", "thunk", "clink", "ding", "boat_horn"]
 X = {n: sfx(n) for n in nm}; popS = lpf(X["pop"], 2600); knock = lpf(X["thunk"], 1800)
 put(FOL, X["paper"], 0.0, -20)                                                       # paper-flick on frame 0
-put(FOL, X["pop"], W("mo_a", 0.6), -18, -0.4)                                        # YOU's thumb snaps up
+put(FOL, X["pop"], E("mo_a") + 0.02, -18, -0.4)                                        # YOU's thumb snaps up
 put(FOL, popS, MK["tPop"] - 0.03, -15, 0.4)                                          # Mo's cloud pops in
 for j in range(10): put(FOL, popS, MK["tWide"] + 0.35 + j * 0.17, -19 - j * 0.3, [-0.6, -0.3, 0, 0.5, 0.6, 0.6, -0.6, 0.5, -0.1, 0.2][j])
 put(FOL, X["tick"], MK["tPOV"], -16)                                                 # the "?" above you

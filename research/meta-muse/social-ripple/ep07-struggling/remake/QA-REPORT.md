@@ -39,7 +39,7 @@ Two review passes: (1) per-shot contact sheets (65 shots × 2 stills, three roun
 J1, J3, J4, H1, n22, J5 and n28 are verbatim from SCENE-CARDS.md / RESEARCH.md. "Ask one more time" is labelled as our suggestion in the description.
 
 **Pass 3 (your note: "the start was a little weird")**, from a frame-by-frame look at the first 14 s (every 0.25 s):
-- **"How you doing?" → "Me too!" answered nothing:** YOU's only reply was a silent thumbs-up. YOU now answers in a **"Fine!" speech bubble** (YOU never speaks aloud), so Mo's "Me too!" lands, and the lie is planted in the first two seconds.
+- **"How you doing?" → "Me too!" answered nothing:** YOU's only reply was a silent thumbs-up. YOU now answers in a **"Fine!" speech bubble** (YOU never speaks aloud), which pops right after the question and before "Me too!", so Mo's "Me too!" lands, and the lie is planted in the first two seconds.
 - **YOU froze in the flinch for 5 s** (one leg in the air through the next shot) → the flinch now relaxes after 0.75 s.
 - **The crowd reveal opened on a stranger's half-cropped face** → it now opens on YOU's face, and the foreground extras moved in from the frame edges.
 - **Ana's box stack walked through the fountain** → she crosses on the open side.
