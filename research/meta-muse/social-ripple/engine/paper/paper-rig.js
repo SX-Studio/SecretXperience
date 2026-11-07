@@ -42,7 +42,7 @@
     const lB = { thigh: cap(legB, PTd, LEGW), shin: cap(legB, PTd, LEGW - 4), shoe: el("path", { fill: dark(s.shoes, 0.15) }, legB) }, lF = { thigh: cap(legF, PT, LEGW), shin: cap(legF, PT, LEGW - 4), shoe: el("path", { fill: s.shoes }, legF) };
     const torso = el("path", { fill: SH }, body), torsoShade = el("path", { fill: SHd, opacity: 0.35 }, body), collar = el("path", { fill: light(SH, 0.35) }, body);
     const neck = el("rect", { width: 34, height: 40, rx: 12, fill: SKd }, neckG);
-    const head = el("circle", { r: HR, fill: SK }, headL), hairBack = el("path", { fill: s.hair }, headL);
+    const head = el("circle", { r: HR, fill: SK }, headL), hairBack = el("path", { fill: s.hair }, headL); headL.insertBefore(hairBack, head);   // back hair BEHIND the face (long hair used to cover it)
     const hairFront = el("path", { fill: s.hair }, hairL), hairHi = el("path", { fill: light(s.hair, 0.3), opacity: 0.6 }, hairL);
     // ---- face (paper) ----
     const F = el("g", {}, faceL), cheeks = [-1, 1].map((d) => el("circle", { cx: d * 48, cy: 30, r: 15, fill: "#F28C8C", opacity: 0 }, F));
@@ -58,7 +58,7 @@
     const tears = [-1, 1].map(() => el("path", { fill: "#7EC8FF", opacity: 0 }, F));
     // ---- motion helpers ----
     const xs = s.x || [[0, 0]], T_END = Math.max(30, xs[xs.length - 1][0] + 5), dist = [];
-    { let d = 0, px = sampleTrack(xs, 0, 0); for (let i = 0; i <= T_END * 60; i++) { const xv = sampleTrack(xs, i / 60, 0); d += Math.abs(xv - px); px = xv; dist.push(d); } }
+    { let d = 0, px = sampleTrack(xs, 0, 0); for (let i = 0; i <= T_END * 60; i++) { const xv = sampleTrack(xs, i / 60, 0), dx = Math.abs(xv - px); d += dx > 60 ? 0 : dx; px = xv; dist.push(d); } }
     const distAt = (t) => { const i = clamp(t * 60, 0, dist.length - 1), i0 = Math.floor(i); return lerp(dist[i0], dist[Math.min(dist.length - 1, i0 + 1)], i - i0); };
     const speedAt = (t) => Math.abs(distAt(t + 0.05) - distAt(t - 0.05)) / 0.1;
     const poseOf = (n) => Object.assign({}, BASE, POSES[n] || {}), moodOf = (n) => Object.assign({}, FXD, SR.F5of(n));
@@ -81,7 +81,7 @@
     function update(t) {
       const x = sampleTrack(xs, t, 0), y = sampleTrack(s.y, t, 900), facing = sampleTrack(s.facing, t, 1) >= 0 ? 1 : -1, sc = sampleTrack(s.scaleT, t, s.scale), vis = sampleTrack(s.opacity, t, 1);
       const P = blend(s.pose, t, "stand", poseOf), D = blend(s.mood, t, "neutral", moodOf), look = sampleTrack(s.look, t, { x: 0, y: 0 });
-      const spd = speedAt(t), w = clamp(spd / (150 * sc), 0, 1) * (s.noWalk ? 0 : 1), stride = 150 * sc, ph = (distAt(t) / stride) * Math.PI * 2, sw = Math.sin(ph);
+      const spd = speedAt(t), w = clamp(spd / (150 * sc), 0, 1) * (s.noWalk ? 0 : 1) * sampleTrack(s.walkOn || [[0, 1]], t, 1), stride = 150 * sc, ph = (distAt(t) / stride) * Math.PI * 2, sw = Math.sin(ph);
       P.hipF += 28 * sw * w; P.hipB -= 28 * sw * w; P.knF -= 40 * Math.max(0, Math.cos(ph)) * w; P.knB -= 40 * Math.max(0, -Math.cos(ph)) * w; P.shF -= 22 * sw * w; P.shB += 22 * sw * w; P.elF += 16 * w; P.elB += 16 * w; P.lean += 3 * w;
       const bob = -Math.abs(Math.cos(ph)) * 5 * w, breath = Math.sin(t * 2 * Math.PI / 3.6 + s.seed) * 3.5 * (1 - w);
       let squash = 0, hop = 0; if (s.mood) for (const [t0] of s.mood) { const k = (t - t0) / 0.3; if (k > 0 && k < 1) squash += Math.sin(k * Math.PI) * 0.04; }
