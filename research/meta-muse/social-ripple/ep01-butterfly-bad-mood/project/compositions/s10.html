@@ -1,0 +1,75 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #s10-svg { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+    #s10-svg text { font-family: "Outfit"; }
+  </style>
+  <div id="root" data-composition-id="s10" data-width="1920" data-height="1080">
+    <svg id="s10-svg" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" data-layout-ignore></svg>
+  </div>
+  <script>
+    (function () {
+      const SR = window.SR; const { el, Set, Character, Camera, Ripple, Butterfly, PAL, EASE, clamp, sampleTrack, drive } = SR;
+      const svg = document.getElementById("s10-svg");
+      const D = 17.0, G = 760, LANE = 1010;
+      const world = el("g", {}, svg);
+      const bg = el("g", {}, world), road = el("g", {}, world), mid = el("g", {}, world), fx = el("g", {}, world);
+      Set.sky(bg, "noon", 1920, 1080); el("rect", { x: -600, y: -400, width: 3200, height: 560, fill: "#CDE4EC" }, bg); Set.sun(bg, 1720, 140, 80, "#FFF1C9");
+      Set.building(bg, -300, 500, 520, G, PAL.sage, { cols: 3 });
+      Set.shopfront(bg, 200, 520, G, PAL.terracotta, null, { awning: PAL.teal });
+      Set.building(bg, 720, 520, 600, G, PAL.sand, { cols: 3 });
+      Set.building(bg, 1240, 420, 480, G, PAL.plum, { cols: 3 });
+      Set.building(bg, 1660, 560, 640, G, PAL.slate, { cols: 3 });
+      Set.tree(bg, 1180, G, 0.8);
+      Set.street(bg, G, 3200); el("rect", { x: -600, y: G, width: 600, height: 600, fill: PAL.street }, bg); el("rect", { x: -600, y: G, width: 3200, height: 70, fill: PAL.walk }, bg);
+      Set.crosswalk(road, 1420, G, 360, 6);
+      const door = Set.door(mid, 610, G, PAL.wood);
+      Set.bench(mid, 840, 240, G + 50);
+      // vignette 1: someone holds the door
+      const holder = Character(mid, { id: "s10-h", color: PAL.forest, hair: "bun", seed: 91, x: [[0, 720]], y: [[0, G + 50]], facing: [[0, -1]], pose: [[0, "relaxed", 0], [1.7, "give", 0.3]], mood: [[0, "content", 0], [1.9, "happy", 0.3]] });
+      const goer = Character(mid, { id: "s10-g", color: PAL.rose, hair: "long", seed: 92, scale: 0.95, x: [[0, 300], [3.6, 610, "inOut"]], y: [[0, G + 50]], pose: [[0, "relaxed", 0]], mood: [[0, "content", 0], [2.2, "joy", 0.3]], prop: { kind: "bag" } });
+      // vignette 2: a kid on the bench, drawing a terrible picture for grandpa
+      const kid = Character(mid, { id: "s10-k", color: "#6BA8D9", hair: "cap", hairColor: PAL.rude, seed: 2, scale: 0.7, x: [[0, 900]], y: [[0, G + 50]], pose: [[0, "sitPhone", 0], [2.9, "give", 0.3]], mood: [[0, "content", 0], [3.0, "joy", 0.3]], prop: { kind: "note" } });
+      const gramps = Character(mid, { id: "s10-gp", color: PAL.slate, hair: "short", hairColor: "#D9D4CC", glasses: true, seed: 66, x: [[0, 1060]], y: [[0, G + 50]], facing: [[0, -1]], pose: [[0, "sit", 0]], mood: [[0, "neutral", 0], [3.3, "joy", 0.3]] });
+      // vignette 3: a car stops and lets someone cross
+      const carG = el("g", {}, road);
+      Set.car(carG, 0, 0, PAL.teal, 1);
+      const carX = [[0, 400], [4.2, 1180, "out"]];
+      const walker = Character(mid, { id: "s10-w", color: PAL.mustard, hair: "curly", seed: 93, x: [[0, 1580], [4.4, 1580], [6.0, 1620]], y: [[0, G + 40], [4.4, G + 40], [6.0, G + 260]], scaleT: [[0, 0.9], [6.0, 1.05]], pose: [[0, "relaxed", 0], [4.5, "wave", 0.3]], mood: [[0, "neutral", 0], [4.6, "happy", 0.3]], facing: [[0, -1]] });
+      const rings = [Ripple(fx, { color: PAL.kind, t: 2.0, dur: 1.4, maxR: 260, rings: 3, width: 9 }), Ripple(fx, { color: PAL.kind, t: 2.9, dur: 1.4, maxR: 260, rings: 3, width: 9 }), Ripple(fx, { color: PAL.kind, t: 4.45, dur: 1.4, maxR: 260, rings: 3, width: 9 })];
+      const links = [el("path", { fill: "none", stroke: PAL.kind, "stroke-width": 8, "stroke-linecap": "round" }, fx), el("path", { fill: "none", stroke: PAL.kind, "stroke-width": 8, "stroke-linecap": "round" }, fx)];
+      // ---- the card ----
+      const card = el("g", { opacity: 0 }, svg);
+      el("rect", { x: 0, y: 0, width: 1920, height: 1080, fill: "#FBF4EA", opacity: 0.93 }, card);
+      const glow = [0, 1, 2].map(() => el("circle", { cx: 960, cy: 470, r: 0, fill: "none", stroke: PAL.kind, "stroke-width": 8, opacity: 0 }, card));
+      const line = (s, y, size, col, w) => { const g = el("g", { opacity: 0 }, card); const t = el("text", { x: 0, y: 0, "text-anchor": "middle", "dominant-baseline": "central", "font-family": "Outfit", "font-weight": w || 900, "font-size": size, fill: col, "letter-spacing": "-2" }, g); t.textContent = s; return { g, t, y }; };
+      const l1 = line("NOTHING YOU DO", 380, 150, PAL.ink), l2 = line("STAYS WITH YOU.", 550, 150, PAL.ink);
+      const q = line("Who's in your three degrees? Tell us below.", 720, 52, "#5B4A3E", 800); q.t.setAttribute("font-family", "Nunito");
+      const brand = el("g", { opacity: 0 }, card);
+      [34, 22, 12].forEach((r, i) => el("circle", { cx: 0, cy: 0, r, fill: "none", stroke: i === 2 ? PAL.ink : PAL.kind, "stroke-width": i === 2 ? 0 : 6 - i }, brand));
+      el("circle", { cx: 0, cy: 0, r: 10, fill: PAL.ink }, brand);
+      const bt = el("text", { x: 52, y: 2, "dominant-baseline": "central", "font-family": "Outfit", "font-weight": 900, "font-size": 54, fill: PAL.ink, "letter-spacing": "-1" }, brand); bt.textContent = "Social Ripple";
+      // the butterfly lands on the "O" of the last "YOU"
+      const bf = Butterfly(card, { x: [[0, -140], [10.6, -140], [11.6, 520], [12.4, 1240], [12.9, 1318, "out"]], y: [[0, 300], [10.6, 300], [11.6, 220], [12.4, 400], [12.9, 482, "out"]], rotT: [[0, -10], [12.4, 6], [12.9, 14]], scale: 1.4, flap: 3.2 });
+      const cam = Camera(world, [[0, { x: 960, y: 640, z: 1.05, r: 0 }], [6.0, { x: 1000, y: 650, z: 1.15, r: 0 }, "linear"], [D, { x: 1000, y: 650, z: 1.25, r: 0 }, "linear"]]);
+      const tl = gsap.timeline({ paused: true });
+      drive(tl, D, (t) => {
+        cam.update(t);
+        door.open(clamp((t - 1.6) / 0.4, 0, 1) * (1 - clamp((t - 4.4) / 0.5, 0, 1)));
+        const cx = sampleTrack(carX, t, 0); carG.setAttribute("transform", `translate(${cx},${LANE})`);
+        const h = holder.update(t), g = goer.update(t), k = kid.update(t), gp = gramps.update(t), w = walker.update(t);
+        const P = [{ x: h.headX, y: h.headY }, { x: k.headX, y: k.headY }, { x: w.headX, y: w.headY }];
+        rings.forEach((r, i) => r.update(t, P[i]));
+        links.forEach((lk, i) => { const a = P[i], b = P[i + 1], kk = clamp((t - 5.0 - i * 0.3) / 0.6, 0, 1); lk.setAttribute("d", `M${a.x},${a.y} Q${(a.x + b.x) / 2},${Math.min(a.y, b.y) - 200} ${b.x},${b.y}`); const len = 900; lk.setAttribute("stroke-dasharray", `${kk * len} 2000`); lk.setAttribute("opacity", kk > 0 ? 1 : 0); });
+        const kc = clamp((t - 6.0) / 0.5, 0, 1);
+        card.setAttribute("opacity", kc);
+        [l1, l2].forEach((L, i) => { const kk = clamp((t - 6.2 - i * 0.45) / 0.35, 0, 1); L.g.setAttribute("opacity", kk); const sq = kk > 0.6 && kk < 1 ? 1 - Math.sin(((kk - 0.6) / 0.4) * Math.PI) * 0.1 : 1; L.g.setAttribute("transform", `translate(960,${L.y - (1 - EASE.back(kk)) * 200}) scale(${2 - sq},${sq})`); });
+        const kq = clamp((t - 7.5) / 0.5, 0, 1); q.g.setAttribute("opacity", kq); q.g.setAttribute("transform", `translate(960,${q.y + (1 - EASE.out(kq)) * 30})`);
+        const kb = clamp((t - 13.0) / 0.6, 0, 1); brand.setAttribute("opacity", kb); brand.setAttribute("transform", `translate(${960 - 190},${900}) scale(${0.85 + 0.15 * EASE.back(kb)})`);
+        glow.forEach((gl, i) => { const kk = Math.max(0, (((t - 6.6 - i * 1.6) % 4.8) + 4.8) % 4.8) / 4.8; gl.setAttribute("r", 120 + kk * 900); gl.setAttribute("opacity", t > 6.6 + i * 1.6 ? (1 - kk) * 0.35 : 0); });
+        bf.update(t);
+      });
+      window.__timelines["s10"] = tl;
+    })();
+  </script>
+</template>

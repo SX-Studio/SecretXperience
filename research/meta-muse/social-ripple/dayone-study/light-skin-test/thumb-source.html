@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=1280, height=720" />
+<script src="assets/sr-engine-v1.js"></script><script src="assets/sr-v3.js"></script><script src="assets/lips.js"></script><script src="assets/ep2-sets.js"></script><script src="assets/v3-fx.js"></script><script src="assets/cine.js"></script>
+<style>* { margin: 0; padding: 0; } html, body { width: 1280px; height: 720px; overflow: hidden; background: #08070B; } #root { position: relative; width: 1280px; height: 720px; } #art { position: absolute; inset: 0; width: 1280px; height: 720px; }
+#t { position: absolute; left: 34px; top: 18px; font-family: "Permanent Marker"; font-size: 118px; line-height: 1; color: #FFFFFF; transform: rotate(-3deg); letter-spacing: 0.01em; text-shadow: 0 6px 0 #000, 0 0 30px rgba(0,0,0,0.9); }</style></head>
+<body><div id="root" data-composition-id="main" data-start="0" data-duration="1" data-width="1280" data-height="720" data-no-timeline>
+<svg id="art" viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" data-layout-ignore></svg><div id="t">SEAT TAKEN?</div></div>
+<script>
+(function () {
+  const SR = window.SR, EP = window.EP, C = window.CINE; const { el, Character } = SR;
+  SR.SKIN = "#F1EBDD"; const svg = document.getElementById("art"), d = svg.querySelector("defs") || el("defs", {}, svg);
+  el("rect", { x: 0, y: 0, width: 1280, height: 720, fill: "#09080C" }, svg);
+  // receding empty table + chairs, faintly lit, defocused
+  const bg = el("g", { filter: C.blur(svg, 3.5) }, svg);
+  el("path", { d: "M380,470 L1280,410 L1280,470 L380,520 Z", fill: "#3A2E26" }, bg);
+  el("path", { d: "M380,520 L1280,470 L1280,490 L380,540 Z", fill: "#211A16" }, bg);
+  for (let i = 0; i < 6; i++) { const x = 560 + i * 125, s = 1 - i * 0.08, y = 450 - i * 9; el("rect", { x, y: y - 150 * s, width: 22 * s, height: 150 * s, rx: 6, fill: "#5A4630", opacity: 0.9 - i * 0.1 }, bg); el("rect", { x: x - 10, y: y - 20 * s, width: 70 * s, height: 12 * s, rx: 4, fill: "#5A4630", opacity: 0.9 - i * 0.1 }, bg); }
+  C.pool(svg, bg, 900, 300, 520, 300, "#FFB060", 0.16);
+  // warm overhead light cone in the distance
+  C.shaft(svg, svg, "820,0 980,0 1180,520 620,520", "#FFD9A0", 0.10);
+  // Jordan, big, close-up, looking down at the phone
+  const fig = el("g", {}, svg);
+  const j = Character(fig, EP.cast("jordan", { id: "td-j", scale: 3.1, x: [[0, 330]], y: [[0, 1090]], noWalk: true, facing: [[0, 1]], pose: [[0, "phone", 0]], prop: { kind: "phone" }, mood: [[0, "worried", 0]], look: [[0, { x: 0.6, y: 0.75 }]] }));
+  fig.setAttribute("filter", C.rim(svg, "#FF7A5A", 6, -3, 2.2, 0.55));
+  const c = j.update(0.3);
+  // red phone glow lighting the face from below
+  const glow = el("g", { style: "mix-blend-mode:screen" }, svg);
+  C.pool(svg, glow, c.handX + 10, c.handY - 30, 230, 200, "#FF3B30", 0.75);
+  C.pool(svg, glow, c.headX + 40, c.headY + 90, 170, 120, "#FF6A4A", 0.55);
+  // light falloff for pale skin: multiply a radial gradient centred on the phone (red near it, deep purple shadow away from it)
+  { const rg = el("radialGradient", { id: "phl", cx: c.handX - 10, cy: c.handY - 60, r: 720, gradientUnits: "userSpaceOnUse" }, d);
+    [[0, "#FFC6AE"], [0.3, "#EE8A90"], [0.66, "#8E5A7A"], [1, "#3A2840"]].forEach(([o, col]) => el("stop", { offset: o, "stop-color": col }, rg));
+    el("rect", { x: 0, y: 0, width: 1280, height: 720, fill: "url(#phl)", style: "mix-blend-mode:multiply" }, svg); }
+  // the phone screen itself, with laughing reactions
+  const ph = el("g", { transform: `translate(${c.handX - 6},${c.handY - 70}) rotate(-12)` }, svg);
+  el("rect", { x: -48, y: -84, width: 96, height: 168, rx: 14, fill: "#111", stroke: "#000", "stroke-width": 4 }, ph);
+  el("rect", { x: -40, y: -74, width: 80, height: 148, rx: 8, fill: "#FF5A48" }, ph);
+  ["😂", "💀", "😂"].forEach((e, i) => EP.txt(ph, -14 + (i % 2) * 26, -42 + i * 40, e, 26, "#fff"));
+  el("g", { filter: C.bloom(svg, 10, 1.4) }, svg).appendChild(ph.cloneNode(true));
+  // glossy, wet eyes + sweat drop
+  const fx = el("g", {}, svg);
+  const eyeY = c.headY - 3.1 * 5, eyeX = c.headX + 3.1 * 7;
+  [[-14, 0], [14, 0]].forEach(([dx]) => { el("ellipse", { cx: eyeX + dx * 3.1 - 8, cy: eyeY - 14, rx: 8, ry: 5, fill: "#FFFFFF", opacity: 0.95 }, fx); el("path", { d: `M${eyeX + dx * 3.1 - 28},${eyeY + 40} q30,10 58,0`, stroke: "#9FE0FF", "stroke-width": 5, fill: "none", "stroke-linecap": "round", opacity: 0.85 }, fx); });
+  el("path", { d: `M${c.headX - 95},${c.headY - 70} q-18,30 0,44 q18,-14 0,-44 z`, fill: "#BFE6FF", stroke: "#0B0A0E", "stroke-width": 3 }, fx);
+  el("circle", { cx: c.headX - 99, cy: c.headY - 40, r: 4, fill: "#fff" }, fx);
+  const post = el("g", { transform: "scale(0.6667,0.6667)" }, svg); window.V3.grade(svg, post, { light: "#FF8A5A", lightK: 0.2, shadowK: 0.5, vignette: 0.75 });
+  SR.Butterfly(el("g", { opacity: 0.6 }, svg), { x: [[0, 1245]], y: [[0, 690]], scale: 0.35, flap: 2 }).update(0.2);
+})();
+</script></body></html>

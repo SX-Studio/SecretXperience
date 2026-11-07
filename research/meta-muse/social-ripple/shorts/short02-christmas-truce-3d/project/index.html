@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script src="assets/three.min.js"></script>
+    <script src="assets/sr-engine-v1.js"></script>
+    <script src="assets/sr-v3.js"></script>
+    <script src="assets/lips.js"></script>
+    <script src="assets/t.js"></script>
+    <script src="assets/ep2-sets.js"></script>
+    <script src="assets/v3-fx.js"></script>
+    <script src="assets/cine.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #0B0A12; }
+      #root { width: 1080px; height: 1920px; position: relative; overflow: hidden; background: #0B0A12; }
+      #bg, #ov, #hud { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; display: block; }
+      #gm { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; mix-blend-mode: multiply; }
+      #warm { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; mix-blend-mode: soft-light; background: linear-gradient(0deg, rgba(255,170,90,0.55) 0%, rgba(255,170,90,0) 55%); }
+      #vig { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; background: radial-gradient(ellipse 80% 62% at 50% 46%, rgba(18,12,26,0) 58%, rgba(18,12,26,0.55) 100%); }
+      #hud text, #ov text { font-family: "Nunito"; }
+      #fontwarm { position: absolute; left: -9999px; top: 0; font-family: "Outfit"; font-weight: 900; }
+      #fontwarm b { font-family: "Nunito"; font-weight: 900; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="51.81" data-width="1080" data-height="1920">
+      <div id="fontwarm" data-layout-ignore>Aa <b>Aa</b></div>
+      <canvas id="bg" width="1080" height="1920" data-layout-ignore></canvas>
+      <svg id="ov" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg" data-layout-ignore></svg>
+      <div id="gm" data-layout-ignore></div>
+      <div id="warm" data-layout-ignore></div>
+      <div id="vig" data-layout-ignore></div>
+      <svg id="hud" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg" data-layout-ignore></svg>
+      <audio id="mix" class="clip" src="assets/mix.wav" data-start="0" data-duration="51.81" data-track-index="2" data-volume="1"></audio>
+    </div>
+    <script>
+    (function () {
+      const SR = window.SR, EP = window.EP, T = window.T, WD = window.WORDS, TH = window.THREE;
+      const { el, Character, clamp, EASE, sampleTrack, mulberry32 } = SR;
+      SR.SKIN = "#F1EBDD";
+      const FW = 1080, FH = 1920, D = T.D, PXM = 171, INK = "#1E1B22";
+      const Wd = (w, nth = 0, line) => { let k = 0; for (const x of WD) { if ((!line || x[3] === line) && x[0].toLowerCase().replace(/[^a-z0-9']/g, "") === w) { if (k === nth) return x[1]; k++; } } return 0; };
+      const txt = (p, x, y, s, size, fill, o = {}) => EP.txt(p, x, y, s, size, fill, o);
+      const lerp = (a, b, k) => a + (b - a) * k, sstep = (k) => k * k * k * (k * (k * 6 - 15) + 10);
+      const tCand = Wd("candles"), tTrees = Wd("trees"), tSing = Wd("singing"), tBrit = Wd("british"), tBack = Wd("back"), tMerry = Wd("merry"), tClimb = Wd("climbs"), tUnarm = Wd("unarmed"), tNob = Wd("nobody");
+      const tWent = Wd("went"), tCopied = Wd("copied"), tMiles = Wd("miles"), tCig = Wd("cigarettes"), tBut = Wd("buttons"), tBur = Wd("buried"), tKick = Wd("kicked"), tBall = Wd("ball"), tBeef = Wd("beef");
+      const tFur = Wd("furious"), tNextX = Wd("next", 0, "t1"), tArt = Wd("artillery"), tSome = Wd("somebody");
+      const CUT_HQ = T.t1, CUT_15 = tArt - 0.06;
+
+      // ======================= THREE: renderer + passes =======================
+      const canvas = document.getElementById("bg");
+      const renderer = new TH.WebGLRenderer({ canvas, antialias: false, preserveDrawingBuffer: true, powerPreference: "high-performance" });
+      renderer.setPixelRatio(1); renderer.setSize(FW, FH, false);
+      const rtC = new TH.WebGLRenderTarget(FW, FH, { type: TH.HalfFloatType, samples: 4 });
+      const rtN = new TH.WebGLRenderTarget(FW, FH, { type: TH.HalfFloatType, minFilter: TH.NearestFilter, magFilter: TH.NearestFilter });
+      const scene = new TH.Scene();
+      const fog = new TH.Fog(0x1b2246, 14, 70); scene.fog = fog;
+      const cam = new TH.PerspectiveCamera(40, FW / FH, 0.05, 900);
+      const ndMat = new TH.ShaderMaterial({ blending: TH.NoBlending,
+        vertexShader: `varying vec3 vN; varying float vD; void main(){ vec4 p = vec4(position,1.0); vec3 n = normal;
+          #ifdef USE_INSTANCING
+            p = instanceMatrix * p; n = mat3(instanceMatrix) * n;
+          #endif
+          vec4 mv = modelViewMatrix * p; vN = normalize(normalMatrix * n); vD = -mv.z; gl_Position = projectionMatrix * mv; }`,
+        fragmentShader: `varying vec3 vN; varying float vD; void main(){ gl_FragColor = vec4(normalize(vN)*0.5+0.5, vD/1000.0); }` });
+      const comp = new TH.ShaderMaterial({
+        uniforms: { tC: { value: rtC.texture }, tN: { value: rtN.texture }, res: { value: new TH.Vector2(FW, FH) }, focus: { value: 10 }, dofR: { value: 0 }, inkK: { value: 0.9 }, inkNear: { value: 18 }, inkFar: { value: 70 }, inkCol: { value: new TH.Color("#1E1830") } },
+        vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`,
+        fragmentShader: `uniform sampler2D tC; uniform sampler2D tN; uniform vec2 res; uniform float focus, dofR, inkK, inkNear, inkFar; uniform vec3 inkCol; varying vec2 vUv;
+          float dep(vec2 uv){ return max(texture2D(tN, uv).a * 1000.0, 0.01); }
+          vec3 nor(vec2 uv){ return texture2D(tN, uv).rgb * 2.0 - 1.0; }
+          float cocAt(float d){ return clamp(abs(d - focus) / max(focus, 0.5), 0.0, 1.0) * dofR; }
+          void main(){
+            vec2 px = 1.0 / res; float d0 = dep(vUv); vec3 n0 = nor(vUv);
+            vec3 col = texture2D(tC, vUv).rgb; float coc = cocAt(d0);
+            if (coc > 0.6) { vec3 acc = col; float ws = 1.0;
+              for (int i = 0; i < 24; i++) { float fi = float(i); float r = sqrt((fi + 0.5) / 24.0) * coc; float a = fi * 2.39996; vec2 o = vec2(cos(a), sin(a)) * r * px;
+                float cn = cocAt(dep(vUv + o)); float w = clamp(cn / max(r, 0.5), 0.0, 1.0); acc += texture2D(tC, vUv + o).rgb * w; ws += w; }
+              col = acc / ws; }
+            float l = dep(vUv - vec2(px.x, 0.0)), r2 = dep(vUv + vec2(px.x, 0.0)), u = dep(vUv + vec2(0.0, px.y)), dn = dep(vUv - vec2(0.0, px.y));
+            float iz = 1.0 / d0; float lap = max(abs(1.0/l + 1.0/r2 - 2.0*iz), abs(1.0/u + 1.0/dn - 2.0*iz)) * d0;
+            float eD = smoothstep(0.035, 0.09, lap);
+            float eN = 0.0; vec2 o4[4]; o4[0] = vec2(px.x, 0.0); o4[1] = vec2(-px.x, 0.0); o4[2] = vec2(0.0, px.y); o4[3] = vec2(0.0, -px.y);
+            for (int i = 0; i < 4; i++) { vec2 uv2 = vUv + o4[i] * 1.2; float dd = dep(uv2); if (abs(dd - d0) / d0 < 0.2) eN = max(eN, 1.0 - clamp(dot(n0, nor(uv2)), 0.0, 1.0)); }
+            eN = smoothstep(0.2, 0.42, eN);
+            float e = max(eD, eN) * (1.0 - smoothstep(inkNear, inkFar, d0)) * (1.0 - smoothstep(1.0, 7.0, coc)) * step(d0, 900.0);
+            col = mix(col, inkCol, e * inkK);
+            gl_FragColor = vec4(col, 1.0);
+            #include <colorspace_fragment>
+          }` });
+      const compScene = new TH.Scene(), compCam = new TH.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+      compScene.add(new TH.Mesh(new TH.PlaneGeometry(2, 2), comp));
+
+      // ======================= materials + textures =======================
+      const gradTex = new TH.DataTexture(new Uint8Array([70, 150, 255]), 3, 1, TH.RedFormat); gradTex.minFilter = gradTex.magFilter = TH.NearestFilter; gradTex.needsUpdate = true;
+      const toon = (color, map) => new TH.MeshToonMaterial({ color: new TH.Color(color), gradientMap: gradTex, map: map || null });
+      function canvasTex(w, h, draw) { const c = document.createElement("canvas"); c.width = w; c.height = h; draw(c.getContext("2d"), w, h); const t = new TH.CanvasTexture(c); t.wrapS = t.wrapT = TH.RepeatWrapping; t.colorSpace = TH.SRGBColorSpace; t.anisotropy = 8; return t; }
+      const mudTex = canvasTex(512, 512, (g, w, h) => { g.fillStyle = "#57443A"; g.fillRect(0, 0, w, h); const r = mulberry32(11);
+        const wrapDraw = (x, y, rr, fn) => { for (const ox of [-w, 0, w]) for (const oy of [-h, 0, h]) if (x + ox > -rr && x + ox < w + rr && y + oy > -rr && y + oy < h + rr) fn(x + ox, y + oy); };
+        for (let i = 0; i < 320; i++) { const x = r() * w, y = r() * h, rad = 8 + r() * 46, rot = r() * 3, col = r() < 0.55 ? "rgba(38,28,24,0.3)" : "rgba(120,96,74,0.2)"; wrapDraw(x, y, rad, (X, Y) => { g.fillStyle = col; g.beginPath(); g.ellipse(X, Y, rad, rad * 0.6, rot, 0, 7); g.fill(); }); }
+        for (let i = 0; i < 50; i++) { const x = r() * w, y = r() * h, rr = 30 + r() * 60; wrapDraw(x, y, rr, (X, Y) => { const gr = g.createRadialGradient(X, Y, 0, X, Y, rr); gr.addColorStop(0, "rgba(206,216,236,0.16)"); gr.addColorStop(1, "rgba(206,216,236,0)"); g.fillStyle = gr; g.fillRect(X - rr, Y - rr, rr * 2, rr * 2); }); }
+        for (let i = 0; i < 600; i++) { g.fillStyle = `rgba(226,232,244,${0.12 + r() * 0.3})`; g.fillRect(r() * w, r() * h, 1 + r() * 2.5, 1 + r() * 2); } });
+      const plankTex = canvasTex(256, 256, (g, w, h) => { const r = mulberry32(5); for (let i = 0; i < 8; i++) { const c = 78 + r() * 34; g.fillStyle = `rgb(${c + 34},${c + 8},${c - 22})`; g.fillRect(i * 32, 0, 32, h); for (let k = 0; k < 5; k++) { g.strokeStyle = "rgba(46,30,20,0.4)"; g.lineWidth = 1.5; g.beginPath(); const x = i * 32 + 6 + r() * 20; g.moveTo(x, 0); g.bezierCurveTo(x + 4, h * 0.3, x - 4, h * 0.6, x + 2, h); g.stroke(); } g.fillStyle = "rgba(28,18,12,0.95)"; g.fillRect(i * 32, 0, 3, h); g.fillStyle = "rgba(30,20,14,0.8)"; g.beginPath(); g.arc(i * 32 + 16, 30 + r() * 190, 3, 0, 7); g.fill(); } });
+      const glowTex = canvasTex(128, 128, (g, w, h) => { const gr = g.createRadialGradient(64, 64, 0, 64, 64, 64); gr.addColorStop(0, "rgba(255,255,255,1)"); gr.addColorStop(0.18, "rgba(255,255,255,0.75)"); gr.addColorStop(0.5, "rgba(255,255,255,0.18)"); gr.addColorStop(1, "rgba(255,255,255,0)"); g.fillStyle = gr; g.fillRect(0, 0, w, h); });
+      glowTex.wrapS = glowTex.wrapT = TH.ClampToEdgeWrapping;
+      const moonTex = canvasTex(256, 256, (g) => { const gr = g.createRadialGradient(128, 128, 0, 128, 128, 128); gr.addColorStop(0, "rgba(240,244,255,1)"); gr.addColorStop(0.2, "rgba(240,244,255,1)"); gr.addColorStop(0.24, "rgba(200,212,255,0.45)"); gr.addColorStop(1, "rgba(160,180,255,0)"); g.fillStyle = gr; g.fillRect(0, 0, 256, 256); g.fillStyle = "rgba(190,196,220,0.6)"; [[112, 116, 9], [140, 136, 6], [122, 146, 5]].forEach(([x, y, r]) => { g.beginPath(); g.arc(x, y, r, 0, 7); g.fill(); }); });
+      moonTex.wrapS = moonTex.wrapT = TH.ClampToEdgeWrapping;
+      const uvScale = (geo, sx, sy) => { const uv = geo.attributes.uv; for (let i = 0; i < uv.count; i++) uv.setXY(i, uv.getX(i) * sx, uv.getY(i) * sy); uv.needsUpdate = true; return geo; };
+      const add = (m, x, y, z, layer) => { m.position.set(x, y, z); if (layer) m.layers.set(layer); scene.add(m); return m; };
+
+      // ======================= the front =======================
+      const XE = 420;
+      const mudSide = toon("#3E3028"), mudTop = toon("#FFFFFF", mudTex), plankMat = toon("#FFFFFF", plankTex), duckMat = toon("#7A5A3E");
+      function slab(x0, x1, z0, z1, yTop, yBot) { const w = x1 - x0, d = z1 - z0; add(new TH.Mesh(new TH.BoxGeometry(w, yTop - yBot, d), mudSide), (x0 + x1) / 2, (yTop + yBot) / 2, (z0 + z1) / 2);
+        const top = new TH.Mesh(uvScale(new TH.PlaneGeometry(w, d).rotateX(-Math.PI / 2), w / 5, d / 5), mudTop); add(top, (x0 + x1) / 2, yTop + 0.003, (z0 + z1) / 2); }
+      slab(-XE, XE, -600, -9.2, 0, -3); slab(-XE, XE, -6.8, 6.8, 0, -3); slab(-XE, XE, 9.2, 600, 0, -3);
+      slab(-XE, XE, -9.2, -6.8, -1.2, -3); slab(-XE, XE, 6.8, 9.2, -1.2, -3);
+      slab(-XE, XE, -7.3, -6.8, -0.6, -1.2); slab(-XE, XE, 6.8, 7.3, -0.6, -1.2);                 // fire steps
+      // revetment planks on the trench walls
+      const wall = (z, ry, y0, y1) => { const geo = uvScale(new TH.PlaneGeometry(80, y1 - y0), 80 / 1.44, (y1 - y0) / 1.44); const m = new TH.Mesh(geo, plankMat); m.rotation.y = ry; add(m, 0, (y0 + y1) / 2, z); };
+      wall(-6.81, Math.PI, -0.6, 0); wall(-9.19, 0, -1.2, 0); wall(-7.31, Math.PI, -1.2, -0.6); wall(6.81, 0, -0.6, 0); wall(9.19, Math.PI, -1.2, 0); wall(7.31, 0, -1.2, -0.6);
+      // duckboards
+      { const geo = new TH.BoxGeometry(0.22, 0.05, 1.5), n = 2 * 230, im = new TH.InstancedMesh(geo, duckMat, n), m = new TH.Matrix4(), r = mulberry32(3); let i = 0;
+        for (const zc of [-8.25, 8.25]) for (let x = -40; x < 40; x += 0.35) { m.makeRotationY((r() - 0.5) * 0.05); m.setPosition(x, -1.17, zc); im.setMatrixAt(i++, m); }
+        im.count = i; scene.add(im); }
+      // sandbag parapets
+      const bagGeo = new TH.SphereGeometry(0.5, 12, 8);
+      function parapet(z0, z1, yTop, courses, base, coreCol) {
+        add(new TH.Mesh(new TH.BoxGeometry(XE * 2, yTop - 0.06, z1 - z0 - 0.08), toon(coreCol)), 0, (yTop - 0.06) / 2, (z0 + z1) / 2);
+        const rows = Math.max(1, Math.round((z1 - z0) / 0.4)), ch = yTop / courses, r = mulberry32(Math.round(z0 * 100) + 999);
+        const max = courses * rows * 140, im = new TH.InstancedMesh(bagGeo, toon("#FFFFFF"), max), m = new TH.Matrix4(), q = new TH.Quaternion(), s = new TH.Vector3(), p = new TH.Vector3(), c = new TH.Color(); let i = 0;
+        for (let k = 0; k < courses; k++) for (let row = 0; row < rows; row++) for (let x = -41; x < 41; x += 0.6) {
+          p.set(x + (k % 2) * 0.3 + (r() - 0.5) * 0.06, ch * (k + 0.5), z0 + (row + 0.5) * (z1 - z0) / rows + (r() - 0.5) * 0.04);
+          q.setFromEuler(new TH.Euler((r() - 0.5) * 0.12, (r() - 0.5) * 0.18, (r() - 0.5) * 0.1)); s.set(0.66 + r() * 0.06, ch * 1.3, ((z1 - z0) / rows) * 1.15);
+          m.compose(p, q, s); im.setMatrixAt(i, m); c.set(base).offsetHSL(0, (r() - 0.5) * 0.05, (r() - 0.5) * 0.09); im.setColorAt(i, c); i++; }
+        im.count = i; scene.add(im); }
+      parapet(-6.8, -6.0, 0.5, 3, "#8E8A70", "#3A3428"); parapet(-10.0, -9.2, 0.3, 2, "#7E7A62", "#3A3428");
+      parapet(6.0, 6.8, 0.5, 3, "#A0906A", "#3E3428"); parapet(9.2, 10.0, 0.3, 2, "#90805E", "#3E3428");
+      // wire, posts, craters (no-man's-land)
+      { const r = mulberry32(21), postM = toon("#4A3A2C"), wireM = toon("#2C2830");
+        const posts = new TH.InstancedMesh(new TH.CylinderGeometry(0.035, 0.045, 1.15, 6), postM, 80), coils = new TH.InstancedMesh(new TH.TorusGeometry(0.34, 0.012, 4, 20), wireM, 600); let ip = 0, ic = 0; const m = new TH.Matrix4(), q = new TH.Quaternion(), s = new TH.Vector3(1, 1, 1), p = new TH.Vector3();
+        for (const zw of [-4.5, 4.5]) { for (let x = -22.6; x <= 24; x += 2.4) { m.makeRotationZ((r() - 0.5) * 0.25); m.setPosition(x + (r() - 0.5) * 0.4, 0.5, zw + (r() - 0.5) * 0.3); posts.setMatrixAt(ip++, m); }
+          for (let x = -24; x <= 24; x += 0.24) { q.setFromEuler(new TH.Euler(0, Math.PI / 2 + 0.35, (r() - 0.5) * 0.3)); p.set(x, 0.36 + (r() - 0.5) * 0.06, zw + Math.sin(x * 1.3) * 0.12); s.set(1, 1 + (r() - 0.5) * 0.2, 1); m.compose(p, q, s); coils.setMatrixAt(ic++, m); } }
+        posts.count = ip; coils.count = ic; scene.add(posts); scene.add(coils);
+        const cratM = toon("#2A2019"), rimM = toon("#4E3E32");
+        [[-6, -2.4, 1.1], [3.2, 1.9, 0.9], [-1.8, 3.0, 0.7], [7.5, -1.0, 1.3], [-9, 1.6, 1.0], [1.4, -4.6, 0.6], [12, 2.6, 1.2], [-14, -3.2, 1.4], [5.8, 4.8, 0.55]].forEach(([x, z, rr]) => {
+          add(new TH.Mesh(new TH.CircleGeometry(rr, 24).rotateX(-Math.PI / 2), cratM), x, 0.012, z);
+          const rim = new TH.Mesh(new TH.TorusGeometry(rr, rr * 0.16, 6, 28), rimM); rim.rotation.x = -Math.PI / 2; rim.scale.set(1, 1, 0.55); add(rim, x, 0.02, z); }); }
+      // sky, stars, moon (layer 1: no ink, no depth)
+      const sky = new TH.Mesh(new TH.SphereGeometry(450, 32, 16), new TH.ShaderMaterial({ side: TH.BackSide, depthWrite: false, fog: false,
+        uniforms: { cT: { value: new TH.Color("#070A1C") }, cM: { value: new TH.Color("#16204A") }, cH: { value: new TH.Color("#3C3A64") }, cG: { value: new TH.Color("#1A1830") } },
+        vertexShader: `varying vec3 vP; void main(){ vP = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+        fragmentShader: `uniform vec3 cT, cM, cH, cG; varying vec3 vP; void main(){ float h = vP.y; vec3 c = mix(cH, cM, smoothstep(0.0, 0.22, h)); c = mix(c, cT, smoothstep(0.22, 0.75, h)); c = mix(cG, c, smoothstep(-0.08, 0.0, h)); gl_FragColor = vec4(c, 1.0); }` }));
+      sky.renderOrder = -10; add(sky, 0, 0, 0, 1);
+      { const r = mulberry32(14), n = 900, pos = new Float32Array(n * 3); for (let i = 0; i < n; i++) { const a = r() * Math.PI * 2, y = 0.06 + Math.pow(r(), 0.7) * 0.94, rr = Math.sqrt(1 - y * y); pos.set([Math.cos(a) * rr * 420, y * 420, Math.sin(a) * rr * 420], i * 3); }
+        const g = new TH.BufferGeometry(); g.setAttribute("position", new TH.BufferAttribute(pos, 3));
+        var stars = new TH.Points(g, new TH.PointsMaterial({ color: 0xffffff, size: 2.2, sizeAttenuation: false, fog: false, transparent: true, opacity: 0.85, depthWrite: false })); stars.renderOrder = -9; add(stars, 0, 0, 0, 1); }
+      const moon = new TH.Sprite(new TH.SpriteMaterial({ map: moonTex, fog: false, depthWrite: false, transparent: true })); moon.scale.set(60, 60, 1); moon.renderOrder = -8; add(moon, 0, 0, 0, 1);
+      const MOON_DIR = new TH.Vector3(-0.32, 0.36, -0.88).normalize();
+      // lights
+      const hemi = new TH.HemisphereLight(0x8090d8, 0x3a2a48, 1.6); scene.add(hemi);
+      const moonL = new TH.DirectionalLight(0xb8c4ff, 1.5); moonL.position.set(-14, 22, 18); scene.add(moonL);
+      const gLights = [-3, 0, 3].map((x) => { const L = new TH.PointLight(0xffa850, 0, 9, 1.6); L.position.set(x, 0.95, -5.7); scene.add(L); return L; });
+      const bLights = [-3, 0, 3].map((x) => { const L = new TH.PointLight(0xffa850, 0, 9, 1.6); L.position.set(x, 0.95, 5.7); scene.add(L); return L; });
+      const redL = new TH.PointLight(0xff5a30, 0, 70, 1.0); redL.position.set(0, 5, -16); scene.add(redL);
+      // candle glows along both lines (for miles)
+      const GX = []; for (let x = -4; x <= 4; x++) GX.push(x); for (let x = 5.5; x <= 330; x += x < 40 ? 1.5 : 2.5) { GX.push(x); GX.push(-x); }
+      const nG = GX.length, gpos = new Float32Array(nG * 6), gcol = new Float32Array(nG * 6);
+      GX.forEach((x, i) => { gpos.set([x, 0.68, -6.42], i * 3); gpos.set([x, 0.68, 6.42], (nG + i) * 3); });
+      const glowGeo = new TH.BufferGeometry(); glowGeo.setAttribute("position", new TH.BufferAttribute(gpos, 3)); glowGeo.setAttribute("color", new TH.BufferAttribute(gcol, 3));
+      const glowPts = new TH.Points(glowGeo, new TH.PointsMaterial({ size: 1.3, map: glowTex, vertexColors: true, transparent: true, blending: TH.AdditiveBlending, depthWrite: false, fog: false })); add(glowPts, 0, 0, 0, 1);
+      // artillery flashes + distant guns
+      const flashSpr = []; for (let i = 0; i < 7; i++) { const s = new TH.Sprite(new TH.SpriteMaterial({ map: glowTex, color: 0xff7a40, blending: TH.AdditiveBlending, depthWrite: false, fog: false, transparent: true, opacity: 0 })); add(s, 0, 0, 0, 1); flashSpr.push(s); }
+      const ART = []; for (let k = 0; k < 7; k++) ART.push({ t: tArt + 0.1 + k * 0.33, x: [-12, 9, -3, 17, -20, 4, 12][k], z: -22 - (k % 3) * 9, s: 1 - k * 0.07 });
+      const FAR = [1.0, 3.4, 5.8, 8.2].map((t, k) => ({ t, x: [-26, 18, -6, 30][k], z: -70, s: 0.55 }));
+      // snow (1915)
+      const NS = 1600, spos = new Float32Array(NS * 3), sseed = [], rsn = mulberry32(31); for (let i = 0; i < NS; i++) sseed.push([rsn() * 34 - 17, rsn() * 9, rsn() * 30 - 14, 0.45 + rsn() * 0.5, rsn() * 6.28]);
+      const snowGeo = new TH.BufferGeometry(); snowGeo.setAttribute("position", new TH.BufferAttribute(spos, 3));
+      const snow = new TH.Points(snowGeo, new TH.PointsMaterial({ color: 0xf2f4ff, size: 0.1, map: glowTex, transparent: true, depthWrite: false, opacity: 0.95 })); add(snow, 0, 0, 0, 1);
+
+      // ======================= HQ (x = 200) =======================
+      const HX = 200;
+      { const floor = new TH.Mesh(uvScale(new TH.PlaneGeometry(8, 7).rotateX(-Math.PI / 2), 8 / 1.44, 7 / 1.44), plankMat); add(floor, HX, 0, 0);
+        const wallM = toon("#5A4434"), backM = toon("#6E5A44");
+        add(new TH.Mesh(new TH.BoxGeometry(8, 3.4, 0.2), backM), HX, 1.7, -2.6); add(new TH.Mesh(new TH.BoxGeometry(0.2, 3.4, 7), wallM), HX - 3.6, 1.7, 0); add(new TH.Mesh(new TH.BoxGeometry(0.2, 3.4, 7), wallM), HX + 3.6, 1.7, 0);
+        add(new TH.Mesh(new TH.BoxGeometry(8, 0.2, 7), toon("#3A2C22")), HX, 3.4, 0);
+        for (let x = -3.2; x <= 3.2; x += 1.6) add(new TH.Mesh(new TH.BoxGeometry(0.18, 3.4, 0.12), toon("#3E2C20")), HX + x, 1.7, -2.45);
+        const mapTex = canvasTex(1024, 640, (g, w, h) => { g.fillStyle = "#E4D6B0"; g.fillRect(0, 0, w, h); g.strokeStyle = "rgba(120,100,70,0.35)"; g.lineWidth = 2; for (let x = 0; x < w; x += 64) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, h); g.stroke(); } for (let y = 0; y < h; y += 64) { g.beginPath(); g.moveTo(0, y); g.lineTo(w, y); g.stroke(); }
+          g.strokeStyle = "#B8302A"; g.lineWidth = 10; g.beginPath(); const r = mulberry32(8); let x = 560, y = 0; g.moveTo(x, y); while (y < h) { x += (r() - 0.5) * 110; y += 40; g.lineTo(x, y); } g.stroke();
+          g.fillStyle = "#2A3A6A"; g.font = "bold 44px serif"; g.fillText("FLANDERS", 120, 120); g.fillText("FRANCE", 700, 540); });
+        mapTex.wrapS = mapTex.wrapT = TH.ClampToEdgeWrapping;
+        add(new TH.Mesh(new TH.PlaneGeometry(3.4, 2.1), toon("#FFFFFF", mapTex)), HX, 1.95, -2.38);
+        add(new TH.Mesh(new TH.BoxGeometry(2.7, 0.08, 1.1), toon("#7A5238")), HX, 0.84, -0.05);
+        [[-1.2, -0.5], [1.2, -0.5], [-1.2, 0.4], [1.2, 0.4]].forEach(([x, z]) => add(new TH.Mesh(new TH.BoxGeometry(0.08, 0.8, 0.08), toon("#5A3A28")), HX + x, 0.4, z));
+        const tmap = new TH.Mesh(new TH.PlaneGeometry(1.4, 0.85).rotateX(-Math.PI / 2), toon("#FFFFFF", mapTex)); tmap.rotation.y = 0.08; add(tmap, HX - 0.1, 0.885, -0.05);
+        const shade = new TH.Mesh(new TH.ConeGeometry(0.32, 0.26, 18, 1, true), toon("#2E4A3A")); shade.material.side = TH.DoubleSide; add(shade, HX, 2.35, 0.1);
+        add(new TH.Mesh(new TH.CylinderGeometry(0.01, 0.01, 0.9, 4), toon("#1E1B22")), HX, 2.9, 0.1);
+        add(new TH.Mesh(new TH.SphereGeometry(0.07, 10, 8), new TH.MeshBasicMaterial({ color: 0xfff0c0 })), HX, 2.24, 0.1);
+        var lamp = new TH.PointLight(0xffc070, 0, 10, 1.2); lamp.position.set(HX, 2.15, 0.2); scene.add(lamp); }
+
+      // ======================= SVG overlay: billboards in the world =======================
+      const ov = document.getElementById("ov"), hud = document.getElementById("hud"), defs = el("defs", {}, ov);
+      let FID = 1;
+      function litF(rim, dx, dy, tint, k = 0.9) { const id = "lf" + FID++, f = el("filter", { id, x: "-20%", y: "-20%", width: "140%", height: "140%", "color-interpolation-filters": "sRGB" }, defs);
+        el("feColorMatrix", { in: "SourceGraphic", type: "matrix", values: `${tint[0]} 0 0 0 0  0 ${tint[1]} 0 0 0  0 0 ${tint[2]} 0 0  0 0 0 1 0`, result: "tn" }, f);
+        el("feOffset", { in: "SourceAlpha", dx, dy, result: "o" }, f); el("feComposite", { in: "SourceAlpha", in2: "o", operator: "out", result: "band" }, f);
+        el("feFlood", { "flood-color": rim, "flood-opacity": k, result: "c" }, f); el("feComposite", { in: "c", in2: "band", operator: "in", result: "rb" }, f);
+        el("feGaussianBlur", { in: "rb", stdDeviation: 0.8, result: "rbb" }, f); el("feComposite", { in: "rbb", in2: "SourceAlpha", operator: "in", result: "rim" }, f);
+        const m = el("feMerge", {}, f); el("feMergeNode", { in: "tn" }, m); el("feMergeNode", { in: "rim" }, m); return `url(#${id})`; }
+      const LF = { moon: litF("#AFC2FF", 5, 5, [0.74, 0.78, 0.95], 0.8), candle: litF("#FFB45A", 0, -6, [0.98, 0.86, 0.74], 0.95), warm: litF("#FFC870", -5, 4, [1.0, 0.92, 0.82], 0.85),
+        red: litF("#FF7050", 5, 3, [0.9, 0.7, 0.68], 0.9), lamp: litF("#FFD592", 0, 6, [1.0, 0.9, 0.78], 0.85) };
+      const bbL = el("g", {}, ov), ovTop = el("g", {}, ov);
+      const BB = []; let BID = 1;
+      function billboard(o) { const outer = el("g", {}, bbL), cp = el("clipPath", { id: "bc" + BID, clipPathUnits: "userSpaceOnUse" }, defs), poly = el("polygon", { points: "" }, cp), wrap = el("g", {}, outer);
+        const b = Object.assign({ outer, cpId: "bc" + BID++, poly, wrap, vis: () => 1, lit: () => null }, o); BB.push(b); return b; }
+      // --- characters
+      const KHAKI = "#A9844E", GREY = "#62708A";
+      function soldier(id, side, P3, ex) {
+        const xs = []; let acc = 0; P3.forEach((k, i) => { if (i) { const a = P3[i - 1][1], c = k[1]; acc += Math.hypot(c.x - a.x, c.y - a.y, c.z - a.z) * PXM; } xs.push([k[0], acc, k[2]]); });
+        const b = billboard({ kind: "char", side, P3, face: ex.face || [[0, { x: 0, z: side === "B" ? -1 : 1 }]], pref: side === "B" ? 1 : -1, vis: ex.vis || (() => 1) });
+        b.ch = Character(b.wrap, Object.assign({ id, color: side === "B" ? KHAKI : (ex.color || GREY), outfit: "jacket", hair: "cap", hairColor: side === "B" ? "#7A6038" : "#4E5A70", pants: side === "B" ? "#7A6040" : "#4E5A70", thin: true, scale: 1, x: xs, y: [[0, 0]], facing: [[0, 1]], noWalk: false, pose: [[0, "relaxed", 0]], mood: [[0, "tired", 0]] }, ex.rig || {}));
+        if (side === "G") b.spike = el("path", { d: "M-7,0 L0,-40 L7,0 Z", fill: "#C9C2A8", stroke: INK, "stroke-width": 3.5 }, b.wrap);
+        b.pos = (t) => sampleTrack(P3, t, P3[0][1]); return b; }
+      const V = (x, y, z) => ({ x, y, z });
+      const vis14 = (t) => t < CUT_HQ;
+      const g1 = soldier("g1", "G", [[0, V(-1.5, -0.6, -7.1)], [26.6, V(-1.5, -0.6, -7.1)], [26.9, V(-1.5, 0.5, -6.45)], [27.2, V(-1.6, 0, -5.7)], [30.6, V(-3.15, 0, -1.25)]], { vis: vis14, face: [[0, { x: 0, z: 1 }], [29.5, { x: 0, z: 1 }], [30.3, { x: -1, z: 0.2 }]],
+        rig: { pose: [[0, "holdBoth", 0], [26.6, "relaxed", 0.3]], mood: [[0, "content", 0], [4.6, "tired", 0.2], [tCand, "content", 0.3], [tSing, "happy", 0.3], [26.6, "joy", 0.3], [tBur - 0.3, "sad", 0.4], [tBall + 0.5, "content", 0.4]], talk: [[tSing - 0.1, tSing + 2.7]] } });
+      const g2 = soldier("g2", "G", [[0, V(0.3, -0.6, -7.1)], [tClimb - 0.05, V(0.3, -0.6, -7.1)], [tClimb + 0.35, V(0.3, 0.5, -6.45)], [tClimb + 0.7, V(0.35, 0, -5.7)], [tNob - 0.1, V(0.9, 0, -1.3)], [25.4, V(0.9, 0, -1.3)], [26.6, V(1.0, 0, -0.45)],
+        [44.9, V(1.0, 0, -0.45)], [44.95, V(0.15, -1.7, -7.1), "linear"], [46.9, V(0.15, -1.7, -7.1)], [47.4, V(0.15, -0.6, -7.1), "out"]],
+        { vis: (t) => t < CUT_HQ || t > 46.9, face: [[0, { x: 0, z: 1 }], [25.6, { x: 0, z: 1 }], [26.0, { x: -1, z: 0.4 }], [44.9, { x: -1, z: 0.4 }], [44.95, { x: 0, z: 1 }]],
+          rig: { pose: [[0, "holdBoth", 0], [tMerry - 0.15, "wave", 0.2], [tClimb, "relaxed", 0.3], [tUnarm - 0.1, "shrug", 0.25], [tNob + 0.6, "relaxed", 0.4], [tCig - 0.25, "give", 0.25], [tBut + 0.6, "relaxed", 0.3]],
+            mood: [[0, "content", 0], [4.6, "tired", 0.2], [tCand, "content", 0.3], [tSing, "happy", 0.3], [tMerry - 0.1, "joy", 0.15], [tClimb, "worried", 0.3], [tNob + 1.5, "surprised", 0.3], [25.6, "joy", 0.4], [tBur - 0.3, "sad", 0.4], [tBall, "joy", 0.3], [46.8, "content", 0], [tSome, "happy", 0.5]],
+            talk: [[tSing - 0.1, tSing + 2.5], [tMerry - 0.05, tMerry + 0.85]] } });
+      const g3 = soldier("g3", "G", [[0, V(1.9, -0.6, -7.1)], [27.2, V(1.9, -0.6, -7.1)], [27.5, V(1.9, 0.5, -6.45)], [27.8, V(2.0, 0, -5.7)], [31.6, V(5.15, 0, 0.6)]], { vis: vis14, face: [[0, { x: 0, z: 1 }], [30.8, { x: 0, z: 1 }], [31.4, { x: -1, z: 0 }]],
+        rig: { pose: [[0, "holdBoth", 0], [27.2, "relaxed", 0.3], [tKick + 0.4, "wave", 0.3]], mood: [[0, "content", 0], [4.6, "tired", 0.2], [tCand, "content", 0.3], [tSing, "happy", 0.3], [27.2, "joy", 0.3]], talk: [[tSing, tSing + 2.6]] } });
+      const b1 = soldier("b1", "B", [[0, V(-1.4, -0.6, 7.1)], [26.9, V(-1.4, -0.6, 7.1)], [27.2, V(-1.4, 0.5, 6.45)], [27.5, V(-1.5, 0, 5.7)], [31.0, V(-4.45, 0, -0.75)]], { vis: vis14, face: [[0, { x: 0, z: -1 }], [29.8, { x: 0, z: -1 }], [30.6, { x: 1, z: -0.2 }]],
+        rig: { pose: [[0, "crossed", 0], [tBrit, "holdBoth", 0.3], [26.9, "relaxed", 0.3]], mood: [[0, "tired", 0], [tCand + 0.3, "surprised", 0.3], [tBack, "happy", 0.3], [26.9, "content", 0.3], [tBur - 0.3, "sad", 0.4]], talk: [[tBrit - 0.05, tBrit + 2.6]] } });
+      const b2 = soldier("b2", "B", [[0, V(0.2, -0.6, 7.1)], [27.3, V(0.2, -0.6, 7.1)], [27.6, V(0.2, 0.5, 6.45)], [27.9, V(0.3, 0, 5.7)], [31.6, V(3.0, 0, 1.0)], [tKick - 0.1, V(3.0, 0, 1.0)], [tKick + 0.25, V(3.3, 0, 0.95)], [tBall + 0.9, V(3.15, 0, 1.0)]],
+        { vis: vis14, face: [[0, { x: 0, z: -1 }], [30.8, { x: 0, z: -1 }], [31.4, { x: 1, z: 0 }]],
+          rig: { pose: [[0, "slump", 0], [tBrit, "holdBoth", 0.3], [27.3, "relaxed", 0.3], [tKick - 0.15, "startle", 0.12], [tKick + 0.5, "wave", 0.3]], mood: [[0, "sad", 0], [tCand + 0.4, "surprised", 0.3], [tBack, "joy", 0.3], [tKick, "joy", 0.2]], talk: [[tBrit, tBrit + 2.7]] } });
+      const b3 = soldier("b3", "B", [[0, V(1.8, -0.6, 7.1)], [tNob + 0.8, V(1.8, -0.6, 7.1)], [tNob + 1.15, V(1.8, 0.5, 6.45)], [tNob + 1.5, V(1.7, 0, 5.7)], [26.4, V(-0.3, 0, 0.3)],
+        [44.9, V(-0.3, 0, 0.3)], [44.95, V(-0.2, -1.7, 7.1), "linear"], [48.7, V(-0.2, -1.7, 7.1)], [49.15, V(-0.2, -0.6, 7.1), "out"]],
+        { vis: (t) => t < CUT_HQ || t > 48.7, face: [[0, { x: 0, z: -1 }], [25.6, { x: 0, z: -1 }], [26.0, { x: 1, z: -0.4 }], [44.9, { x: 1, z: -0.4 }], [44.95, { x: 0, z: -1 }]],
+          rig: { pose: [[0, "relaxed", 0], [tCig - 0.25, "give", 0.25], [tBut + 0.6, "relaxed", 0.3]], mood: [[0, "worried", 0], [tCand + 0.4, "surprised", 0.3], [tBack, "happy", 0.3], [tNob + 0.6, "worried", 0.3], [25.6, "joy", 0.4], [tBur - 0.3, "sad", 0.4], [tBall, "joy", 0.3], [48.6, "content", 0], [49.4, "happy", 0.5]], talk: [[tBrit + 0.1, tBrit + 2.5]] } });
+      const SOL = [g1, g2, g3, b1, b2, b3];
+      // generals (HQ)
+      function general(id, x, face, glasses) { const b = billboard({ kind: "char", side: "H", P3: [[0, V(HX + x, 0, -0.95)]], face: [[0, { x: face, z: 0.6 }]], pref: face, vis: (t) => t >= CUT_HQ && t < CUT_15 });
+        b.ch = Character(b.wrap, { id, color: "#6A5A3A", outfit: "jacket", hair: "cap", hairColor: "#3A3022", pants: "#4A4030", thin: true, scale: 1, x: [[0, 0]], y: [[0, 0]], facing: [[0, 1]], noWalk: true, glasses,
+          pose: [[0, "hipsHands", 0], [tFur - 0.1, "shout", 0.15], [tArt - 0.25, "point", 0.2]], mood: [[0, "annoyed", 0], [tFur - 0.1, "angry", 0.15]], squash: [[tFur - 0.1, 0], [tFur, 0.12], [tFur + 0.3, 0]], talk: [[tFur - 0.1, tFur + 0.6]] });
+        b.pos = () => b.P3[0][1]; return b; }
+      const gen1 = general("gen1", -0.75, 1, false), gen2 = general("gen2", 0.75, -1, true);
+      // candles (SVG flames) — 9 on each parapet, centre
+      function gOn(x, t) { const ax = Math.abs(x); let d;
+        if (t < 4.55) return ax <= 24 ? 1 : 0;
+        if (t >= tNextX - 0.05 && t < tSome) return 0;
+        if (t >= tSome) d = tSome + (ax < 0.5 ? 0 : 0.75 + ax * 0.11);
+        else if (ax <= 4.01) d = tCand + (x + 4) * 0.12;
+        else if (ax <= 30) d = tCand + 1.1 + (ax - 4) * 0.06;
+        else d = tWent - 0.3 + (ax - 30) / 90;
+        return clamp((t - d) / 0.12, 0, 1); }
+      function bOn(x, t) { const ax = Math.abs(x); let d;
+        if (t < tWent - 0.6 || (t >= tNextX - 0.05 && t < tSome)) return 0;
+        if (t >= tSome) d = tSome + 1.8 + ax * 0.11; else d = tCopied - 0.4 + ax / 90;
+        return clamp((t - d) / 0.12, 0, 1); }
+      const glowDefs = (() => { const id = "cg" + FID++, rg = el("radialGradient", { id }, defs); el("stop", { offset: 0, "stop-color": "#FFC060", "stop-opacity": 0.7 }, rg); el("stop", { offset: 1, "stop-color": "#FFC060", "stop-opacity": 0 }, rg); return `url(#${id})`; })();
+      for (const side of ["G", "B"]) for (let x = -4; x <= 4; x++) {
+        const z = side === "G" ? -6.42 : 6.42, b = billboard({ kind: "candle", side }); b.pos = () => V(x, 0.5, z);
+        const gl = el("circle", { cx: 0, cy: -28, r: 44, fill: glowDefs, style: "mix-blend-mode:screen", opacity: 0 }, b.wrap);
+        el("rect", { x: -4, y: -20, width: 8, height: 20, rx: 2, fill: "#EFE6D2", stroke: INK, "stroke-width": 2 }, b.wrap);
+        const fl = el("path", { d: "M0,-36 q7,9 0,14 q-7,-5 0,-14 z", fill: "#FFC24A", stroke: "#E07A2A", "stroke-width": 1.2, opacity: 0 }, b.wrap);
+        b.upd = (t) => { const on = side === "G" ? gOn(x, t) : bOn(x, t), f = 1 + 0.12 * Math.sin(t * 13 + x * 2.1); fl.setAttribute("opacity", on); fl.setAttribute("transform", `translate(0,-22) scale(${on * f}) translate(0,22)`); gl.setAttribute("opacity", on * (0.8 + 0.2 * Math.sin(t * 7 + x))); };
+        b.vis = (t) => t < CUT_HQ || t >= CUT_15; }
+      // little Christmas trees on the German parapet
+      [-2.6, -0.6, 3.2].forEach((x, i) => { const b = billboard({ kind: "tree" }); b.pos = () => V(x, 0.5, -6.6); const g = el("g", {}, b.wrap);
+        el("rect", { x: -7, y: -18, width: 14, height: 18, fill: "#6A4A30", stroke: INK, "stroke-width": 3 }, g);
+        el("path", { d: "M0,-150 L40,-60 L22,-60 L52,-16 L-52,-16 L-22,-60 L-40,-60 Z", fill: "#3E6B4A", stroke: INK, "stroke-width": 4, "stroke-linejoin": "round" }, g);
+        [[-16, -44, "#FFD27A"], [18, -50, "#E86A5A"], [-24, -26, "#FFD27A"], [26, -24, "#FFD27A"], [0, -96, "#FFE9A8"], [6, -70, "#E86A5A"]].forEach(([a, c, f]) => el("circle", { cx: a, cy: c, r: 6, fill: f, stroke: INK, "stroke-width": 1.5 }, g));
+        el("path", { d: "M0,-166 l5,10 l11,1 l-8,7 l3,11 l-11,-6 l-11,6 l3,-11 l-8,-7 l11,-1 z", fill: "#FFE07A", stroke: INK, "stroke-width": 2 }, g);
+        b.upd = (t) => { const on = (t > tTrees - 0.1 + i * 0.18 && t < CUT_HQ) || t < 4.55 || t > tSome + 1.2 + i * 0.3; const k = t < 4.55 ? 1 : clamp((t - (t > tSome ? tSome + 1.2 + i * 0.3 : tTrees - 0.1 + i * 0.18)) / 0.35, 0, 1); g.setAttribute("transform", `scale(${on ? EASE.back ? EASE.back(k) : k : 0})`); };
+        b.vis = (t) => t < CUT_HQ || t > tSome; });
+      // rat on the duckboards
+      { const b = billboard({ kind: "rat" }); b.pos = (t) => V(lerp(-1.0, -6.4, clamp((t - 7.6) / 2.2, 0, 1)), -1.15, 8.0); b.vis = (t) => t > 7.3 && t < 10.2; const g = el("g", {}, b.wrap);
+        el("ellipse", { cx: 0, cy: -9, rx: 20, ry: 10, fill: "#5A5048", stroke: INK, "stroke-width": 3 }, g); el("path", { d: "M18,-9 q22,4 32,-6", stroke: INK, "stroke-width": 3, fill: "none" }, g); el("circle", { cx: -14, cy: -13, r: 2.2, fill: INK }, g); el("circle", { cx: -8, cy: -19, r: 5, fill: "#7A6A60", stroke: INK, "stroke-width": 2 }, g);
+        b.upd = (t) => g.setAttribute("transform", `translate(0,${-Math.abs(Math.sin(t * 22)) * 3})`); }
+      // grave cross
+      { const b = billboard({ kind: "cross" }); b.pos = () => V(-3.8, 0, -1.0); b.vis = (t) => t > tBur - 0.15 && t < CUT_HQ; const g = el("g", {}, b.wrap);
+        el("path", { d: "M-60,0 q60,-34 120,0 z", fill: "#3A2C22", stroke: INK, "stroke-width": 3 }, g); el("path", { d: "M0,-4 v-150 M-36,-112 h72", stroke: "#7A5A3C", "stroke-width": 14, "stroke-linecap": "round" }, g); el("path", { d: "M0,-4 v-150 M-36,-112 h72", stroke: INK, "stroke-width": 3, fill: "none", opacity: 0.5 }, g);
+        b.upd = (t) => g.setAttribute("transform", `scale(1,${EASE.out(clamp((t - tBur + 0.15) / 0.4, 0, 1))})`); }
+      // the tin of beef (the ball)
+      const tinPos = (t) => { const k = clamp((t - tKick - 0.05) / 2.0, 0, 1), e = EASE.out(k); return V(lerp(3.35, 4.6, e), 0, lerp(0.95, 0.75, e)); };
+      { const b = billboard({ kind: "tin" }); b.pos = tinPos; b.vis = (t) => t > 30 && t < CUT_HQ; const g = el("g", {}, b.wrap), gi = el("g", {}, g);
+        el("rect", { x: -16, y: -13, width: 32, height: 26, rx: 6, fill: "#B8B0A0", stroke: INK, "stroke-width": 3 }, gi); el("rect", { x: -16, y: -5, width: 32, height: 10, fill: "#C83A2A" }, gi); txt(gi, 0, 0, "BEEF", 8.5, "#FFFFFF", { font: "Outfit" });
+        el("rect", { x: -16, y: -13, width: 32, height: 26, rx: 6, fill: "none", stroke: INK, "stroke-width": 3 }, gi);
+        b.upd = (t) => { const k = clamp((t - tKick - 0.05) / 2.0, 0, 1), hop = Math.abs(Math.sin(EASE.out(k) * Math.PI * 3)) * (1 - k) * 22, pop = t > tBeef - 0.2 ? 0.35 * EASE.back(clamp((t - tBeef + 0.2) / 0.25, 0, 1)) : 0;
+          gi.setAttribute("transform", `translate(0,${-13 - hop}) rotate(${EASE.out(k) * 720}) scale(${1 + pop})`); }; }
+      // swapped items (cigarettes, bread, buttons, cap) between b3 and g2
+      const ITEM = [(g) => { el("rect", { x: -16, y: -3, width: 32, height: 6, fill: "#F4F0E6", stroke: INK, "stroke-width": 2 }, g); el("rect", { x: 10, y: -3, width: 6, height: 6, fill: "#E07A2A" }, g); },
+        (g) => { el("path", { d: "M-18,6 q0,-16 18,-16 q18,0 18,16 z", fill: "#D6A25E", stroke: INK, "stroke-width": 2.5 }, g); },
+        (g) => { el("circle", { r: 9, fill: "#C9A227", stroke: INK, "stroke-width": 2.5 }, g); [[-3, -3], [3, -3], [-3, 3], [3, 3]].forEach(([a, c]) => el("circle", { cx: a, cy: c, r: 1.4, fill: INK }, g)); },
+        (g) => { el("path", { d: "M-16,4 q0,-16 16,-16 q16,0 16,16 z M-16,4 h40", fill: "#4E5A70", stroke: INK, "stroke-width": 2.5 }, g); }];
+      ITEM.forEach((draw, i) => { const b = billboard({ kind: "item" }), g = el("g", {}, b.wrap); draw(g); const t0 = tCig + i * 0.32;
+        b.pos = (t) => { const k = EASE.inOut(clamp((t - t0) / 0.8, 0, 1)), a = i % 2 ? V(0.85, 1.2, -0.4) : V(-0.15, 1.2, 0.25), c = i % 2 ? V(-0.15, 1.2, 0.25) : V(0.85, 1.2, -0.4); return V(lerp(a.x, c.x, k), lerp(a.y, c.y, k) + Math.sin(k * Math.PI) * 0.22, lerp(a.z, c.z, k)); };
+        b.vis = (t) => t > t0 && t < t0 + 0.8; b.upd = (t) => g.setAttribute("transform", `rotate(${(t - t0) * 300}) scale(1.5)`); });
+      // music notes rising from the singers
+      for (let i = 0; i < 8; i++) { const b = billboard({ kind: "note" }), g = el("g", {}, b.wrap); txt(g, 0, 0, i % 2 ? "♪" : "♫", 46, "#FFD27A", { attrs: { stroke: INK, "stroke-width": 4, "paint-order": "stroke" } });
+        const ger = i < 4, src = ger ? [g1, g2, g3, g2][i] : [b1, b2, b3, b1][i - 4], t0 = ger ? tSing + i * 0.55 : tBack - 0.3 + (i - 4) * 0.55;
+        b.pos = (t) => { const p = src.pos(t), k = clamp((t - t0) / 2.2, 0, 1); return V(p.x + Math.sin(k * 6 + i) * 0.25, p.y + 1.85 + k * 1.3, p.z); };
+        b.vis = (t) => t > t0 && t < t0 + 2.2; b.upd = (t) => { const k = clamp((t - t0) / 2.2, 0, 1); g.setAttribute("opacity", 1 - k); }; }
+      const merry = SR.Bubble(ovTop, { text: "Merry Christmas!", t0: tMerry - 0.05, t1: tClimb - 0.1, side: -1, size: 46 });
+      // occluders (top edges of the parapets, the HQ table)
+      const OCC = [{ x0: -XE, x1: XE, z0: -6.8, z1: -6.0, y: 0.5 }, { x0: -XE, x1: XE, z0: -10.0, z1: -9.2, y: 0.3 }, { x0: -XE, x1: XE, z0: 6.0, z1: 6.8, y: 0.5 }, { x0: -XE, x1: XE, z0: 9.2, z1: 10.0, y: 0.3 },
+        { x0: HX - 1.35, x1: HX + 1.35, z0: -0.6, z1: 0.5, y: 0.88 }];
+
+      // ======================= HUD =======================
+      const tag14 = el("g", { opacity: 0 }, hud); el("rect", { x: 230, y: 330, width: 620, height: 76, rx: 16, fill: "#0B0A12", opacity: 0.78 }, tag14); txt(tag14, 540, 369, "WESTERN FRONT · 24 DEC 1914", 36, "#E8E2D6", { weight: 900 });
+      const tag15 = el("g", { opacity: 0 }, hud); el("rect", { x: 300, y: 330, width: 480, height: 104, rx: 18, fill: "#0B0A12", opacity: 0.82 }, tag15); txt(tag15, 540, 383, "CHRISTMAS 1915", 54, "#FF8A6A", { font: "Outfit" });
+      const mcount = el("g", { opacity: 0 }, hud); el("rect", { x: 200, y: 300, width: 680, height: 116, rx: 22, fill: "#0B0A12", opacity: 0.8 }, mcount); const mct = txt(mcount, 540, 358, "", 56, "#FFD27A", { font: "Outfit" });
+      const order = el("g", { opacity: 0 }, hud); el("rect", { x: -200, y: -120, width: 400, height: 240, rx: 10, fill: "#F2EAD8", stroke: INK, "stroke-width": 6 }, order); txt(order, 0, -56, "ORDER · DEC 1915", 32, INK, { font: "Outfit" }); txt(order, 0, 18, "NO TRUCE.", 60, "#C83A2A", { font: "Outfit" }); txt(order, 0, 78, "ARTILLERY: FIRE", 32, INK, { font: "Outfit" });
+      const cap = el("g", {}, hud); const capT = txt(cap, 540, 1380, "", 104, "#FFFFFF", { font: "Outfit", attrs: { stroke: "#0B0A12", "stroke-width": 18, "paint-order": "stroke", "stroke-linejoin": "round" } });
+      const gm = document.getElementById("gm"), warm = document.getElementById("warm");
+      const mixc = (a, b, k) => { const pa = parseInt(a.slice(1), 16), pb = parseInt(b.slice(1), 16); const ch = (s) => Math.round(((pa >> s) & 255) * (1 - k) + ((pb >> s) & 255) * k); return `rgb(${ch(16)},${ch(8)},${ch(0)})`; };
+      const GK = [[0, "#FFEFD8"], [4.45, "#FFEFD8"], [5.0, "#D4DCF6"], [tCand, "#D4DCF6"], [tCand + 1.0, "#FFEAD2"], [T.p1, "#FFEAD2"], [T.p1 + 0.8, "#B8C2F0"], [T.p2 - 0.1, "#B8C2F0"], [T.p2 + 0.5, "#FFEFD8"], [CUT_15, "#FFEFD8"], [CUT_15 + 0.01, "#FFC4B8"], [T.f1, "#FFC4B8"], [tSome, "#E6E2F2"], [tSome + 1.5, "#FFEAD2"]];
+      const gradeAt = (t) => { let i = 0; while (i < GK.length - 1 && t >= GK[i + 1][0]) i++; if (i === GK.length - 1) return GK[i][1]; const [t0, c0] = GK[i], [t1, c1] = GK[i + 1]; return mixc(c0, c1, clamp((t - t0) / Math.max(0.01, t1 - t0), 0, 1)); };
+
+      // ======================= camera =======================
+      const K = [
+        { t: 0, p: [2.5, 1.2, 7.35], l: [-0.4, 0.75, -7.0], f: 30, dof: 0.9, fn: 12, ff: 70 },
+        { t: 4.35, p: [2.35, 1.18, 7.0], l: [-0.3, 0.78, -7.0], f: 24, e: "lin" },
+        { t: 5.55, p: [11, 8.6, 17.5], l: [0, -0.6, 0], f: 42, dof: 0, e: "io" },
+        { t: 7.5, p: [10.2, 7.8, 16.4], l: [0, -0.5, 0.4], f: 42, e: "lin" },
+        { t: 8.5, p: [-7.8, 0.15, 8.6], l: [1.5, -0.2, 7.6], f: 40, dof: 0.35, e: "io" },
+        { t: 9.3, p: [-7.4, 0.15, 8.55], l: [1.5, -0.2, 7.6], f: 40, e: "lin" },
+        { t: 10.6, p: [-1.6, 1.5, 9.8], l: [0.4, 0.6, -7.0], f: 40, dof: 0.25, e: "io" },
+        { t: 11.5, p: [-1.4, 1.48, 9.3], l: [0.3, 0.62, -7.0], f: 38, e: "lin" },
+        { t: 13.2, p: [0.5, 1.15, -1.4], l: [0.1, 0.85, -7.1], f: 40, dof: 0.3, e: "io" },
+        { t: 17.45, p: [0.35, 1.05, -2.9], l: [0.1, 0.9, -7.1], f: 37, e: "lin" },
+        { t: 18.35, p: [0.95, 1.3, 1.5], l: [0.95, 0.95, 7.1], f: 42, e: "io" },
+        { t: 19.0, p: [0.95, 1.28, 1.8], l: [0.95, 0.95, 7.1], f: 40, e: "lin" },
+        { t: 19.75, p: [0.45, 1.08, -2.4], l: [0.3, 0.95, -7.1], f: 40, e: "io" },
+        { t: 20.75, p: [0.45, 1.08, -2.75], l: [0.3, 0.95, -7.1], f: 38, e: "lin" },
+        { t: 22.4, p: [1.2, 1.35, 1.6], l: [0.8, 0.95, -1.6], f: 42, e: "io" },
+        { t: 23.5, p: [7.2, 5.6, 6.0], l: [0.4, 0.3, -0.6], f: 40, dof: 0, e: "io" },
+        { t: 25.1, p: [6.8, 5.2, 5.6], l: [0.4, 0.3, -0.4], f: 40, e: "lin" },
+        { t: 26.6, p: [14, 30, 24], l: [-3, 0, -1], f: 45, fn: 70, ff: 520, e: "io" },
+        { t: 28.9, p: [13, 31.5, 23], l: [-3, 0, -1], f: 45, e: "lin" },
+        { t: 31.2, p: [26, 38, 14], l: [-60, 0, -2], f: 48, e: "io" },
+        { t: 32.45, p: [26, 39, 13], l: [-62, 0, -2], f: 48, e: "lin" },
+        { t: 33.3, p: [0.55, 1.35, 3.9], l: [0.35, 1.0, 0], f: 40, dof: 0.35, fn: 12, ff: 70, e: "io" },
+        { t: 34.45, p: [0.5, 1.32, 3.6], l: [0.35, 1.0, 0], f: 40, e: "lin" },
+        { t: 35.2, p: [-3.65, 1.5, 4.7], l: [-3.8, 0.8, -1.0], f: 38, e: "io" },
+        { t: 35.95, p: [-3.7, 1.45, 4.3], l: [-3.8, 0.8, -1.0], f: 38, e: "lin" },
+        { t: 36.7, p: [4.1, 1.5, 7.3], l: [4.1, 0.55, 0.8], f: 42, e: "io" },
+        { t: 37.9, p: [4.2, 1.3, 6.3], l: [4.3, 0.45, 0.8], f: 41, e: "lin" },
+        { t: 38.85, p: [4.75, 0.32, 1.8], l: [4.6, 0.12, 0.75], f: 36, dof: 0.7, e: "io" },
+        { t: 39.8, p: [4.72, 0.3, 1.65], l: [4.6, 0.12, 0.75], f: 36, e: "lin" },
+        { t: CUT_HQ, p: [HX, 1.6, 4.9], l: [HX, 1.25, -1], f: 40, dof: 0.3, fn: 30, ff: 120, e: "cut" },
+        { t: CUT_15 - 0.01, p: [HX, 1.5, 4.0], l: [HX, 1.3, -1], f: 38, e: "lin" },
+        { t: CUT_15, p: [-4.6, 3.9, 12.8], l: [0, 0, -4], f: 42, dof: 0, fn: 10, ff: 60, e: "cut" },
+        { t: 45.5, p: [-4.2, 3.5, 11.8], l: [0, 0, -4], f: 42, e: "lin" },
+        { t: 46.9, p: [0.55, 1.15, 1.4], l: [0.3, 0.78, -7.0], f: 38, dof: 0.3, fn: 12, ff: 60, e: "io" },
+        { t: 48.6, p: [0.55, 1.12, 0.4], l: [0.3, 0.8, -7.0], f: 36, e: "lin" },
+        { t: D, p: [0.5, 17, 3.2], l: [0, 0, 0.2], f: 50, dof: 0, ff: 90, e: "io" },
+      ];
+      // fill inherited fields
+      for (let i = 1; i < K.length; i++) for (const f of ["dof", "fn", "ff"]) if (K[i][f] === undefined) K[i][f] = K[i - 1][f];
+      const ypd = (k) => { const dx = k.l[0] - k.p[0], dy = k.l[1] - k.p[1], dz = k.l[2] - k.p[2], d = Math.hypot(dx, dy, dz); return { yaw: Math.atan2(dx, -dz), pitch: Math.asin(dy / d), d }; };
+      K.forEach((k) => Object.assign(k, ypd(k)));
+      function camAt(t) { let i = 0; while (i < K.length - 1 && t >= K[i + 1].t) i++; const a = K[i], b = K[Math.min(i + 1, K.length - 1)];
+        if (a === b || b.e === "cut") return a; const u = clamp((t - a.t) / (b.t - a.t), 0, 1), k = b.e === "lin" ? u : sstep(u);
+        let dy = b.yaw - a.yaw; while (dy > Math.PI) dy -= Math.PI * 2; while (dy < -Math.PI) dy += Math.PI * 2;
+        return { p: a.p.map((v, j) => lerp(v, b.p[j], k)), yaw: a.yaw + dy * k, pitch: lerp(a.pitch, b.pitch, k), d: lerp(a.d, b.d, k), f: lerp(a.f, b.f, k), dof: lerp(a.dof, b.dof, k), fn: lerp(a.fn, b.fn, k), ff: lerp(a.ff, b.ff, k) }; }
+      const flashK = (t, list, dur = 0.35) => list.map((f) => { const k = (t - f.t) / dur; return k >= 0 && k < 1 ? Math.pow(1 - k, 2) * f.s : 0; });
+
+      // ======================= projection helpers =======================
+      const tv = new TH.Vector3();
+      const proj = (x, y, z) => { tv.set(x, y, z).applyMatrix4(cam.matrixWorldInverse); const d = -tv.z; tv.applyMatrix4(cam.projectionMatrix); return { sx: (tv.x + 1) * FW / 2, sy: (1 - tv.y) * FH / 2, d }; };
+      function clipFor(p) { let best = null, bestY = Infinity; const c = cam.position;
+        for (const o of OCC) { if (p.x < o.x0 || p.x > o.x1) continue; let ez;
+          if (c.z < o.z0 && p.z > o.z1) ez = c.y > o.y ? o.z1 : o.z0; else if (c.z > o.z1 && p.z < o.z0) ez = c.y > o.y ? o.z0 : o.z1; else continue;
+          const a = proj(p.x - 2, o.y, ez), b = proj(p.x + 2, o.y, ez); if (a.d < 0.05 || b.d < 0.05) continue;
+          const m = (b.sy - a.sy) / (b.sx - a.sx || 1e-6), yAt = (X) => a.sy + m * (X - a.sx), here = yAt(proj(p.x, p.y, p.z).sx);
+          if (here < bestY) { bestY = here; best = `-600,${yAt(-600).toFixed(1)} 1680,${yAt(1680).toFixed(1)} 1680,-4000 -600,-4000`; } }
+        return best; }
+
+      // ======================= draw =======================
+      const tl = gsap.timeline({ paused: true });
+      function draw(t) {
+        // --- camera
+        const c = camAt(t), shk = flashK(t, ART, 0.13).reduce((s, v) => s + v, 0) * 0.07;
+        const sx = shk * (Math.sin(t * 91) > 0 ? 1 : -1), sy = shk * (Math.cos(t * 77) > 0 ? 1 : -1) * 0.7;
+        cam.position.set(c.p[0] + sx, c.p[1] + sy, c.p[2]); cam.fov = c.f; cam.updateProjectionMatrix();
+        const dir = new TH.Vector3(Math.sin(c.yaw) * Math.cos(c.pitch), Math.sin(c.pitch), -Math.cos(c.yaw) * Math.cos(c.pitch));
+        cam.lookAt(cam.position.clone().add(dir)); cam.updateMatrixWorld(); cam.matrixWorldInverse.copy(cam.matrixWorld).invert();
+        fog.near = c.fn; fog.far = c.ff; comp.uniforms.focus.value = c.d; comp.uniforms.dofR.value = c.dof * 14; comp.uniforms.inkNear.value = c.fn * 1.3; comp.uniforms.inkFar.value = c.ff * 1.05;
+        sky.position.copy(cam.position); stars.position.copy(cam.position); moon.position.copy(cam.position).addScaledVector(MOON_DIR, 400);
+        const inHQ = t >= CUT_HQ && t < CUT_15, in15 = t >= CUT_15 && t < T.f1 + 0.6;
+        // --- lights
+        let gs = 0, bs = 0; for (let x = -4; x <= 4; x++) { gs += gOn(x, t); bs += bOn(x, t); } gs /= 9; bs /= 9; const fl = 0.85 + 0.15 * Math.sin(t * 11.3);
+        gLights.forEach((L) => L.intensity = gs * fl * 7); bLights.forEach((L) => L.intensity = bs * fl * 7); lamp.intensity = inHQ ? 9 : 0;
+        hemi.intensity = inHQ ? 0.9 : 1.6; moonL.intensity = inHQ ? 0.25 : 1.5;
+        const af = flashK(t, ART), ff = flashK(t, FAR, 0.5);
+        redL.intensity = af.reduce((s, v) => s + v, 0) * 95;
+        af.forEach((k, i) => { const s = flashSpr[i], f = ART[i]; s.position.set(f.x, 2.5, f.z); s.scale.setScalar(14 + 30 * k); s.material.opacity = k > 0 && in15 ? Math.min(1, k * 1.6) : 0; });
+        ff.forEach((k, i) => { if (k > 0 && !af[i]) { const s = flashSpr[i], f = FAR[i]; s.position.set(f.x, 4, f.z); s.scale.setScalar(7 + 9 * k); s.material.opacity = k * 0.6; } });
+        // candle glows
+        GX.forEach((x, i) => { const fk = 0.85 + 0.15 * Math.sin(t * 9 + x * 3.7), g = gOn(x, t) * fk, b = bOn(x, t) * fk; gcol.set([g, g * 0.62, g * 0.25], i * 3); gcol.set([b, b * 0.62, b * 0.25], (nG + i) * 3); });
+        glowGeo.attributes.color.needsUpdate = true; glowPts.material.size = 1.3 + Math.max(0, cam.position.y - 3) * 0.09; glowPts.visible = !inHQ;
+        // snow
+        const snowOn = t >= CUT_15; snow.visible = snowOn;
+        if (snowOn) { for (let i = 0; i < NS; i++) { const s = sseed[i]; spos[i * 3] = s[0] + Math.sin(t * 0.7 + s[4]) * 0.3; spos[i * 3 + 1] = ((s[1] - t * s[3]) % 9 + 9) % 9; spos[i * 3 + 2] = s[2]; } snowGeo.attributes.position.needsUpdate = true; }
+        // --- render: colour pass, normal/depth pass, composite
+        cam.layers.enableAll(); renderer.setRenderTarget(rtC); renderer.setClearColor(0x0b0a12, 1); renderer.clear(); renderer.render(scene, cam);
+        scene.overrideMaterial = ndMat; cam.layers.set(0); const fgs = scene.fog; scene.fog = null; renderer.setRenderTarget(rtN); renderer.setClearColor(new TH.Color(0.5, 0.5, 1.0), 1); renderer.clear(); renderer.render(scene, cam);
+        scene.overrideMaterial = null; scene.fog = fgs; cam.layers.enableAll(); renderer.setRenderTarget(null); renderer.render(compScene, compCam);
+        // --- billboards
+        const live = [];
+        for (const b of BB) { const vis = b.vis(t); const p = b.pos ? b.pos(t) : null; if (!vis || !p) { b.outer.setAttribute("display", "none"); continue; }
+          const s = proj(p.x, p.y, p.z); if (s.d < 0.25 || s.sx < -900 || s.sx > FW + 900) { b.outer.setAttribute("display", "none"); continue; }
+          b.outer.removeAttribute("display"); const k = (FH / 2) / Math.tan((c.f * Math.PI) / 360) / s.d / PXM;
+          let ox = 0, oy = 0;
+          if (b.ch) { const fd = sampleTrack(b.face, t, { x: 0, z: 1 }), a = proj(p.x, p.y + 1, p.z), e = proj(p.x + fd.x * 0.6, p.y + 1, p.z + fd.z * 0.6), dx = e.sx - a.sx; b.ch.spec.facing = [[0, Math.abs(dx) > 3 ? Math.sign(dx) : b.pref]];
+            const r = b.ch.update(t); ox = r.x; oy = r.y; b.head = { x: s.sx + (r.headX - r.x) * k, y: s.sy + (r.headY - r.y) * k };
+            if (b.spike) b.spike.setAttribute("transform", `translate(${r.headX},${r.headY - 37})`);
+            const lit = b.side === "H" ? LF.lamp : in15 ? LF.red : (b.side === "G" && gs > 0.3) || (b.side === "B" && bs > 0.3) ? LF.candle : (t > T.p2 - 0.5 && t < CUT_HQ) ? LF.warm : LF.moon;
+            b.wrap.setAttribute("filter", lit); }
+          if (b.upd) b.upd(t);
+          b.wrap.setAttribute("transform", `translate(${(s.sx - ox * k).toFixed(2)},${(s.sy - oy * k).toFixed(2)}) scale(${k.toFixed(4)})`);
+          const cl = clipFor(p); if (cl) { b.poly.setAttribute("points", cl); b.outer.setAttribute("clip-path", `url(#${b.cpId})`); } else b.outer.removeAttribute("clip-path");
+          live.push([s.d, b]); }
+        live.sort((a, b) => b[0] - a[0]); live.forEach(([, b]) => bbL.appendChild(b.outer));
+        merry.update(t, g2.head || { x: 540, y: 900 });
+        // --- HUD
+        tag14.setAttribute("opacity", clamp((t - T.s1 - 0.6) / 0.3, 0, 1) * (1 - clamp((t - 8.1) / 0.3, 0, 1)));
+        tag15.setAttribute("opacity", clamp((t - CUT_15) / 0.15, 0, 1) * (1 - clamp((t - T.f1 + 0.2) / 0.3, 0, 1)));
+        const km = clamp((t - tWent + 0.5) / 0.3, 0, 1) * (1 - clamp((t - T.p2 + 0.35) / 0.25, 0, 1)); mcount.setAttribute("opacity", km);
+        mct.textContent = "≈ " + Math.round(100000 * EASE.inOut(clamp((t - tWent + 0.3) / (tMiles - tWent + 0.6), 0, 1))).toLocaleString("en-US") + " SOLDIERS";
+        const ko = clamp((t - tNextX) / 0.25, 0, 1); order.setAttribute("opacity", inHQ ? ko : 0); order.setAttribute("transform", `translate(540,700) scale(${1.25 - 0.25 * EASE.out(ko)}) rotate(-4)`);
+        let cw = "", cur = null; for (const x of WD) if (t >= x[1] - 0.02 && t < x[2] + 0.12) { cw = x[0].replace(/[,.?!:]/g, "").toUpperCase(); cur = x; }
+        capT.textContent = cw; const kk = cur ? clamp((t - cur[1]) / 0.08, 0, 1) : 1; capT.setAttribute("transform", `translate(540,1380) scale(${0.85 + 0.15 * EASE.back(kk)}) translate(-540,-1380)`);
+        gm.style.background = gradeAt(t);
+        warm.style.opacity = (inHQ ? 0.6 : Math.max(gs, bs * 0.8) * 0.7 + (in15 ? 0.4 : 0)).toFixed(3);
+      }
+      renderer.compile(scene, cam);
+      SR.drive(tl, D, draw);
+      window.__timelines["main"] = tl;
+    })();
+    </script>
+  </body>
+</html>

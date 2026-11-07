@@ -1,0 +1,435 @@
+<template id="f01-cold-open-template">
+  <div
+    id="root"
+    data-composition-id="01-cold-open"
+    data-start="0"
+    data-duration="3.892"
+    data-width="1080"
+    data-height="1920"
+  >
+    <style>
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500-italic.woff2") format("woff2");font-weight:500;font-style:italic;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600-italic.woff2") format("woff2");font-weight:600;font-style:italic;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+#root, #root * { font-variant-numeric: lining-nums; }
+
+#root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+      }
+      #root * { box-sizing: border-box; font-variant-numeric: lining-nums; }
+
+      /* ---------- page ground (own clip layer) ---------- */
+      #f01-paper {
+        position: absolute;
+        inset: 0;
+        background-color: #EFE6D2;
+        background-image:
+          linear-gradient(to right, rgba(185, 169, 140, 0.25) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(185, 169, 140, 0.25) 1px, transparent 1px);
+        background-size: 40px 40px;
+        background-position: 20px 0;
+      }
+      #f01-paper .f01-vignette {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse 80% 70% at 50% 42%, rgba(239, 230, 210, 0) 55%, rgba(150, 120, 80, 0.22) 100%);
+      }
+
+      /* ---------- stage (push-in) + shake wrapper ---------- */
+      #f01-stage {
+        position: absolute;
+        inset: 0;
+        transform-origin: 540px 768px;
+      }
+      #f01-shake {
+        position: absolute;
+        inset: 0;
+      }
+
+      /* ambient speed-line field, streams upward (camera tracks the stoop) */
+      #f01-world {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 1540px;
+        overflow: hidden;
+        -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 0px, #000 140px, #000 1400px, rgba(0,0,0,0) 1540px);
+        mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 0px, #000 140px, #000 1400px, rgba(0,0,0,0) 1540px);
+      }
+      #f01-world-svg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 7200px;
+        overflow: visible;
+      }
+
+      /* altimeter tape, right edge */
+      #f01-alt {
+        position: absolute;
+        left: 984px;
+        top: 200px;
+        width: 80px;
+        height: 1300px;
+        overflow: hidden;
+        -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 0px, #000 120px, #000 1180px, rgba(0,0,0,0) 1300px);
+        mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 0px, #000 120px, #000 1180px, rgba(0,0,0,0) 1300px);
+      }
+      #f01-alt-svg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 80px;
+        height: 3600px;
+      }
+      #f01-alt-label {
+        position: absolute;
+        left: 940px;
+        top: 136px;
+        width: 120px;
+        text-align: right;
+        font-family: "Courier Prime", monospace;
+        font-weight: 700;
+        font-size: 34px;
+        letter-spacing: 0.04em;
+        color: #C2412D;
+        line-height: 1;
+      }
+      #f01-alt-index {
+        position: absolute;
+        left: 948px;
+        top: 748px;
+        width: 40px;
+        height: 40px;
+        overflow: visible;
+      }
+
+      /* stooping falcon (bird + trailing streaks share one svg) */
+      #f01-falcon {
+        position: absolute;
+        left: 440px;
+        top: -510px;
+        width: 200px;
+        height: 1160px;
+        overflow: visible;
+      }
+
+      /* stat slam */
+      #f01-stat {
+        position: absolute;
+        left: 0;
+        top: 633px;
+        width: 1080px;
+        height: 270px;
+        display: flex;
+        justify-content: center;
+        align-items: baseline;
+      }
+      #f01-num {
+        display: inline-block;
+        font-family: "Cormorant Garamond", serif;
+        font-weight: 700;
+        font-size: 300px;
+        line-height: 0.9;
+        letter-spacing: -0.01em;
+        color: #C2412D;
+        transform-origin: 50% 62%;
+        white-space: nowrap;
+      }
+      #f01-mph {
+        display: inline-block;
+        margin-left: 26px;
+        font-family: "Cormorant Garamond", serif;
+        font-weight: 600;
+        font-size: 72px;
+        line-height: 1.1;
+        letter-spacing: 0.04em;
+        color: #2B2118;
+        white-space: nowrap;
+      }
+      #f01-flash {
+        position: absolute;
+        left: 200px;
+        top: 884px;
+        width: 680px;
+        height: 14px;
+        background: #C2412D;
+        opacity: 0;
+      }
+      #f01-rule {
+        position: absolute;
+        left: 230px;
+        top: 900px;
+        width: 620px;
+        height: 4px;
+        background: #C2412D;
+      }
+      #f01-label {
+        position: absolute;
+        left: 0;
+        top: 548px;
+        width: 1080px;
+        text-align: center;
+        font-family: "Courier Prime", monospace;
+        font-weight: 700;
+        font-size: 42px;
+        letter-spacing: 0.12em;
+        color: #C2412D;
+        line-height: 1;
+        white-space: nowrap;
+      }
+      #f01-label span {
+        display: inline-block;
+        padding: 4px 2px 6px 8px;
+      }
+    </style>
+
+    <!-- paper ground -->
+    <div id="f01-paper" class="clip" data-start="0" data-duration="3.892" data-track-index="0">
+      <div class="f01-vignette"></div>
+    </div>
+
+    <div id="f01-stage" class="clip" data-start="0" data-duration="3.892" data-track-index="1">
+      <div id="f01-shake">
+        <!-- ambient speed lines -->
+        <div id="f01-world">
+          <svg id="f01-world-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 7200" width="1080" height="7200">
+            <defs>
+              <linearGradient id="f01-g-streak" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#fff" stop-opacity="0" />
+                <stop offset="0.6" stop-color="#fff" stop-opacity="1" />
+                <stop offset="1" stop-color="#fff" stop-opacity="0" />
+              </linearGradient>
+            </defs>
+            <g id="f01-world-lines"></g>
+          </svg>
+        </div>
+
+        <!-- altimeter tape -->
+        <div id="f01-alt-label">ALT</div>
+        <div id="f01-alt">
+          <svg id="f01-alt-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 3600" width="80" height="3600">
+            <line x1="4" y1="0" x2="4" y2="3600" stroke="#B9A98C" stroke-width="2" />
+            <g id="f01-alt-ticks"></g>
+          </svg>
+        </div>
+        <svg id="f01-alt-index" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="40" height="40">
+          <polygon points="6,8 34,20 6,32" fill="#C2412D" />
+        </svg>
+
+        <!-- stooping falcon -->
+        <svg id="f01-falcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -700 200 1160" width="200" height="1160">
+          <defs>
+            <linearGradient id="f01-g-trail-ink" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#2B2118" stop-opacity="0" />
+              <stop offset="1" stop-color="#2B2118" stop-opacity="0.7" />
+            </linearGradient>
+            <linearGradient id="f01-g-trail-red" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#C2412D" stop-opacity="0" />
+              <stop offset="1" stop-color="#C2412D" stop-opacity="0.95" />
+            </linearGradient>
+            <filter id="f01-vblur" x="-20%" y="-40%" width="140%" height="180%">
+              <feGaussianBlur stdDeviation="0 7" />
+            </filter>
+            <path
+              id="f01-bird-shape"
+              d="M100,456 C92,450 84,444 80,432 C70,416 72,396 80,384 C58,374 42,356 40,330 C38,290 56,210 74,120 C80,88 84,52 88,14 C92,40 96,62 100,80 C104,62 108,40 112,10 C116,52 122,90 128,124 C146,214 164,292 160,332 C158,358 142,374 120,384 C128,396 130,416 120,432 C116,444 108,450 100,456 Z"
+            />
+          </defs>
+          <!-- trailing streaks (grow upward from shoulders / wingtips / tail) -->
+          <g id="f01-trail">
+            <rect class="f01-tr" x="34" y="-240" width="3" height="570" rx="1.5" fill="url(#f01-g-trail-ink)" />
+            <rect class="f01-tr" x="60" y="-330" width="4" height="560" rx="2" fill="url(#f01-g-trail-red)" />
+            <rect class="f01-tr" x="86" y="-480" width="2.5" height="494" rx="1.25" fill="url(#f01-g-trail-ink)" />
+            <rect class="f01-tr" x="99" y="-560" width="3" height="640" rx="1.5" fill="url(#f01-g-trail-red)" />
+            <rect class="f01-tr" x="112" y="-470" width="2.5" height="480" rx="1.25" fill="url(#f01-g-trail-ink)" />
+            <rect class="f01-tr" x="137" y="-320" width="4" height="560" rx="2" fill="url(#f01-g-trail-red)" />
+            <rect class="f01-tr" x="163" y="-250" width="3" height="582" rx="1.5" fill="url(#f01-g-trail-ink)" />
+          </g>
+          <!-- motion echoes -->
+          <g transform="rotate(-3 100 230)">
+            <use id="f01-echo-2" href="#f01-bird-shape" fill="#2B2118" opacity="0.1" filter="url(#f01-vblur)" />
+            <use id="f01-echo-1" href="#f01-bird-shape" fill="#2B2118" opacity="0.22" filter="url(#f01-vblur)" />
+          </g>
+          <!-- the bird -->
+          <g id="f01-bird-jit">
+            <g transform="rotate(-3 100 230)">
+              <use href="#f01-bird-shape" fill="#2B2118" />
+              <!-- folded-wing edges and feather marks, paper-coloured ink gaps -->
+              <path d="M62,352 C70,282 82,184 90,60" fill="none" stroke="#EFE6D2" stroke-width="2.5" stroke-linecap="round" opacity="0.55" />
+              <path d="M138,352 C130,282 118,184 110,56" fill="none" stroke="#EFE6D2" stroke-width="2.5" stroke-linecap="round" opacity="0.55" />
+              <path d="M76,300 C80,250 86,200 92,150" fill="none" stroke="#EFE6D2" stroke-width="1.6" stroke-linecap="round" opacity="0.35" />
+              <path d="M124,300 C120,250 114,200 108,150" fill="none" stroke="#EFE6D2" stroke-width="1.6" stroke-linecap="round" opacity="0.35" />
+              <path d="M84,384 C94,390 106,390 116,384" fill="none" stroke="#EFE6D2" stroke-width="2" stroke-linecap="round" opacity="0.45" />
+              <circle cx="90" cy="412" r="4.5" fill="#EFE6D2" />
+              <circle cx="110" cy="412" r="4.5" fill="#EFE6D2" />
+              <path d="M96,440 C98,446 100,449 100,452" fill="none" stroke="#EFE6D2" stroke-width="1.6" stroke-linecap="round" opacity="0.6" />
+            </g>
+          </g>
+        </svg>
+
+        <!-- stat slam -->
+        <div id="f01-label"><span>DIVE SPEED</span></div>
+        <div id="f01-stat">
+          <span id="f01-num">242</span><span id="f01-mph">MPH</span>
+        </div>
+        <div id="f01-flash"></div>
+        <div id="f01-rule"></div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        var FID = "01-cold-open";
+        var DUR = 3.892;
+        var SVGNS = "http://www.w3.org/2000/svg";
+
+        // seeded PRNG (mulberry32), fixed seed, deterministic
+        function mulberry32(a) {
+          return function () {
+            a |= 0; a = (a + 0x6d2b79f5) | 0;
+            var t = Math.imul(a ^ (a >>> 15), 1 | a);
+            t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+            return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+          };
+        }
+        var rnd = mulberry32(242001);
+
+        var scope = document.querySelector('[data-composition-id="' + FID + '"]') || document;
+        function q(sel) { return scope.querySelector(sel); }
+
+        // ---- ambient speed-line field ----
+        var worldG = q("#f01-world-lines");
+        for (var i = 0; i < 72; i++) {
+          var isRed = rnd() < 0.2;
+          var x = 50 + rnd() * 980;
+          var y = rnd() * 7000;
+          var len = 140 + rnd() * 380;
+          var w = isRed ? 3 + rnd() : 2 + rnd() * 1.5;
+          var r = document.createElementNS(SVGNS, "rect");
+          r.setAttribute("x", x.toFixed(1));
+          r.setAttribute("y", y.toFixed(1));
+          r.setAttribute("width", w.toFixed(2));
+          r.setAttribute("height", len.toFixed(1));
+          r.setAttribute("rx", (w / 2).toFixed(2));
+          r.setAttribute("fill", isRed ? "#C2412D" : "#2B2118");
+          r.setAttribute("opacity", (isRed ? 0.42 + rnd() * 0.16 : 0.14 + rnd() * 0.2).toFixed(3));
+          worldG.appendChild(r);
+        }
+        // soften each streak's ends with the shared gradient mask
+        (function () {
+          var defs = q("#f01-world-svg defs");
+          var m = document.createElementNS(SVGNS, "mask");
+          m.setAttribute("id", "f01-streak-mask");
+          m.setAttribute("maskContentUnits", "objectBoundingBox");
+          var mr = document.createElementNS(SVGNS, "rect");
+          mr.setAttribute("x", "0"); mr.setAttribute("y", "0");
+          mr.setAttribute("width", "1"); mr.setAttribute("height", "1");
+          mr.setAttribute("fill", "url(#f01-g-streak)");
+          m.appendChild(mr);
+          defs.appendChild(m);
+          var rs = worldG.querySelectorAll("rect");
+          for (var k = 0; k < rs.length; k++) rs[k].setAttribute("mask", "url(#f01-streak-mask)");
+        })();
+
+        // ---- altimeter ticks ----
+        var tickG = q("#f01-alt-ticks");
+        for (var j = 0; j <= 120; j++) {
+          var major = j % 5 === 0;
+          var ln = document.createElementNS(SVGNS, "line");
+          ln.setAttribute("x1", "4");
+          ln.setAttribute("x2", major ? "52" : "26");
+          ln.setAttribute("y1", String(j * 30));
+          ln.setAttribute("y2", String(j * 30));
+          ln.setAttribute("stroke", major ? "#5C4A36" : "#B9A98C");
+          ln.setAttribute("stroke-width", major ? "3" : "2");
+          tickG.appendChild(ln);
+        }
+
+        var tl = gsap.timeline({ paused: true });
+        var SLAM = 0.8;
+
+        // continuous world motion (whole shot) — streaks and tape stream upward
+        tl.fromTo("#f01-world-svg", { y: 0 }, { y: -5600, duration: DUR, ease: "none" }, 0);
+        tl.fromTo("#f01-alt-svg", { y: 0 }, { y: -1700, duration: DUR, ease: "none" }, 0);
+
+        // Scene 1 (0.0–0.8): falcon already mid-streak in the top third, plunges down the frame
+        tl.fromTo("#f01-falcon", { y: 0 }, { y: 820, duration: SLAM, ease: "power2.out" }, 0);
+        tl.to("#f01-falcon", { y: 848, duration: DUR - SLAM, ease: "none" }, SLAM);
+        tl.fromTo("#f01-echo-1", { y: -44 }, { y: -18, duration: SLAM, ease: "power2.out" }, 0);
+        tl.fromTo("#f01-echo-2", { y: -96 }, { y: -40, duration: SLAM, ease: "power2.out" }, 0);
+
+        // trailing streaks flicker (seeded keyframes): long during the plunge, shorter once tracked
+        var trails = scope.querySelectorAll(".f01-tr");
+        var STEP = 0.1;
+        for (var a = 0; a < trails.length; a++) {
+          var el = trails[a];
+          tl.set(el, { scaleY: 0.85 + rnd() * 0.15, transformOrigin: "50% 100%" }, 0);
+          for (var t = STEP; t < DUR - 0.01; t += STEP) {
+            var v = t < SLAM ? 0.72 + rnd() * 0.28 : 0.3 + rnd() * 0.22;
+            tl.to(el, { scaleY: v, duration: STEP, ease: "sine.inOut" }, t - STEP);
+          }
+        }
+
+        // buffeting micro-jitter after the camera locks on (seeded)
+        for (var b = SLAM; b < DUR - 0.05; b += 0.16) {
+          tl.to("#f01-bird-jit", {
+            x: (rnd() - 0.5) * 4,
+            rotation: (rnd() - 0.5) * 2,
+            svgOrigin: "100 230",
+            duration: 0.16,
+            ease: "sine.inOut"
+          }, b);
+        }
+
+        // Scene 2 (0.8–2.4): 242 stat-slam, 1-frame red underline flash, impact shake, MPH lands
+        tl.fromTo("#f01-num", { scale: 1.25, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.42, ease: "expo.out" }, SLAM);
+        tl.set("#f01-flash", { opacity: 1 }, SLAM + 0.03);
+        tl.set("#f01-flash", { opacity: 0 }, SLAM + 0.03 + 1 / 30);
+        tl.fromTo("#f01-world", { opacity: 1 }, { opacity: 0.55, duration: 0.4, ease: "power2.out" }, SLAM);
+
+        var SHAKE_STEPS = 8, SHAKE_D = 0.25 / SHAKE_STEPS;
+        for (var s = 0; s < SHAKE_STEPS; s++) {
+          var amp = 4 * (1 - s / SHAKE_STEPS);
+          tl.to("#f01-shake", {
+            x: (rnd() * 2 - 1) * amp,
+            y: (rnd() * 2 - 1) * amp,
+            duration: SHAKE_D,
+            ease: "none"
+          }, SLAM + s * SHAKE_D);
+        }
+        tl.to("#f01-shake", { x: 0, y: 0, duration: SHAKE_D, ease: "none" }, SLAM + SHAKE_STEPS * SHAKE_D);
+
+        tl.fromTo("#f01-mph", { opacity: 0, x: -28 }, { opacity: 1, x: 0, duration: 0.45, ease: "power3.out" }, 1.55);
+
+        // Scene 3 (2.4–3.892): readout types on, red rule drafts under the figure, slow push-in hold
+        tl.fromTo("#f01-label span",
+          { clipPath: "inset(0% 100% 0% 0%)" },
+          { clipPath: "inset(0% 0% 0% 0%)", duration: 0.5, ease: "steps(10)" }, 2.45);
+        tl.fromTo("#f01-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power2.out", transformOrigin: "50% 50%" }, 2.55);
+        tl.fromTo("#f01-stage", { scale: 1 }, { scale: 1.03, duration: DUR - 2.4, ease: "sine.inOut" }, 2.4);
+
+        // pad the timeline to the full frame length
+        tl.set({}, {}, DUR);
+
+        window.__timelines = window.__timelines || {};
+        window.__timelines[FID] = tl;
+      })();
+    </script>
+  </div>
+</template>

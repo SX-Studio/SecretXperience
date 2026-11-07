@@ -1,0 +1,436 @@
+<template>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500-italic.woff2") format("woff2");font-weight:500;font-style:italic;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600-italic.woff2") format("woff2");font-weight:600;font-style:italic;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+#root, #root * { font-variant-numeric: lining-nums; }
+
+    
+    
+    
+    
+    
+    
+
+    #root {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+      color: #2B2118;
+      font-family: "Source Sans 3", sans-serif;
+    }
+
+    /* ---------- paper ground (own clip layer) ---------- */
+    #f05-paper {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 1920px;
+      background-color: #EFE6D2;
+    }
+    #f05-paper .f05-grid {
+      position: absolute;
+      inset: 0;
+      opacity: 0.25;
+      background-image:
+        linear-gradient(to right, #B9A98C 2px, transparent 2px),
+        linear-gradient(to bottom, #B9A98C 2px, transparent 2px);
+      background-size: 40px 40px;
+      background-position: 0 0;
+    }
+    #f05-paper .f05-vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 78% 62% at 50% 46%, rgba(239, 230, 210, 0) 58%, rgba(201, 161, 91, 0.16) 86%, rgba(92, 74, 54, 0.22) 100%);
+    }
+
+    /* ---------- camera + layout ---------- */
+    #f05-cam {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 1920px;
+      transform-origin: 540px 800px;
+    }
+    #f05-kicker {
+      position: absolute;
+      left: 72px;
+      top: 150px;
+      font-family: "Source Sans 3", sans-serif;
+      font-weight: 700;
+      font-size: 30px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #5C4A36;
+      line-height: 1;
+    }
+    #f05-title {
+      position: absolute;
+      left: 68px;
+      top: 188px;
+      font-family: "Cormorant Garamond", serif;
+      font-weight: 600;
+      font-size: 96px;
+      line-height: 1.0;
+      color: #2B2118;
+      white-space: nowrap;
+    }
+
+    /* specimen plate */
+    #f05-wash {
+      position: absolute;
+      left: 690px;
+      top: 90px;
+      width: 380px;
+      height: 360px;
+      border-radius: 50%;
+      background: radial-gradient(ellipse at 50% 50%, rgba(110, 123, 78, 0.26) 0%, rgba(110, 123, 78, 0.16) 45%, rgba(110, 123, 78, 0) 72%);
+    }
+    #f05-plate {
+      position: absolute;
+      left: 745px;
+      top: 118px;
+      width: 265px;
+      height: 274px;
+      mix-blend-mode: multiply;
+    }
+    #f05-latin {
+      position: absolute;
+      left: 700px;
+      top: 398px;
+      width: 355px;
+      text-align: center;
+      font-family: "Cormorant Garamond", serif;
+      font-weight: 600;
+      font-style: italic;
+      font-size: 36px;
+      line-height: 1;
+      color: #5C4A36;
+    }
+
+    /* diagram */
+    #f05-diagram {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 1560px;
+      transform-origin: 540px 300px;
+    }
+    #f05-diagram svg {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 1560px;
+      overflow: visible;
+    }
+    .f05-tlab {
+      position: absolute;
+      font-family: "Courier Prime", monospace;
+      font-weight: 700;
+      font-size: 38px;
+      letter-spacing: 0.04em;
+      line-height: 1;
+      white-space: nowrap;
+      color: #C2412D;
+    }
+    #f05-lab-impala { right: 80px; top: 622px; color: #6E7B4E; }
+    #f05-lab-fast { left: 150px; top: 350px; }
+    #f05-lab-brake { right: 80px; top: 806px; }
+    .f05-note {
+      position: absolute;
+      font-family: "Caveat", cursive;
+      font-weight: 700;
+      font-size: 56px;
+      line-height: 1.1;
+      color: #5C4A36;
+      white-space: nowrap;
+      padding: 0 10px;
+    }
+    #f05-note-fast { left: 322px; top: 540px; }
+    #f05-note-brake { left: 446px; top: 906px; }
+
+    /* stat */
+    #f05-stat {
+      position: absolute;
+      left: 0;
+      top: 1176px;
+      width: 1080px;
+      text-align: center;
+      font-family: "Cormorant Garamond", serif;
+      font-weight: 700;
+      font-size: 200px;
+      line-height: 0.9;
+      color: #C2412D;
+      font-variant-numeric: lining-nums;
+    }
+    #f05-stat-note {
+      position: absolute;
+      left: 0;
+      top: 1372px;
+      width: 1080px;
+      text-align: center;
+      font-family: "Source Sans 3", sans-serif;
+      font-weight: 600;
+      font-size: 44px;
+      line-height: 1.3;
+      color: #2B2118;
+    }
+    #f05-source {
+      position: absolute;
+      left: 72px;
+      top: 1488px;
+      font-family: "Source Sans 3", sans-serif;
+      font-weight: 700;
+      font-size: 30px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #5C4A36;
+      line-height: 1;
+      padding-top: 12px;
+      border-top: 2px solid #B9A98C;
+    }
+    #f05-illus {
+      position: absolute;
+      right: 72px;
+      top: 1482px;
+      font-family: "Source Sans 3", sans-serif;
+      font-weight: 700;
+      font-size: 30px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #5C4A36;
+      line-height: 1;
+      padding: 9px 16px 8px 18px;
+      border: 2px solid #B9A98C;
+      background: #E4D7BC;
+    }
+  </style>
+
+  <div id="root" data-composition-id="05-the-brakes" data-start="0" data-duration="14.333" data-width="1080" data-height="1920">
+    <div id="f05-paper" class="clip" data-start="0" data-duration="14.333" data-track-index="0">
+      <div class="f05-grid"></div>
+      <div class="f05-vignette"></div>
+    </div>
+
+    <div id="f05-cam">
+      <div id="f05-kicker">Top-down view</div>
+      <div id="f05-title">The swerve</div>
+
+      <div id="f05-wash"></div>
+      <img id="f05-plate" src="public/impala-ink.png" alt="" />
+      <div id="f05-latin">Aepyceros melampus</div>
+
+      <div id="f05-diagram">
+        <svg viewBox="0 0 1080 1560" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <mask id="f05-fast-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="1080" height="1560">
+              <path id="f05-fast-reveal" d="M220,1300 L220,760 C220,500 400,410 580,440 C690,458 770,510 820,580"
+                fill="none" stroke="#fff" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"
+                pathLength="1" stroke-dasharray="1 2" stroke-dashoffset="1" />
+            </mask>
+          </defs>
+
+          <!-- full-speed cheetah: dashed, overshoots wide -->
+          <g id="f05-fast-g">
+            <path id="f05-fast" d="M220,1300 L220,760 C220,500 400,410 580,440 C690,458 770,510 820,580"
+              fill="none" stroke="#C2412D" stroke-width="7" stroke-linecap="round" stroke-dasharray="24 18"
+              mask="url(#f05-fast-mask)" />
+          </g>
+          <g id="f05-fast-arrow"><polygon transform="translate(834,598) rotate(54.5)" points="0,0 -32,-16 -32,16" fill="#C2412D" /></g>
+
+          <!-- impala: olive, solid with sample dots -->
+          <path id="f05-impala" d="M300,1180 L300,760 A70,70 0 0 1 370,690 L972,690"
+            fill="none" stroke="#6E7B4E" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"
+            pathLength="1" stroke-dasharray="1 2" stroke-dashoffset="1" />
+          <g id="f05-impala-dots"></g>
+          <g id="f05-impala-arrow"><polygon transform="translate(1002,690)" points="0,0 -32,-16 -32,16" fill="#6E7B4E" /></g>
+
+          <!-- braking cheetah: solid red, dots bunch up before the corner -->
+          <g id="f05-ticks"></g>
+          <path id="f05-brake" d="M380,1300 L380,830 A60,60 0 0 1 440,770 L915,770"
+            fill="none" stroke="#C2412D" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"
+            pathLength="1" stroke-dasharray="1 2" stroke-dashoffset="1" />
+          <g id="f05-brake-dots"></g>
+          <g id="f05-brake-arrow"><polygon transform="translate(946,770)" points="0,0 -32,-16 -32,16" fill="#C2412D" /></g>
+
+          <!-- annotation leaders -->
+          <path id="f05-lead-fast" d="M548,548 C552,520 556,496 566,462"
+            fill="none" stroke="#5C4A36" stroke-width="3" stroke-linecap="round"
+            pathLength="1" stroke-dasharray="1 2" stroke-dashoffset="1" />
+          <path id="f05-lead-brake" d="M452,944 C440,946 432,950 424,958"
+            fill="none" stroke="#5C4A36" stroke-width="3" stroke-linecap="round"
+            pathLength="1" stroke-dasharray="1 2" stroke-dashoffset="1" />
+        </svg>
+
+        <div id="f05-lab-impala" class="f05-tlab">IMPALA</div>
+        <div id="f05-lab-fast" class="f05-tlab">CHEETAH (FULL SPEED)</div>
+        <div id="f05-lab-brake" class="f05-tlab">CHEETAH (BRAKING)</div>
+        <div id="f05-note-fast" class="f05-note">too fast to turn</div>
+        <div id="f05-note-brake" class="f05-note">brakes hard</div>
+      </div>
+
+      <div id="f05-stat">~70%</div>
+      <div id="f05-stat-note">harder braking than its prey</div>
+      <div id="f05-source">Wilson et al., Nature 2018</div>
+      <div id="f05-illus">Illustration</div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var NS = "http://www.w3.org/2000/svg";
+      var D = 13.833;
+      var tl = gsap.timeline({ paused: true });
+
+      // ---------- analytic path geometry (no layout reads) ----------
+      // Impala: M300,1180 L300,760 A70 -> 370,690 L972,690
+      var IM_V = 420, IM_R = 70, IM_A = Math.PI * IM_R / 2, IM_H = 602, IM_L = IM_V + IM_A + IM_H;
+      function impalaAt(s) {
+        if (s <= IM_V) return [300, 1180 - s];
+        if (s <= IM_V + IM_A) {
+          var th = Math.PI + ((s - IM_V) / IM_A) * (Math.PI / 2);
+          return [370 + IM_R * Math.cos(th), 760 + IM_R * Math.sin(th)];
+        }
+        return [370 + (s - IM_V - IM_A), 690];
+      }
+      // Braking cheetah: M380,1300 L380,830 A60 -> 440,770 L915,770
+      var BR_V = 470, BR_R = 60, BR_A = Math.PI * BR_R / 2, BR_H = 475, BR_L = BR_V + BR_A + BR_H;
+      function brakeAt(s) {
+        if (s <= BR_V) return [380, 1300 - s];
+        if (s <= BR_V + BR_A) {
+          var th = Math.PI + ((s - BR_V) / BR_A) * (Math.PI / 2);
+          return [440 + BR_R * Math.cos(th), 830 + BR_R * Math.sin(th)];
+        }
+        return [440 + (s - BR_V - BR_A), 770];
+      }
+      function dot(parent, x, y, color) {
+        var c = document.createElementNS(NS, "circle");
+        c.setAttribute("cx", x.toFixed(1));
+        c.setAttribute("cy", y.toFixed(1));
+        c.setAttribute("r", "8");
+        c.setAttribute("fill", "#EFE6D2");
+        c.setAttribute("stroke", color);
+        c.setAttribute("stroke-width", "4.5");
+        parent.appendChild(c);
+        return c;
+      }
+
+      // ---------- camera: slow documentary push-in across the whole shot ----------
+      tl.fromTo("#f05-cam", { scale: 1 }, { scale: 1.02, duration: D, ease: "sine.inOut" }, 0);
+
+      // ---------- Scene 1 (0.0–3.0): impala swerves, full-speed cheetah overshoots ----------
+      tl.fromTo("#f05-kicker", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, 0.0);
+      tl.fromTo("#f05-title", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, 0.1);
+      tl.fromTo("#f05-wash", { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 1.4, ease: "power2.out" }, 0.0);
+      tl.fromTo("#f05-plate", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.1, ease: "power2.inOut" }, 0.15);
+      tl.fromTo("#f05-latin", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power2.out" }, 0.9);
+
+      // impala path self-draws at a steady pace; sample dots drop as the head passes
+      var imStart = 0.2, imDur = 1.3;
+      tl.fromTo("#f05-impala", { opacity: 0 }, { opacity: 1, duration: 0.05 }, imStart);
+      tl.fromTo("#f05-impala", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: imDur, ease: "none" }, imStart);
+      var imDots = document.getElementById("f05-impala-dots");
+      for (var i = 0; i * 94 <= IM_L - 30; i++) {
+        var s = i * 94;
+        var p = impalaAt(s);
+        var d = dot(imDots, p[0], p[1], "#6E7B4E");
+        tl.fromTo(d, { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power1.out" }, imStart + (s / IM_L) * imDur);
+      }
+      tl.fromTo("#f05-impala-arrow", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power1.out" }, imStart + imDur - 0.05);
+      tl.fromTo("#f05-lab-impala", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 1.35);
+
+      // full-speed cheetah: dashed track revealed by a self-drawing mask, constant fast pace
+      var fsStart = 0.9, fsDur = 1.5;
+      tl.fromTo("#f05-fast-g", { opacity: 0 }, { opacity: 1, duration: 0.05 }, fsStart);
+      tl.fromTo("#f05-fast-reveal", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: fsDur, ease: "none" }, fsStart);
+      tl.fromTo("#f05-fast-arrow", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power1.out" }, fsStart + fsDur - 0.05);
+      tl.fromTo("#f05-lab-fast", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 1.9);
+
+      // field note writes on, leader line draws to the wide arc
+      tl.fromTo("#f05-note-fast", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.75, ease: "power1.inOut" }, 2.2);
+      tl.fromTo("#f05-lead-fast", { opacity: 0 }, { opacity: 1, duration: 0.05 }, 2.75);
+      tl.fromTo("#f05-lead-fast", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.35, ease: "power2.out" }, 2.75);
+
+      // ---------- Scene 2 (3.0–6.2): braking cheetah — head slows into the corner ----------
+      // Sample positions at equal time steps: spacing shrinks before the corner (braking), then opens up.
+      var BS = [0, 100, 190, 270, 340, 398, 442, 474, 498, 520, 545, 575, 620, 690, 780, 880, 980, BR_L];
+      var brStart = 3.2, dt = 0.15;
+      tl.fromTo("#f05-brake", { opacity: 0 }, { opacity: 1, duration: 0.05 }, brStart);
+      var brDots = document.getElementById("f05-brake-dots");
+      var ticks = document.getElementById("f05-ticks");
+      for (var k = 0; k < BS.length; k++) {
+        var t = brStart + k * dt;
+        if (k < BS.length - 1) {
+          tl.fromTo("#f05-brake",
+            { strokeDashoffset: 1 - BS[k] / BR_L },
+            { strokeDashoffset: 1 - BS[k + 1] / BR_L, duration: dt, ease: "none", immediateRender: k === 0 },
+            t);
+        }
+        if (k < BS.length - 1) {
+          var bp = brakeAt(BS[k]);
+          var bd = dot(brDots, bp[0], bp[1], "#C2412D");
+          tl.fromTo(bd, { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "power1.out" }, t);
+          // brake ticks (skid marks) on the straight run-in where the cheetah sheds speed
+          if (BS[k] >= 270 && BS[k] < BR_V) {
+            var tg = document.createElementNS(NS, "g");
+            var y = (1300 - BS[k]).toFixed(1);
+            [[344, 360], [400, 416]].forEach(function (xx) {
+              var ln = document.createElementNS(NS, "line");
+              ln.setAttribute("x1", xx[0]); ln.setAttribute("x2", xx[1]);
+              ln.setAttribute("y1", y); ln.setAttribute("y2", y);
+              ln.setAttribute("stroke", "#C2412D");
+              ln.setAttribute("stroke-width", "4");
+              ln.setAttribute("stroke-linecap", "round");
+              tg.appendChild(ln);
+            });
+            ticks.appendChild(tg);
+            tl.fromTo(tg, { opacity: 0 }, { opacity: 0.85, duration: 0.15, ease: "power1.out" }, t + 0.04);
+          }
+        }
+      }
+      var brEnd = brStart + (BS.length - 1) * dt;
+      tl.fromTo("#f05-brake-arrow", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power1.out" }, brEnd - 0.05);
+      tl.fromTo("#f05-note-brake", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.6, ease: "power1.inOut" }, 4.75);
+      tl.fromTo("#f05-lead-brake", { opacity: 0 }, { opacity: 1, duration: 0.05 }, 5.3);
+      tl.fromTo("#f05-lead-brake", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.3, ease: "power2.out" }, 5.3);
+      tl.fromTo("#f05-lab-brake", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 5.55);
+
+      // ---------- Scene 3 (6.2–13.83): diagram eases up, ~70% lands, sources ----------
+      tl.fromTo("#f05-diagram", { scale: 1, y: 0 }, { scale: 0.84, y: -20, duration: 1.3, ease: "power2.inOut" }, 6.3);
+
+      var stat = document.getElementById("f05-stat");
+      var cnt = { v: 0 };
+      tl.fromTo("#f05-stat", { opacity: 0, y: 24, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: "power3.out" }, 8.6);
+      tl.fromTo(cnt, { v: 0 }, {
+        v: 70, duration: 0.9, ease: "power2.out",
+        onUpdate: function () { stat.textContent = "~" + Math.round(cnt.v) + "%"; }
+      }, 8.6);
+      tl.fromTo("#f05-stat-note", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, 9.9);
+      tl.fromTo("#f05-source", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 10.8);
+      tl.fromTo("#f05-illus", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 11.2);
+
+      // hold to the full duration
+      tl.set({}, {}, D);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["05-the-brakes"] = tl;
+    })();
+  </script>
+</template>

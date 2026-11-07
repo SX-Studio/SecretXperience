@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=1280, height=720" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script src="assets/three.min.js"></script><script src="assets/sr-engine-v1.js"></script><script src="assets/sr-v3.js"></script><script src="assets/lips.js"></script><script src="assets/ep2-sets.js"></script>
+<script src="assets/sr3d.js"></script><script src="assets/ep3-interiors.js"></script><script src="assets/ep3-props.js"></script>
+<style>* { margin: 0; padding: 0; } html, body { width: 1280px; height: 720px; overflow: hidden; background: #050409; }
+#root { width: 1280px; height: 720px; position: relative; overflow: hidden; } #bg, #ov { position: absolute; left: 0; top: 0; width: 1280px; height: 720px; }
+.t { position: absolute; font-family: "Permanent Marker"; color: #FFFFFF; line-height: 0.95; text-shadow: 0 6px 0 #000, 0 0 34px rgba(0,0,0,0.95); }
+#vig { position: absolute; inset: 0; background: radial-gradient(ellipse 70% 70% at 62% 55%, rgba(0,0,0,0) 45%, rgba(4,3,8,0.85) 100%); }
+</style></head><body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="3" data-width="1280" data-height="720">
+<canvas id="bg" width="1280" height="720" data-layout-ignore></canvas><svg id="ov" viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" data-layout-ignore></svg><div id="dark" data-layout-ignore style="position:absolute;inset:0;mix-blend-mode:multiply;background:radial-gradient(ellipse 46% 62% at 58% 52%, #FFFFFF 0%, #FFF2E0 30%, #3A2A3A 75%, #120A18 100%)"></div><div id="vig" data-layout-ignore></div>
+<div class="t" id="tA" style="left:40px; top:26px; font-size:104px; transform: rotate(-4deg);">THEY JUST<br/><span style="color:#FFC24A">TYPE IT?!</span></div>
+<div class="t" id="tB" style="left:40px; top:30px; font-size:112px; transform: rotate(-4deg); display:none">$10 = <span style="color:#7CFFB0">$40?!</span></div>
+</div>
+<script>
+(function () { const SR = window.SR, TH = window.THREE; SR.SKIN = "#F1EBDD";
+  const W3 = SR3D.create({ canvas: document.getElementById("bg"), ov: document.getElementById("ov"), width: 1280, height: 720 });
+  const I = EP3.interiors(W3), P = EP3.props(W3); I.occ.forEach((o) => W3.occ.push(o));
+  W3.skyCol("#050409", "#050409", "#050409", "#050409"); W3.fog.color.set("#050409");
+  const hemi = new TH.HemisphereLight(0x3a3060, 0x100818, 0.25); W3.scene.add(hemi);
+  const bA = I.anchors.bank, scr = bA.screen;
+  I.setScreen(["+$1,000", "", "NEW MONEY", ""]);
+  const glow = new TH.PointLight(0xffb040, 9, 6, 1.4); glow.position.set(scr.x + 0.3, scr.y + 0.1, scr.z + 0.5); W3.scene.add(glow);
+  // B: bill + sandwich glowing in the shop
+  const bill = P.makeBill({}); bill.group.scale.setScalar(5); const sw = P.makeSandwich(); sw.group.scale.setScalar(2.2);
+  const mo = W3.person({ id: "mo", P3: [[0, { x: scr.x + 0.95, y: 0, z: scr.z + 0.75 }]], face: [[0, { x: -1, z: -0.2 }]], pref: -1, rig: { color: "#E8834A", outfit: "apron", hair: "short", hairColor: "#3A2A22", mood: [[0, "shock", 0]], pose: [[0, "startle", 0]], look: [[0, { x: -0.6, y: 0.1 }]] } });
+  const lit = W3.litF("#FFB040", -7, 2, [0.95, 0.72, 0.5], 1.0);
+  const ana = W3.person({ id: "ana", P3: [[0, { x: 300.7, y: 0, z: 0.9 }]], face: [[0, { x: -1, z: 0 }]], pref: -1, rig: { color: "#3FA7A0", outfit: "tee", hair: "bun", hairColor: "#5A3A2A", mood: [[0, "surprised", 0]], pose: [[0, "startle", 0]] } });
+  const litG = W3.litF("#9AFFC0", -7, 2, [0.75, 0.95, 0.8], 1.0);
+  const glow2 = new TH.PointLight(0x7cffb0, 0, 5, 1.4); glow2.position.set(299.9, 1.6, 1.2); W3.scene.add(glow2);
+  const camA = W3.keys([{ t: 0, p: [scr.x + 1.9, scr.y + 0.45, scr.z + 1.7], l: [scr.x + 0.45, scr.y + 0.28, scr.z + 0.4], f: 38, dof: 0.18, fn: 20, ff: 60 }]);
+  const camB = W3.keys([{ t: 0, p: [301.9, 1.5, 2.2], l: [300.25, 1.35, 0.6], f: 36, dof: 0.6, fn: 20, ff: 60 }]);
+  const tl = gsap.timeline({ paused: true });
+  SR.drive(tl, 3, (t) => { const B = t >= 1.5; document.getElementById("tA").style.display = B ? "none" : "block"; document.getElementById("tB").style.display = B ? "block" : "none";
+    I.update(t, { night: 0, oven2: 1, oven2Bow: 0 }); glow2.intensity = B ? 9 : 0; glow.intensity = B ? 0 : 9;
+    bill.group.visible = sw.group.visible = B; bill.group.position.set(299.75, 1.55, 1.0); bill.group.rotation.set(-0.1, 0.9, 0.12); sw.group.position.set(300.1, 1.12, 0.35); sw.group.rotation.y = 0.6;
+    mo.vis = () => !B; ana.vis = () => B;
+    W3.frame(t, B ? camB(t) : camA(t), { lightFor: (b) => (b === mo ? lit : litG) }); });
+  window.__timelines["main"] = tl; })();
+</script></body></html>

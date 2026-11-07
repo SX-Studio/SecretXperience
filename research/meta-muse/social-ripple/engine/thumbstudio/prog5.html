@@ -1,0 +1,20 @@
+<!doctype html><html><head><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@900&display=swap" rel="stylesheet">
+<script src="assets/sr-engine-v1.js"></script><script src="assets/sr-v3.js"></script><script src="assets/face5rig.js"></script><script src="studio.js"></script><script src="assets/cast5.js"></script>
+<style>*{margin:0;padding:0}body{width:1280px;height:720px;overflow:hidden;background:#1E1B22}svg{position:absolute;inset:0}</style></head>
+<body><svg id="art" viewBox="0 0 1280 720"></svg><script>
+const svg=document.getElementById('art'); TS.defs(svg); const {el}=SR;
+// row 1: a single mood track blended over time (progressive); row 2: single moods
+const track=[[0,"forced",0],[1,"nervous",1.6,"inOut"],[3,"worried",1.5,"inOut"],[4.6,"crying",1.5,"inOut"],[6.6,"touched",1.6,"inOut"],[8.4,"relieved",1.4,"inOut"],[10,"laugh",0.5,"inOut"]];
+const TT=[0,1.8,3.8,5.2,6.4,7.5,9.4,10.6], cols=["#8FA0FF","#9FB4E8","#7F96CC","#6F8FD6","#B7A6E0","#FFD68A","#FFC93C","#FFB347"];
+const lab=(x,y,s,fs=20)=>el("text",{x,y,"font-family":"Outfit","font-weight":900,"font-size":fs,fill:"#fff",stroke:"#1E1B22","stroke-width":5,"paint-order":"stroke"},svg).textContent=s;
+TT.forEach((t,i)=>{ const cx=80+i*160, cy=180; const clip=el("clipPath",{id:"p"+i},svg.querySelector("defs")); el("rect",{x:cx-76,y:cy-150,width:152,height:300,rx:16},clip);
+  const g=el("g",{"clip-path":`url(#p${i})`},svg); el("rect",{x:cx-76,y:cy-150,width:152,height:300,fill:cols[i]},g);
+  const c=SR.Character(g,Object.assign({},CAST5.ana,{id:"a"+i,scale:1.7,x:[[0,cx-8]],y:[[0,cy+430]],facing:[[0,1]],noWalk:true,pose:[[0,"relaxed",0]],mood:track,look:[[0,{x:0,y:0}]]}));
+  c.update(t+0.0001); lab(cx-68,cy+140,"t="+t+"s",18); });
+lab(14,26,"ONE MOOD TRACK, BLENDED OVER TIME  (forced → nervous → worried → crying → touched → relieved → laugh)",19);
+const S=[["mo","grin"],["kai","angry"],["theo","shock"],["bea","skeptic"],["finn","cheeky"],["nia","smug"],["you","sad"],["mo","bliss"]];
+S.forEach(([w,m],i)=>{ const cx=80+i*160, cy=530; const clip=el("clipPath",{id:"q"+i},svg.querySelector("defs")); el("rect",{x:cx-76,y:cy-150,width:152,height:300,rx:16},clip);
+  const g=el("g",{"clip-path":`url(#q${i})`},svg); el("rect",{x:cx-76,y:cy-150,width:152,height:300,fill:["#FFC93C","#FF5A5A","#FF6B6B","#C9B6FF","#7DE0B0","#FF9E6B","#9FB4E8","#FFD68A"][i]},g);
+  const c=SR.Character(g,Object.assign({},CAST5[w],{id:"s"+i,scale:1.7,x:[[0,cx-8]],y:[[0,cy+430]],facing:[[0,1]],noWalk:true,pose:[[0,"relaxed",0]],mood:[[0,m,0]],look:[[0,{x:0,y:0}]]}));
+  c.update(1.3); lab(cx-68,cy+140,m.toUpperCase(),20); });
+</script></body></html>

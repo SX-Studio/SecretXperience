@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=2560, height=1440" />
+    <script src="assets/sr-engine.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 2560px; height: 1440px; overflow: hidden; background: #FBE6D2; }
+      #root { position: relative; width: 2560px; height: 1440px; }
+      #art { position: absolute; inset: 0; width: 2560px; height: 1440px; }
+      #word { position: absolute; left: 672px; top: 598px; font-family: "Outfit"; font-weight: 900; font-size: 150px; letter-spacing: -0.035em; color: #1E1B22; line-height: 1; white-space: nowrap; }
+      #tag { position: absolute; left: 680px; top: 772px; font-family: "Nunito"; font-weight: 800; font-size: 44px; color: #1E1B22; white-space: nowrap; }
+      #tag b { color: #C8501F; font-weight: 900; }
+      #week { position: absolute; left: 682px; top: 846px; font-family: "Nunito"; font-weight: 800; font-size: 30px; color: #5B4A3E; letter-spacing: 0.02em; white-space: nowrap; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="1" data-width="2560" data-height="1440" data-no-timeline>
+      <svg id="art" viewBox="0 0 2560 1440" xmlns="http://www.w3.org/2000/svg" data-layout-ignore></svg>
+      <div id="word">Social Ripple</div>
+      <div id="tag">How one small act shapes <b>all of us.</b></div>
+      <div id="week">ANIMATED FILMS · REAL RESEARCH · NEW EVERY WEEK</div>
+    </div>
+    <script>
+      (function () {
+        const { el, Set, Character, PAL } = window.SR;
+        const svg = document.getElementById("art");
+        const bg = el("g", {}, svg), mid = el("g", {}, svg), fg = el("g", {}, svg);
+        const G = 922; // ground line inside the 423 px safe strip (y 508-931)
+        const defs = el("defs", {}, svg);
+        const lg = el("linearGradient", { id: "bsky", x1: 0, y1: 0, x2: 0, y2: 1 }, defs);
+        el("stop", { offset: "0", "stop-color": "#F4C6A3" }, lg); el("stop", { offset: "0.62", "stop-color": "#FBE3CC" }, lg);
+        el("rect", { x: 0, y: 0, width: 2560, height: 1440, fill: "url(#bsky)" }, bg);
+        Set.sun(bg, 2240, 330, 120, "#FFE3B0");
+        Set.building(bg, -60, 420, 760, G, PAL.sage, { cols: 3 });
+        Set.building(bg, 360, 260, 560, G, PAL.sand, { cols: 2 });
+        Set.tree(bg, 300, G, 1.15);
+        Set.building(bg, 2080, 520, 820, G, PAL.slate, { cols: 4 });
+        Set.lamp(bg, 2120, G);
+        Set.tree(bg, 2420, G, 1.0, PAL.forest);
+        // soft wash behind the wordmark so the type reads on the sky
+        el("rect", { x: 0, y: G, width: 2560, height: 1440 - G, fill: PAL.walk }, bg);
+        el("rect", { x: 0, y: G + 70, width: 2560, height: 12, fill: PAL.curb }, bg);
+        el("rect", { x: 0, y: G + 82, width: 2560, height: 600, fill: PAL.street }, bg);
+        for (let i = 0; i < 2560; i += 220) if (i < 1000 || i > 1700) el("rect", { x: i + 40, y: G + 250, width: 110, height: 10, fill: "#E9E2D6" }, bg);
+        for (let i = 0; i < 9; i++) el("rect", { x: 1060 + i * 70, y: G + 100, width: 40, height: 420, fill: "#EDE6DA" }, bg);
+        // the chain: three strangers, a gold ripple passing from one to the next
+        const people = [
+          Character(fg, { id: "b1", color: PAL.teal, hair: "ponytail", seed: 5, x: [[0, 1630]], y: [[0, G]], pose: [[0, "give", 0]], mood: [[0, "content", 0]], look: [[0, { x: 1, y: 0 }]], prop: { kind: "cup" }, scale: 0.95 }),
+          Character(fg, { id: "b2", color: PAL.mustard, hair: "curly", glasses: true, seed: 9, x: [[0, 1830]], y: [[0, G]], facing: [[0, -1]], pose: [[0, "relaxed", 0]], mood: [[0, "happy", 0]], look: [[0, { x: 1, y: 0 }]], scale: 0.95 }),
+          Character(fg, { id: "b3", color: PAL.rude, hair: "short", seed: 2, x: [[0, 1990]], y: [[0, G]], facing: [[0, -1]], pose: [[0, "wave", 0]], mood: [[0, "joy", 0]], look: [[0, { x: 1, y: -0.3 }]], scale: 0.74 }),
+        ];
+        const pts = people.map((p) => p.update(0.2));
+        const fx = el("g", {}, svg);
+        // rings around the first act, threads to the next two people
+        [118, 82, 48].forEach((r, i) => el("circle", { cx: pts[0].handX, cy: pts[0].handY - 14, r, fill: "none", stroke: PAL.kind, "stroke-width": 9 - i * 2, opacity: 0.35 + i * 0.25 }, fx));
+        const arc = (a, b, h) => `M${a.headX},${a.headY - 50} Q${(a.headX + b.headX) / 2},${Math.min(a.headY, b.headY) - h} ${b.headX},${b.headY - 50}`;
+        el("path", { d: arc(pts[0], pts[1], 150), fill: "none", stroke: PAL.kind, "stroke-width": 8, "stroke-linecap": "round" }, fx);
+        el("path", { d: arc(pts[1], pts[2], 130), fill: "none", stroke: PAL.kind, "stroke-width": 8, "stroke-linecap": "round", "stroke-dasharray": "2 18" }, fx);
+        el("circle", { cx: pts[2].headX, cy: pts[2].headY - 50, r: 12, fill: PAL.kind }, fx);
+        // degree marks above each person
+        ["1°", "2°", "3°"].forEach((d, i) => { const t = el("text", { x: pts[i].headX, y: pts[i].headY - 78 - (i === 0 ? 0 : 0), "text-anchor": "middle", "font-family": "Outfit", "font-weight": 900, "font-size": 34, fill: PAL.ink }, fx); t.textContent = d; });
+        // wordmark ripple mark
+        const mx = 600, my = 668;
+        [58, 40, 22].forEach((r, i) => el("circle", { cx: mx, cy: my, r, fill: "none", stroke: i === 2 ? PAL.ink : PAL.kind, "stroke-width": i === 2 ? 0 : 9 - i * 2 }, fx));
+        el("circle", { cx: mx, cy: my, r: 16, fill: PAL.ink }, fx);
+        el("ellipse", { cx: mx + 4, cy: my - 2, rx: 3.6, ry: 4.4, fill: PAL.white }, fx);
+        el("ellipse", { cx: mx + 12, cy: my - 2, rx: 3.6, ry: 4.4, fill: PAL.white }, fx);
+        window.SR.Butterfly(fx, { x: [[0, mx + 46]], y: [[0, my - 58]], scale: 0.85, flap: 0, rot: 24 });
+        Set.grain(svg, "bgrain", 0.05, 2560, 1440);
+      })();
+    </script>
+  </body>
+</html>

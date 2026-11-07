@@ -1,0 +1,681 @@
+<template id="f04-versus-template">
+  <div
+    id="root"
+    data-composition-id="04-versus"
+    data-start="0"
+    data-duration="14.12"
+    data-width="1080"
+    data-height="1920"
+  >
+    <style>
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500-italic.woff2") format("woff2");font-weight:500;font-style:italic;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600-italic.woff2") format("woff2");font-weight:600;font-style:italic;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+#root, #root * { font-variant-numeric: lining-nums; }
+
+#root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        font-variant-numeric: lining-nums;
+      }
+      #root * { box-sizing: border-box; font-variant-numeric: lining-nums; }
+
+      /* ---------- page ground (own clip layer) ---------- */
+      #f04-paper {
+        position: absolute;
+        inset: 0;
+        background-color: #EFE6D2;
+        background-image:
+          linear-gradient(to right, rgba(185, 169, 140, 0.25) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(185, 169, 140, 0.25) 1px, transparent 1px);
+        background-size: 40px 40px;
+        background-position: 20px 0;
+      }
+      #f04-paper .f04-vignette {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse 78% 68% at 50% 45%, rgba(239, 230, 210, 0) 55%, rgba(150, 120, 80, 0.22) 100%);
+      }
+      #f04-paper .f04-fibre {
+        position: absolute;
+        inset: 0;
+        width: 1080px;
+        height: 1920px;
+        opacity: 0.07;
+        mix-blend-mode: multiply;
+      }
+
+      /* ---------- stage / shake ---------- */
+      #f04-stage {
+        position: absolute;
+        inset: 0;
+        transform-origin: 540px 900px;
+      }
+      #f04-shake {
+        position: absolute;
+        inset: 0;
+      }
+
+      /* ---------- versus cards ---------- */
+      .f04-wrap {
+        position: absolute;
+        left: 72px;
+        width: 936px;
+        height: 560px;
+        perspective: 1600px;
+        transform-origin: 0 0;
+      }
+      #f04-cheetah { top: 220px; z-index: 2; }
+      #f04-falcon { top: 900px; z-index: 2; }
+
+      .f04-card {
+        position: absolute;
+        inset: 0;
+        background: #E4D7BC;
+        border: 2px solid #B9A98C;
+        transform-style: preserve-3d;
+        transform-origin: 50% 50%;
+      }
+      #f04-cheetah .f04-card { box-shadow: 12px 12px 0 rgba(92, 74, 54, 0.16); }
+      #f04-falcon .f04-card { box-shadow: -12px 12px 0 rgba(92, 74, 54, 0.16); }
+
+      /* inner hairline frame (specimen mat) */
+      .f04-card::before {
+        content: "";
+        position: absolute;
+        inset: 12px;
+        border: 2px solid rgba(185, 169, 140, 0.55);
+        pointer-events: none;
+      }
+
+      .f04-plate {
+        position: absolute;
+        left: 36px;
+        top: 36px;
+        width: 400px;
+        height: 300px;
+        overflow: hidden;
+      }
+      .f04-plate img {
+        position: absolute;
+        display: block;
+        mix-blend-mode: multiply;
+      }
+      #f04-cheetah .f04-plate img { left: 0; top: 30px; width: 400px; height: 241px; }
+      #f04-falcon .f04-plate img { left: -391px; top: -399px; width: 1073px; height: 1668px; }
+
+      .f04-namebox {
+        position: absolute;
+        left: 476px;
+        top: 52px;
+        width: 420px;
+      }
+      .f04-chip {
+        display: inline-block;
+        padding: 4px 14px 2px;
+        border: 2px solid #C2412D;
+        color: #C2412D;
+        font-family: "Courier Prime", monospace;
+        font-weight: 700;
+        font-size: 30px;
+        letter-spacing: 0.04em;
+        line-height: 1.1;
+      }
+      .f04-name {
+        margin-top: 18px;
+        font-family: "Cormorant Garamond", serif;
+        font-weight: 700;
+        font-size: 96px;
+        line-height: 0.95;
+        letter-spacing: 0;
+        color: #2B2118;
+      }
+      .f04-latin {
+        margin-top: 12px;
+        font-family: "Cormorant Garamond", serif;
+        font-style: italic;
+        font-weight: 500;
+        font-size: 44px;
+        line-height: 1.1;
+        color: #5C4A36;
+      }
+
+      .f04-row {
+        position: absolute;
+        left: 36px;
+        width: 864px;
+        height: 84px;
+        border-top: 2px solid #B9A98C;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .f04-row-1 { top: 360px; }
+      .f04-row-2 { top: 444px; }
+      .f04-row-label {
+        font-family: "Source Sans 3", sans-serif;
+        font-weight: 700;
+        font-size: 30px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #5C4A36;
+      }
+      .f04-row-val {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        font-family: "Courier Prime", monospace;
+        font-weight: 700;
+        font-size: 44px;
+        letter-spacing: 0.04em;
+        color: #2B2118;
+      }
+      .f04-row-val.f04-key { color: #C2412D; }
+      .f04-row-val svg { width: 34px; height: 34px; display: block; }
+
+      /* speed streaks trail each card on entry */
+      .f04-streaks {
+        position: absolute;
+        top: 60px;
+        width: 380px;
+        height: 440px;
+        pointer-events: none;
+      }
+      #f04-cheetah .f04-streaks { left: -400px; }
+      #f04-falcon .f04-streaks { right: -400px; }
+      .f04-streak {
+        position: absolute;
+        height: 3px;
+        background: #2B2118;
+        border-radius: 2px;
+      }
+      .f04-streak.f04-red { background: #C2412D; height: 4px; }
+      #f04-cheetah .f04-streak { right: 0; transform-origin: 100% 50%; }
+      #f04-falcon .f04-streak { left: 0; transform-origin: 0% 50%; }
+
+      /* ---------- VS roundel ---------- */
+      #f04-vs-pos {
+        position: absolute;
+        left: 430px;
+        top: 730px;
+        width: 220px;
+        height: 220px;
+        z-index: 5;
+        transform-origin: 50% 50%;
+      }
+      #f04-vs {
+        position: absolute;
+        inset: 0;
+        transform-origin: 50% 50%;
+      }
+      #f04-vs svg {
+        position: absolute;
+        inset: 0;
+        width: 220px;
+        height: 220px;
+        overflow: visible;
+      }
+      #f04-vs .f04-vs-text {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-bottom: 8px;
+        font-family: "Cormorant Garamond", serif;
+        font-weight: 700;
+        font-size: 110px;
+        line-height: 1;
+        letter-spacing: 0.02em;
+        color: #EFE6D2;
+      }
+
+      /* ---------- chart ---------- */
+      #f04-chart {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: visible;
+      }
+      .f04-schem {
+        position: absolute;
+        left: 176px;
+        top: 486px;
+        font-family: "Courier Prime", monospace;
+        font-weight: 400;
+        font-size: 32px;
+        letter-spacing: 0.02em;
+        color: #5C4A36;
+        white-space: nowrap;
+      }
+      .f04-axlabel {
+        position: absolute;
+        font-family: "Source Sans 3", sans-serif;
+        font-weight: 700;
+        font-size: 32px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #5C4A36;
+        white-space: nowrap;
+      }
+      #f04-x-slow { left: 176px; top: 1322px; }
+      #f04-x-name { left: 0; width: 1080px; top: 1322px; text-align: center; color: #2B2118; }
+      #f04-x-fast { right: 96px; top: 1322px; }
+      #f04-y-rot {
+        position: absolute;
+        left: 104px;
+        top: 935px;
+        width: 0;
+        height: 0;
+        transform: rotate(-90deg);
+      }
+      #f04-y-name {
+        position: absolute;
+        left: -220px;
+        top: -24px;
+        width: 440px;
+        text-align: center;
+        color: #2B2118;
+      }
+
+      #f04-source {
+        position: absolute;
+        left: 72px;
+        top: 1430px;
+        padding: 10px 18px 8px;
+        background: #E4D7BC;
+        border: 2px solid #B9A98C;
+        font-family: "Source Sans 3", sans-serif;
+        font-weight: 700;
+        font-size: 30px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #5C4A36;
+        white-space: nowrap;
+      }
+
+      /* hand-written note */
+      #f04-note {
+        position: absolute;
+        left: 196px;
+        top: 560px;
+        transform: rotate(-3deg);
+        transform-origin: 0 50%;
+      }
+      #f04-note-text {
+        display: block;
+        padding: 10px 18px 18px 8px;
+        font-family: "Caveat", cursive;
+        font-weight: 700;
+        font-size: 68px;
+        line-height: 1.05;
+        color: #5C4A36;
+        white-space: nowrap;
+      }
+    </style>
+
+    <!-- full-bleed paper ground -->
+    <div id="f04-paper" class="clip" data-start="0" data-duration="14.12" data-track-index="0">
+      <svg class="f04-fibre" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <filter id="f04-fibre-filter" x="0" y="0" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.9 0.35" numOctaves="2" seed="4" />
+          <feColorMatrix type="saturate" values="0" />
+        </filter>
+        <rect width="1080" height="1920" filter="url(#f04-fibre-filter)" />
+      </svg>
+      <div class="f04-vignette"></div>
+    </div>
+
+    <!-- content stage -->
+    <div id="f04-stage" class="clip" data-start="0" data-duration="14.12" data-track-index="1">
+
+      <!-- schematic chart (below the compacted cards) -->
+      <svg id="f04-chart" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="f04-wash-grad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#C9A15B" stop-opacity="0.9" />
+            <stop offset="100%" stop-color="#C9A15B" stop-opacity="0.15" />
+          </linearGradient>
+        </defs>
+        <g id="f04-grid" stroke="#B9A98C" stroke-width="2" stroke-dasharray="6 10" fill="none">
+          <line id="f04-grid-1" x1="172" y1="1120" x2="960" y2="1120" />
+          <line id="f04-grid-2" x1="172" y1="940" x2="960" y2="940" />
+          <line id="f04-grid-3" x1="172" y1="760" x2="960" y2="760" />
+        </g>
+        <path id="f04-wash" d="" fill="url(#f04-wash-grad)" opacity="0.25" />
+        <path id="f04-axis-x" d="M170 1300 L980 1300" fill="none" stroke="#2B2118" stroke-width="3" stroke-linecap="round" />
+        <path id="f04-axis-x-tip" d="M962 1288 L982 1300 L962 1312" fill="none" stroke="#2B2118" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        <path id="f04-axis-y" d="M170 1300 L170 560" fill="none" stroke="#2B2118" stroke-width="3" stroke-linecap="round" />
+        <path id="f04-axis-y-tip" d="M158 578 L170 558 L182 578" fill="none" stroke="#2B2118" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        <path id="f04-curve" d="" fill="none" stroke="#2B2118" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+        <path id="f04-curve-red" d="" fill="none" stroke="#C2412D" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
+        <path id="f04-leader" d="" fill="none" stroke="#5C4A36" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+        <path id="f04-underline" d="" fill="none" stroke="#C2412D" stroke-width="4" stroke-linecap="round" />
+        <g id="f04-marker">
+          <circle id="f04-marker-pulse" cx="0" cy="0" r="26" fill="none" stroke="#C2412D" stroke-width="3" opacity="0" />
+          <circle id="f04-marker-ring" cx="0" cy="0" r="26" fill="none" stroke="#C2412D" stroke-width="3" />
+          <circle id="f04-marker-dot" cx="0" cy="0" r="12" fill="#C2412D" />
+        </g>
+      </svg>
+
+      <div class="f04-schem" id="f04-schem">schematic · after Mills et al. 2018</div>
+      <div id="f04-y-rot"><div id="f04-y-name" class="f04-axlabel">Steering force</div></div>
+      <div id="f04-x-slow" class="f04-axlabel">slow</div>
+      <div id="f04-x-name" class="f04-axlabel">Dive speed</div>
+      <div id="f04-x-fast" class="f04-axlabel">fast</div>
+      <div id="f04-source">Mills et al., PLOS Comp. Biol. 2018</div>
+
+      <div id="f04-note"><span id="f04-note-text">faster = sharper turns</span></div>
+
+      <!-- versus card pair (shake layer) -->
+      <div id="f04-shake">
+        <!-- CHEETAH (episode 1 callback) -->
+        <div id="f04-cheetah" class="f04-wrap">
+          <div class="f04-card" id="f04-cheetah-card">
+            <div class="f04-streaks">
+              <div class="f04-streak" style="top: 40px; width: 360px;"></div>
+              <div class="f04-streak f04-red" style="top: 150px; width: 300px;"></div>
+              <div class="f04-streak" style="top: 260px; width: 340px;"></div>
+              <div class="f04-streak" style="top: 380px; width: 240px;"></div>
+            </div>
+            <div class="f04-plate" id="f04-cheetah-plate"><img src="public/cheetah-ink.png" alt="" /></div>
+            <div class="f04-namebox" id="f04-cheetah-name">
+              <span class="f04-chip">EP. 1</span>
+              <div class="f04-name">CHEETAH</div>
+              <div class="f04-latin">Acinonyx jubatus</div>
+            </div>
+            <div class="f04-row f04-row-1" id="f04-cheetah-row1">
+              <span class="f04-row-label">To turn</span>
+              <span class="f04-row-val f04-key">
+                <svg viewBox="0 0 34 34" aria-hidden="true"><path d="M4 8 L30 8 L17 30 Z" fill="#C2412D" /></svg>
+                SLOWS DOWN
+              </span>
+            </div>
+            <div class="f04-row f04-row-2" id="f04-cheetah-row2">
+              <span class="f04-row-label">Hunts</span>
+              <span class="f04-row-val">ON LAND</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- FALCON -->
+        <div id="f04-falcon" class="f04-wrap">
+          <div class="f04-card" id="f04-falcon-card">
+            <div class="f04-streaks">
+              <div class="f04-streak" style="top: 30px; width: 360px;"></div>
+              <div class="f04-streak f04-red" style="top: 140px; width: 320px;"></div>
+              <div class="f04-streak" style="top: 250px; width: 370px;"></div>
+              <div class="f04-streak f04-red" style="top: 360px; width: 260px;"></div>
+            </div>
+            <div class="f04-plate" id="f04-falcon-plate"><img src="public/gould-peregrine.jpg" alt="" /></div>
+            <div class="f04-namebox" id="f04-falcon-name">
+              <span class="f04-chip">EP. 2</span>
+              <div class="f04-name">FALCON</div>
+              <div class="f04-latin">Falco peregrinus</div>
+            </div>
+            <div class="f04-row f04-row-1" id="f04-falcon-row1">
+              <span class="f04-row-label">To turn</span>
+              <span class="f04-row-val f04-key">
+                <svg viewBox="0 0 34 34" aria-hidden="true"><path d="M4 26 L30 26 L17 4 Z" fill="#C2412D" /></svg>
+                SPEEDS UP
+              </span>
+            </div>
+            <div class="f04-row f04-row-2" id="f04-falcon-row2">
+              <span class="f04-row-label">Hunts</span>
+              <span class="f04-row-val">IN A DIVE</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- red VS roundel -->
+        <div id="f04-vs-pos">
+          <div id="f04-vs">
+            <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <defs>
+                <filter id="f04-vs-rough" x="-10%" y="-10%" width="120%" height="120%">
+                  <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="9" result="f04vn" />
+                  <feDisplacementMap in="SourceGraphic" in2="f04vn" scale="7" xChannelSelector="R" yChannelSelector="G" />
+                </filter>
+              </defs>
+              <circle cx="110" cy="110" r="124" fill="none" stroke="#B9A98C" stroke-width="2" />
+              <circle cx="110" cy="110" r="100" fill="#C2412D" fill-opacity="0.94" filter="url(#f04-vs-rough)" />
+              <circle cx="110" cy="110" r="86" fill="none" stroke="#EFE6D2" stroke-width="2" stroke-opacity="0.7" />
+            </svg>
+            <div class="f04-vs-text">VS</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        var FID = "04-versus";
+        var DUR = 13.62;
+
+        // seeded PRNG (deterministic shake / wobble)
+        function mulberry32(a) {
+          return function () {
+            a |= 0; a = (a + 0x6d2b79f5) | 0;
+            var t = Math.imul(a ^ (a >>> 15), 1 | a);
+            t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+            return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+          };
+        }
+        var rnd = mulberry32(2018);
+        function j(n) { return (rnd() * 2 - 1) * n; }
+
+        // ---------- schematic curve: dive speed -> steering force (rising, convex) ----------
+        var X0 = 200, X1 = 940, Y0 = 1272, Y1 = 612;
+        var N = 48, pts = [];
+        for (var i = 0; i <= N; i++) {
+          var u = i / N;
+          var f = 0.18 * u + 0.82 * u * u;
+          pts.push([X0 + (X1 - X0) * u, Y0 - (Y0 - Y1) * f]);
+        }
+        var curveD = "M" + pts.map(function (p) { return p[0].toFixed(1) + " " + p[1].toFixed(1); }).join(" L");
+        var cum = [0];
+        for (var k = 1; k < pts.length; k++) {
+          var dx = pts[k][0] - pts[k - 1][0], dy = pts[k][1] - pts[k - 1][1];
+          cum.push(cum[k - 1] + Math.sqrt(dx * dx + dy * dy));
+        }
+        var curveLen = cum[cum.length - 1];
+        function pointAt(p) {
+          var target = p * curveLen;
+          for (var q = 1; q < cum.length; q++) {
+            if (cum[q] >= target) {
+              var seg = cum[q] - cum[q - 1];
+              var r = seg > 0 ? (target - cum[q - 1]) / seg : 0;
+              return [pts[q - 1][0] + (pts[q][0] - pts[q - 1][0]) * r, pts[q - 1][1] + (pts[q][1] - pts[q - 1][1]) * r];
+            }
+          }
+          return pts[pts.length - 1];
+        }
+
+        var curve = document.getElementById("f04-curve");
+        var curveRed = document.getElementById("f04-curve-red");
+        curve.setAttribute("d", curveD);
+        curveRed.setAttribute("d", curveD);
+        var CL = Math.ceil(curveLen) + 4;
+        curve.setAttribute("stroke-dasharray", CL + " " + CL);
+        curveRed.setAttribute("stroke-dasharray", CL + " " + CL);
+        curve.setAttribute("stroke-dashoffset", CL);
+        curveRed.setAttribute("stroke-dashoffset", CL);
+
+        document.getElementById("f04-wash").setAttribute("d", curveD + " L" + X1 + " 1298 L" + X0 + " 1298 Z");
+
+        // marker starts at the curve origin
+        var marker = document.getElementById("f04-marker");
+        var start = pointAt(0);
+        marker.setAttribute("transform", "translate(" + start[0].toFixed(1) + " " + start[1].toFixed(1) + ")");
+
+        // axis lengths (straight lines)
+        var AX = 810, AY = 740, TIP = 50;
+        ["f04-axis-x", "f04-axis-y"].forEach(function (id, n) {
+          var L = n === 0 ? AX : AY;
+          var el = document.getElementById(id);
+          el.setAttribute("stroke-dasharray", L + " " + L);
+          el.setAttribute("stroke-dashoffset", L);
+        });
+        ["f04-axis-x-tip", "f04-axis-y-tip"].forEach(function (id) {
+          var el = document.getElementById(id);
+          el.setAttribute("stroke-dasharray", TIP + " " + TIP);
+          el.setAttribute("stroke-dashoffset", TIP);
+        });
+
+        // hand-drawn leader: from note end to the curve's top
+        var la = [818, 628], end = pointAt(1), lb = [end[0] - 34, end[1] + 6];
+        var lpts = [], LN = 6;
+        for (var m = 0; m <= LN; m++) {
+          var t = m / LN;
+          var bx = la[0] + (lb[0] - la[0]) * t;
+          var by = la[1] + (lb[1] - la[1]) * t - Math.sin(t * Math.PI) * 26;
+          if (m > 0 && m < LN) { bx += j(2.5); by += j(2.5); }
+          lpts.push([bx, by]);
+        }
+        var leaderD = "M" + lpts[0][0].toFixed(1) + " " + lpts[0][1].toFixed(1);
+        var leaderLen = 0;
+        for (var n2 = 1; n2 < lpts.length; n2++) {
+          leaderD += " L" + lpts[n2][0].toFixed(1) + " " + lpts[n2][1].toFixed(1);
+          var ex = lpts[n2][0] - lpts[n2 - 1][0], ey = lpts[n2][1] - lpts[n2 - 1][1];
+          leaderLen += Math.sqrt(ex * ex + ey * ey);
+        }
+        leaderD += " M" + (lb[0] - 18).toFixed(1) + " " + (lb[1] - 2).toFixed(1) + " L" + lb[0].toFixed(1) + " " + lb[1].toFixed(1) + " L" + (lb[0] - 6).toFixed(1) + " " + (lb[1] + 17).toFixed(1);
+        leaderLen = Math.ceil(leaderLen + 60);
+        var leader = document.getElementById("f04-leader");
+        leader.setAttribute("d", leaderD);
+        leader.setAttribute("stroke-dasharray", leaderLen + " " + leaderLen);
+        leader.setAttribute("stroke-dashoffset", leaderLen);
+
+        // wobbly underline beneath the note
+        var ul = "M226 " + (652 + j(2)).toFixed(1);
+        for (var w = 1; w <= 6; w++) ul += " L" + (226 + w * 96) + " " + (652 - w * 5 + j(2.5)).toFixed(1);
+        var under = document.getElementById("f04-underline");
+        under.setAttribute("d", ul);
+        under.setAttribute("stroke-dasharray", "640 640");
+        under.setAttribute("stroke-dashoffset", "640");
+
+        // seeded impact shake (max 4px, 0.25 s, decaying)
+        var shakeKeys = [];
+        for (var s = 0; s < 6; s++) {
+          var amp = 4 * (1 - s / 6);
+          shakeKeys.push({ x: j(amp), y: j(amp) });
+        }
+
+        var tl = gsap.timeline({ paused: true });
+
+        // ===== Scene 1 (0.0–2.6): CHEETAH card slides in from the left, tilted =====
+        tl.fromTo("#f04-cheetah-card",
+          { x: -820, rotationZ: -7, rotationX: 14, opacity: 0 },
+          { x: 0, rotationZ: -1.2, rotationX: 7, opacity: 1, duration: 0.75, ease: "power3.out" }, 0.05);
+        tl.fromTo("#f04-cheetah .f04-streak", { scaleX: 0, opacity: 0.9 },
+          { scaleX: 1, opacity: 0.9, duration: 0.3, ease: "power2.out", stagger: 0.04 }, 0.08);
+        tl.to("#f04-cheetah .f04-streak", { opacity: 0, duration: 0.3, ease: "power1.out", stagger: 0.03 }, 0.62);
+        tl.fromTo("#f04-cheetah-plate", { clipPath: "inset(0% 100% 0% 0%)" },
+          { clipPath: "inset(0% 0% 0% 0%)", duration: 0.7, ease: "power2.out" }, 0.55);
+        tl.fromTo("#f04-cheetah-name", { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.55, ease: "power3.out" }, 0.75);
+        tl.fromTo("#f04-cheetah-row1", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 1.25);
+        tl.fromTo("#f04-cheetah-row2", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 1.75);
+
+        // ===== Scene 2 (2.6–4.2): FALCON card slams in from the right, VS stamps =====
+        tl.fromTo("#f04-falcon-card",
+          { x: 980, rotationZ: 8, rotationX: -16, opacity: 0 },
+          { x: 0, rotationZ: 1.2, rotationX: -7, opacity: 1, duration: 0.45, ease: "expo.out" }, 2.62);
+        tl.fromTo("#f04-falcon .f04-streak", { scaleX: 0, opacity: 0.9 },
+          { scaleX: 1, opacity: 0.9, duration: 0.2, ease: "power2.out", stagger: 0.03 }, 2.64);
+        tl.to("#f04-falcon .f04-streak", { opacity: 0, duration: 0.3, ease: "power1.out", stagger: 0.03 }, 2.98);
+        tl.fromTo("#f04-vs",
+          { scale: 1.9, rotation: -24, opacity: 0 },
+          { scale: 1, rotation: -8, opacity: 1, duration: 0.28, ease: "expo.out" }, 2.95);
+        // impact shake on the card pair
+        var sk = 3.0;
+        shakeKeys.forEach(function (kf, idx) {
+          tl.to("#f04-shake", { x: kf.x, y: kf.y, duration: 0.04, ease: "none" }, sk + idx * 0.04);
+        });
+        tl.to("#f04-shake", { x: 0, y: 0, duration: 0.04, ease: "none" }, sk + 0.24);
+        tl.fromTo("#f04-falcon-plate", { clipPath: "inset(0% 100% 0% 0%)" },
+          { clipPath: "inset(0% 0% 0% 0%)", duration: 0.6, ease: "power2.out" }, 3.1);
+        tl.fromTo("#f04-falcon-name", { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 3.2);
+        tl.fromTo("#f04-falcon-row1", { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.45, ease: "power3.out" }, 3.45);
+        tl.fromTo("#f04-falcon-row2", { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.45, ease: "power3.out" }, 3.75);
+
+        // ===== Scene 3 (4.2–9.5): cards slide up + shrink into a book-open pair; chart draws =====
+        var MV = 4.4, MD = 1.05, SC = 0.468;
+        tl.fromTo("#f04-cheetah", { x: 0, y: 0, scale: 1 }, { x: 0, y: -70, scale: SC, duration: MD, ease: "power3.inOut" }, MV);
+        tl.fromTo("#f04-falcon", { x: 0, y: 0, scale: 1 }, { x: 498, y: -750, scale: SC, duration: MD, ease: "power3.inOut" }, MV + 0.06);
+        tl.to("#f04-cheetah-card", { rotationX: 0, rotationZ: 0, rotationY: 13, duration: MD, ease: "power3.inOut" }, MV);
+        tl.to("#f04-falcon-card", { rotationX: 0, rotationZ: 0, rotationY: -13, duration: MD, ease: "power3.inOut" }, MV + 0.06);
+        tl.fromTo("#f04-vs-pos", { x: 0, y: 0, scale: 1 }, { x: 0, y: -559, scale: 0.5, duration: MD, ease: "power3.inOut" }, MV + 0.03);
+
+        // counter-phase idle float (explicit alternating tweens)
+        var bobT = MV + MD + 0.1, bobSeg = 1.1, sign = 1;
+        while (bobT + bobSeg <= DUR) {
+          tl.to("#f04-cheetah-card", { y: -4 * sign, duration: bobSeg, ease: "sine.inOut" }, bobT);
+          tl.to("#f04-falcon-card", { y: 4 * sign, duration: bobSeg, ease: "sine.inOut" }, bobT);
+          bobT += bobSeg; sign = -sign;
+        }
+
+        // axes draw
+        tl.to("#f04-axis-x", { attr: { "stroke-dashoffset": 0 }, duration: 0.7, ease: "power2.inOut" }, 5.05);
+        tl.to("#f04-axis-x-tip", { attr: { "stroke-dashoffset": 0 }, duration: 0.2, ease: "power1.out" }, 5.7);
+        tl.to("#f04-axis-y", { attr: { "stroke-dashoffset": 0 }, duration: 0.7, ease: "power2.inOut" }, 5.3);
+        tl.to("#f04-axis-y-tip", { attr: { "stroke-dashoffset": 0 }, duration: 0.2, ease: "power1.out" }, 5.95);
+        tl.fromTo("#f04-grid line", { opacity: 0 }, { opacity: 0.8, duration: 0.5, ease: "power1.out", stagger: 0.12 }, 5.6);
+        // axis labels
+        tl.fromTo("#f04-x-name", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 5.85);
+        tl.fromTo("#f04-y-name", { opacity: 0, y: -18 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 6.1);
+        tl.fromTo("#f04-x-slow, #f04-x-fast", { opacity: 0 }, { opacity: 1, duration: 0.45, ease: "power1.out", stagger: 0.15 }, 6.55);
+        // schematic label + source chip
+        tl.fromTo("#f04-schem", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.6, ease: "power1.inOut" }, 6.9);
+        tl.fromTo("#f04-source", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 7.2);
+        // the curve rises on "more force to steer"
+        tl.fromTo(curve, { attr: { "stroke-dashoffset": CL } }, { attr: { "stroke-dashoffset": 0 }, duration: 1.5, ease: "power1.inOut" }, 7.75);
+        tl.fromTo("#f04-wash", { opacity: 0 }, { opacity: 0.25, duration: 0.9, ease: "power1.out" }, 8.9);
+
+        // ===== Scene 4 (9.5–13.62): red marker rides the curve up; field note; hold =====
+        tl.fromTo("#f04-marker", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power1.out" }, 9.5);
+        tl.fromTo("#f04-marker-dot", { scale: 0.3, transformOrigin: "50% 50%" }, { scale: 1, duration: 0.3, ease: "power2.out", transformOrigin: "50% 50%" }, 9.5);
+        var ride = { p: 0 };
+        tl.to(ride, {
+          p: 1,
+          duration: 2.1,
+          ease: "power2.in",
+          onUpdate: function () {
+            var pt = pointAt(ride.p);
+            marker.setAttribute("transform", "translate(" + pt[0].toFixed(1) + " " + pt[1].toFixed(1) + ")");
+            curveRed.setAttribute("stroke-dashoffset", (CL * (1 - ride.p)).toFixed(1));
+          }
+        }, 9.75);
+        tl.fromTo("#f04-note-text", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.0, ease: "power1.inOut" }, 10.45);
+        tl.to(leader, { attr: { "stroke-dashoffset": 0 }, duration: 0.55, ease: "power2.inOut" }, 11.45);
+        // arrival pulse (single shot)
+        tl.set("#f04-marker-pulse", { opacity: 0.9 }, 11.86);
+        tl.fromTo("#f04-marker-pulse", { scale: 1, transformOrigin: "50% 50%" },
+          { scale: 2.4, duration: 0.7, ease: "power2.out", transformOrigin: "50% 50%" }, 11.86);
+        tl.to("#f04-marker-pulse", { opacity: 0, duration: 0.7, ease: "power2.out" }, 11.86);
+        tl.to(under, { attr: { "stroke-dashoffset": 0 }, duration: 0.5, ease: "power2.out" }, 12.3);
+
+        // slow documentary push-in underneath the payoff
+        tl.fromTo("#f04-stage", { scale: 1 }, { scale: 1.025, duration: DUR - 9.5, ease: "sine.inOut" }, 9.5);
+
+        tl.set({}, {}, DUR);
+
+        window.__timelines = window.__timelines || {};
+        window.__timelines[FID] = tl;
+      })();
+    </script>
+  </div>
+</template>

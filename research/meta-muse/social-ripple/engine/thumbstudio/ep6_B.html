@@ -1,0 +1,21 @@
+<!doctype html><html><head><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@900&display=swap" rel="stylesheet">
+<script src="assets/sr-engine-v1.js"></script><script src="assets/sr-v3.js"></script><script src="studio.js"></script>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{width:1280px;height:720px;overflow:hidden;background:#0f1a3a}
+#bg{position:absolute;inset:0;background:radial-gradient(circle at 62% 62%,#ffcf5a 0%,#ff7a3c 14%,#2f6fd8 42%,#162a6e 70%,#0b1230 100%)}
+svg{position:absolute;inset:0}
+.t{position:absolute;left:34px;top:30px;font-family:Outfit;font-weight:900;line-height:.92;color:#fff;-webkit-text-stroke:14px #1E1B22;paint-order:stroke fill;text-shadow:0 10px 0 #1E1B22}
+.t .a{font-size:128px;color:#FFD23F}.t .b{font-size:150px}
+.ui{position:absolute;left:44px;bottom:46px;background:#2B2140;border:7px solid #FFC94A;border-radius:26px;padding:10px 26px 4px;font-family:Outfit;font-weight:900;color:#fff;box-shadow:0 0 36px #ffc94acc,0 10px 0 rgba(0,0,0,.35)}
+.ui small{display:block;font-size:26px;color:#FFE3A0;letter-spacing:4px}.ui b{font-size:84px;line-height:1}</style></head>
+<body><div id="bg"></div><svg id="art" viewBox="0 0 1280 720"></svg>
+<div class="t"><div class="a">1 SANDWICH.</div></div><div class="ui"><small>LIVES TOUCHED</small><b>347</b></div>
+<script>
+const svg=document.getElementById('art'); TS.defs(svg); const {el}=SR;
+const MO={color:"#E8834A",outfit:"apron",hair:"short",hairColor:"#3A2A22",pants:"#3A4A63",seed:7};
+const sx=650, sy=560;   // the sandwich
+for(let i=0;i<14;i++){const a=-Math.PI*0.95+i*(Math.PI*1.25/13), r=520+((i*97)%5)*60; TS.thread(svg,sx,sy,sx+Math.cos(a)*r*1.3,sy+Math.sin(a)*r*0.75,4+(i%3),-(80+(i*53)%140));}
+const hg=el("g",{filter:"url(#rim)"},svg); TS.char(hg,MO,{id:"mo",x:860,y:1230,scale:3.0,pose:"give",mood:"starstruck",facing:-1,look:{x:-0.3,y:0.1}});
+const s=el("g",{transform:`translate(${sx},${sy}) scale(2.2)`,filter:"url(#glow)"},svg);
+el("path",{d:"M-38,4 Q0,-36 38,4 Z",fill:"#E8B06A",stroke:"#1E1B22","stroke-width":5},s);el("rect",{x:-40,y:4,width:80,height:9,rx:4,fill:"#7DBA5A",stroke:"#1E1B22","stroke-width":4},s);
+el("rect",{x:-38,y:13,width:76,height:8,rx:4,fill:"#E2574C",stroke:"#1E1B22","stroke-width":4},s);el("rect",{x:-38,y:21,width:76,height:13,rx:6,fill:"#E8B06A",stroke:"#1E1B22","stroke-width":5},s);
+</script></body></html>

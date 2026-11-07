@@ -1,0 +1,94 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #s1-svg { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+    #s1-svg text { font-family: "Nunito"; }
+  </style>
+  <div id="root" data-composition-id="s1" data-width="1920" data-height="1080">
+    <svg id="s1-svg" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" data-layout-ignore></svg>
+  </div>
+  <script>
+    (function () {
+      const SR = window.SR; const { el, Set, Character, Ripple, Camera, Crowd, Badge, PAL, EASE, clamp, sampleTrack, drive } = SR;
+      const svg = document.getElementById("s1-svg");
+      const world = el("g", {}, svg);
+      const bg = el("g", {}, world), mid = el("g", {}, world), road = el("g", {}, world), fg = el("g", {}, world), fx = el("g", {}, world);
+      const G = 700, LANE = 1000;
+      // ---- set: morning city, the 7:42 clock sign, crosswalk, traffic light ----
+      Set.sky(bg, "morning", 3200, 1700);
+      el("rect", { x: -800, y: -400, width: 4000, height: 520, fill: "#F7D3B5" }, bg);
+      Set.sun(bg, 1640, 160, 90);
+      Set.building(bg, -420, 420, 640, G, PAL.slate, { cols: 3 });
+      Set.building(bg, 0, 360, 520, G, PAL.sage, { cols: 3 });
+      Set.building(bg, 360, 460, 600, G, PAL.sand, { cols: 3 });
+      Set.clockSign(bg, 590, 210, "7:42");
+      Set.building(bg, 820, 300, 470, G, PAL.terracotta, { cols: 2 });
+      Set.building(bg, 1120, 420, 700, G, PAL.plum, { cols: 3 });
+      Set.building(bg, 1540, 380, 560, G, PAL.sage, { cols: 3 });
+      Set.building(bg, 1920, 520, 650, G, PAL.slate, { cols: 4 });
+      Set.tree(bg, 300, G, 0.8); Set.tree(bg, 1700, G, 0.9);
+      Set.street(bg, G, 3200);
+      el("rect", { x: -800, y: G, width: 800, height: 1000, fill: PAL.street }, bg);
+      el("rect", { x: -800, y: G, width: 4000, height: 70, fill: PAL.walk }, bg);
+      Set.crosswalk(road, 960, G, 440, 7);
+      const light = Set.trafficLight(mid, 900, G);
+      Set.lamp(mid, 1480, G);
+      // ---- people ----
+      const crowd = Crowd(mid, { n: 9, seed: 742, x0: -200, x1: 2300, y: G + 40, dur: 14, speed: [60, 110], scale: [0.6, 0.72], idp: "s1c" });
+      // Dev in his car (visible through the glass)
+      const carG = el("g", {}, road);
+      const devWrap = el("g", { "clip-path": SR.clip(carG, "s1-devclip", "M-66,-150 L-36,-150 L-36,-102 L-100,-102 Z M-24,-150 L64,-150 Q80,-150 90,-130 L110,-102 L-24,-102 Z") }, carG);
+      const dev = Character(devWrap, { id: "s1-dev", color: PAL.navy, hair: "short", seed: 21, scale: 0.8, x: [[0, 60]], y: [[0, 40 - 0]], noWalk: true,
+        pose: [[0, "drive", 0], [5.2, "honk", 0.15], [6.4, "drive", 0.3]], mood: [[0, "annoyed", 0], [5.2, "angry", 0.2], [7.5, "annoyed", 0.4]], look: [[0, { x: 1, y: 0 }]] });
+      const car = Set.car(carG, 0, 0, "#C9A227", 1, { holes: true });
+      el("rect", { x: 70, y: -128, width: 34, height: 22, fill: "#FFF6C7", stroke: PAL.ink, "stroke-width": 2 }, carG);
+      el("path", { d: "M80,-118 q4,-6 8,0 q4,-6 8,0", fill: "none", stroke: PAL.kind, "stroke-width": 3 }, carG);
+      const carX = [[0, 520], [10.9, 520], [13.8, 2400, "in"]];
+      // Maya crossing, reading her phone
+      const maya = Character(fg, { id: "s1-maya", color: PAL.teal, hair: "ponytail", seed: 5,
+        x: [[0, 1060], [5.2, 1090], [5.25, 1090], [13.8, 1140]], y: [[0, 760], [5.2, 930, "linear"], [5.32, 860, "out"], [5.6, 930, "in"], [9.0, 1010], [13.8, 1040]],
+        scaleT: [[0, 0.92], [5.2, 1.04], [13.8, 1.12]],
+        facing: [[0, 1], [6.3, -1]],
+        pose: [[0, "phone", 0], [5.25, "startle", 0.12], [6.4, "shout", 0.3], [8.4, "crossed", 0.4]],
+        mood: [[0, "content", 0], [5.25, "shock", 0.1], [6.3, "angry", 0.3], [8.4, "annoyed", 0.4]],
+        look: [[0, { x: 0, y: 1 }], [5.25, { x: 0, y: -0.4 }], [6.3, { x: 1, y: 0 }]],
+        prop: { kind: "phone" }, squash: [[5.22, 0.07]] });
+      // ---- fx: HONK burst, rings, the mood mark, the thread off-screen ----
+      const burst = el("g", { opacity: 0 }, fx);
+      { let d = ""; const n = 22; for (let i = 0; i <= n; i++) { const a = (i / n) * Math.PI * 2, rr = i % 2 ? 1 : 1.45; d += (i ? "L" : "M") + Math.cos(a) * 120 * rr + "," + Math.sin(a) * 78 * rr; } el("path", { d: d + "Z", fill: PAL.white, stroke: PAL.rude, "stroke-width": 9, "stroke-linejoin": "round" }, burst); }
+      const honkT = el("text", { "text-anchor": "middle", "dominant-baseline": "central", "font-family": "Outfit", "font-weight": 900, "font-size": 86, fill: PAL.rude, y: 4 }, burst); honkT.textContent = "HONK!";
+      const ring1 = Ripple(fx, { color: PAL.rude, t: 5.25, dur: 1.5, maxR: 520, rings: 4, width: 10 });
+      const ring2 = Ripple(fx, { color: PAL.rude, t: 6.5, dur: 1.2, maxR: 200, rings: 2, width: 7, tThread: 10.3, threadDur: 1.3, threadHold: 3, arc: 260 });
+      const mark = el("circle", { r: 58, fill: "none", stroke: PAL.rude, "stroke-width": 6, opacity: 0 }, fx);
+      const badge = Badge(fx, { text: "1°", t0: 7.1, color: PAL.rude, lift: 120 });
+      const lightState = (t) => (t < 10.6 ? "red" : "green");
+      const cam = Camera(world, [[0, { x: 900, y: 430, z: 0.8, r: 0 }], [1.2, { x: 900, y: 430, z: 0.8, r: 0 }], [5.0, { x: 880, y: 800, z: 1.32, r: 0 }, "inOut"],
+        [5.22, { x: 880, y: 800, z: 1.32, r: 0 }], [5.3, { x: 780, y: 850, z: 2.0, r: -1.5 }, "out"], [6.3, { x: 800, y: 845, z: 1.95, r: -1 }, "linear"],
+        [6.6, { x: 1020, y: 830, z: 1.65, r: 0 }, "out"], [10.2, { x: 1060, y: 820, z: 1.8, r: 0 }, "inOut"], [12.0, { x: 1380, y: 720, z: 1.25, r: 0 }, "inOut"], [13.8, { x: 1420, y: 700, z: 1.2, r: 0 }]],
+        { shake: [[5.2, 0], [5.25, 9], [6.2, 0, "out"]] });
+      const tl = gsap.timeline({ paused: true });
+      drive(tl, 13.8, (t) => {
+        cam.update(t);
+        light.set(lightState(t));
+        crowd.update(t);
+        const cx = sampleTrack(carX, t, 520);
+        carG.setAttribute("transform", `translate(${cx},${LANE})`);
+        dev.update(t);
+        const m = maya.update(t);
+        const front = { x: cx + 200, y: LANE - 110 };
+        const kb = clamp((t - 5.22) / 0.16, 0, 1), kbo = clamp((t - 6.3) / 0.25, 0, 1);
+        burst.setAttribute("opacity", t > 5.22 ? 1 - kbo : 0);
+        burst.setAttribute("transform", `translate(${front.x + 110},${front.y - 40}) rotate(-8) scale(${EASE.back(kb) * (1 + 0.04 * Math.sin(t * 40))})`);
+        ring1.update(t, front);
+        const head = { x: m.headX, y: m.headY };
+        ring2.update(t, head, { x: 2350, y: 520 });
+        const km = clamp((t - 6.8) / 0.4, 0, 1);
+        mark.setAttribute("cx", head.x); mark.setAttribute("cy", head.y);
+        mark.setAttribute("opacity", km * (0.75 + 0.25 * Math.sin(t * 5)));
+        mark.setAttribute("r", 58 + 4 * Math.sin(t * 5));
+        badge.update(t, head);
+      });
+      window.__timelines["s1"] = tl;
+    })();
+  </script>
+</template>
