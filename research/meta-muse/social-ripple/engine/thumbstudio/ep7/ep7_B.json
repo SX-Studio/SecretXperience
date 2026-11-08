@@ -1,0 +1,251 @@
+{
+ "name": "ep7_B",
+ "assets": "../assets",
+ "bg": {
+  "css": "radial-gradient(circle at 50% 35%,#8f7cff 0%,#4b3cc2 32%,#24185e 68%,#0f0a2b 100%)"
+ },
+ "crowd": [
+  {
+   "look": {
+    "color": "#F4C430",
+    "outfit": "coat",
+    "hair": "cap",
+    "hairColor": "#2E4A6A",
+    "pants": "#3A4A63",
+    "seed": 11
+   },
+   "x": 120,
+   "y": 430,
+   "scale": 0.55,
+   "mood": "happy",
+   "pose": "wave",
+   "facing": 1,
+   "over": [
+    {
+     "kind": "rain",
+     "dy": -78,
+     "k": 1.6,
+     "glow": true
+    }
+   ]
+  },
+  {
+   "look": {
+    "color": "#E8834A",
+    "outfit": "apron",
+    "hair": "short",
+    "hairColor": "#3A2A22",
+    "pants": "#3A4A63",
+    "seed": 7
+   },
+   "x": 300,
+   "y": 400,
+   "scale": 0.5,
+   "mood": "joy",
+   "pose": "relaxed",
+   "facing": 1,
+   "over": [
+    {
+     "kind": "storm",
+     "dy": -78,
+     "k": 1.6,
+     "glow": true
+    }
+   ]
+  },
+  {
+   "look": {
+    "color": "#5A7FD8",
+    "outfit": "shirt",
+    "hair": "short",
+    "hairColor": "#3A2A22",
+    "pants": "#2A3050",
+    "seed": 31
+   },
+   "x": 980,
+   "y": 400,
+   "scale": 0.5,
+   "mood": "content",
+   "pose": "hipsHands",
+   "facing": -1,
+   "over": [
+    {
+     "kind": "cloud",
+     "dy": -78,
+     "k": 1.6,
+     "glow": true
+    }
+   ]
+  },
+  {
+   "look": {
+    "skin": "ink",
+    "color": "#E05A8A",
+    "outfit": "dress",
+    "hair": "long",
+    "hairColor": "#1E1B22",
+    "pants": "#4A3A5A",
+    "seed": 32
+   },
+   "x": 1150,
+   "y": 430,
+   "scale": 0.56,
+   "mood": "laughing",
+   "pose": "relaxed",
+   "facing": -1,
+   "over": [
+    {
+     "kind": "storm",
+     "dy": -78,
+     "k": 1.6,
+     "glow": true
+    }
+   ]
+  },
+  {
+   "look": {
+    "color": "#7DBA5A",
+    "outfit": "tee",
+    "hair": "curly",
+    "hairColor": "#8A5A2E",
+    "pants": "#3A4A63",
+    "seed": 41
+   },
+   "x": 80,
+   "y": 640,
+   "scale": 0.85,
+   "mood": "happy",
+   "pose": "wave",
+   "facing": 1,
+   "over": [
+    {
+     "kind": "storm",
+     "dy": -78,
+     "k": 1.6,
+     "glow": true
+    }
+   ]
+  },
+  {
+   "look": {
+    "color": "#B07FC0",
+    "outfit": "coat",
+    "hair": "bun",
+    "hairColor": "#9A9AA6",
+    "pants": "#4A3A5A",
+    "seed": 14
+   },
+   "x": 1220,
+   "y": 650,
+   "scale": 0.9,
+   "mood": "joy",
+   "pose": "relaxed",
+   "facing": -1,
+   "over": [
+    {
+     "kind": "rain",
+     "dy": -78,
+     "k": 1.6,
+     "glow": true
+    }
+   ]
+  },
+  {
+   "look": {
+    "skin": "ink",
+    "color": "#E8634A",
+    "outfit": "jacket",
+    "hair": "curly",
+    "hairColor": "#1E1B22",
+    "pants": "#2E3A5A",
+    "seed": 9
+   },
+   "x": 420,
+   "y": 560,
+   "scale": 0.62,
+   "mood": "content",
+   "pose": "hipsHands",
+   "facing": 1,
+   "over": [
+    {
+     "kind": "sun",
+     "dy": -78,
+     "k": 1.6,
+     "glow": true
+    }
+   ]
+  },
+  {
+   "look": {
+    "color": "#8A93A6",
+    "outfit": "hoodie",
+    "hair": "short",
+    "hairColor": "#6A4A3A",
+    "pants": "#3A4050",
+    "seed": 21
+   },
+   "x": 860,
+   "y": 560,
+   "scale": 0.62,
+   "mood": "laughing",
+   "pose": "relaxed",
+   "facing": -1,
+   "over": [
+    {
+     "kind": "storm",
+     "dy": -78,
+     "k": 1.6,
+     "glow": true
+    }
+   ]
+  }
+ ],
+ "crowdOpacity": 0.7,
+ "hero": {
+  "look": {
+   "color": "#3FA7A0",
+   "outfit": "tee",
+   "hair": "bun",
+   "hairColor": "#5A3A2A",
+   "pants": "#2E7A74",
+   "seed": 5
+  },
+  "x": 640,
+  "y": 1250,
+  "scale": 2.7,
+  "mood": "embarrassed",
+  "pose": "wave",
+  "facing": 1,
+  "lookDir": {
+   "x": 0,
+   "y": 0
+  },
+  "over": [
+   {
+    "kind": "storm",
+    "dy": -330,
+    "k": 3.2
+   }
+  ]
+ },
+ "props": [],
+ "text": {
+  "pos": "left:26px;top:18px",
+  "lines": [
+   {
+    "t": "SHE'S",
+    "size": 110
+   },
+   {
+    "t": "NOT.",
+    "size": 150,
+    "punch": true
+   }
+  ]
+ },
+ "counter": {
+  "label": "SHE SAID",
+  "value": "FINE!",
+  "pos": "right:34px;bottom:28px"
+ }
+}

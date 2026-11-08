@@ -1,0 +1,30 @@
+const D = T.D, G = 900, W = (id, w, n, f) => EP.W(T, id, w, n, f);
+const world = el("g", {}, svg);
+const bg = el("g", {}, world), backK = el("g", {}, world), backT = el("g", {}, world), threadL = el("g", {}, world), hero = el("g", {}, world), fx = el("g", {}, world), hud = el("g", {}, svg);
+EP.cafeteria(svg, bg, G, { time: "12:20" });
+const BY = G - 140; const bTabs = [-600, 300, 1200, 2100];
+const labels = [["BAND KIDS", "#8C5E78", W("n12", "band")], ["GAMERS", "#4F7FB0", W("n12", "gamers")], ["SOCCER TEAM", "#4E8A5A", W("n12", "soccer")], ["ART CLUB", "#E58A3A", W("n12", "if") - 0.2]];
+const mX = [[0, -500], [T.n12 + 0.4, -500], [T.marcus_yo - 0.3, 2350, "linear"]];
+const mx = (t) => sampleTrack(mX, t, 0);
+// time Marcus passes each table centre
+const passT = bTabs.map((x) => { const cx = x + 400; for (let t = 0; t < D; t += 0.02) if (mx(t) >= cx - 60) return t; return D; });
+const bxs = []; bTabs.forEach((x) => { for (let i = 0; i < 4; i++) bxs.push(x + 90 + i * 180); });
+const kids = EP.kids(backK, { xs: bxs, y: BY, scale: 0.8, seed: 71, idp: "s7b", dur: D, spec: (i) => { const tb = Math.floor(i / 4), tw = passT[tb]; return (i % 4 === 2) ? { pose: [[0, "sit", 0], [tw - 0.5, "wave", 0.25], [tw + 0.9, "sit", 0.3]], mood: [[0, "content", 0], [tw - 0.5, "joy", 0.2], [tw + 1.2, "happy", 0.3]], facing: [[0, -1]] } : {}; } });
+bTabs.forEach((x, i) => EP.table(backT, x, 1000, BY, 0.8, 70 + i));
+const tags = bTabs.map((x, i) => EP.Tag(fx, { t0: labels[i][2], t1: D, texts: [[0, labels[i][0], labels[i][1]]], lift: 0 }));
+const waveP = []; passT.forEach((tw) => waveP.push([tw - 0.45, "wave", 0.2], [tw + 0.5, "relaxed", 0.25]));
+const marcus = Character(hero, EP.cast("marcus", { id: "s7-m", x: mX, y: [[0, G + 30]], pose: [[0, "relaxed", 0], ...waveP, [T.marcus_yo, "holdBoth", 0.25]], mood: [[0, "joy", 0]], lips: [[T.marcus_yo, "marcus_yo"]], look: [[0, { x: 0.5, y: -0.6 }]] }));
+const threads = bTabs.map((x, i) => el("path", { fill: "none", stroke: labels[i][1], "stroke-width": 6, "stroke-dasharray": "14 10", opacity: 0 }, threadL));
+const yo = Bubble(fx, { text: "Yo! What's up, what's up!", t0: T.marcus_yo, t1: D + 1, side: -1 });
+const tHub = W("n12", "passes"), ring = Ripple(fx, { color: "#3F7F87", t: tHub, dur: 1.2, maxR: 220, rings: 2, width: 6 });
+const card = EP.LevelCard(hud, { n: 5, name: "THE CONNECTOR", t0: T.n12, t1: T.n12 + 2.4 });
+const ladder = EP.Ladder(hud, { hide: T.n12 + 3.2, level: [[0, 4], [T.n12 + 0.2, 4], [T.n12 + 0.9, 5, "out"]] });
+const dust = FX.dust(fx);
+const cam = Camera(world, [[0, { x: -100, y: 620, z: 1.1 }], [T.n12 + 0.4, { x: -100, y: 620, z: 1.2 }, "linear"], [T.marcus_yo - 0.3, { x: 2100, y: 640, z: 1.25 }, "linear"], [D, { x: 2160, y: 660, z: 1.45 }, "out"]]);
+return (t) => {
+  cam.update(t); kids.update(t); const m = marcus.update(t);
+  bTabs.forEach((x, i) => { tags[i].update(t, { x: x + 400, y: BY - 280 }); const on = t > passT[i] - 0.4; const k = clamp((t - passT[i] + 0.4) / 0.5, 0, 1); threads[i].setAttribute("opacity", on ? 0.85 : 0);
+    const ax = x + 400, ay = BY - 200, bx = m.headX, by = m.headY; threads[i].setAttribute("d", `M${ax},${ay} Q${(ax + bx) / 2},${Math.min(ay, by) - 140} ${ax + (bx - ax) * k},${ay + (by - ay) * k}`); });
+  ring.update(t, { x: m.headX, y: m.headY }); dust.update(t, m, G + 30); yo.update(t, { x: m.headX, y: m.headY });
+  card.update(t); ladder.update(t);
+};

@@ -1,0 +1,21 @@
+<!doctype html><html><head><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@900&display=swap" rel="stylesheet">
+<script src="assets/sr-engine-v1.js"></script><script src="assets/sr-v3.js"></script><script src="studio.js"></script>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{width:1280px;height:720px;overflow:hidden;background:#1a1033}
+#bg{position:absolute;inset:0;background:radial-gradient(circle at 34% 58%,#ff9a3c 0%,#c2378f 26%,#4b1f86 55%,#160c33 100%)}
+#ph{display:none}#sp{position:absolute;inset:0;background-image:radial-gradient(2px 2px at 20% 30%,#fff8 50%,transparent 51%),radial-gradient(3px 3px at 70% 20%,#ffe9a8aa 50%,transparent 51%),radial-gradient(2px 2px at 85% 75%,#fff8 50%,transparent 51%),radial-gradient(2px 2px at 55% 85%,#ffe9a888 50%,transparent 51%),radial-gradient(3px 3px at 45% 15%,#fff6 50%,transparent 51%),radial-gradient(2px 2px at 92% 42%,#fff7 50%,transparent 51%)}
+svg{position:absolute;inset:0}
+.t{position:absolute;right:40px;top:26px;text-align:right;font-family:Outfit;font-weight:900;line-height:.9;color:#fff;-webkit-text-stroke:14px #1E1B22;paint-order:stroke fill;text-shadow:0 10px 0 #1E1B22}
+.t .a{font-size:118px}.t .b{font-size:150px;color:#FFD23F}</style></head>
+<body><div id="bg"></div><div id="ph"></div><div id="sp"></div><svg id="art" viewBox="0 0 1280 720"></svg>
+<div class="t"><div class="a">I DID</div><div class="b">THAT?</div></div>
+<script>
+const svg=document.getElementById('art'); TS.defs(svg); const {el}=SR;
+const MO={color:"#E8834A",outfit:"apron",hair:"short",hairColor:"#3A2A22",pants:"#3A4A63",seed:7};
+// threads from Mo's chest to the people he touched
+const cx=380, cy=520, P=[[760,600],[960,640],[1150,600]];
+P.forEach(([x,y],i)=>{TS.thread(svg,cx,cy,x,y,7,-200-i*30); el("circle",{cx:x,cy:y,r:16,fill:"#FFE7A0",filter:"url(#glow)"},svg);}); TS.thread(svg,cx,cy,640,740,5,-60); TS.thread(svg,cx,cy,1280,700,5,-260);
+const small=[["theo",{color:"#8A93A6",outfit:"hoodie",hair:"short",hairColor:"#6A4A3A",pants:"#3A4050",seed:21}],["kai",{color:"#FF8A2A",outfit:"jacket",hair:"cap",hairColor:"#E0B020",pants:"#3A4A63",seed:6}],["bea",{skin:"ink",color:"#F2C14E",outfit:"apron",hair:"ponytail",hairColor:"#1E1B22",pants:"#6A4A8A",seed:4}]];
+const sg=el("g",{},svg); small.forEach(([id,lk],i)=>TS.char(sg,lk,{id,x:P[i][0],y:P[i][1]+190,scale:1.05,mood:"happy",facing:1,look:{x:-0.5,y:0}}));
+TS.label(svg,760,330,"STAYED"); TS.label(svg,960,370,"WELCOMED"); TS.label(svg,1150,330,"HELPED");
+const hg=el("g",{filter:"url(#rim)"},svg); TS.char(hg,MO,{id:"mo",x:330,y:1180,scale:3.1,pose:"hands",mood:"starstruck",facing:1,look:{x:0.2,y:-0.1}});
+</script></body></html>

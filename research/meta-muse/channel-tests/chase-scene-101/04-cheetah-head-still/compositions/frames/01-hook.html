@@ -1,0 +1,479 @@
+<template id="f01-template" data-composition-id="01-hook" data-width="1080" data-height="1920">
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500-italic.woff2") format("woff2");font-weight:500;font-style:italic;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600-italic.woff2") format("woff2");font-weight:600;font-style:italic;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+#root, #root * { font-variant-numeric: lining-nums; }
+
+#root, #root * { font-variant-numeric: lining-nums; }
+
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+      --f01-red: #E8553F;
+      --f01-white: rgba(255, 255, 255, 0.9);
+      --f01-pill: rgba(10, 8, 6, 0.72);
+      --f01-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    }
+
+    /* Ground: the pre-rendered footage window clip. Never cropped/scaled/filtered. */
+    #f01-ground {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 1920px;
+      object-fit: fill;
+      display: block;
+    }
+
+    #f01-hud {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      font-family: "Courier Prime", monospace;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* ---------- speed ticks along the window edges ---------- */
+    .f01-ticks {
+      position: absolute;
+      left: 0;
+      width: 2160px;
+      height: 12px;
+      will-change: transform;
+    }
+    #f01-ticks-top { top: 616px; }
+    #f01-ticks-bot { top: 1260px; }
+    .f01-ticks svg { display: block; width: 2160px; height: 12px; overflow: visible; }
+
+    /* ---------- tracked reticle + HEAD pill ---------- */
+    #f01-ret-pos {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 180px;
+      height: 180px;
+      will-change: transform;
+    }
+    #f01-ret {
+      position: absolute;
+      inset: 0;
+      transform-origin: 50% 50%;
+    }
+    #f01-ret svg { display: block; width: 180px; height: 180px; overflow: visible; filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6)); }
+
+    #f01-pill-pos {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 200px;
+      height: 0;
+      will-change: transform;
+    }
+    #f01-pill {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #f01-pill-label {
+      background: var(--f01-pill);
+      border-left: 2px solid var(--f01-red);
+      color: #fff;
+      font-size: 34px;
+      line-height: 1;
+      padding: 10px 16px 10px 18px;
+      text-shadow: var(--f01-shadow);
+      white-space: nowrap;
+    }
+    #f01-pill-stem {
+      width: 2px;
+      height: 22px;
+      background: var(--f01-white);
+      transform-origin: 50% 0%;
+    }
+
+    /* ---------- telemetry readout block (dark zone above the window) ---------- */
+    #f01-readout {
+      position: absolute;
+      left: 72px;
+      top: 474px;
+      width: 936px;
+      height: 136px;
+    }
+    #f01-readout-rule {
+      position: absolute;
+      left: 0;
+      top: 4px;
+      width: 2px;
+      height: 96px;
+      background: var(--f01-red);
+      transform-origin: 50% 0%;
+    }
+    .f01-row {
+      position: absolute;
+      left: 24px;
+      height: 44px;
+      font-size: 40px;
+      line-height: 44px;
+      color: #fff;
+      text-shadow: var(--f01-shadow);
+      white-space: pre;
+    }
+    #f01-row1 { top: 4px; padding-left: 34px; }
+    #f01-row2 { top: 56px; }
+    #f01-rec {
+      position: absolute;
+      left: 0;
+      top: 12px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--f01-red);
+      box-shadow: 0 0 0 2px rgba(10, 8, 6, 0.6);
+    }
+    #f01-row2-val { color: var(--f01-red); }
+    #f01-scale-end {
+      position: absolute;
+      right: 0;
+      top: 64px;
+      font-size: 30px;
+      line-height: 34px;
+      color: var(--f01-white);
+      text-shadow: var(--f01-shadow);
+    }
+    #f01-scale {
+      position: absolute;
+      left: 24px;
+      top: 108px;
+      width: 912px;
+      height: 20px;
+    }
+    #f01-scale-track {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 9px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.55);
+    }
+    .f01-scale-tick {
+      position: absolute;
+      top: 2px;
+      width: 2px;
+      height: 16px;
+      background: rgba(255, 255, 255, 0.75);
+    }
+    #f01-scale-fill {
+      position: absolute;
+      left: 0;
+      top: 7px;
+      width: 912px;
+      height: 6px;
+      background: var(--f01-red);
+      transform-origin: 0% 50%;
+      will-change: transform;
+    }
+
+    /* ---------- stat slam (dark zone below the window) ---------- */
+    #f01-slam-wrap {
+      position: absolute;
+      left: 0;
+      top: 1300px;
+      width: 1080px;
+      height: 160px;
+    }
+    #f01-slam-flash {
+      position: absolute;
+      left: 150px;
+      top: 0;
+      width: 780px;
+      height: 160px;
+      background: rgba(232, 85, 63, 0.55);
+      opacity: 0;
+    }
+    #f01-slam {
+      position: absolute;
+      left: 0;
+      top: 12px;
+      width: 1080px;
+      height: 120px;
+      text-align: center;
+      font-size: 120px;
+      line-height: 120px;
+      letter-spacing: 0.04em;
+      color: var(--f01-red);
+      text-shadow: 0 3px 12px rgba(0, 0, 0, 0.7);
+      white-space: nowrap;
+      transform-origin: 50% 50%;
+    }
+    #f01-slam-ul {
+      position: absolute;
+      left: 180px;
+      top: 144px;
+      width: 720px;
+      height: 6px;
+      background: var(--f01-red);
+      transform-origin: 50% 50%;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    }
+  </style>
+
+  <div id="root" data-composition-id="01-hook" data-width="1080" data-height="1920" data-duration="4.958">
+    <!-- Ground: footage clip, direct child of the frame root, never nested in a timed wrapper -->
+    <video
+      id="f01-ground"
+      src="public/clips/s1_raw.mp4"
+      muted
+      playsinline
+      class="clip"
+      data-start="0"
+      data-duration="4.958"
+      data-track-index="0"
+    ></video>
+
+    <!-- HUD overlay layer (no media inside) -->
+    <div id="f01-hud" class="clip" data-start="0" data-duration="4.958" data-track-index="1" data-layout-allow-overflow>
+      <div id="f01-ticks-top" class="f01-ticks"><svg id="f01-ticks-top-svg" viewBox="0 0 2160 12" xmlns="http://www.w3.org/2000/svg"></svg></div>
+      <div id="f01-ticks-bot" class="f01-ticks"><svg id="f01-ticks-bot-svg" viewBox="0 0 2160 12" xmlns="http://www.w3.org/2000/svg"></svg></div>
+
+      <div id="f01-readout">
+        <div id="f01-readout-rule"></div>
+        <div id="f01-row1" class="f01-row"><span id="f01-rec"></span><span id="f01-row1-txt"></span></div>
+        <div id="f01-row2" class="f01-row"><span id="f01-row2-lab"></span><span id="f01-row2-val"></span></div>
+        <div id="f01-scale-end">0.1 S</div>
+        <div id="f01-scale">
+          <div id="f01-scale-track"></div>
+          <div class="f01-scale-tick" style="left: 0px"></div>
+          <div class="f01-scale-tick" style="left: 227px"></div>
+          <div class="f01-scale-tick" style="left: 455px"></div>
+          <div class="f01-scale-tick" style="left: 683px"></div>
+          <div class="f01-scale-tick" style="left: 910px"></div>
+          <div id="f01-scale-fill"></div>
+        </div>
+      </div>
+
+      <div id="f01-pill-pos">
+        <div id="f01-pill">
+          <div id="f01-pill-label">HEAD</div>
+          <div id="f01-pill-stem"></div>
+        </div>
+      </div>
+
+      <div id="f01-ret-pos">
+        <div id="f01-ret">
+          <svg viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="90" cy="90" r="50" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2" />
+            <circle id="f01-ret-lock" cx="90" cy="90" r="58" fill="none" stroke="#E8553F" stroke-width="3"
+                    stroke-dasharray="364.4" stroke-dashoffset="364.4" transform="rotate(-90 90 90)" />
+            <g stroke="#E8553F" stroke-width="4" stroke-linecap="round">
+              <line x1="90" y1="18" x2="90" y2="36" />
+              <line x1="90" y1="144" x2="90" y2="162" />
+              <line x1="18" y1="90" x2="36" y2="90" />
+              <line x1="144" y1="90" x2="162" y2="90" />
+            </g>
+            <g stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-linecap="round">
+              <line x1="90" y1="58" x2="90" y2="72" />
+              <line x1="90" y1="108" x2="90" y2="122" />
+              <line x1="58" y1="90" x2="72" y2="90" />
+              <line x1="108" y1="90" x2="122" y2="90" />
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <div id="f01-slam-wrap">
+        <div id="f01-slam-flash"></div>
+        <div id="f01-slam">60&#215; SLOWER</div>
+        <div id="f01-slam-ul"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var DUR = 4.958;
+      var FPS = 24;
+      // s1.json head track, composite px, rounded ints, frames 0..123 at 24 fps (x,y pairs)
+      var HEAD = [822,896,820,896,818,898,816,898,814,898,812,899,809,899,808,900,806,900,803,900,801,902,799,902,796,901,793,901,790,901,788,901,786,902,783,900,781,900,779,899,777,900,775,901,773,902,771,902,770,903,767,904,765,904,764,906,762,907,760,908,757,908,756,909,753,910,751,911,749,911,748,912,745,913,744,914,742,916,740,916,738,917,736,918,735,920,732,921,732,926,731,926,729,926,727,927,724,927,723,928,721,929,719,929,717,930,715,931,714,932,712,933,710,934,709,935,707,936,705,937,703,937,702,938,700,939,698,939,696,940,695,941,694,942,691,942,689,942,687,943,686,943,684,944,682,944,680,944,678,944,677,945,675,945,673,945,672,945,669,945,668,946,666,946,664,946,663,946,661,946,659,946,657,946,655,946,654,946,652,947,650,947,648,946,647,947,645,946,643,946,641,947,640,947,638,947,637,948,636,948,633,948,631,946,630,947,628,947,627,947,624,946,623,945,622,946,620,947,619,946,617,946,616,946,614,946,613,947,611,946,610,946,608,946,607,946,605,945,604,945,602,944,601,944,599,944,597,943];
+      var N = HEAD.length / 2;
+
+      // seeded PRNG (mulberry32) for deterministic tick layout and shake
+      function mulberry32(a) {
+        return function () {
+          a |= 0; a = (a + 0x6D2B79F5) | 0;
+          var t = Math.imul(a ^ (a >>> 15), 1 | a);
+          t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+
+      // ---- build speed-tick strips (period 1080px, drawn twice for seamless wrap) ----
+      var SVGNS = "http://www.w3.org/2000/svg";
+      function buildTicks(svgId, seed) {
+        var svg = document.getElementById(svgId);
+        var rnd = mulberry32(seed);
+        var x = 0;
+        var dashes = [];
+        while (x < 1040) {
+          var len = 18 + Math.round(rnd() * 70);
+          var y = 3 + Math.round(rnd() * 6);
+          var op = 0.45 + rnd() * 0.55;
+          dashes.push([x, len, y, op]);
+          x += len + 28 + Math.round(rnd() * 60);
+        }
+        for (var c = 0; c < 2; c++) {
+          for (var k = 0; k < dashes.length; k++) {
+            var d = dashes[k];
+            var ln = document.createElementNS(SVGNS, "line");
+            ln.setAttribute("x1", String(d[0] + c * 1080));
+            ln.setAttribute("x2", String(d[0] + d[1] + c * 1080));
+            ln.setAttribute("y1", String(d[2]));
+            ln.setAttribute("y2", String(d[2]));
+            ln.setAttribute("stroke", "#E8553F");
+            ln.setAttribute("stroke-width", "3");
+            ln.setAttribute("stroke-linecap", "round");
+            ln.setAttribute("opacity", d[3].toFixed(2));
+            svg.appendChild(ln);
+          }
+        }
+      }
+      buildTicks("f01-ticks-top-svg", 1101);
+      buildTicks("f01-ticks-bot-svg", 2207);
+
+      var retPos = document.getElementById("f01-ret-pos");
+      var pillPos = document.getElementById("f01-pill-pos");
+      var ticksTop = document.getElementById("f01-ticks-top");
+      var ticksBot = document.getElementById("f01-ticks-bot");
+      var row1 = document.getElementById("f01-row1-txt");
+      var row2Lab = document.getElementById("f01-row2-lab");
+      var row2Val = document.getElementById("f01-row2-val");
+      var rec = document.getElementById("f01-rec");
+      var fill = document.getElementById("f01-scale-fill");
+
+      var ROW1 = "1,200 FPS";
+      var LAB2 = "REAL TIME ";
+      var CPS = 0.04; // seconds per typed character
+      var ROW1_AT = 0.5, ROW2_AT = 0.85;
+
+      // speed-tick scroll offset as a closed-form function of t (seek-safe):
+      // fast stream, then decelerates on "slowed down" (2.72 s -> 3.6 s)
+      var V0 = 1400, V1 = 160, TS = 2.72, TD = 0.88;
+      function tickOffset(t) {
+        if (t <= TS) return V0 * t;
+        var base = V0 * TS;
+        var d = Math.min(t - TS, TD);
+        var off = base + V0 * d - (V0 - V1) * d * d / (2 * TD);
+        if (t > TS + TD) off += V1 * (t - TS - TD);
+        return off;
+      }
+
+      function typed(full, t, at) {
+        var n = Math.floor((t - at) / CPS) + 1;
+        if (n <= 0) return "";
+        return full.slice(0, Math.min(full.length, n));
+      }
+
+      var last1 = null, last2a = null, last2b = null;
+      function render(t) {
+        if (t < 0) t = 0;
+        if (t > DUR) t = DUR;
+        // head position (interpolated between tracked frames)
+        var f = t * FPS;
+        var i = Math.min(N - 1, Math.floor(f));
+        var j = Math.min(N - 1, i + 1);
+        var a = f - i;
+        if (a > 1) a = 1;
+        var hx = HEAD[i * 2] + (HEAD[j * 2] - HEAD[i * 2]) * a;
+        var hy = HEAD[i * 2 + 1] + (HEAD[j * 2 + 1] - HEAD[i * 2 + 1]) * a;
+        retPos.style.transform = "translate(" + (hx - 90).toFixed(1) + "px," + (hy - 90).toFixed(1) + "px)";
+        pillPos.style.transform = "translate(" + (hx - 100).toFixed(1) + "px," + (hy - 72).toFixed(1) + "px)";
+
+        // speed ticks stream right-to-left
+        var off = tickOffset(t) % 1080;
+        ticksTop.style.transform = "translateX(" + (-off).toFixed(1) + "px)";
+        ticksBot.style.transform = "translateX(" + (-((off + 540) % 1080)).toFixed(1) + "px)";
+
+        // readouts: type-on + real-time counter at exactly t/60
+        var s1 = typed(ROW1, t, ROW1_AT);
+        if (s1 !== last1) { row1.textContent = s1; last1 = s1; }
+        var full2 = LAB2 + (t / 60).toFixed(3) + " S";
+        var s2 = typed(full2, t, ROW2_AT);
+        var lab = s2.slice(0, Math.min(s2.length, LAB2.length));
+        var val = s2.length > LAB2.length ? s2.slice(LAB2.length) : "";
+        if (lab !== last2a) { row2Lab.textContent = lab; last2a = lab; }
+        if (val !== last2b) { row2Val.textContent = val; last2b = val; }
+        // REC dot: visible from 0.5 s, blinks at 2 Hz (pure function of t)
+        rec.style.opacity = t < ROW1_AT ? "0" : (Math.floor((t - ROW1_AT) * 2) % 2 === 0 ? "1" : "0.25");
+        // real-time scale fill: fraction of 0.1 s elapsed (t/60/0.1)
+        fill.style.transform = "scaleX(" + Math.min(1, t / 6).toFixed(4) + ")";
+      }
+
+      var tl = gsap.timeline({ paused: true });
+
+      // single seek-safe driver: every tracked / time-derived overlay reads proxy.p
+      var proxy = { p: 0 };
+      tl.to(proxy, { p: DUR, duration: DUR, ease: "none", onUpdate: function () { render(proxy.p); } }, 0);
+      render(0);
+
+      // Scene 1 (0-0.3): footage only. Scene 2 (0.3-3.4): reticle snaps onto the head (2-step 1.4 -> 0.9 -> 1)
+      tl.fromTo("#f01-ret", { scale: 1.4, opacity: 0 }, { scale: 0.9, opacity: 1, duration: 0.12, ease: "expo.out" }, 0.3);
+      tl.to("#f01-ret", { scale: 1, duration: 0.18, ease: "expo.out" }, 0.42);
+      // HEAD pill: stem grows, label wipes in from the left
+      tl.fromTo("#f01-pill-stem", { scaleY: 0 }, { scaleY: 1, duration: 0.18, ease: "power3.out" }, 0.4);
+      tl.fromTo("#f01-pill-label", { clipPath: "inset(0% 100% 0% 0%)", opacity: 0 }, { clipPath: "inset(0% 0% 0% 0%)", opacity: 1, duration: 0.3, ease: "power3.out" }, 0.42);
+      // speed ticks fade in along the window edges
+      tl.fromTo(".f01-ticks", { opacity: 0 }, { opacity: 1, duration: 0.35, ease: "power2.out" }, 0.3);
+      // readout block rule draws as the readouts begin typing at 0.5
+      tl.fromTo("#f01-readout-rule", { scaleY: 0 }, { scaleY: 1, duration: 0.4, ease: "power3.out" }, 0.45);
+      // "fastest" (1.12): lock ring self-draws around the reticle
+      tl.fromTo("#f01-ret-lock", { attr: { "stroke-dashoffset": 364.4 } }, { attr: { "stroke-dashoffset": 0 }, duration: 0.5, ease: "power2.out" }, 1.12);
+      // "animal on Earth" (1.92): real-time scale wipes in under the readouts
+      tl.fromTo("#f01-scale", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.55, ease: "power3.out" }, 1.92);
+      tl.fromTo("#f01-scale-end", { opacity: 0, x: 16 }, { opacity: 1, x: 0, duration: 0.35, ease: "power2.out" }, 2.2);
+      // "slowed down" (2.72): ticks decelerate (closed form in render); the lock ring pulses once
+      tl.to("#f01-ret", { scale: 1.08, duration: 0.14, ease: "power2.out" }, 2.72);
+      tl.to("#f01-ret", { scale: 1, duration: 0.3, ease: "power2.inOut" }, 2.86);
+
+      // Scene 3 (3.52 "60"): stat slam 1.25 -> 1, expo.out, with a 1-frame red flash
+      tl.fromTo("#f01-slam", { scale: 1.25, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "expo.out" }, 3.52);
+      tl.fromTo("#f01-slam-ul", { scaleX: 0.2, scaleY: 2.4, opacity: 0 }, { scaleX: 1, scaleY: 1, opacity: 1, duration: 0.35, ease: "expo.out" }, 3.52);
+      tl.set("#f01-slam-flash", { opacity: 1 }, 3.52);
+      tl.set("#f01-slam-flash", { opacity: 0 }, 3.56);
+      // impact shake on the slam block only (max 6px, 0.25 s, seeded) — HUD tracking stays locked to footage
+      (function () {
+        var rnd = mulberry32(6060);
+        var steps = 6, st = 0.25 / steps, at = 3.52;
+        for (var k = 0; k < steps; k++) {
+          var amp = 6 * (1 - k / steps);
+          tl.to("#f01-slam-wrap", { x: (rnd() * 2 - 1) * amp, y: (rnd() * 2 - 1) * amp, duration: st, ease: "none" }, at + k * st);
+        }
+        tl.to("#f01-slam-wrap", { x: 0, y: 0, duration: 0.05, ease: "power1.out" }, at + 0.25);
+      })();
+      // quiet settle so the hold keeps breathing to the cut
+      tl.to("#f01-slam", { scale: 1.03, duration: 1.0, ease: "power1.out" }, 3.95);
+
+      window.__timelines["01-hook"] = tl;
+    })();
+  </script>
+</template>

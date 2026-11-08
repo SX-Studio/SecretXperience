@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1280, height=720" />
+    <script src="assets/sr-engine-v1.js"></script>
+    <script src="assets/sr-v2.js"></script>
+    <script src="assets/lips.js"></script>
+    <script src="assets/ep2-sets.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1280px; height: 720px; overflow: hidden; background: #CFE3D6; }
+      #root { position: relative; width: 1280px; height: 720px; }
+      #art { position: absolute; inset: 0; width: 1280px; height: 720px; }
+      #t1 { position: absolute; left: 0; width: 1280px; top: 18px; text-align: center; font-family: "Outfit"; font-weight: 900; font-size: 136px; letter-spacing: 0.01em; color: #FFD23F;
+        -webkit-text-stroke: 14px #1E1B22; paint-order: stroke fill; text-shadow: 0 8px 0 #1E1B22; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="1" data-width="1280" data-height="720" data-no-timeline>
+      <svg id="art" viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" data-layout-ignore></svg>
+      <div id="t1">SEAT TAKEN?</div>
+    </div>
+    <script>
+      (function () {
+        const SR = window.SR, EP = window.EP; const { el, Character, Butterfly, PAL } = SR;
+        const svg = document.getElementById("art");
+        const world = el("g", { transform: "translate(-180,-330) scale(0.95)" }, svg);
+        const bg = el("g", {}, world), bk = el("g", {}, world), bt = el("g", {}, world), ch = el("g", {}, world), kl = el("g", {}, world), tl = el("g", {}, world), fg = el("g", {}, svg);
+        EP.cafeteria(svg, bg, 900, { time: "12:31", menu: "Taco Wednesday", menuX: 1500, clockX: 2060, bannerX: 380 });
+        const stare = (i, x) => ({ mood: [[0, ["shock", "surprised", "shock", "worried"][i % 4], 0]], look: [[0, { x: 0, y: 0.2 }]], facing: [[0, x < 930 ? 1 : -1]], talk: [] });
+        const B = EP.kids(bk, { xs: [250, 420, 590, 1280, 1450, 1620], y: 760, scale: 0.8, seed: 7, idp: "tb", quiet: true, spec: stare });
+        EP.table(bt, 160, 620, 760, 0.8, 3); EP.table(bt, 1190, 620, 760, 0.8, 4);
+        const XS = [650, 800, 950, 1100, 1250];
+        XS.forEach((x) => EP.chair(ch, x - 12, 1040, 1.0, "#C9A227").set(0, 0));
+        const j = Character(kl, EP.cast("jordan", { id: "tj", x: [[0, 950]], y: [[0, 1040]], noWalk: true, pose: [[0, "sitSlump", 0]], mood: [[0, "sad", 0]], look: [[0, { x: 0, y: 0.6 }]] }));
+        EP.table(tl, 570, 800, 1040, 1, 9, { top: "#F2D28A" });
+        const sg = el("g", {}, tl); el("rect", { x: 830, y: 974, width: 240, height: 46, rx: 10, fill: "#C9A227", stroke: PAL.ink, "stroke-width": 4 }, sg); EP.txt(sg, 950, 998, "TOP TABLE", 28, "#FFFFFF", { font: "Outfit" });
+        [B, j].forEach((p) => p.update(0.5));
+        // Nia, big, foreground right, holding the tray, glancing at the viewer
+        const n = Character(fg, EP.cast("nia", { id: "tn", scale: 1.9, x: [[0, 1120]], y: [[0, 1010]], facing: [[0, -1]], prop: { kind: "tray" }, pose: [[0, "hold", 0]], mood: [[0, "happy", 0]], look: [[0, { x: 0.6, y: 0 }]] }));
+        n.update(0.5);
+        Butterfly(fg, { x: [[0, 70]], y: [[0, 690]], scale: 0.4, flap: 2 }).update(0.3);
+        const v = el("g", {}, svg); SR.Scene2.vignette(svg, v, 0.35, 1280, 720);
+      })();
+    </script>
+  </body>
+</html>

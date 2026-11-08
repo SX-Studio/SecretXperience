@@ -1,0 +1,511 @@
+<template>
+  <style>
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-400.woff2") format("woff2");font-weight:400;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-500.woff2") format("woff2");font-weight:500;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-600.woff2") format("woff2");font-weight:600;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-700.woff2") format("woff2");font-weight:700;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-800.woff2") format("woff2");font-weight:800;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-900.woff2") format("woff2");font-weight:900;font-style:normal;}
+@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/IBMPlexMono-400.woff2") format("woff2");font-weight:400;font-style:normal;}
+@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/IBMPlexMono-500.woff2") format("woff2");font-weight:500;font-style:normal;}
+@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/IBMPlexMono-600.woff2") format("woff2");font-weight:600;font-style:normal;}
+@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/IBMPlexMono-700.woff2") format("woff2");font-weight:700;font-style:normal;}
+
+    
+  </style>
+  <style>
+    #root {
+      position: relative;
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+      container-type: size;
+      font-family: "Barlow", sans-serif;
+      color: #F0ECE5;
+    }
+    #root * { box-sizing: border-box; }
+
+    /* full-bleed ground: dark register */
+    #root [id="02-big-ear-listening-ground"] {
+      position: absolute;
+      inset: 0;
+      background: #111111;
+    }
+
+    /* Scene 1: date chip, just below the reserved top band */
+    #root [id="02-big-ear-listening-date"] {
+      position: absolute;
+      left: 59px;
+      top: 196px;
+      padding: 12px 44px 10px 18px;
+      border: 1px solid #505048;
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 40px;
+      line-height: 48px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #F0ECE5;
+      white-space: nowrap;
+    }
+    #root [id="02-big-ear-listening-cursor"] {
+      position: absolute;
+      left: 18px;
+      top: 14px;
+      width: 24px;
+      height: 42px;
+      background: #E85D26;
+    }
+
+    /* kicker */
+    #root [id="02-big-ear-listening-kicker"] {
+      position: absolute;
+      left: 59px;
+      top: 286px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    #root [id="02-big-ear-listening-kicker-rule"] {
+      width: 36px;
+      height: 2px;
+      background: #E85D26;
+      transform-origin: 0% 50%;
+    }
+    #root [id="02-big-ear-listening-kicker-text"] {
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 24px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #E85D26;
+      white-space: nowrap;
+    }
+
+    /* Scene 2-3: the hairline Big Ear diagram */
+    #root [id="02-big-ear-listening-diagram"] {
+      position: absolute;
+      left: 60px;
+      top: 320px;
+      width: 960px;
+      height: 720px;
+      transform-origin: 50% 62%;
+    }
+    #root [id="02-big-ear-listening-diagram"] svg {
+      display: block;
+      width: 960px;
+      height: 720px;
+      overflow: visible;
+    }
+    #root [class~="02-big-ear-listening-draw"] { fill: none; stroke-linecap: butt; stroke-linejoin: miter; }
+    #root [class~="02-big-ear-listening-hair"] { stroke: #888880; stroke-width: 1.5; }
+    #root [class~="02-big-ear-listening-main"] { stroke: #F0ECE5; stroke-width: 3; }
+    #root [class~="02-big-ear-listening-mid"] { stroke: #F0ECE5; stroke-width: 1.5; }
+    #root [class~="02-big-ear-listening-hint"] { stroke: #505048; stroke-width: 1.5; }
+    #root [class~="02-big-ear-listening-accent"] { stroke: #E85D26; stroke-width: 2.5; }
+    #root [class~="02-big-ear-listening-arc"] { fill: none; stroke: #F0ECE5; stroke-width: 2; }
+    #root [class~="02-big-ear-listening-label"] {
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 20px;
+      letter-spacing: 0.14em;
+      fill: #888880;
+    }
+
+    /* BIG EAR name row */
+    #root [id="02-big-ear-listening-name"] {
+      position: absolute;
+      left: 59px;
+      top: 1062px;
+      width: 962px;
+      height: 76px;
+    }
+    #root [id="02-big-ear-listening-name-rule"] {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 962px;
+      height: 1px;
+      background: #282826;
+      transform-origin: 0% 50%;
+    }
+    #root [id="02-big-ear-listening-name-text"] {
+      position: absolute;
+      left: 0;
+      top: 18px;
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 44px;
+      line-height: 52px;
+      letter-spacing: 0.14em;
+      color: #F0ECE5;
+      white-space: nowrap;
+    }
+    #root [id="02-big-ear-listening-name-tag"] {
+      position: absolute;
+      right: 0;
+      top: 32px;
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 22px;
+      line-height: 28px;
+      letter-spacing: 0.14em;
+      color: #888880;
+      white-space: nowrap;
+    }
+
+    /* Scene 4: printer paper feeding up out of a slot */
+    #root [id="02-big-ear-listening-paper-window"] {
+      position: absolute;
+      left: 270px;
+      top: 1190px;
+      width: 540px;
+      height: 397px;
+      overflow: hidden;
+    }
+    #root [id="02-big-ear-listening-paper"] {
+      position: absolute;
+      left: 0;
+      top: 16px;
+      width: 540px;
+      height: 381px;
+      border: 1px solid #888880;
+      border-bottom: none;
+      border-top: 1px dashed #888880;
+    }
+    #root [class~="02-big-ear-listening-perf"] {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 0;
+      border-left: 1px dashed #505048;
+    }
+    #root [class~="02-big-ear-listening-hole"] {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border: 1px solid #888880;
+      border-radius: 50%;
+    }
+    #root [id="02-big-ear-listening-row"] {
+      position: absolute;
+      left: 50px;
+      top: 300px;
+      height: 42px;
+      white-space: nowrap;
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 30px;
+      line-height: 42px;
+      color: #F0ECE5;
+    }
+    #root [class~="02-big-ear-listening-pc"] {
+      display: inline-block;
+      width: 20px;
+      text-align: center;
+    }
+    #root [id="02-big-ear-listening-head"] {
+      position: absolute;
+      left: 50px;
+      top: 298px;
+      width: 20px;
+      height: 46px;
+      background: #E85D26;
+    }
+    #root [id="02-big-ear-listening-slot"] {
+      position: absolute;
+      left: 210px;
+      top: 1588px;
+      width: 660px;
+      height: 1px;
+      background: #888880;
+      transform-origin: 50% 50%;
+    }
+  </style>
+
+  <div id="root" data-composition-id="02-big-ear-listening" data-width="1080" data-height="1920" data-duration="7.379">
+    <div id="02-big-ear-listening-ground" class="clip" data-start="0" data-duration="7.379" data-track-index="0"></div>
+
+    <div id="02-big-ear-listening-date"><span class="02-big-ear-listening-dc">A</span><span class="02-big-ear-listening-dc">U</span><span class="02-big-ear-listening-dc">G</span><span class="02-big-ear-listening-dc">&nbsp;</span><span class="02-big-ear-listening-dc">1</span><span class="02-big-ear-listening-dc">5</span><span class="02-big-ear-listening-dc">&nbsp;</span><span class="02-big-ear-listening-dc">1</span><span class="02-big-ear-listening-dc">9</span><span class="02-big-ear-listening-dc">7</span><span class="02-big-ear-listening-dc">7</span><div id="02-big-ear-listening-cursor"></div></div>
+
+    <div id="02-big-ear-listening-kicker">
+      <div id="02-big-ear-listening-kicker-rule"></div>
+      <div id="02-big-ear-listening-kicker-text">Ohio State University · Delaware, Ohio</div>
+    </div>
+
+    <div id="02-big-ear-listening-diagram">
+      <svg viewBox="0 0 960 720" xmlns="http://www.w3.org/2000/svg">
+        <g id="02-big-ear-listening-stars"></g>
+        <g id="02-big-ear-listening-arcs"></g>
+        <g id="02-big-ear-listening-structure">
+          <!-- earth line + hatch, then the aluminum ground plane between the reflectors -->
+          <path id="02-big-ear-listening-earth" class="02-big-ear-listening-draw 02-big-ear-listening-hair" d="M 20 640 L 950 640" />
+          <g id="02-big-ear-listening-hatch"></g>
+          <path id="02-big-ear-listening-plane" class="02-big-ear-listening-draw 02-big-ear-listening-main" d="M 140 638 L 900 638" />
+          <!-- tiltable flat reflector (left) + its support frame -->
+          <path id="02-big-ear-listening-flat" class="02-big-ear-listening-draw 02-big-ear-listening-main" d="" />
+          <circle id="02-big-ear-listening-pivot" class="02-big-ear-listening-draw 02-big-ear-listening-mid" cx="140" cy="632" r="7" />
+          <path id="02-big-ear-listening-legA" class="02-big-ear-listening-draw 02-big-ear-listening-mid" d="" />
+          <path id="02-big-ear-listening-legB" class="02-big-ear-listening-draw 02-big-ear-listening-mid" d="" />
+          <path id="02-big-ear-listening-brace" class="02-big-ear-listening-draw 02-big-ear-listening-hair" d="" />
+          <!-- fixed curved (paraboloidal) reflector (right) + back frame -->
+          <path id="02-big-ear-listening-para" class="02-big-ear-listening-draw 02-big-ear-listening-main" d="" />
+          <path id="02-big-ear-listening-paraback" class="02-big-ear-listening-draw 02-big-ear-listening-mid" d="" />
+          <path id="02-big-ear-listening-lattice" class="02-big-ear-listening-draw 02-big-ear-listening-hair" d="" />
+          <!-- feed horns on the ground plane, mouth facing the curved reflector -->
+          <path id="02-big-ear-listening-housing" class="02-big-ear-listening-draw 02-big-ear-listening-accent" d="M 486 638 L 486 618 L 506 618 L 506 638" />
+          <path id="02-big-ear-listening-horn" class="02-big-ear-listening-draw 02-big-ear-listening-accent" d="M 506 630 L 540 612 L 540 638 L 506 638 Z" />
+        </g>
+        <!-- signal path: sky -> flat reflector -> curved reflector -> feed horn -->
+        <path id="02-big-ear-listening-ray" class="02-big-ear-listening-draw 02-big-ear-listening-accent" style="stroke-width:2" d="" />
+        <circle id="02-big-ear-listening-hit" cx="540" cy="625" r="0" fill="#E85D26" />
+        <!-- part labels -->
+        <g id="02-big-ear-listening-labels">
+          <path class="02-big-ear-listening-draw 02-big-ear-listening-hint 02-big-ear-listening-leader" d="M 60 652 L 60 672" />
+          <text class="02-big-ear-listening-label" x="20" y="700" text-anchor="start">FLAT REFLECTOR</text>
+          <path class="02-big-ear-listening-draw 02-big-ear-listening-hint 02-big-ear-listening-leader" d="M 516 652 L 516 672" />
+          <text class="02-big-ear-listening-label" x="516" y="700" text-anchor="middle">FEED HORNS</text>
+          <path class="02-big-ear-listening-draw 02-big-ear-listening-hint 02-big-ear-listening-leader" d="M 920 652 L 920 672" />
+          <text class="02-big-ear-listening-label" x="950" y="700" text-anchor="end">CURVED REFLECTOR</text>
+        </g>
+      </svg>
+    </div>
+
+    <div id="02-big-ear-listening-name">
+      <div id="02-big-ear-listening-name-rule"></div>
+      <div id="02-big-ear-listening-name-text">BIG EAR</div>
+      <div id="02-big-ear-listening-name-tag">RADIO TELESCOPE</div>
+    </div>
+
+    <div id="02-big-ear-listening-paper-window">
+      <div id="02-big-ear-listening-paper">
+        <div class="02-big-ear-listening-perf" style="left:38px"></div>
+        <div class="02-big-ear-listening-perf" style="left:500px"></div>
+        <div id="02-big-ear-listening-holes"></div>
+        <div id="02-big-ear-listening-row"></div>
+        <div id="02-big-ear-listening-head"></div>
+      </div>
+    </div>
+    <div id="02-big-ear-listening-slot"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      var ID = "02-big-ear-listening";
+      var P = ID + "-";
+      var NS = "http://www.w3.org/2000/svg";
+      var $ = function (s) { return document.getElementById(P + s); };
+      var root = document.querySelector('[data-composition-id="' + ID + '"]');
+      var all = function (cls) { return Array.prototype.slice.call(root.querySelectorAll('[class~="' + P + cls + '"]')); };
+      var f = function (n) { return (Math.round(n * 100) / 100).toString(); };
+      var poly = function (pts) {
+        return pts.map(function (p, i) { return (i ? "L " : "M ") + f(p[0]) + " " + f(p[1]); }).join(" ");
+      };
+      var svgEl = function (tag, attrs, parent) {
+        var el = document.createElementNS(NS, tag);
+        for (var k in attrs) el.setAttribute(k, attrs[k]);
+        parent.appendChild(el);
+        return el;
+      };
+
+      /* ---------- geometry (viewBox units, 1:1 with px) ---------- */
+      var GY = 640;                                   // ground line
+      var D2R = Math.PI / 180;
+      // flat reflector: pivots at its base, leans back 20 deg, faces the sky
+      var B = [140, GY - 4];
+      var LEAN = 20 * D2R, FLAT_LEN = 300;
+      var T = [B[0] - FLAT_LEN * Math.sin(LEAN), B[1] - FLAT_LEN * Math.cos(LEAN)];
+      var at = function (k) { return [B[0] + (T[0] - B[0]) * k, B[1] + (T[1] - B[1]) * k]; };
+      var H = at(0.5);                                // where the sky ray lands
+      $("flat").setAttribute("d", poly([B, T]));
+      $("legA").setAttribute("d", poly([[14, GY], at(0.9)]));
+      $("legB").setAttribute("d", poly([[66, GY], at(0.55)]));
+      $("brace").setAttribute("d", poly([[14, GY], at(0.55), [66, GY]]));
+
+      // fixed paraboloid: axis along the ground, focus at the feed horns
+      var VX = 900, FX = 520, FL = VX - FX, PH = 210;
+      var px = function (y) { return VX - Math.pow(GY - y, 2) / (4 * FL); };
+      var front = [];
+      for (var y = GY - 2; y >= GY - PH - 0.01; y -= 15) front.push([px(y), y]);
+      front.push([px(GY - PH), GY - PH]);
+      $("para").setAttribute("d", poly(front));
+      var bx = function (y) { return 950 - (GY - y) * 0.14; };
+      var back = [[bx(GY), GY], [bx(GY - PH), GY - PH], [px(GY - PH), GY - PH]];
+      $("paraback").setAttribute("d", poly(back));
+      var lat = [];
+      for (var i = 0; i <= 6; i++) {
+        var yy = GY - (PH / 6) * i;
+        lat.push(i % 2 === 0 ? [px(yy), yy] : [bx(yy), yy]);
+      }
+      $("lattice").setAttribute("d", poly(lat));
+
+      // earth hatch ticks
+      var hatch = $("hatch");
+      for (var hx = 40; hx <= 940; hx += 30) {
+        svgEl("path", { d: poly([[hx, GY + 4], [hx - 10, GY + 16]]), "class": P + "draw " + P + "hint " + P + "tick" }, hatch);
+      }
+
+      // signal ray: from the sky at 40 deg elevation -> flat reflector -> paraboloid -> horn mouth
+      var EL = 40 * D2R;
+      var U = [Math.cos(EL), -Math.sin(EL)];          // toward the source (up-right)
+      var R0 = [H[0] + 560 * U[0], H[1] + 560 * U[1]];
+      var PR = [px(H[1]), H[1]];
+      var mx = 540, tt = (PR[0] - mx) / (PR[0] - FX);
+      var HM = [mx, PR[1] + tt * (GY - PR[1])];
+      $("ray").setAttribute("d", poly([R0, H, PR, HM]));
+      $("hit").setAttribute("cx", f(HM[0]));
+      $("hit").setAttribute("cy", f(HM[1]));
+
+      // wavefront arcs: concentric about a distant point along the ray
+      var S = [H[0] + 1500 * U[0], H[1] + 1500 * U[1]];
+      var theta0 = Math.atan2(-U[1], -U[0]);
+      var arcG = $("arcs");
+      var DIST = [220, 320, 420], ARC_OP = [0.9, 0.62, 0.38];
+      var arcs = DIST.map(function (d) {
+        var r = 1500 - d, span = 150 / r, pts = [];
+        for (var k = 0; k <= 24; k++) {
+          var a = theta0 - span + (2 * span * k) / 24;
+          pts.push([S[0] + r * Math.cos(a), S[1] + r * Math.sin(a)]);
+        }
+        var g = svgEl("g", {}, arcG);
+        svgEl("path", { d: poly(pts), "class": P + "arc" }, g);
+        return g;
+      });
+
+      // seeded deterministic starfield (sky only)
+      var seed = 1977;
+      var rnd = function () {
+        seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+        var t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+      var starG = $("stars");
+      for (var s = 0; s < 44; s++) {
+        svgEl("circle", {
+          cx: f(rnd() * 960), cy: f(30 + rnd() * 350), r: f(0.8 + rnd() * 1.4),
+          fill: "#F0ECE5", "fill-opacity": f(0.12 + rnd() * 0.36)
+        }, starG);
+      }
+
+      // tractor-feed holes
+      var holes = $("holes");
+      for (var h = 0; h < 11; h++) {
+        ["13px", "515px"].forEach(function (lx) {
+          var d = document.createElement("div");
+          d.className = P + "hole";
+          d.style.left = lx;
+          d.style.top = (22 + h * 32) + "px";
+          holes.appendChild(d);
+        });
+      }
+
+      // first printed row (single-character channel readout)
+      var ROW = "1  1   2 1  11  1   21";
+      var rowEl = $("row");
+      var pcs = ROW.split("").map(function (ch) {
+        var sp = document.createElement("span");
+        sp.className = P + "pc";
+        sp.textContent = ch === " " ? " " : ch;
+        rowEl.appendChild(sp);
+        return sp;
+      });
+
+      /* ---------- dash setup for self-draw ---------- */
+      var prep = function (el) {
+        var len = 0;
+        try { len = el.getTotalLength(); } catch (e) { len = 0; }
+        if (!(len > 0)) len = 2000;
+        len = len * 1.03;
+        el.style.strokeDasharray = len + " " + len;
+        el.style.strokeDashoffset = String(len);
+        return len;
+      };
+      var draw = function (tl, el, at, dur, ease) {
+        var len = prep(el);
+        tl.fromTo(el, { strokeDashoffset: len }, { strokeDashoffset: 0, duration: dur, ease: ease || "power2.out" }, at);
+      };
+
+      /* ---------- timeline ---------- */
+      var tl = gsap.timeline({ paused: true });
+
+      // underlying slow camera push on the diagram (full duration)
+      tl.fromTo($("diagram"), { scale: 1 }, { scale: 1.03, duration: 6.879, ease: "none" }, 0);
+
+      // sky stars settle in
+      tl.fromTo(starG, { opacity: 0 }, { opacity: 1, duration: 0.8, ease: "power1.out" }, 0);
+
+      // Scene 1 (0.0-1.4): date chip types on
+      tl.fromTo($("date"), { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power1.out" }, 0.12);
+      var dcs = all("dc");
+      var ADV = 40 * 0.74;                            // Plex Mono advance (0.6em) + 0.14em tracking
+      dcs.forEach(function (c, i) {
+        var t = 0.3 + i * 0.075;
+        tl.fromTo(c, { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none" }, t);
+        tl.set($("cursor"), { x: (i + 1) * ADV }, t);
+      });
+      var cur = $("cursor");
+      tl.fromTo(cur, { opacity: 0 }, { opacity: 1, duration: 0.01 }, 0.3);
+      [[1.2, 0], [1.45, 1], [1.7, 0], [1.95, 1], [2.2, 0]].forEach(function (b) { tl.set(cur, { opacity: b[1] }, b[0]); });
+
+      // ground plane starts drawing under the date (left to right)
+      draw(tl, $("earth"), 0.35, 1.3, "power1.inOut");
+      tl.fromTo(all("tick"), { opacity: 0 }, { opacity: 1, duration: 0.2, stagger: 0.03, ease: "power1.out" }, 0.6);
+      draw(tl, $("plane"), 0.55, 1.1, "power1.inOut");
+
+      // Scene 2 (1.4-3.6): kicker, then Big Ear draws itself left to right
+      tl.fromTo($("kicker-rule"), { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.out" }, 1.35);
+      tl.fromTo($("kicker-text"), { opacity: 0, x: -16 }, { opacity: 1, x: 0, duration: 0.5, ease: "power2.out" }, 1.45);
+
+      draw(tl, $("pivot"), 1.45, 0.3);
+      draw(tl, $("flat"), 1.5, 0.6);
+      draw(tl, $("legA"), 1.8, 0.4);
+      draw(tl, $("legB"), 1.9, 0.35);
+      draw(tl, $("brace"), 2.0, 0.4);
+
+      tl.fromTo($("name-rule"), { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power2.out" }, 2.2);
+      tl.fromTo($("name-text"), { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 2.3);
+      tl.fromTo($("name-tag"), { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.out" }, 2.55);
+
+      draw(tl, $("para"), 2.2, 0.6);
+      draw(tl, $("paraback"), 2.4, 0.55);
+      draw(tl, $("lattice"), 2.6, 0.6);
+      draw(tl, $("housing"), 2.85, 0.3);
+      draw(tl, $("horn"), 2.95, 0.4);
+
+      var leaders = all("leader");
+      var labels = Array.prototype.slice.call($("labels").querySelectorAll("text"));
+      leaders.forEach(function (l, i) { draw(tl, l, 3.05 + i * 0.12, 0.25); });
+      tl.fromTo(labels, { opacity: 0 }, { opacity: 1, duration: 0.35, stagger: 0.12, ease: "power1.out" }, 3.15);
+
+      // Scene 3 (3.6-4.8): three wavefront arcs descend toward the reflector, one after another
+      arcs.forEach(function (g, i) {
+        tl.fromTo(g,
+          { x: 140 * U[0], y: 140 * U[1], opacity: 0 },
+          { x: 0, y: 0, opacity: ARC_OP[i], duration: 1.6, ease: "power1.out" },
+          3.6 + i * 0.38);
+      });
+      // the signal path traces down onto the feed horns
+      draw(tl, $("ray"), 4.3, 0.95, "power1.inOut");
+      tl.fromTo($("hit"), { attr: { r: 0 } }, { attr: { r: 7 }, duration: 0.3, ease: "power2.out" }, 5.2);
+
+      // Scene 4 (4.8-6.8): paper feeds up out of the printer slot, first row prints
+      tl.fromTo($("slot"), { scaleX: 0 }, { scaleX: 1, duration: 0.35, ease: "power2.out" }, 4.72);
+      tl.fromTo($("paper"), { y: 397 }, { y: 0, duration: 0.75, ease: "power2.out" }, 4.85);
+      var head = $("head");
+      var STEP = 0.043, PSTART = 5.6;
+      tl.fromTo(head, { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "none" }, 5.45);
+      tl.fromTo(head, { x: 0 }, { x: pcs.length * 20, duration: pcs.length * STEP, ease: "none" }, PSTART);
+      pcs.forEach(function (c, i) {
+        tl.fromTo(c, { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none" }, PSTART + (i + 1) * STEP);
+      });
+      // hold to the end of the frame
+      tl.set({}, {}, 6.85);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines[ID] = tl;
+    })();
+  </script>
+</template>

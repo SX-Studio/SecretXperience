@@ -1,0 +1,228 @@
+<template>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500-italic.woff2") format("woff2");font-weight:500;font-style:italic;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600-italic.woff2") format("woff2");font-weight:600;font-style:italic;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+#root, #root * { font-variant-numeric: lining-nums; }
+
+    #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; }
+    #root img { display: block; }
+
+    /* Photo A: lone pronghorn, colour returning from sepia, camera pushes + pans with it */
+    #f05-photo-a {
+      position: absolute; left: 0; top: 0; width: 1080px; height: 1920px;
+      object-fit: cover; object-position: 40% 50%;
+      transform-origin: 50% 50%;
+    }
+    /* Documentary grade so banner / captions read */
+    #f05-grade { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; pointer-events: none; z-index: 11; } /* above photo B so the loop picture matches 01-hook frame 0 (photo + same grade) */
+    #f05-grade-top {
+      position: absolute; left: 0; top: 0; width: 1080px; height: 480px;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.45), rgba(0,0,0,0));
+    }
+    #f05-grade-bot {
+      position: absolute; left: 0; top: 1450px; width: 1080px; height: 470px;
+      background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.5));
+    }
+
+    /* Ghost cheetah (frame.md ghost spec): inverted ink, white glow, motion-blur copy behind */
+    #f05-ghost { position: absolute; left: -240px; top: 690px; width: 820px; height: 494px; }
+    #f05-ghost-blur, #f05-ghost-main {
+      position: absolute; left: 0; top: 0; width: 820px; height: 494px;
+    }
+    #f05-ghost-blur {
+      left: -40px; opacity: 0.2;
+      filter: invert(1) brightness(1.15) blur(6px);
+    }
+    #f05-ghost-main {
+      filter: invert(1) brightness(1.15) drop-shadow(0 0 18px rgba(255,255,255,0.55));
+    }
+
+    /* Dust: seeded particles sampled from the cheetah's own ink, in the ghost's box */
+    #f05-dust { position: absolute; left: -200px; top: 690px; width: 820px; height: 494px; }
+    .f05-mote {
+      position: absolute; border-radius: 50%;
+      background: #FFFFFF; box-shadow: 0 0 8px rgba(255,255,255,0.7);
+    }
+
+    /* Speed lines streaking behind the runner */
+    #f05-speed { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+    .f05-streak { position: absolute; transform-origin: 100% 50%; border-radius: 3px; }
+
+    /* Caveat field note + red underline */
+    #f05-note {
+      position: absolute; left: 330px; top: 512px; width: 700px;
+      font-family: "Caveat", cursive; font-weight: 700; font-size: 96px; line-height: 1.1;
+      color: #FFFFFF; white-space: nowrap;
+      text-shadow: 0 3px 16px rgba(0,0,0,0.65), 0 1px 3px rgba(0,0,0,0.5);
+    }
+    #f05-note-text { display: inline-block; }
+    #f05-underline { position: absolute; left: 330px; top: 628px; width: 640px; height: 44px; overflow: visible; }
+
+    /* Photo B: Frame 1's opening picture — static, EXACT loop state */
+    #f05-photo-b {
+      position: absolute; left: 0; top: 0; width: 1080px; height: 1920px;
+      object-fit: cover; object-position: 38% 50%;
+      transform: scale(1.12) translateX(0);
+      z-index: 10;
+    }
+  </style>
+
+  <div id="root" data-composition-id="05-loop" data-width="1080" data-height="1920">
+    <img id="f05-photo-a" class="clip" src="public/ph-148318979.jpg" alt=""
+         data-start="0" data-duration="5.627" data-track-index="0" />
+
+    <div id="f05-grade" class="clip" data-start="0" data-duration="5.627" data-track-index="1">
+      <div id="f05-grade-top"></div>
+      <div id="f05-grade-bot"></div>
+    </div>
+
+    <div id="f05-ghost" class="clip" data-start="0" data-duration="5.627" data-track-index="2">
+      <img id="f05-ghost-blur" src="public/cheetah-ink.png" alt="" />
+      <img id="f05-ghost-main" src="public/cheetah-ink.png" alt="" />
+    </div>
+
+    <div id="f05-dust" class="clip" data-start="0" data-duration="5.627" data-track-index="3"></div>
+
+    <div id="f05-speed" class="clip" data-start="0" data-duration="5.627" data-track-index="4"></div>
+
+    <div id="f05-notewrap" class="clip" data-start="0" data-duration="5.627" data-track-index="5">
+      <div id="f05-note"><span id="f05-note-text">never slowed down</span></div>
+      <svg id="f05-underline" viewBox="0 0 640 44" width="640" height="44">
+        <path id="f05-underline-path" d="M8 26 C 120 14, 230 30, 340 20 S 540 12, 632 22"
+              fill="none" stroke="#C2412D" stroke-width="9" stroke-linecap="round" />
+      </svg>
+    </div>
+
+    <img id="f05-photo-b" class="clip" src="public/ph-148319074.jpg" alt=""
+         data-start="0" data-duration="5.627" data-track-index="6" />
+  </div>
+
+  <script>
+    (function () {
+      window.__timelines = window.__timelines || {};
+      var D = 5.627;
+
+      // ---- seeded PRNG (mulberry32) ----
+      function mulberry32(a) {
+        return function () {
+          a |= 0; a = (a + 0x6D2B79F5) | 0;
+          var t = Math.imul(a ^ (a >>> 15), 1 | a);
+          t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+      var rnd = mulberry32(50519);
+
+      // ---- dust motes: positions sampled offline from cheetah-ink.png ink pixels (per-mille of the box) ----
+      var P = [735,74,779,107,791,91,115,891,739,76,337,159,383,767,174,417,883,100,719,536,42,713,217,763,429,233,281,358,271,648,593,193,731,615,743,609,355,103,302,169,581,131,268,157,638,409,169,403,651,563,891,275,808,983,748,130,808,301,113,547,115,503,899,163,356,427,798,112,396,468,227,239,682,221,753,524,338,417,241,653,167,431,165,402,204,249,383,447,833,163,260,625,451,453,678,508,374,384,169,408,77,609,428,131,5,705,980,101,473,470,854,118,390,325,562,218,701,488,727,911,353,577,797,44,379,124,301,115,796,215,391,582,402,142,505,384,814,172,767,474,361,770,479,352,373,482,348,344,343,607,308,509,705,577,664,477,805,134,590,426,565,233,760,100,63,745,134,409,247,644,370,678,433,184,652,335,69,569,901,97,760,156,736,850,528,474,778,79,754,314,291,654,211,139,648,438,561,195,722,133,365,731,406,63,291,592,204,299,603,949,268,393,518,506,670,699,734,574,272,556,616,125,661,470,884,245,840,148,269,417,46,627,346,367,297,89,327,349,404,131,316,402,358,601,611,929,814,361,677,308,715,165,381,455,90,568,57,637,57,674,403,140,914,147,296,438,399,358,384,468,357,412,281,228,562,459,813,343,291,387,381,736,954,24,342,606,957,189,494,168,359,725,420,225,346,745,667,378,562,495];
+      var dust = document.getElementById("f05-dust");
+      var motes = [];
+      for (var i = 0; i < P.length; i += 2) {
+        var m = document.createElement("div");
+        m.className = "f05-mote";
+        var s = 3 + Math.round(rnd() * 5);
+        m.style.width = s + "px";
+        m.style.height = s + "px";
+        m.style.left = (P[i] / 1000 * 820 - s / 2).toFixed(1) + "px";
+        m.style.top = (P[i + 1] / 1000 * 494 - s / 2).toFixed(1) + "px";
+        dust.appendChild(m);
+        motes.push({
+          el: m,
+          dx: -40 + rnd() * 260,      // drift with the wind, mostly forward
+          dy: -50 - rnd() * 150,      // rising dust
+          delay: rnd() * 0.38,
+          life: 0.75 + rnd() * 0.6,
+          peak: 0.55 + rnd() * 0.4
+        });
+      }
+
+      // ---- speed lines: three seeded waves of streaks behind the pronghorn ----
+      var speed = document.getElementById("f05-speed");
+      var waves = [];
+      for (var w = 0; w < 3; w++) {
+        var lines = [];
+        for (var k = 0; k < 8; k++) {
+          var ln = document.createElement("div");
+          ln.className = "f05-streak";
+          var len = 160 + Math.round(rnd() * 240);
+          var th = 2 + Math.round(rnd() * 2);
+          ln.style.width = len + "px";
+          ln.style.height = th + "px";
+          ln.style.left = Math.round(330 - len - rnd() * 80) + "px";
+          ln.style.top = Math.round(800 + rnd() * 480) + "px";
+          ln.style.background = (k % 3 === 0) ? "#FFFFFF" : "#C2412D";
+          speed.appendChild(ln);
+          lines.push({ el: ln, delay: rnd() * 0.22 });
+        }
+        waves.push(lines);
+      }
+
+      var tl = gsap.timeline({ paused: true });
+
+      // ===== Photo A camera: slow push, then it keeps going (never slows down) =====
+      tl.fromTo("#f05-photo-a",
+        { scale: 1.06, x: 0, filter: "sepia(0.85) saturate(0.55) brightness(0.78) contrast(1.06)" },
+        { scale: 1.10, x: -24, duration: 2.4, ease: "sine.in" }, 0);
+      tl.to("#f05-photo-a", { scale: 1.19, x: -110, duration: D - 2.4, ease: "none" }, 2.4);
+
+      // Grade: stays dim through the ghost, colour floods back on "never" (Scene 2)
+      tl.to("#f05-photo-a",
+        { filter: "sepia(0.55) saturate(0.75) brightness(0.86) contrast(1.04)", duration: 0.8, ease: "sine.inOut" }, 1.0);
+      tl.to("#f05-photo-a",
+        { filter: "sepia(0) saturate(1.08) brightness(1) contrast(1)", duration: 1.3, ease: "power2.out" }, 1.9);
+
+      // ===== Scene 1 (0.0–1.8): ghost on its heels, then "vanished." → dust =====
+      tl.fromTo("#f05-ghost", { opacity: 0.5, x: 0 }, { opacity: 0.55, x: 44, duration: 0.96, ease: "sine.inOut" }, 0);
+      tl.fromTo("#f05-ghost-main", { filter: "invert(1) brightness(1.15) drop-shadow(0 0 18px rgba(255,255,255,0.55)) blur(0px)" },
+        { filter: "invert(1) brightness(1.15) drop-shadow(0 0 18px rgba(255,255,255,0.55)) blur(10px)", duration: 0.6, ease: "power2.in" }, 0.96);
+      tl.to("#f05-ghost", { opacity: 0, x: 70, duration: 0.6, ease: "power2.in" }, 0.96);
+
+      motes.forEach(function (mo) {
+        var t0 = 0.96 + mo.delay;
+        tl.fromTo(mo.el, { opacity: 0, x: 0, y: 0, scale: 1 },
+          { opacity: mo.peak, x: mo.dx * 0.25, y: mo.dy * 0.25, duration: 0.22, ease: "power1.out" }, t0);
+        tl.to(mo.el, { opacity: 0, x: mo.dx, y: mo.dy, scale: 0.4, duration: mo.life, ease: "sine.out" }, t0 + 0.22);
+      });
+
+      // ===== Scene 2 (1.8–4.0): speed lines + note writes on, red underline on "down." =====
+      var waveAt = [2.42, 3.1, 3.7];
+      waves.forEach(function (lines, wi) {
+        lines.forEach(function (o) {
+          var t0 = waveAt[wi] + o.delay;
+          tl.fromTo(o.el, { opacity: 0, scaleX: 0, x: 0 },
+            { opacity: 0.9, scaleX: 1, x: -40, duration: 0.14, ease: "power2.out" }, t0);
+          tl.to(o.el, { opacity: 0, x: -220, duration: 0.34, ease: "power1.in" }, t0 + 0.14);
+        });
+      });
+
+      tl.fromTo("#f05-note-text",
+        { clipPath: "inset(-20% 100% -20% 0%)", y: 6 },
+        { clipPath: "inset(-20% 0% -20% 0%)", y: 0, duration: 0.72, ease: "power1.inOut" }, 2.48);
+
+      var ul = document.getElementById("f05-underline-path");
+      var ulLen = 660;
+      ul.style.strokeDasharray = ulLen;
+      tl.fromTo(ul, { strokeDashoffset: ulLen }, { strokeDashoffset: 0, duration: 0.36, ease: "power2.out" }, 3.2);
+
+      // ===== Scene 3 (4.4–5.627): overlays clear, crossfade into Frame 1's opening picture, hold still =====
+      tl.to("#f05-notewrap", { opacity: 0, duration: 0.35, ease: "power1.in" }, 4.4);
+      tl.to("#f05-speed", { opacity: 0, duration: 0.3, ease: "power1.in" }, 4.4);
+      // Photo B: opacity only — its transform is the static CSS loop state, scale(1.12) translateX(0)
+      tl.fromTo("#f05-photo-b", { opacity: 0 }, { opacity: 1, duration: 0.7, ease: "power2.inOut" }, 4.4);
+
+      tl.set({}, {}, D);
+      window.__timelines["05-loop"] = tl;
+    })();
+  </script>
+</template>

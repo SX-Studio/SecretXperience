@@ -1,0 +1,70 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Video dissection</title>
+<style>
+:root{--bg:#15131b;--panel:#201d28;--ink:#f1ecff;--mute:#9a93ad;--acc:#ffc93c;--cut:#ff5a5a;--hit:#7ec8ff;--mus:#b58cff;--spk:#7de0b0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 system-ui,sans-serif}
+header{padding:14px 18px;border-bottom:1px solid #2c2838;display:flex;gap:18px;flex-wrap:wrap;align-items:baseline}header h1{font-size:18px;margin:0}header span{color:var(--mute)}
+#stats{display:flex;gap:14px;flex-wrap:wrap;padding:10px 18px;color:var(--mute)}#stats b{color:var(--ink)}
+#tl{position:relative;margin:0 18px;background:var(--panel);border-radius:10px;overflow:hidden;cursor:crosshair}
+canvas{display:block;width:100%}
+#ph{position:absolute;top:0;bottom:0;width:2px;background:#fff;pointer-events:none}
+main{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px;padding:16px 18px}
+.card{background:var(--panel);border-radius:12px;padding:12px}.card h2{font-size:13px;letter-spacing:1px;text-transform:uppercase;color:var(--mute);margin:0 0 8px}
+#shot img{width:100%;border-radius:8px;background:#000}#shot .meta{color:var(--mute);margin-top:6px;font-size:13px}
+.chips span{display:inline-block;background:#2c2838;border-radius:999px;padding:2px 9px;margin:2px 4px 2px 0;font-size:12px}
+#tr{max-height:38vh;overflow:auto;font-size:14px}#tr .w{cursor:pointer;padding:0 1px;border-radius:3px}#tr .w.on{background:var(--acc);color:#1e1b22}
+#shots{max-height:40vh;overflow:auto}#shots .s{display:grid;grid-template-columns:96px 1fr;gap:8px;padding:6px;border-radius:8px;cursor:pointer;align-items:center}#shots .s:hover,#shots .s.on{background:#2c2838}#shots img{width:96px;border-radius:5px}
+#shots small{color:var(--mute)}
+#sheets img{width:100%;border-radius:8px;margin-bottom:8px}
+#keys{color:var(--mute);font-size:12px;padding:0 18px 14px}
+@media(max-width:900px){main{grid-template-columns:1fr}}
+</style></head><body>
+<header><h1 id="title">Dissection</h1><span id="sub"></span></header>
+<div id="stats"></div>
+<div id="tl"><canvas id="c" height="260"></canvas><div id="ph"></div></div>
+<div id="keys">Timeline rows: <b style="color:var(--acc)">loudness</b> · <b style="color:#5fffc8">voice pitch</b> · <b style="color:#8f8">motion (every frame)</b> · <b style="color:var(--spk)">speech</b> / <b style="color:var(--mus)">music</b> spans · <b style="color:var(--cut)">cuts</b> · <b style="color:var(--hit)">hits</b> · grey = silence · bottom strip = average colour per shot. Click anywhere to jump. ← → step shots, space plays if the video file sits next to this page.</div>
+<main>
+ <div>
+  <div class="card" id="shot"><h2>Shot <span id="sn"></span></h2><img id="kf" alt=""><div class="meta" id="sm"></div><div class="chips" id="ss"></div><div class="chips" id="st"></div></div>
+  <div class="card"><h2>Transcript (click a word to jump)</h2><div id="tr"></div></div>
+ </div>
+ <div>
+  <div class="card"><h2>Shot list</h2><div id="shots"></div></div>
+  <div class="card"><h2>On-screen text</h2><div id="ocr" style="max-height:24vh;overflow:auto;font-size:13px"></div></div>
+  <div class="card"><h2>Picture + sound sheets (what Claude reads)</h2><div id="sheets"></div></div>
+ </div>
+</main>
+<video id="v" style="display:none" controls></video>
+<script id="data" type="application/json">__DATA__</script>
+<script>
+const D=JSON.parse(document.getElementById('data').textContent);const $=s=>document.querySelector(s);
+const hms=t=>`${Math.floor(t/60)}:${(t%60).toFixed(1).padStart(4,'0')}`;
+$('#title').textContent=D.src.split('/').pop();$('#sub').textContent=`${D.w}×${D.h} @ ${D.fps.toFixed(2)} fps · ${hms(D.dur)}`;
+const S=D.stats;$('#stats').innerHTML=[['shots',S.shots],['avg shot',S.avg_shot.toFixed(2)+'s'],['median',S.median_shot.toFixed(2)+'s'],['cuts/min',S.cuts_per_min.toFixed(1)],['words',S.words],['wpm',S.wpm.toFixed(0)],['speech',S.speech_pct.toFixed(0)+'%'],['music',S.music_pct.toFixed(0)+'%'],['silence',S.silence_total.toFixed(1)+'s'],['still frames',S.still_pct.toFixed(0)+'%']].map(([k,v])=>`<div>${k} <b>${v}</b></div>`).join('');
+const c=$('#c'),ctx=c.getContext('2d');let cur=0;
+function draw(){const Wd=c.width=c.clientWidth*devicePixelRatio,Hh=c.height=260*devicePixelRatio;ctx.clearRect(0,0,Wd,Hh);const X=t=>t/D.dur*Wd;
+ const row=(y0,h,arr,col,lo,hi,hop)=>{ctx.strokeStyle=col;ctx.lineWidth=devicePixelRatio;ctx.beginPath();let first=true;for(let i=0;i<arr.length;i++){const v=arr[i];if(v==null)continue;const x=X(i*hop),y=y0+h-h*Math.min(1,Math.max(0,(v-lo)/(hi-lo)));first?ctx.moveTo(x,y):ctx.lineTo(x,y);first=false}ctx.stroke()};
+ (D.music||[]).forEach(([a,b])=>{ctx.fillStyle='rgba(181,140,255,.35)';ctx.fillRect(X(a),0,X(b)-X(a),Hh*.06)});(D.speech||[]).forEach(([a,b])=>{ctx.fillStyle='rgba(125,224,176,.5)';ctx.fillRect(X(a),Hh*.06,X(b)-X(a),Hh*.05)});
+ (D.silences||[]).forEach(([a,b])=>{ctx.fillStyle='rgba(150,150,150,.5)';ctx.fillRect(X(a),Hh*.12,X(b)-X(a),Hh*.3)});
+ const loud=D.shots.length&&D.loud?D.loud:null;
+ if(D.watch_loud)row(Hh*.12,Hh*.3,D.watch_loud,'#ffc93c',-50,-5,D.hop);
+ row(Hh*.12,Hh*.3,D.loud_series||[],'#ffc93c',-50,-5,D.hop||.05);
+ row(Hh*.12,Hh*.3,(D.pitch_series||[]).map(v=>v?Math.log(v):null),'#5fffc8',Math.log(75),Math.log(400),D.hop||.05);
+ row(Hh*.45,Hh*.22,D.frame_motion,'#8f8',0,Math.max(4,quantile(D.frame_motion,.99)),1/D.fps);
+ D.shots.forEach(s=>{ctx.fillStyle=s.colour;ctx.fillRect(X(s.start),Hh*.72,Math.max(1,X(s.end)-X(s.start)),Hh*.1);ctx.fillStyle='#ff5a5a';ctx.fillRect(X(s.start),Hh*.45,devicePixelRatio,Hh*.37)});
+ (D.hits||[]).forEach(h=>{ctx.fillStyle='#7ec8ff';ctx.beginPath();ctx.moveTo(X(h)-4,Hh*.84);ctx.lineTo(X(h)+4,Hh*.84);ctx.lineTo(X(h),Hh*.9);ctx.fill()});
+ ctx.fillStyle='#9a93ad';ctx.font=`${11*devicePixelRatio}px system-ui`;for(let t=0;t<D.dur;t+=D.dur>600?60:D.dur>120?30:10)ctx.fillText(hms(t),X(t)+3,Hh-4)}
+function quantile(a,q){const s=[...a].sort((x,y)=>x-y);return s[Math.floor(q*(s.length-1))]||1}
+function show(i){cur=i;const s=D.shots[i];$('#sn').textContent=`${i+1}/${D.shots.length} · ${hms(s.start)}–${hms(s.end)} (${s.dur.toFixed(2)}s)`;$('#kf').src=s.keyframe;
+ $('#sm').innerHTML=`motion ${s.motion.toFixed(1)} (${s.still_pct.toFixed(0)}% still) · colour <span style="background:${s.colour};padding:0 10px;border-radius:4px">&nbsp;</span> ${s.colour} · bright ${s.brightness.toFixed(0)}`+(s.loud?` · loud ${s.loud[0]}/${s.loud[1]} dB`:'')+(s.pitch?` · pitch ${s.pitch[0]}–${s.pitch[2]} Hz`:'')+(s.hits.length?` · ${s.hits.length} hits`:'')+(s.words?`<div style="color:var(--ink);margin-top:6px">“${s.words}”</div>`:'');
+ $('#ss').innerHTML=(s.sounds||[]).map(([l,p])=>`<span>${l} ${p.toFixed(2)}</span>`).join('');$('#st').innerHTML=(s.text||[]).map(t=>`<span style="background:#3a3350">${t}</span>`).join('');
+ document.querySelectorAll('#shots .s').forEach((e,j)=>e.classList.toggle('on',j===i));const el=document.querySelectorAll('#shots .s')[i];if(el)el.scrollIntoView({block:'nearest'});
+ $('#ph').style.left=(s.start/D.dur*100)+'%';document.querySelectorAll('#tr .w').forEach(w=>w.classList.toggle('on',+w.dataset.t>=s.start&&+w.dataset.t<s.end))}
+$('#shots').innerHTML=D.shots.map((s,i)=>`<div class="s" data-i="${i}"><img src="${s.keyframe}" loading="lazy"><div>${hms(s.start)} · ${s.dur.toFixed(2)}s<br><small>${(s.sounds||[]).slice(0,2).map(x=>x[0]).join(', ')}${s.text&&s.text.length?' · text':''}</small></div></div>`).join('');
+$('#shots').onclick=e=>{const s=e.target.closest('.s');if(s)show(+s.dataset.i)};
+$('#tr').innerHTML=D.words.map(w=>`<span class="w" data-t="${w.t}">${w.w}</span> `).join('');$('#tr').onclick=e=>{if(e.target.dataset.t){const t=+e.target.dataset.t;show(D.shots.findIndex(s=>t>=s.start&&t<s.end));$('#v').currentTime=t}};
+$('#ocr').innerHTML=D.text.map(o=>`<div>[${hms(o.first)}–${hms(o.last)}] ${o.text}</div>`).join('')||'<i>none detected</i>';
+$('#sheets').innerHTML=D.sheets.map(p=>`<img src="${p}" loading="lazy">`).join('');
+$('#tl').onclick=e=>{const t=(e.clientX-c.getBoundingClientRect().left)/c.clientWidth*D.dur;const i=D.shots.findIndex(s=>t>=s.start&&t<s.end);show(i<0?0:i);$('#v').currentTime=t};
+addEventListener('keydown',e=>{if(e.key==='ArrowRight')show(Math.min(D.shots.length-1,cur+1));if(e.key==='ArrowLeft')show(Math.max(0,cur-1));if(e.key===' '){e.preventDefault();const v=$('#v');v.style.display='block';v.src=v.src||D.src.split('/').pop();v.paused?v.play():v.pause()}});
+addEventListener('resize',draw);draw();show(0);
+</script></body></html>

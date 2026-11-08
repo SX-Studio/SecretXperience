@@ -1,0 +1,106 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #seat-svg { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+    #seat-svg text { font-family: "Nunito"; }
+  </style>
+  <div id="root" data-composition-id="seat" data-width="1920" data-height="1080">
+    <svg id="seat-svg" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" data-layout-ignore></svg>
+  </div>
+  <script>
+    (function () {
+      const SR = window.SR, EP = window.EP, V3 = window.V3, T = window.T3; const { el, Character, Ripple, PAL, clamp, EASE, sampleTrack } = SR;
+      const svg = document.getElementById("seat-svg"), D = T.D, G = 900;
+      const world = el("g", {}, svg);
+      const bgL = el("g", {}, world), setL = el("g", {}, bgL), lights = el("g", {}, bgL), backK = el("g", {}, bgL), backT = el("g", {}, bgL);
+      const midL = el("g", {}, world), chairL = el("g", {}, midL), kidsL = el("g", {}, world), tabL = el("g", {}, world), fx = el("g", {}, world);
+      const fgL = el("g", {}, svg), insL = el("g", { opacity: 0 }, svg), post = el("g", {}, svg), hud = el("g", {}, svg);
+      EP.cafeteria(svg, setL, G, { time: "12:31", menu: "Taco Wednesday", menuX: 1700, clockX: 2250 });
+      [-1100, -660, -220].forEach((x) => V3.glow(svg, lights, x + 150, 230, 420, "#FFD9A0", 0.55));
+      const bTabs = [-500, 1500], bxs = []; bTabs.forEach((x) => { for (let i = 0; i < 4; i++) bxs.push(x + 90 + i * 180); });
+      const tEvery = T["n28:everybody"];
+      const back = EP.kids(backK, { xs: bxs, y: G - 140, scale: 0.8, seed: 141, idp: "v3b", dur: D, turns: [[tEvery, (i, x) => (x < 700 ? 1 : -1), "surprised"]], spec: (i) => (i === 5 ? { opacity: [[0, 0]] } : { mood: [[0, "neutral", 0], [tEvery + 0.8, "happy", 0.4]] }) });
+      bTabs.forEach((x, i) => EP.table(backT, x, 1000, G - 140, 0.8, 140 + i));
+      const JX = [200, 360, 520, 680, 840, 1000];
+      const chairs = JX.map((x) => EP.chair(chairL, x - 12, G + 40, 1.0, "#C9A227"));
+      const rim = V3.rim(svg, "#FFD08A", 2.2, -2, -1.5, 0.12), rimHot = V3.rim(svg, "#FFC46B", 3.5, -3, -2, 0.3);
+      // timing
+      const tS2 = T["n26:something"] - 0.05, tS3 = T.nia_seat - 0.15, tS4 = T.jordan_free - 0.15, tS5 = T.jordan_free + 0.62, tS6 = T.jordan_free_e + 0.05, tS7 = T.n27, tS8 = T["n27:but"] - 0.05, tS9 = T.marcus_scoot - 0.4, tS10 = T.n28 - 0.1;
+      const tSit = tS6 + 0.1, tSaw = T["n27:saw"];
+      const jordan = Character(kidsL, EP.cast("jordan", { id: "v3-j", x: [[0, 520]], y: [[0, G + 40]], noWalk: true, facing: [[0, -1]],
+        pose: [[0, "sitSlump", 0], [T.jordan_free, "sit", 0.25], [T.jordan_free + 0.6, "shrug", 0.3], [T.jordan_free_e + 0.3, "sit", 0.3]],
+        mood: [[0, "sad", 0], [T.nia_seat + 0.3, "surprised", 0.2], [T.jordan_free, "deadpan", 0.2], [tS7 + 0.5, "content", 0.5], [tS10 + 0.6, "happy", 0.5]],
+        look: [[0, { x: 0, y: 0.8 }], [T.nia_seat + 0.2, { x: 0.8, y: -0.4 }], [tS7, { x: 0.6, y: 0 }]], lips: [[T.jordan_free, "jordan_free"]] }));
+      const nia = Character(kidsL, EP.cast("nia", { id: "v3-n", x: [[0, -500], [0.6, -500], [tS3 - 0.1, 300, "out"], [tSit - 0.25, 300], [tSit, 360, "out"]], y: [[0, G + 70], [tSit - 0.25, G + 70], [tSit, G + 40]],
+        prop: { kind: "tray", show: [[0, 1], [tSit - 0.05, 1], [tSit, 0]] }, facing: [[0, 1]], pose: [[0, "hold", 0], [tSit, "sit", 0.3]],
+        mood: [[0, "content", 0], [T.nia_seat, "happy", 0.2], [T.jordan_free + 0.5, "smug", 0.25], [tS7, "happy", 0.4]], look: [[0, { x: 1, y: 0 }]], lips: [[T.nia_seat, "nia_seat"]] }));
+      const marcus = Character(kidsL, EP.cast("marcus", { id: "v3-m", x: [[0, bxs[5]], [tS9 - 0.01, bxs[5]], [tS9, 900], [T.marcus_scoot_e + 0.2, 900], [T.marcus_scoot_e + 0.6, 840, "out"]],
+        y: [[0, G - 140], [tS9 - 0.01, G - 140], [tS9, G + 70], [T.marcus_scoot_e + 0.4, G + 70], [T.marcus_scoot_e + 0.7, G + 40]], scaleT: [[0, 0.8], [tS9 - 0.01, 0.8], [tS9, 1.06]], facing: [[0, -1]], noWalk: true,
+        pose: [[0, "sit", 0], [tSaw + 0.2, "startle", 0.15], [tS9, "hipsHands", 0], [T.marcus_scoot_e + 0.5, "sit", 0.3]], mood: [[0, "neutral", 0], [tSaw, "surprised", 0.15], [tS9, "smug", 0], [tS10, "joy", 0.3]],
+        look: [[0, { x: -0.8, y: 0.3 }], [tS9, { x: 0.6, y: 0.4 }]], lips: [[T.marcus_scoot, "marcus_scoot"]] }));
+      EP.table(tabL, 120, 1000, G + 40, 1, 145, { top: "#F2D28A" });
+      const crown = el("g", {}, tabL); el("rect", { x: 490, y: G - 66, width: 260, height: 48, rx: 10, fill: "#C9A227", stroke: PAL.ink, "stroke-width": 4 }, crown); EP.txt(crown, 620, G - 41, "TOP TABLE", 30, "#FFFFFF", { font: "Outfit" });
+      const gold = Ripple(fx, { color: PAL.kind, t: T["n28:moves"], dur: 1.8, maxR: 1100, rings: 4, width: 10 });
+      const b1 = SR.Bubble(hud, { text: "Is this seat taken?", t0: T.nia_seat, t1: tS4 - 0.05, side: 1, size: 44 });
+      const b2 = SR.Bubble(hud, { text: "It's… literally all free.", t0: T.jordan_free, t1: tS6, side: -1, size: 44 });
+      const b3 = SR.Bubble(hud, { text: "Scoot over.", t0: T.marcus_scoot, t1: tS10, side: -1, size: 44 });
+      // OTS foreground: a huge, dark, defocused Jordan shoulder/head on screen right
+      const otsBlur = V3.blur(svg); fgL.setAttribute("filter", otsBlur.url);
+      const ots = Character(fgL, EP.cast("jordan", { id: "v3-ots", x: [[0, 1700]], y: [[0, 1700]], scale: 4.2, noWalk: true, facing: [[0, -1]], pose: [[0, "sitSlump", 0]], mood: [[0, "sad", 0]] }));
+      // top-down insert: the tray landing on the table
+      const tray = el("g", {}, insL);
+      el("rect", { x: 0, y: 0, width: 1920, height: 1080, fill: "#E9D9B8" }, insL.insertBefore(el("g", {}), tray));
+      for (let i = 0; i < 14; i++) el("path", { d: `M0,${40 + i * 80} C600,${60 + i * 80} 1300,${20 + i * 80} 1920,${50 + i * 80}`, fill: "none", stroke: "rgba(150,110,60,0.18)", "stroke-width": 6 }, insL.firstChild);
+      el("rect", { x: -380, y: -230, width: 760, height: 460, rx: 30, fill: "#E58A3A", stroke: PAL.ink, "stroke-width": 10 }, tray);
+      el("rect", { x: -340, y: -190, width: 330, height: 380, rx: 20, fill: "#D9772A" }, tray); el("rect", { x: 20, y: -190, width: 320, height: 170, rx: 20, fill: "#D9772A" }, tray); el("rect", { x: 20, y: 20, width: 320, height: 170, rx: 20, fill: "#D9772A" }, tray);
+      el("path", { d: "M-300,60 Q-175,-170 -50,60 Z", fill: "#F2C14E", stroke: PAL.ink, "stroke-width": 8 }, tray); el("path", { d: "M-270,40 Q-175,-90 -80,40", fill: "none", stroke: "#4E8A5A", "stroke-width": 14 }, tray);
+      el("rect", { x: 110, y: -160, width: 120, height: 120, rx: 8, fill: "#FFFFFF", stroke: PAL.ink, "stroke-width": 8 }, tray); el("path", { d: "M110,-100 L230,-100", stroke: "#7EC8E3", "stroke-width": 16 }, tray);
+      el("circle", { cx: 180, cy: 105, r: 55, fill: "#D9453A", stroke: PAL.ink, "stroke-width": 8 }, tray); el("path", { d: "M180,50 q10,-30 30,-34", fill: "none", stroke: "#5B3A29", "stroke-width": 8 }, tray);
+      [[-420, 0], [420, 0]].forEach(([x, y]) => el("circle", { cx: x, cy: y, r: 70, fill: PAL.ink }, tray));
+      // finishing: grade, grain, letterbox-free
+      V3.grade(svg, post, { light: "#FFB46B", lightK: 0.6, shadow: "#3A2A5A", shadowK: 0.3, vignette: 0.42 });
+      const grain = V3.grain(svg, post, 0.06);
+      const bgBlur = V3.blur(svg), midBlur = V3.blur(svg); bgL.setAttribute("filter", bgBlur.url); midL.setAttribute("filter", midBlur.url);
+      // camera targets (measured from the rigs at the moment of each shot)
+      const at = (c, t) => { const r = c.update(t); return r; };
+      const nH = at(nia, tS3 + 0.3), jH = at(jordan, tS4 + 0.3), mH = at(marcus, tSaw), mL = at(marcus, tS9 + 0.2), twoN = at(nia, tS7 + 0.5);
+      const shots = V3.Shots([
+        { t: 0, cam: { x: 1000, y: 640, z: 1.0 }, to: { x: 900, y: 660, z: 1.12 }, f: [0, 0, 0] },                                   // S1 wide establishing
+        { t: tS2, cam: { x: 120, y: 760, z: 1.7 }, to: { x: 210, y: 760, z: 1.85 }, f: [3.5, 0, 1], ots: 1 },                         // S2 over Jordan's shoulder
+        { t: tS3, cam: { x: nH.headX + 30, y: nH.headY + 20, z: 3.1 }, to: { x: nH.headX + 20, y: nH.headY + 15, z: 3.35 }, f: [7, 2.2, 0], rimN: 1 }, // S3 ECU Nia
+        { t: tS4, cam: { x: jH.headX - 30, y: jH.headY + 20, z: 3.1 }, to: { x: jH.headX - 30, y: jH.headY + 20, z: 3.2 }, f: [7, 2.2, 0], rimJ: 1 }, // S4 ECU Jordan
+        { t: tS5, cam: { x: jH.headX + 100, y: G - 60, z: 2.0 }, to: { x: 1150, y: G - 60, z: 2.0 }, ease: "out", f: [4, 0, 0], whip: 1 },   // S5 whip along the empty chairs
+        { t: tS6, cam: { x: 960, y: 540, z: 1 }, f: [0, 0, 0], insert: 1 },                                                            // S6 top-down insert: tray lands
+        { t: tS7, cam: { x: 450, y: twoN.headY + 60, z: 2.1 }, to: { x: 450, y: twoN.headY + 50, z: 2.35 }, f: [4, 0, 0], rimN: 1, rimJ: 1 }, // S7 two-shot
+        { t: tS8, cam: { x: mH.headX - 100, y: mH.headY + 40, z: 2.2 }, to: { x: mH.headX - 60, y: mH.headY + 30, z: 2.5 }, f: [0, 5, 0], rack: 1 }, // S8 rack focus to Marcus
+        { t: tS9, cam: { x: 820, y: mL.headY + 150, z: 2.3, r: -5 }, to: { x: 800, y: mL.headY + 140, z: 2.45, r: -6 }, f: [6, 0, 0], rimM: 1 }, // S9 low dutch angle, Marcus
+        { t: tS10, cam: { x: 700, y: 700, z: 1.55 }, to: { x: 860, y: 620, z: 0.98 }, ease: "inOut", f: [0, 0, 0], rimN: 1, rimJ: 1, rimM: 1 }, // S10 wide pull-out, the ripple
+      ], D);
+      const tl = gsap.timeline({ paused: true });
+      SR.drive(tl, D, (t) => {
+        const sh = shots.at(t), s = sh.s;
+        const whipK = s.whip ? Math.sin(clamp(sh.k * 1.6, 0, 1) * Math.PI) : 0;
+        V3.apply(world, sh.c, (s.insert ? 0 : 0) + (t > tS6 && t < tS6 + 0.25 ? 8 : 0), t);
+        // focus: bg / mid blur (rack focus animates from mid-sharp to bg-sharp)
+        let fb = s.f[0], fm = s.f[1];
+        if (s.rack) { const k = EASE.inOut(clamp(sh.tin / 0.5, 0, 1)); fb = 5 * (1 - k); fm = 5 * k; }
+        bgBlur.set(fb + whipK * 24, fb); midBlur.set(fm + whipK * 24, fm);
+        if (t < tS9 && marcus.g.parentNode !== backK) backK.appendChild(marcus.g); if (t >= tS9 && marcus.g.parentNode !== kidsL) kidsL.appendChild(marcus.g);
+        back.update(t); const j = jordan.update(t), n = nia.update(t), m = marcus.update(t);
+        jordan.g.setAttribute("filter", s.rimJ ? rimHot : rim); nia.g.setAttribute("filter", s.rimN ? rimHot : rim); marcus.g.setAttribute("filter", s.rimM ? rimHot : rim);
+        chairs.forEach((c, i) => { const isN = i === 1, isM = i === 4; const k = isN ? clamp((t - tSit + 0.5) / 0.3, 0, 1) * (1 - clamp((t - tSit) / 0.3, 0, 1)) : isM ? clamp((t - T.marcus_scoot_e) / 0.3, 0, 1) * (1 - clamp((t - T.marcus_scoot_e - 0.5) / 0.3, 0, 1)) : 0; c.set(-30 * k, 0); });
+        const scr = (x, y) => { const c = sh.c, a = (c.r || 0) * Math.PI / 180, dx = (x - c.x) * c.z, dy = (y - c.y) * c.z; return { x: 960 + dx * Math.cos(a) - dy * Math.sin(a), y: 540 + dx * Math.sin(a) + dy * Math.cos(a) - 30 * (c.z - 1) }; };
+        const clampB = (p, side) => ({ x: clamp(p.x, side > 0 ? 60 : 560, side > 0 ? 1360 : 1860), y: clamp(p.y, 200, 1000) });
+        b1.update(t, clampB(scr(n.headX, n.headY), 1)); b2.update(t, clampB(scr(j.headX, j.headY), -1)); b3.update(t, clampB(scr(m.headX, m.headY), -1));
+        gold.update(t, { x: m.headX, y: m.headY });
+        // OTS foreground
+        fgL.setAttribute("opacity", s.ots ? 1 : 0); otsBlur.set(9); ots.update(t); fgL.setAttribute("transform", s.ots ? `translate(${-30 * sh.k},0)` : "");
+        // insert
+        const ki = s.insert ? EASE.out(clamp(sh.tin / 0.28, 0, 1)) : 0;
+        insL.setAttribute("opacity", s.insert ? 1 : 0); tray.setAttribute("transform", `translate(960,${540 + 700 * (1 - ki)}) rotate(${-8 * (1 - ki)}) scale(${1.15 - 0.15 * ki})`);
+        grain.update(t);
+      });
+      window.__timelines["seat"] = tl;
+    })();
+  </script>
+</template>

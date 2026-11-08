@@ -1,0 +1,274 @@
+<template>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500-italic.woff2") format("woff2");font-weight:500;font-style:italic;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600-italic.woff2") format("woff2");font-weight:600;font-style:italic;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+#root, #root * { font-variant-numeric: lining-nums; }
+
+#root, #root * { font-variant-numeric: lining-nums; }
+
+    #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; }
+    #f04-clip-a, #f04-clip-b { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+    #f04-hud { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; pointer-events: none; }
+    #f04-svg { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible; }
+
+    .f04-mono {
+      font-family: "Courier Prime", monospace; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; white-space: nowrap; line-height: 1;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    }
+    .f04-red { color: #E8553F; }
+    .f04-pill {
+      position: relative; height: 60px; box-sizing: border-box; padding: 12px 22px 12px 20px;
+      font-size: 36px; color: rgba(255,255,255,0.96);
+      background: rgba(10,8,6,0.72); border-left: 2px solid #E8553F; border-radius: 0 4px 4px 0;
+      display: inline-flex; align-items: center;
+    }
+
+    /* tracked reticle: outer div positioned by render(), inner div scaled by the timeline */
+    #f04-ring { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+    #f04-ring-scale { position: absolute; left: -80px; top: -80px; width: 160px; height: 160px; transform-origin: 50% 50%; }
+    #f04-ring-svg { position: absolute; left: 0; top: 0; width: 160px; height: 160px; overflow: visible; }
+
+    /* scene 1 labels (lower free zone, below the footage window) */
+    #f04-grp-a { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+    #f04-pill-claws { position: absolute; left: 150px; top: 1330px; }
+    #f04-hl { position: relative; display: inline-block; }
+    #f04-hl-line {
+      position: absolute; left: 0; right: 0; bottom: -9px; height: 4px; background: #E8553F;
+      transform-origin: 0 50%; box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    }
+    #f04-row-spikes { position: absolute; left: 150px; top: 1330px; display: flex; align-items: center; gap: 20px; }
+    #f04-spikes { display: flex; align-items: flex-end; gap: 9px; height: 40px; }
+    .f04-spike { width: 24px; height: 38px; transform-origin: 50% 100%; display: block; }
+    .f04-tag {
+      position: absolute; left: 150px; top: 1452px; font-size: 30px; color: rgba(255,255,255,0.78);
+      display: flex; align-items: center; gap: 14px;
+    }
+    .f04-tag-dot { width: 12px; height: 12px; background: #E8553F; display: block; }
+
+    /* scene 2 labels (upper free zone, beside the tail tip) */
+    #f04-grp-b { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; opacity: 0; }
+    #f04-pill-rudder { position: absolute; left: 440px; top: 547px; }
+  </style>
+
+  <div id="root" data-composition-id="04-grip-tail" data-width="1080" data-height="1920">
+    <!-- ground: two back-to-back pre-rendered clips on one track (never scaled / filtered) -->
+    <video id="f04-clip-a" src="public/clips/s4a_raw.mp4" muted playsinline class="clip" data-start="0" data-duration="3.9" data-track-index="0"></video>
+    <video id="f04-clip-b" src="public/clips/s4b_raw.mp4" muted playsinline class="clip" data-start="3.9" data-duration="2.85" data-track-index="0"></video>
+
+    <div id="f04-hud" class="clip" data-start="0" data-duration="6.75" data-track-index="1">
+      <!-- leader lines, travel tracer, rudder arrow -->
+      <svg id="f04-svg" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+        <g id="f04-arrow" opacity="0">
+          <path id="f04-arc-shadow" d="M -152 293 A 300 300 0 0 1 37 -95" pathLength="1" fill="none"
+                stroke="rgba(0,0,0,0.38)" stroke-width="14" stroke-linecap="round" stroke-dasharray="1 2" stroke-dashoffset="1"></path>
+          <path id="f04-arc" d="M -152 293 A 300 300 0 0 1 37 -95" pathLength="1" fill="none"
+                stroke="#E8553F" stroke-width="8" stroke-linecap="round" stroke-dasharray="1 2" stroke-dashoffset="1"></path>
+          <g id="f04-arrowhead" opacity="0">
+            <polygon points="-4,-19 28,0 -4,19" fill="#E8553F" stroke="rgba(0,0,0,0.25)" stroke-width="2" stroke-linejoin="round"></polygon>
+          </g>
+        </g>
+        <line id="f04-tracer" x1="0" y1="0" x2="0" y2="0" stroke="#E8553F" stroke-width="4" stroke-linecap="round" opacity="0"></line>
+        <line id="f04-lead-a" x1="0" y1="0" x2="0" y2="0" stroke="rgba(255,255,255,0.9)" stroke-width="2" opacity="0"></line>
+        <circle id="f04-lead-a-dot" cx="0" cy="0" r="5" fill="#FFFFFF" opacity="0"></circle>
+        <line id="f04-lead-b" x1="0" y1="0" x2="0" y2="0" stroke="rgba(255,255,255,0.9)" stroke-width="2" opacity="0"></line>
+        <circle id="f04-lead-b-dot" cx="0" cy="0" r="5" fill="#FFFFFF" opacity="0"></circle>
+      </svg>
+
+      <!-- tracked reticle (paw in clip A, tail tip in clip B) -->
+      <div id="f04-ring">
+        <div id="f04-ring-scale">
+          <svg id="f04-ring-svg" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="80" cy="80" r="40" fill="none" stroke="rgba(0,0,0,0.35)" stroke-width="6"></circle>
+            <circle cx="80" cy="80" r="40" fill="none" stroke="rgba(255,255,255,0.92)" stroke-width="2.5"></circle>
+            <g id="f04-ring-rot">
+              <circle cx="80" cy="80" r="52" fill="none" stroke="#E8553F" stroke-width="2" stroke-dasharray="14 12" opacity="0.85"></circle>
+            </g>
+            <g stroke="#E8553F" stroke-width="3.5" stroke-linecap="round">
+              <line x1="80" y1="18" x2="80" y2="32"></line>
+              <line x1="80" y1="128" x2="80" y2="142"></line>
+              <line x1="18" y1="80" x2="32" y2="80"></line>
+              <line x1="128" y1="80" x2="142" y2="80"></line>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <!-- scene 1: claws -->
+      <div id="f04-grp-a">
+        <div id="f04-pill-claws" class="f04-pill f04-mono">CLAWS&nbsp;·&nbsp;<span id="f04-hl" class="f04-red">ALWAYS OUT<span id="f04-hl-line"></span></span></div>
+        <div id="f04-row-spikes">
+          <div id="f04-pill-spikes" class="f04-pill f04-mono">GRIP LIKE RUNNING&nbsp;<span class="f04-red">SPIKES</span></div>
+          <div id="f04-spikes">
+            <svg class="f04-spike" id="f04-spike-1" viewBox="0 0 24 38" xmlns="http://www.w3.org/2000/svg"><polygon points="12,0 24,38 0,38" fill="#E8553F"></polygon></svg>
+            <svg class="f04-spike" id="f04-spike-2" viewBox="0 0 24 38" xmlns="http://www.w3.org/2000/svg"><polygon points="12,0 24,38 0,38" fill="#E8553F"></polygon></svg>
+            <svg class="f04-spike" id="f04-spike-3" viewBox="0 0 24 38" xmlns="http://www.w3.org/2000/svg"><polygon points="12,0 24,38 0,38" fill="#E8553F"></polygon></svg>
+          </div>
+        </div>
+        <div id="f04-tag-a" class="f04-tag f04-mono"><span class="f04-tag-dot"></span>TRACK · PLANTED PAW</div>
+      </div>
+
+      <!-- scene 2: tail -->
+      <div id="f04-grp-b">
+        <div id="f04-pill-rudder" class="f04-pill f04-mono">TAIL&nbsp;=&nbsp;<span class="f04-red">RUDDER</span></div>
+        <div id="f04-tag-b" class="f04-tag f04-mono"><span class="f04-tag-dot"></span>TRACK · TAIL TIP</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      window.__timelines = window.__timelines || {};
+      var DUR = 6.75, FPS = 24, CUT = 3.9;
+
+      // s4a.json paw (lowest silhouette point), composite px. Pre-filtered from the raw track:
+      // window-edge clamps (y>=1240) and 1-2 frame foot flickers rejected (a foot switch must
+      // persist 3 frames), then Gaussian-smoothed (sigma 2.5 frames) so the ring holds on a
+      // planted foot and eases between feet instead of jumping.
+      var PAW = [[757,1164],[742,1160],[723,1155],[703,1149],[684,1144],[670,1140],[661,1138],[656,1136],[654,1135],[655,1135],[656,1134],[658,1134],[660,1133],[662,1133],[664,1133],[666,1133],[668,1133],[669,1133],[670,1133],[671,1133],[672,1133],[673,1134],[673,1134],[672,1135],[671,1135],[668,1136],[666,1137],[664,1137],[663,1138],[664,1139],[666,1140],[669,1141],[673,1141],[676,1141],[679,1140],[681,1140],[683,1139],[684,1138],[685,1138],[686,1138],[686,1139],[687,1139],[688,1140],[688,1141],[688,1142],[688,1142],[688,1143],[688,1143],[688,1144],[688,1145],[688,1146],[688,1147],[687,1147],[686,1148],[685,1148],[684,1149],[682,1149],[681,1150],[679,1151],[677,1152],[675,1153],[673,1154],[671,1155],[669,1156],[667,1157],[665,1157],[663,1159],[662,1160],[662,1162],[664,1165],[666,1168],[670,1171],[674,1175],[678,1179],[683,1183],[690,1186],[697,1190],[705,1194],[711,1198],[714,1201],[713,1204],[708,1206],[699,1209],[688,1211],[675,1213],[661,1215],[647,1218],[633,1221],[621,1224],[610,1226],[602,1229],[598,1230],[597,1231],[598,1232],[600,1233],[602,1233]];
+      // s4b.json tail tip, median(5) + Gaussian (sigma 1.5) smoothed.
+      var TAIL = [[249,694],[249,694],[249,694],[248,694],[247,694],[247,694],[246,694],[246,694],[246,694],[246,694],[245,694],[245,694],[244,694],[243,694],[241,694],[240,693],[240,693],[239,693],[238,693],[237,692],[235,692],[234,692],[233,691],[232,691],[232,691],[232,691],[232,690],[233,690],[234,689],[235,689],[235,688],[235,688],[235,687],[236,687],[236,686],[237,686],[237,685],[238,684],[238,684],[239,683],[239,683],[240,682],[241,682],[241,681],[242,680],[242,680],[242,679],[243,679],[244,678],[246,677],[247,676],[249,675],[250,674],[251,673],[252,673],[253,672],[253,671],[254,671],[255,670],[255,669],[256,669],[256,668],[256,667],[256,667],[257,666],[257,665],[257,665],[257,664],[256,664],[256,664],[255,663],[255,663]];
+
+      function clamp01(v) { return v < 0 ? 0 : (v > 1 ? 1 : v); }
+      function sample(arr, t) {
+        var N = arr.length, f = Math.max(0, t * FPS);
+        var i = Math.min(N - 1, Math.floor(f));
+        if (i >= N - 1) return [arr[N - 1][0], arr[N - 1][1]];
+        var u = f - i;
+        return [arr[i][0] + (arr[i + 1][0] - arr[i][0]) * u, arr[i][1] + (arr[i + 1][1] - arr[i][1]) * u];
+      }
+      function lerp(a, b, k) { return [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k]; }
+
+      var eOut = gsap.parseEase("power2.out");
+      var eInOut = gsap.parseEase("power2.inOut");
+      var e3InOut = gsap.parseEase("power3.inOut");
+      var eIn = gsap.parseEase("power2.in");
+      var eExpo = gsap.parseEase("expo.out");
+
+      var ring = document.getElementById("f04-ring");
+      var ringRot = document.getElementById("f04-ring-rot");
+      var leadA = document.getElementById("f04-lead-a"), leadADot = document.getElementById("f04-lead-a-dot");
+      var leadB = document.getElementById("f04-lead-b"), leadBDot = document.getElementById("f04-lead-b-dot");
+      var tracer = document.getElementById("f04-tracer");
+      var arrow = document.getElementById("f04-arrow");
+      var arc = document.getElementById("f04-arc"), arcShadow = document.getElementById("f04-arc-shadow");
+      var head = document.getElementById("f04-arrowhead");
+
+      var RING_R = 46;                 // leader starts just outside the ring
+      var ANCHOR_A = [430, 1330];      // top edge of the claw pills
+      var ANCHOR_B = [440, 577];       // left edge of the rudder pill
+      var PAW_END = sample(PAW, CUT);  // where the reticle leaves clip A
+      var ARC_END = [37, -95];         // arc end, relative to the tail tip
+
+      function leader(line, dot, from, anchor, k) {
+        if (k <= 0) { line.setAttribute("opacity", "0"); dot.setAttribute("opacity", "0"); return; }
+        var dx = anchor[0] - from[0], dy = anchor[1] - from[1];
+        var d = Math.sqrt(dx * dx + dy * dy) || 1;
+        var s = [from[0] + dx / d * RING_R, from[1] + dy / d * RING_R];
+        var e = lerp(s, anchor, k);
+        line.setAttribute("x1", s[0].toFixed(1)); line.setAttribute("y1", s[1].toFixed(1));
+        line.setAttribute("x2", e[0].toFixed(1)); line.setAttribute("y2", e[1].toFixed(1));
+        line.setAttribute("opacity", "1");
+        dot.setAttribute("cx", anchor[0]); dot.setAttribute("cy", anchor[1]);
+        dot.setAttribute("opacity", k >= 0.98 ? "1" : "0");
+      }
+
+      // Pure function of timeline time: every tracked overlay is recomputed from t (seek-safe).
+      function render(t) {
+        var pos, tail = null;
+        if (t < CUT) {
+          pos = sample(PAW, t);
+        } else {
+          var tb = t - CUT;
+          tail = sample(TAIL, tb);
+          // leg 3: the reticle travels from the last planted paw to the tail tip
+          pos = tb < 0.4 ? lerp(PAW_END, tail, e3InOut(tb / 0.4)) : tail;
+        }
+        ring.style.transform = "translate(" + pos[0].toFixed(1) + "px," + pos[1].toFixed(1) + "px)";
+        ringRot.setAttribute("transform", "rotate(" + (t * 24).toFixed(2) + " 80 80)");
+
+        // scene 1 leader: ring -> claw pill (draws on 'claws')
+        leader(leadA, leadADot, pos, ANCHOR_A, t < CUT ? eOut(clamp01((t - 0.24) / 0.3)) : 0);
+
+        // travel tracer: a red streak behind the reticle during the paw -> tail flight
+        if (t >= CUT && t < 4.5) {
+          var tail0 = lerp(PAW_END, pos, eIn(clamp01((t - CUT - 0.06) / 0.4)));
+          tracer.setAttribute("x1", tail0[0].toFixed(1)); tracer.setAttribute("y1", tail0[1].toFixed(1));
+          tracer.setAttribute("x2", pos[0].toFixed(1)); tracer.setAttribute("y2", pos[1].toFixed(1));
+          tracer.setAttribute("opacity", (0.9 * (1 - clamp01((t - 4.2) / 0.3))).toFixed(3));
+        } else {
+          tracer.setAttribute("opacity", "0");
+        }
+
+        // rudder arrow: rides the tail tip, draws on 'tail', head pops at the end of the draw
+        if (tail && t >= 4.8) {
+          var dk = eInOut(clamp01((t - 4.8) / 0.5));
+          arrow.setAttribute("opacity", "1");
+          arrow.setAttribute("transform", "translate(" + tail[0].toFixed(1) + " " + tail[1].toFixed(1) + ")");
+          var off = (1 - dk).toFixed(4);
+          arc.setAttribute("stroke-dashoffset", off);
+          arcShadow.setAttribute("stroke-dashoffset", off);
+          var hk = clamp01((t - 5.22) / 0.25);
+          var hs = 0.6 + 0.4 * eExpo(hk);
+          head.setAttribute("opacity", hk > 0 ? "1" : "0");
+          head.setAttribute("transform", "translate(" + ARC_END[0] + " " + ARC_END[1] + ") rotate(-18) scale(" + hs.toFixed(3) + ")");
+        } else {
+          arrow.setAttribute("opacity", "0");
+        }
+
+        // scene 2 leader: ring -> rudder pill (draws into 'rudder')
+        leader(leadB, leadBDot, pos, ANCHOR_B, tail ? eOut(clamp01((t - 5.62) / 0.26)) : 0);
+      }
+
+      var tl = gsap.timeline({ paused: true });
+      var proxy = { p: 0 };
+      tl.fromTo(proxy, { p: 0 }, {
+        p: DUR, duration: DUR, ease: "none",
+        onUpdate: function () { render(proxy.p); }
+      }, 0);
+      render(0);
+
+      // ---- Scene 1 (0-3.9 s): claws ----
+      // leg 1: reticle snaps onto the planted paw (2-step 1.4 -> 0.9 -> 1)
+      tl.fromTo("#f04-ring-scale", { scale: 1.4, opacity: 0 }, { scale: 0.9, opacity: 1, duration: 0.14, ease: "expo.out" }, 0.08);
+      tl.to("#f04-ring-scale", { scale: 1, duration: 0.18, ease: "power2.out" }, 0.22);
+      // 'claws' (0.24): pill lands as the leader reaches it
+      tl.fromTo("#f04-pill-claws", { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 0.36);
+      tl.fromTo("#f04-tag-a", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 0.5);
+      // 'retract' (1.28): red underline sweeps under ALWAYS OUT
+      tl.fromTo("#f04-hl-line", { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: "power2.out" }, 1.28);
+      // 'running' (2.96): label swaps to the grip line
+      tl.to("#f04-pill-claws", { opacity: 0, x: 14, duration: 0.18, ease: "power2.in" }, 2.94);
+      tl.fromTo("#f04-pill-spikes", { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.38, ease: "power3.out" }, 3.0);
+      // 'spikes' (3.36): three spike glyphs tick on
+      tl.fromTo(".f04-spike", { scaleY: 0, opacity: 0 }, { scaleY: 1, opacity: 1, duration: 0.16, ease: "power3.out", stagger: 0.1 }, 3.36);
+      // hard cut with the footage
+      tl.set("#f04-grp-a", { opacity: 0 }, CUT);
+
+      // ---- Scene 2 (3.9-6.75 s): tail ----
+      tl.set("#f04-grp-b", { opacity: 1 }, CUT);
+      // the reticle shrinks for the flight, then re-locks on the tail tip
+      tl.to("#f04-ring-scale", { scale: 0.7, duration: 0.12, ease: "power2.in" }, CUT);
+      tl.fromTo("#f04-ring-scale", { scale: 1.4 }, { scale: 0.9, duration: 0.14, ease: "expo.out", immediateRender: false }, 4.3);
+      tl.to("#f04-ring-scale", { scale: 1, duration: 0.18, ease: "power2.out" }, 4.44);
+      tl.fromTo("#f04-tag-b", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 4.0);
+      // 'rudder' (5.76): pill lands at the end of the leader
+      tl.fromTo("#f04-pill-rudder", { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 5.76);
+      // landing: the label settles with a near-imperceptible drift so the hold stays alive
+      tl.to("#f04-pill-rudder", { x: 6, duration: 0.59, ease: "sine.inOut" }, 6.16);
+
+      window.__timelines["04-grip-tail"] = tl;
+    })();
+  </script>
+</template>

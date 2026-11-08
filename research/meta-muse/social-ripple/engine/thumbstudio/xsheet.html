@@ -1,0 +1,19 @@
+<!doctype html><html><head><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@900&display=swap" rel="stylesheet">
+<script src="assets/sr-engine-v1.js"></script><script src="assets/sr-v3.js"></script><script src="studio.js"></script><script src="panel.js"></script><script src="xmoods.js"></script>
+<style>*{margin:0;padding:0}body{width:1280px;height:720px;overflow:hidden;background:#1E1B22}svg{position:absolute;inset:0}</style></head>
+<body><svg id="art" viewBox="0 0 1280 720"></svg><script>
+const svg=document.getElementById('art'); TS.defs(svg); const {el}=SR;
+const CAST=[["shockX","shock","#FF6B6B",{color:"#6C5CE7",outfit:"tee",hair:"short",hairColor:"#1E1B22",pants:"#2E3A5A",seed:51}],
+ ["laughX","laugh","#FFC93C",{color:"#F4C430",outfit:"coat",hair:"cap",hairColor:"#2E4A6A",pants:"#3A4A63",seed:11}],
+ ["sobX","sob","#5C7CC8",{skin:"ink",color:"#F2C14E",outfit:"apron",hair:"ponytail",hairColor:"#1E1B22",pants:"#6A4A8A",seed:4}],
+ ["loveX","love","#FF8FB8",{color:"#8A93A6",outfit:"hoodie",hair:"short",hairColor:"#6A4A3A",pants:"#3A4050",seed:21}],
+ ["starX","star","#FFB84A",{color:"#E8834A",outfit:"apron",hair:"short",hairColor:"#3A2A22",pants:"#3A4A63",seed:7}],
+ ["forcedX","forced","#7A8CFF",{color:"#3FA7A0",outfit:"tee",hair:"bun",hairColor:"#5A3A2A",pants:"#2E7A74",seed:5}]];
+CAST.forEach(([mood,fx,col,look],i)=>{ const cx=213+(i%3)*427, cy=180+Math.floor(i/3)*360, k=2.0;
+  const clip=el("clipPath",{id:"c"+i},svg.querySelector("defs")); el("rect",{x:cx-205,y:cy-172,width:410,height:344,rx:22},clip);
+  const g=el("g",{"clip-path":`url(#c${i})`},svg); el("rect",{x:cx-205,y:cy-172,width:410,height:344,fill:col},g);
+  TS.focusLines(g,cx,cy-10,"rgba(255,255,255,0.55)",70,i+3);
+  TS.char(g,look,{id:"x"+i,x:cx,y:cy+262*k+20-10,scale:k,mood,pose:"relaxed",facing:1});
+  TS.fx(g,fx,cx,cy+20-10,41*k);
+  el("text",{x:cx-190,y:cy+160,"font-family":"Outfit","font-weight":900,"font-size":30,fill:"#fff",stroke:"#1E1B22","stroke-width":7,"paint-order":"stroke"},svg).textContent=mood.replace("X","").toUpperCase(); });
+</script></body></html>

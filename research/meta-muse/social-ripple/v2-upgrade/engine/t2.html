@@ -1,0 +1,47 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #t2-svg { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+    #t2-svg text { font-family: "Nunito"; }
+  </style>
+  <div id="root" data-composition-id="t2" data-width="1920" data-height="1080">
+    <svg id="t2-svg" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" data-layout-ignore></svg>
+  </div>
+  <script>
+    (function () {
+      const SR = window.SR; const { el, Set, Scene2, Character, Camera, Bubble, FX, Life, PAL, clamp, EASE, drive } = SR;
+      const svg = document.getElementById("t2-svg");
+      const D = 7, G = 900;
+      const world = el("g", {}, svg);
+      const bg = el("g", {}, world), back = el("g", {}, world), counterL = el("g", {}, world), front = el("g", {}, world), fx = el("g", {}, world);
+      Scene2.interior(svg, bg, G, { lights: [420, 1060, 1640], frames: [[180, 260, 180, 140, "#9DB49A"], [400, 230, 140, 180, "#D98C8C"]], shelf: [1180, 470, 420] });
+      Set.chalkboard(bg, 640, 170, 420, 280);
+      const t = el("text", { x: 850, y: 230, "text-anchor": "middle", "font-family": "Nunito", "font-weight": 900, "font-size": 40, fill: "#F4F1EA" }, bg); t.textContent = "TODAY";
+      [["Oat latte", "4.50"], ["Kindness", "FREE"]].forEach(([a, b], i) => { const y = 300 + i * 60; const l = el("text", { x: 680, y, "font-family": "Nunito", "font-weight": 800, "font-size": 30, fill: "#F4F1EA" }, bg); l.textContent = a; const r = el("text", { x: 1020, y, "text-anchor": "end", "font-family": "Nunito", "font-weight": 800, "font-size": 30, fill: i ? "#F2D28A" : "#F4F1EA" }, bg); r.textContent = b; });
+      Scene2.planter(bg, 120, G + 10, 1.1);
+      const leo = Character(counterL, { id: "t2-leo", color: "#D9A441", outfit: "apron", hair: "curly", glasses: true, seed: 9, scale: 1.1, x: [[0, 1300]], y: [[0, G - 70]], facing: [[0, -1]], noWalk: true, pants: "#5A4E44",
+        pose: [[0, "relaxed", 0], [1.0, "shrug", 0.3], [3.0, "hold", 0.35], [5.0, "give", 0.3]], mood: [[0, "content", 0], [1.0, "surprised", 0.3], [3.0, "happy", 0.3], [5.0, "joy", 0.3]], lips: [[0.6, "hmm_m"], [1.25, "drew_m"], [5.15, "best_m"]] });
+      Set.counter(counterL, 1000, 860, G);
+      Set.espressoMachine(counterL, 1660, G);
+      const steamM = Life.steam(counterL, 1620, 520);
+      const sam = Character(front, { id: "t2-sam", color: "#6BA8D9", outfit: "hoodie", hair: "cap", hairColor: "#C8452F", seed: 2, scale: 0.78, x: [[0, 420], [2.2, 960, "out"]], y: [[0, G + 64]], pants: "#2F3A4A",
+        pose: [[0, "relaxed", 0], [2.4, "phoneUp", 0.3]], mood: [[0, "worried", 0], [2.2, "content", 0.3], [5.2, "joy", 0.3]], look: [[0, { x: 1, y: -0.5 }]], lips: [[3.15, "cape_kid"], [6.1, "yay_kid"]] });
+      const dust = FX.dust(fx), sweat = FX.sweat(fx), spark = FX.sparkles(fx), imp = FX.impact(fx, "#FFF6C7");
+      const b1 = Bubble(fx, { text: "Wait… you drew this?", t0: 1.2, t1: 2.9, side: -1 });
+      const b2 = Bubble(fx, { text: "It's you. You have a cape.", t0: 3.1, t1: 4.8, side: 1 });
+      const b3 = Bubble(fx, { text: "Best. Customer. Ever.", t0: 5.1, t1: 6.8, side: -1 });
+      const vigL = el("g", {}, svg); Scene2.vignette(svg, vigL, 0.2);
+      const cam = Camera(world, [[0, { x: 900, y: 600, z: 1.1, r: 0 }], [2.4, { x: 1080, y: 620, z: 1.35, r: 0 }, "inOut"], [5.0, { x: 1120, y: 600, z: 1.5, r: 0 }, "linear"], [5.2, { x: 1160, y: 560, z: 1.7, r: 0 }, "out"], [D, { x: 1160, y: 560, z: 1.75, r: 0 }, "linear"]], { shake: [[5.1, 0], [5.15, 4], [5.6, 0, "out"]] });
+      const tl = gsap.timeline({ paused: true });
+      drive(tl, D, (tt) => {
+        cam.update(tt);
+        const l = leo.update(tt), s = sam.update(tt);
+        steamM.update(tt);
+        dust.update(tt, s, G + 64); sweat.update(tt, s, tt < 2.2);
+        b1.update(tt, { x: l.headX, y: l.headY }); b2.update(tt, { x: s.headX, y: s.headY }); b3.update(tt, { x: l.headX, y: l.headY });
+        spark.update(tt, l.headX, l.headY, 5.1, 120); imp.update(tt, l.headX - 120, l.headY - 120, 5.1);
+      });
+      window.__timelines["t2"] = tl;
+    })();
+  </script>
+</template>

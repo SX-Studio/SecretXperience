@@ -1,0 +1,38 @@
+{
+  "provider": "auto",
+  "speed": "1.05",
+  "lines": [
+    {
+      "id": "01",
+      "text": "This is the fastest land animal on Earth, slowed down sixty times."
+    },
+    {
+      "id": "02",
+      "text": "Watch the spine. It coils and snaps open like a spring, flinging each stride out to about seven meters."
+    },
+    {
+      "id": "03",
+      "text": "Twice in every stride, all four feet leave the ground."
+    },
+    {
+      "id": "04",
+      "text": "Its claws never fully retract, so they grip like running spikes. And the long tail works like a rudder."
+    },
+    {
+      "id": "05",
+      "text": "But now, look at the head. The body is thrashing, yet the head barely moves."
+    },
+    {
+      "id": "06",
+      "text": "An oversized balance organ in its inner ear keeps its eyes locked on the target."
+    },
+    {
+      "id": "07",
+      "text": "So even at sixty-one miles an hour, its world stays perfectly still."
+    }
+  ],
+  "bgm": {
+    "mode": "none"
+  },
+  "voice": "bm_george"
+}

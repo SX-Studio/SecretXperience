@@ -1,0 +1,11 @@
+TOPIC: The "Wow!" signal (1977). Source facts (well-documented record; keep claims inside these):
+- On August 15, 1977, Ohio State University's Big Ear radio telescope (near Delaware, Ohio), running a SETI survey, recorded a strong narrowband radio signal.
+- The receiver output was printed by an IBM 1130 computer as one character per channel per ~12 s sample: blank = 0, 1-9, then letters A-Z for 10-35 (signal-to-noise in standard deviations above background).
+- The sequence in channel 2 was 6EQUJ5. "U" means 30 to 31 times the background noise level; it is the strongest value in the sequence.
+- A few days later volunteer astronomer Jerry R. Ehman reviewed the printout, circled 6EQUJ5 in red ink and wrote "Wow!" in the margin.
+- Big Ear was a fixed (transit) telescope: Earth's rotation swept its beam across the sky, so a point source in the sky would rise and fall over 72 seconds. The Wow! signal rose and fell over about 72 seconds, consistent with a celestial origin.
+- Frequency was close to 1420 MHz, the hydrogen line (the natural emission frequency of neutral hydrogen, the most abundant element in the universe).
+- Big Ear had two feed horns; a fixed source should have appeared twice, a few minutes apart. It appeared in only one.
+- Direction: the constellation Sagittarius. Repeated searches since 1977 (Ehman, Robert Gray, others, VLA etc.) found nothing.
+- In 2024, a team led by Abel Méndez (Arecibo Wow! project) proposed a natural explanation: a cold hydrogen cloud that briefly brightened when hit by a strong transient radiation burst, such as a magnetar flare. Not settled.
+- Big Ear was dismantled in 1998.

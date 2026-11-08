@@ -1,0 +1,399 @@
+<template>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500-italic.woff2") format("woff2");font-weight:500;font-style:italic;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600-italic.woff2") format("woff2");font-weight:600;font-style:italic;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+#root, #root * { font-variant-numeric: lining-nums; }
+
+    #root {
+      position: relative;
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+    }
+
+    /* ---------- paper ground (full-bleed clip layer) ---------- */
+    #f09-paper {
+      position: absolute;
+      inset: 0;
+      width: 1080px;
+      height: 1920px;
+      background: #EFE6D2;
+      overflow: hidden;
+    }
+    #f09-grid {
+      position: absolute;
+      left: 0;
+      top: -240px;
+      width: 1080px;
+      height: 2400px;
+      opacity: 0.25;
+      background-image:
+        linear-gradient(to right, #B9A98C 1px, transparent 1px),
+        linear-gradient(to bottom, #B9A98C 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    #f09-vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 78% 62% at 50% 44%, rgba(239, 230, 210, 0) 58%, rgba(170, 140, 96, 0.22) 100%);
+    }
+
+    /* ---------- camera view (content area, ends above caption band) ---------- */
+    #f09-view {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 1560px;
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(to bottom, #000 0px, #000 1420px, transparent 1556px);
+      mask-image: linear-gradient(to bottom, #000 0px, #000 1420px, transparent 1556px);
+    }
+    #f09-cam {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 1560px;
+      transform-origin: 540px 820px;
+    }
+    #f09-wash {
+      position: absolute;
+      left: 360px;
+      top: 300px;
+      width: 760px;
+      height: 640px;
+      border-radius: 50%;
+      background: radial-gradient(closest-side, rgba(201, 161, 91, 0.26), rgba(201, 161, 91, 0.12) 55%, rgba(201, 161, 91, 0) 100%);
+      filter: blur(18px);
+    }
+    #f09-skyfx {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 1560px;
+      overflow: visible;
+    }
+    #f09-falcon {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 80px;
+      height: 40px;
+      overflow: visible;
+    }
+    #f09-world {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 1700px;
+    }
+    #f09-worldsvg {
+      position: absolute;
+      left: 0;
+      top: -600px;
+      width: 1080px;
+      height: 2300px;
+      overflow: visible;
+    }
+
+    /* ---------- closing line ---------- */
+    #f09-type {
+      position: absolute;
+      left: 72px;
+      top: 250px;
+      width: 936px;
+    }
+    .f09-line {
+      display: block;
+      font-family: "Cormorant Garamond", serif;
+      font-weight: 600;
+      font-size: 96px;
+      line-height: 1.05;
+      color: #2B2118;
+      font-variant-numeric: lining-nums;
+      white-space: nowrap;
+    }
+    .f09-line.f09-em {
+      font-style: italic;
+    }
+    #f09-rule {
+      position: absolute;
+      left: 72px;
+      top: 700px;
+      width: 260px;
+      height: 2px;
+      background: #B9A98C;
+      transform-origin: 0 50%;
+    }
+  </style>
+
+  <div id="root" data-composition-id="09-look-up" data-width="1080" data-height="1920" data-duration="7.245">
+    <!-- background: paper sky with faint grid -->
+    <div id="f09-paper" class="clip" data-start="0" data-duration="7.245" data-track-index="0">
+      <div id="f09-grid"></div>
+      <div id="f09-vignette"></div>
+    </div>
+
+    <!-- camera: sky fx + falcon + skyline world -->
+    <div id="f09-view">
+      <div id="f09-cam">
+        <div id="f09-wash"></div>
+
+        <svg id="f09-skyfx" viewBox="0 0 1080 1560" width="1080" height="1560">
+          <defs>
+            <filter id="f09-streakblur" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="2.4"></feGaussianBlur>
+            </filter>
+          </defs>
+          <path id="f09-streak" fill="none" stroke="#C2412D" stroke-width="7" stroke-linecap="round" filter="url(#f09-streakblur)" opacity="0.75"></path>
+          <path id="f09-trail" fill="none" stroke="#C2412D" stroke-width="3" stroke-linecap="round"></path>
+        </svg>
+
+        <svg id="f09-falcon" viewBox="-40 -20 80 40" width="80" height="40">
+          <!-- stooping peregrine: wings tucked, teardrop body, nose toward +x -->
+          <path fill="#2B2118" d="M34 0 C29 -5.5 17 -7 3 -5.5 L-14 -11 L-30 -15 L-20 -6 L-36 -1.5 L-36 1.5 L-20 6 L-30 15 L-14 11 L3 5.5 C17 7 29 5.5 34 0 Z"></path>
+          <path fill="none" stroke="#5C4A36" stroke-width="1.4" stroke-linecap="round" d="M2 -3 L-16 -8 M2 3 L-16 8"></path>
+          <circle cx="24" cy="-1.6" r="1.6" fill="#EFE6D2"></circle>
+        </svg>
+
+        <div id="f09-world">
+          <svg id="f09-worldsvg" viewBox="0 -600 1080 2300" width="1080" height="2300">
+            <defs>
+              <pattern id="f09-hatch" patternUnits="userSpaceOnUse" width="9" height="9">
+                <path d="M-2 11 L11 -2" stroke="#2B2118" stroke-width="1.3" stroke-opacity="0.5"></path>
+              </pattern>
+              <filter id="f09-inkwobble" x="-2%" y="-2%" width="104%" height="104%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.022" numOctaves="2" seed="9" result="n"></feTurbulence>
+                <feDisplacementMap in="SourceGraphic" in2="n" scale="2.6" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap>
+              </filter>
+            </defs>
+            <g id="f09-clouds" fill="none" stroke="#B9A98C" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="f09-skyline" filter="url(#f09-inkwobble)"></g>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- foreground: the closing line -->
+    <div id="f09-type">
+      <span id="f09-l1" class="f09-line">The fastest chase</span>
+      <span id="f09-l2" class="f09-line">on Earth</span>
+      <span id="f09-l3" class="f09-line">might be right</span>
+      <span id="f09-l4" class="f09-line f09-em">above you.</span>
+    </div>
+    <div id="f09-rule"></div>
+  </div>
+
+  <script>
+    (function () {
+      var FID = "09-look-up";
+      var INK = "#2B2118";
+      var PAPER = "#EFE6D2";
+
+      // ---------- seeded PRNG (mulberry32) ----------
+      function mulberry32(a) {
+        return function () {
+          a |= 0; a = (a + 0x6D2B79F5) | 0;
+          var t = Math.imul(a ^ (a >>> 15), 1 | a);
+          t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+      var rand = mulberry32(90917);
+
+      // ---------- skyline (world coords; tilt moves world +700px) ----------
+      var BOTTOM = 1700;
+      var buildings = [
+        { poly: [[-10, BOTTOM], [-10, 700], [140, 700], [140, BOTTOM]],
+          win: [[-10, 140, 732]], hatch: [[104, 700], [140, 700], [140, BOTTOM], [104, BOTTOM]] },
+        { poly: [[140, BOTTOM], [140, 680], [172, 680], [172, 600], [268, 600], [268, 680], [300, 680], [300, BOTTOM]],
+          win: [[172, 268, 628, 664], [140, 300, 712]], hatch: [[262, 680], [300, 680], [300, BOTTOM], [262, BOTTOM]] },
+        { poly: [[300, BOTTOM], [300, 770], [430, 770], [430, BOTTOM]],
+          win: [[300, 430, 800]], hatch: [[398, 770], [430, 770], [430, BOTTOM], [398, BOTTOM]] },
+        { poly: [[430, BOTTOM], [430, 820], [470, 820], [470, BOTTOM]],
+          win: [[430, 470, 850]], hatch: null },
+        { poly: [[470, BOTTOM], [470, 600], [500, 600], [500, 560], [530, 560], [530, 520], [590, 520], [590, 560], [620, 560], [620, 600], [650, 600], [650, BOTTOM]],
+          win: [[530, 590, 532, 556], [500, 620, 570, 600], [470, 650, 630]], hatch: [[606, 600], [650, 600], [650, BOTTOM], [606, BOTTOM]] },
+        { poly: [[650, BOTTOM], [650, 730], [780, 730], [780, BOTTOM]],
+          win: [[650, 780, 760]], hatch: [[748, 730], [780, 730], [780, BOTTOM], [748, BOTTOM]] },
+        { poly: [[780, BOTTOM], [780, 640], [930, 690], [930, BOTTOM]],
+          win: [[780, 930, 722]], hatch: [[894, 678], [930, 690], [930, BOTTOM], [894, BOTTOM]] },
+        { poly: [[930, BOTTOM], [930, 700], [1090, 700], [1090, BOTTOM]],
+          win: [[930, 1090, 732]], hatch: [[1052, 700], [1090, 700], [1090, BOTTOM], [1052, BOTTOM]] }
+      ];
+
+      function pts(p) { return p.map(function (q) { return q[0] + "," + q[1]; }).join(" "); }
+
+      function windowsFor(x0, x1, y0, y1) {
+        var lim = y1 || 1660;
+        var pitchX = 28, pitchY = 36, ww = 13, wh = 20;
+        var n = Math.max(1, Math.floor((x1 - x0 - 16) / pitchX));
+        var span = n * pitchX - (pitchX - ww);
+        var sx = x0 + (x1 - x0 - span) / 2;
+        var filled = "", open = "";
+        for (var y = y0; y + wh <= lim; y += pitchY) {
+          for (var i = 0; i < n; i++) {
+            var x = sx + i * pitchX;
+            var r = rand();
+            var seg = "M" + x.toFixed(1) + " " + y + "h" + ww + "v" + wh + "h-" + ww + "Z";
+            if (r < 0.28) filled += seg; else open += seg;
+          }
+        }
+        return { filled: filled, open: open };
+      }
+
+      var sk = "";
+      buildings.forEach(function (b) {
+        sk += '<polygon points="' + pts(b.poly) + '" fill="' + PAPER + '" stroke="none"></polygon>';
+        if (b.hatch) sk += '<polygon points="' + pts(b.hatch) + '" fill="url(#f09-hatch)"></polygon>';
+        b.win.forEach(function (w) {
+          var res = windowsFor(w[0], w[1], w[2], w[3]);
+          if (res.filled) sk += '<path d="' + res.filled + '" fill="' + INK + '" fill-opacity="0.82"></path>';
+          if (res.open) sk += '<path d="' + res.open + '" fill="none" stroke="' + INK + '" stroke-width="1.6" stroke-opacity="0.62"></path>';
+        });
+        sk += '<polygon points="' + pts(b.poly) + '" fill="none" stroke="' + INK + '" stroke-width="3" stroke-linejoin="round"></polygon>';
+      });
+      // water tower on the left roof
+      sk += '<g stroke="' + INK + '" stroke-width="2.6" stroke-linecap="round" fill="none">' +
+            '<path d="M46 700 L52 655 M94 700 L88 655 M49 680 L91 670 M49 670 L91 680"></path>' +
+            '<rect x="34" y="597" width="72" height="58" fill="' + PAPER + '"></rect>' +
+            '<path d="M50 600 V652 M70 600 V652 M90 600 V652 M34 616 H106 M34 638 H106" stroke-width="1.4" stroke-opacity="0.7"></path>' +
+            '<polygon points="29,598 70,566 111,598" fill="' + PAPER + '"></polygon>' +
+            '</g>';
+      // art-deco spire on the tall tower
+      sk += '<g stroke="' + INK + '" stroke-width="3" stroke-linecap="round" fill="none">' +
+            '<path d="M560 520 V428 M548 500 H572 M552 476 H568"></path>' +
+            '<circle cx="560" cy="424" r="4" fill="' + INK + '"></circle>' +
+            '</g>';
+      // rooftop box + antenna
+      sk += '<g stroke="' + INK + '" stroke-width="2.6" stroke-linecap="round" fill="none">' +
+            '<rect x="688" y="704" width="52" height="26" fill="' + PAPER + '"></rect>' +
+            '<path d="M1004 700 V598 M988 632 H1020 M993 652 H1015"></path>' +
+            '</g>';
+      document.getElementById("f09-skyline").innerHTML = sk;
+
+      // hand-drawn cloud hairlines (revealed by the tilt)
+      function cloud(x, y, s) {
+        var d = "M" + x + " " + y;
+        var cx = x;
+        var bumps = [[34, 26], [46, 38], [40, 30], [30, 20]];
+        bumps.forEach(function (bmp) {
+          var w = bmp[0] * s, h = bmp[1] * s * (0.9 + rand() * 0.2);
+          d += " q" + (w / 2).toFixed(1) + " " + (-h).toFixed(1) + " " + w.toFixed(1) + " 0";
+          cx += w;
+        });
+        d += " M" + (x - 18 * s).toFixed(1) + " " + (y + 1) + " H" + (cx + 22 * s).toFixed(1);
+        return '<path d="' + d + '"></path>';
+      }
+      document.getElementById("f09-clouds").innerHTML =
+        cloud(812, -486, 1.2) + cloud(92, 262, 1.0) + cloud(840, 150, 0.8);
+
+      // ---------- falcon stoop path (view coords) ----------
+      var P0 = [1150, 556], P1 = [930, 640], P2 = [700, 960], P3 = [566, 1392];
+      function bez(t) {
+        var u = 1 - t;
+        return [
+          u * u * u * P0[0] + 3 * u * u * t * P1[0] + 3 * u * t * t * P2[0] + t * t * t * P3[0],
+          u * u * u * P0[1] + 3 * u * u * t * P1[1] + 3 * u * t * t * P2[1] + t * t * t * P3[1]
+        ];
+      }
+      function dbez(t) {
+        var u = 1 - t;
+        return [
+          3 * u * u * (P1[0] - P0[0]) + 6 * u * t * (P2[0] - P1[0]) + 3 * t * t * (P3[0] - P2[0]),
+          3 * u * u * (P1[1] - P0[1]) + 6 * u * t * (P2[1] - P1[1]) + 3 * t * t * (P3[1] - P2[1])
+        ];
+      }
+      // arc-length LUT
+      var NS = 400, lut = [0], prev = bez(0), L = 0;
+      for (var i = 1; i <= NS; i++) {
+        var p = bez(i / NS);
+        L += Math.hypot(p[0] - prev[0], p[1] - prev[1]);
+        lut.push(L);
+        prev = p;
+      }
+      function tAtLen(d) {
+        if (d <= 0) return 0;
+        if (d >= L) return 1;
+        var lo = 0, hi = NS;
+        while (hi - lo > 1) { var mid = (lo + hi) >> 1; if (lut[mid] < d) lo = mid; else hi = mid; }
+        var f = (d - lut[lo]) / (lut[hi] - lut[lo]);
+        return (lo + f) / NS;
+      }
+      var pathD = "M" + P0[0] + " " + P0[1] + " C" + P1[0] + " " + P1[1] + " " + P2[0] + " " + P2[1] + " " + P3[0] + " " + P3[1];
+      var trail = document.getElementById("f09-trail");
+      var streak = document.getElementById("f09-streak");
+      trail.setAttribute("d", pathD);
+      streak.setAttribute("d", pathD);
+      var LAG = 26, S = 170;
+      trail.setAttribute("stroke-dasharray", L.toFixed(2) + " " + (L + 200).toFixed(2));
+      streak.setAttribute("stroke-dasharray", S + " " + (L + S + 200).toFixed(2));
+
+      // ---------- timeline ----------
+      var tl = gsap.timeline({ paused: true });
+
+      // Scene 1 (0.0–2.2s): "look up" — camera tilts up; skyline slides down, open sky revealed
+      tl.fromTo("#f09-world", { y: 0 }, { y: 700, duration: 2.1, ease: "power2.inOut" }, 0.1);
+      tl.fromTo("#f09-grid", { y: 0 }, { y: 160, duration: 2.1, ease: "power2.inOut" }, 0.1);
+
+      // slow documentary push-in under everything after the tilt lands (runs to the end = the settle)
+      tl.fromTo("#f09-cam", { scale: 1 }, { scale: 1.025, duration: 4.545, ease: "sine.inOut" }, 2.2);
+
+      // warm wash bleeds into the sky
+      tl.fromTo("#f09-wash", { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 2.0, ease: "power2.out" }, 1.9);
+
+      // Scene 2 (2.2–6.4s): the closing line writes on, line by line, with the voice
+      var lineStarts = [2.25, 2.95, 3.6, 4.3];
+      ["#f09-l1", "#f09-l2", "#f09-l3", "#f09-l4"].forEach(function (sel, k) {
+        tl.fromTo(sel,
+          { opacity: 0, y: 18, clipPath: "inset(-15% 100% -30% -4%)" },
+          { opacity: 1, y: 0, clipPath: "inset(-15% -6% -30% -4%)", duration: 0.75, ease: "power2.out" },
+          lineStarts[k]);
+      });
+      tl.fromTo("#f09-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: "power3.out" }, 4.75);
+
+      // the falcon stoops across the sky (accelerating, power2.in), dropping into the skyline
+      var T0 = 4.25, DUR = 1.05, SEG = 28;
+      tl.set("#f09-falcon", { opacity: 1 }, T0);
+      for (var s = 0; s < SEG; s++) {
+        var ta = Math.sqrt(s / SEG) * DUR, tb = Math.sqrt((s + 1) / SEG) * DUR;
+        var pa = tAtLen(L * s / SEG), pb = tAtLen(L * (s + 1) / SEG);
+        var A = bez(pa), B = bez(pb), dA = dbez(pa), dB = dbez(pb);
+        var ra = Math.atan2(dA[1], dA[0]) * 180 / Math.PI;
+        var rb = Math.atan2(dB[1], dB[0]) * 180 / Math.PI;
+        tl.fromTo("#f09-falcon",
+          { x: A[0] - 40, y: A[1] - 20, rotation: ra },
+          { x: B[0] - 40, y: B[1] - 20, rotation: rb, duration: tb - ta, ease: "none", immediateRender: s === 0 },
+          T0 + ta);
+      }
+      tl.set("#f09-falcon", { opacity: 0 }, T0 + DUR + 0.02);
+
+      // red trail follows the falcon (same power2.in arc-length timing)
+      tl.fromTo(trail, { strokeDashoffset: L + LAG }, { strokeDashoffset: LAG, duration: DUR, ease: "power2.in" }, T0);
+      tl.fromTo(streak, { strokeDashoffset: S + LAG }, { strokeDashoffset: S + LAG - L, duration: DUR, ease: "power2.in" }, T0);
+      // speed streak fades (0.3s); thin red line settles and stays
+      tl.fromTo(streak, { opacity: 0.75 }, { opacity: 0, duration: 0.3, ease: "power1.out" }, T0 + DUR);
+      tl.fromTo(trail, { opacity: 1 }, { opacity: 0.72, duration: 0.8, ease: "power2.out" }, T0 + DUR + 0.05);
+
+      // initial hidden state of the falcon before its entrance
+      tl.fromTo("#f09-falcon", { opacity: 0 }, { opacity: 0, duration: 0.01 }, 0);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines[FID] = tl;
+    })();
+  </script>
+</template>

@@ -1,0 +1,9 @@
+[{"id":"s1","in":182.0,"dur":5.1,"mode":"side"},
+ {"id":"s2","in":274.0,"dur":7.1,"mode":"side"},
+ {"id":"s3a","in":19.5,"dur":2.0,"mode":"side"},
+ {"id":"s3b","in":45.0,"dur":1.9,"mode":"side"},
+ {"id":"s4a","in":292.0,"dur":3.9,"mode":"side"},
+ {"id":"s4b","in":88.0,"dur":2.9,"mode":"side"},
+ {"id":"s5","in":54.0,"dur":5.1,"mode":"side"},
+ {"id":"s6","in":310.0,"dur":5.8,"mode":"front"},
+ {"id":"s7","in":194.0,"dur":8.0,"mode":"side"}]

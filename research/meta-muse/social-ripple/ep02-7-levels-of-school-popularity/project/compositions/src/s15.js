@@ -1,0 +1,58 @@
+const D = T.D, G = 900, W = (id, w, n, f) => EP.W(T, id, w, n, f);
+const tOpen = W("n32", "seven"), tDiff = W("n33", "different"), tGlad = W("n33", "person"), tB = T.n34 - 0.2, tCool = W("n34", "one"), tC = T.n35 - 0.2, tGrad = W("n35", "graduation");
+const A = el("g", {}, svg), B = el("g", { opacity: 0 }, svg), hud = el("g", {}, svg);
+// ---- A: hallway (n32, n33) and later C (n35) reuse it ----
+const world = el("g", {}, A);
+const bg = el("g", {}, world), back = el("g", {}, world), hero = el("g", {}, world), fx = el("g", {}, world);
+EP.hallway(svg, bg, G, { items: ["lockers", "door", "lockers", "trophy", "lockers", "poster", "lockers"], seed: 29 });
+const ons = EP.kids(back, { xs: [150, 420, 700, 1000, 1300, 1600, 1900, 2200], y: G - 4, scale: 0.9, seed: 151, idp: "s15o", pose: "relaxed", quiet: true, facing: (i, x) => -1,
+  spec: (i, x) => ({ pose: [[0, "relaxed", 0], [tGlad + i * 0.12, "wave", 0.25], [tGlad + 1.4 + i * 0.12, "relaxed", 0.3], [tGrad + 0.2, "wave", 0.2]], mood: [[0, "content", 0], [tGlad, "joy", 0.3]] }) });
+const nia = Character(hero, EP.cast("nia", { id: "s15-n", x: [[0, 100], [tB, 1500, "linear"], [tC, 900], [D, 1900, "linear"]], y: [[0, G + 40]], pose: [[0, "relaxed", 0], [tGlad, "wave", 0.3], [tGlad + 1.5, "relaxed", 0.3], [tGrad, "holdBoth", 0.2]], mood: [[0, "content", 0], [tGlad, "joy", 0.3]] }));
+const jor = Character(hero, EP.cast("jordan", { id: "s15-j", x: [[0, -400], [tC, -300], [D, 700, "linear"]], y: [[0, G + 60]], opacity: [[0, 0], [tC, 0], [tC + 0.01, 1]], pose: [[0, "proud", 0], [tGrad, "holdBoth", 0.2]], mood: [[0, "content", 0], [tGrad, "joy", 0.3]] }));
+const shades = EP.Shades(fx);
+const hearts = [0, 1, 2].map(() => FX.hearts(fx)), spark = FX.sparkles(fx);
+const eyes = [0, 1, 2, 3].map(() => { const g = el("g", { opacity: 0 }, fx); el("path", { d: "M-30,0 Q0,-24 30,0 Q0,24 -30,0 Z", fill: "#FFFFFF", stroke: PAL.ink, "stroke-width": 4 }, g); el("circle", { r: 9, fill: PAL.ink }, g); return g; });
+const caps = [0, 1, 2, 3, 4, 5].map(() => { const g = el("g", { opacity: 0 }, fx); el("path", { d: "M-40,0 L0,-18 L40,0 L0,18 Z", fill: "#2F3E5C", stroke: PAL.ink, "stroke-width": 4 }, g); el("rect", { x: -20, y: 6, width: 40, height: 18, fill: "#2F3E5C", stroke: PAL.ink, "stroke-width": 3 }, g); el("path", { d: "M0,0 L26,26", stroke: PAL.kind, "stroke-width": 4 }, g); return g; });
+const ladder = EP.Ladder(hud, { show: [[0, 1], [W("n33", "it's") + 0.2, 1], [W("n33", "it's") + 0.6, 0]], level: [[0, 6], [T.n32 + 0.3, 6], [tOpen, 7, "inOut"]], unlock: tOpen + 0.2 });
+const lock = EP.Lock(hud, { s: 0.45, tOpen });
+const card = EP.LevelCard(hud, { n: 7, name: "GENUINELY LIKED", t0: tOpen + 0.5, t1: tDiff - 0.4, color: "#C9A227" });
+const two = el("g", { opacity: 0 }, hud);
+[[700, PAL.rude, "STATUS"], [1220, "#C9A227", "LIKED"]].forEach(([x, c, s]) => { el("rect", { x: x - 190, y: 120, width: 380, height: 640, rx: 26, fill: "rgba(255,255,255,0.92)", stroke: PAL.ink, "stroke-width": 6 }, two); el("path", { d: `M${x - 70},180 V700 M${x + 70},180 V700`, stroke: c, "stroke-width": 14, "stroke-linecap": "round" }, two); for (let i = 0; i < 6; i++) el("rect", { x: x - 80, y: 220 + i * 84, width: 160, height: 16, rx: 6, fill: c, stroke: PAL.ink, "stroke-width": 3 }, two); EP.txt(two, x, 730, s, 54, c, { font: "Outfit", attrs: { stroke: "#FFFFFF", "stroke-width": 10, "paint-order": "stroke" } }); });
+const cam = Camera(world, [[0, { x: 300, y: 640, z: 1.4 }], [tB, { x: 1500, y: 640, z: 1.4 }, "linear"], [tC, { x: 600, y: 600, z: 1.05 }], [D, { x: 1300, y: 600, z: 1.1 }, "linear"]]);
+// ---- B: research cards (n34) ----
+el("rect", { x: 0, y: 0, width: 1920, height: 1080, fill: "#F4EEE2" }, B);
+const rows = [["Chasing STATUS", PAL.rude, [["anxiety", "anxiety"], ["depression", "depression"], ["relationship trouble", "relationship"]], 230], ["LIKEABILITY", "#C9A227", [["better relationships", "better"], ["careers", "careers"]], 470]];
+const chips = [];
+rows.forEach(([lbl, c, items, y]) => { EP.txt(B, 140, y, lbl, 62, c, { font: "Outfit", anchor: "start" }); let x = 820; items.forEach(([s, w]) => { const g = el("g", { opacity: 0 }, B); const wd = s.length * 22 + 56; el("rect", { x, y: y - 42, width: wd, height: 84, rx: 42, fill: c, stroke: PAL.ink, "stroke-width": 5 }, g); EP.txt(g, x + wd / 2, y, s, 40, "#FFFFFF", { font: "Outfit" }); chips.push([g, W("n34", w)]); x += wd + 30; }); });
+EP.txt(B, 750, 230, "→", 70, PAL.ink, { font: "Outfit" }); EP.txt(B, 750, 470, "→", 70, PAL.ink, { font: "Outfit" });
+const yb = el("g", { opacity: 0 }, B);
+el("rect", { x: 0, y: 580, width: 1920, height: 500, fill: "#E9DFCB" }, yb);
+const frame = (x, lbl) => { el("rect", { x: x - 150, y: 630, width: 300, height: 340, rx: 10, fill: "#FFFFFF", stroke: PAL.ink, "stroke-width": 6 }, yb); el("rect", { x: x - 126, y: 654, width: 252, height: 250, fill: "#CDE4EC" }, yb); EP.txt(yb, x, 937, lbl, 36, PAL.ink, { font: "Outfit" }); };
+frame(560, "AGE 13"); frame(1060, "AGE 22");
+EP.txt(yb, 810, 780, "→", 90, PAL.ink, { font: "Outfit" });
+const cool13 = Character(yb, EP.cast("jordan", { id: "s15-c13", x: [[0, 560]], y: [[0, 900]], scale: 0.62, noWalk: true, pose: [[0, "proud", 0]], mood: [[0, "content", 0]] }));
+const cool22 = Character(yb, EP.cast("jordan", { id: "s15-c22", color: "#6B6F7A", outfit: "shirt", x: [[0, 1060]], y: [[0, 900]], scale: 0.66, noWalk: true, pose: [[0, "shrug", 0]], mood: [[0, "worried", 0]] }));
+const sh13 = EP.Shades(yb);
+const meter = el("g", {}, yb); el("rect", { x: 1300, y: 660, width: 480, height: 300, rx: 20, fill: "#FFFFFF", stroke: PAL.ink, "stroke-width": 5 }, meter);
+EP.txt(meter, 1540, 705, "Peers rate: socially skilled?", 30, PAL.ink, { weight: 900 });
+el("path", { d: "M1380,900 A160,160 0 0 1 1700,900", fill: "none", stroke: "#E5DED0", "stroke-width": 30 }, meter); el("path", { d: "M1380,900 A160,160 0 0 1 1460,762", fill: "none", stroke: PAL.rude, "stroke-width": 30 }, meter);
+const needle = el("path", { d: "M0,0 L0,-140", stroke: PAL.ink, "stroke-width": 8, "stroke-linecap": "round" }, meter);
+const srcB1 = EP.Source(hud, { text: "Mitch Prinstein (UNC) on status vs. likeability", t0: tB + 0.6, t1: tCool - 0.2 });
+const srcB2 = EP.Source(hud, { text: "Allen et al. (2014), Child Development · 184 teens, age 13 to early 20s", t0: tCool + 0.4, t1: tC - 0.2 });
+return (t) => {
+  const kb = clamp((t - tB) / 0.35, 0, 1) * (1 - clamp((t - tC) / 0.35, 0, 1)); B.setAttribute("opacity", kb); A.setAttribute("opacity", 1 - kb);
+  cam.update(t); const o = ons.update(t); const n = nia.update(t), j = jor.update(t);
+  shades.update(t, j, 1, t > tC ? 1 : 0);
+  hearts.forEach((h, i) => { const c = o[[2, 4, 6][i]]; h.update(t, c.headX, c.headY - 40, tGlad + 0.3 + i * 0.2); });
+  spark.update(t, n.headX, n.headY, tOpen + 0.4, 120);
+  eyes.forEach((e, i) => { const c = o[i]; const k = clamp((t - W("n35", "watch") - i * 0.1) / 0.3, 0, 1); e.setAttribute("opacity", k * (1 - clamp((t - W("n35", "likeability")) / 0.3, 0, 1))); e.setAttribute("transform", `translate(${c.headX},${c.headY - 90}) scale(${EASE.back(k)})`); });
+  caps.forEach((c, i) => { const k = clamp((t - tGrad - i * 0.08) / 1.6, 0, 1); const p = o[i + 1] || o[0]; c.setAttribute("opacity", k > 0 && k < 1 ? 1 : 0); c.setAttribute("transform", `translate(${p.headX + i * 10},${p.headY - 40 - Math.sin(k * Math.PI) * 300}) rotate(${k * 400 * (i % 2 ? 1 : -1)})`); });
+  ladder.update(t); lock.update(t, 110, 185, sampleTrack(ladder ? [[0, 1], [W("n33", "it's") + 0.2, 1], [W("n33", "it's") + 0.6, 0]] : [[0, 1]], t, 1));
+  card.update(t);
+  const k2 = clamp((t - tDiff) / 0.35, 0, 1) * (1 - clamp((t - tGlad + 0.2) / 0.35, 0, 1)); two.setAttribute("opacity", k2); two.setAttribute("transform", `translate(0,${40 * (1 - k2)})`);
+  chips.forEach(([g, t0]) => { const k = clamp((t - t0) / 0.3, 0, 1); g.setAttribute("opacity", k); });
+  const ky = clamp((t - tCool) / 0.4, 0, 1); yb.setAttribute("opacity", ky); yb.setAttribute("transform", `translate(0,${200 * (1 - EASE.out(ky))})`);
+  const c13 = cool13.update(t); cool22.update(t); sh13.update(t, c13, 1, 1);
+  const kn = clamp((t - W("n34", "less") + 0.2) / 1.0, 0, 1); needle.setAttribute("transform", `translate(1540,900) rotate(${50 - 110 * EASE.inOut(kn)})`);
+  srcB1.update(t); srcB2.update(t);
+};

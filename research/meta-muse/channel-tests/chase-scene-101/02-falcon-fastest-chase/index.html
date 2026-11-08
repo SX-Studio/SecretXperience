@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js" integrity="sha384-sG0Hv1tP1lZCk9KQmrIbY/XNwi+OY84GQqhMscbnsoBFqAz8KNCil1kvfL3Hbbk2" crossorigin="anonymous"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #EFE6D2;
+      }
+      .scene {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="89.143"
+      data-width="1080"
+      data-height="1920"
+    >
+      <div
+        id="el-01-cold-open"
+        class="scene"
+        data-composition-id="01-cold-open"
+        data-composition-src="compositions/frames/01-cold-open.html"
+        data-start="0"
+        data-duration="3.892"
+        data-track-index="0"
+      ></div>
+      <audio
+        id="el-01-cold-open-voice"
+        src="assets/voice/01.wav"
+        data-start="0"
+        data-duration="3.892"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-02-not-a-cheetah"
+        class="scene"
+        data-composition-id="02-not-a-cheetah"
+        data-composition-src="compositions/frames/02-not-a-cheetah.html"
+        data-start="3.892"
+        data-duration="8.232"
+        data-track-index="1"
+      ></div>
+      <audio
+        id="el-02-not-a-cheetah-voice"
+        src="assets/voice/02.wav"
+        data-start="3.892"
+        data-duration="7.732"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-03-the-stoop"
+        class="scene"
+        data-composition-id="03-the-stoop"
+        data-composition-src="compositions/frames/03-the-stoop.html"
+        data-start="11.624"
+        data-duration="7.007"
+        data-track-index="0"
+      ></div>
+      <audio
+        id="el-03-the-stoop-voice"
+        src="assets/voice/03.wav"
+        data-start="11.624"
+        data-duration="7.007"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-04-versus"
+        class="scene"
+        data-composition-id="04-versus"
+        data-composition-src="compositions/frames/04-versus.html"
+        data-start="18.631"
+        data-duration="14.12"
+        data-track-index="1"
+      ></div>
+      <audio
+        id="el-04-versus-voice"
+        src="assets/voice/04.wav"
+        data-start="18.631"
+        data-duration="13.62"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-05-like-a-missile"
+        class="scene"
+        data-composition-id="05-like-a-missile"
+        data-composition-src="compositions/frames/05-like-a-missile.html"
+        data-start="32.251"
+        data-duration="11.261"
+        data-track-index="0"
+      ></div>
+      <audio
+        id="el-05-like-a-missile-voice"
+        src="assets/voice/05.wav"
+        data-start="32.251"
+        data-duration="10.761"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-06-collision-course"
+        class="scene"
+        data-composition-id="06-collision-course"
+        data-composition-src="compositions/frames/06-collision-course.html"
+        data-start="43.012"
+        data-duration="11.084"
+        data-track-index="1"
+      ></div>
+      <audio
+        id="el-06-collision-course-voice"
+        src="assets/voice/06.wav"
+        data-start="43.012"
+        data-duration="10.484"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-07-nearly-vanished"
+        class="scene"
+        data-composition-id="07-nearly-vanished"
+        data-composition-src="compositions/frames/07-nearly-vanished.html"
+        data-start="53.496"
+        data-duration="13.949"
+        data-track-index="0"
+      ></div>
+      <audio
+        id="el-07-nearly-vanished-voice"
+        src="assets/voice/07.wav"
+        data-start="53.496"
+        data-duration="13.449"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-08-comeback"
+        class="scene"
+        data-composition-id="08-comeback"
+        data-composition-src="compositions/frames/08-comeback.html"
+        data-start="66.94500000000001"
+        data-duration="11.453"
+        data-track-index="1"
+      ></div>
+      <audio
+        id="el-08-comeback-voice"
+        src="assets/voice/08.wav"
+        data-start="66.94500000000001"
+        data-duration="10.953"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-09-look-up"
+        class="scene"
+        data-composition-id="09-look-up"
+        data-composition-src="compositions/frames/09-look-up.html"
+        data-start="77.89800000000001"
+        data-duration="7.245"
+        data-track-index="0"
+      ></div>
+      <audio
+        id="el-09-look-up-voice"
+        src="assets/voice/09.wav"
+        data-start="77.89800000000001"
+        data-duration="6.745"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-10-end-card"
+        class="scene"
+        data-composition-id="10-end-card"
+        data-composition-src="compositions/frames/10-end-card.html"
+        data-start="84.64300000000001"
+        data-duration="4.5"
+        data-track-index="1"
+      ></div>
+
+      <!-- captions -->
+      <div
+        id="el-captions"
+        class="scene"
+        data-composition-id="captions"
+        data-composition-src="compositions/captions.html"
+        data-start="0"
+        data-duration="89.143"
+        data-track-index="2"
+      ></div>
+
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+      // ── frame transitions (injected by transitions.mjs) ──
+      (function () { var tl = window.__timelines["main"];
+        tl.to("#el-02-not-a-cheetah", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 11.624);
+        tl.fromTo("#el-03-the-stoop", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 11.624);
+        tl.addLabel("hf:transition:02-not-a-cheetah:03-the-stoop:crossfade", 11.624);
+        tl.to("#el-04-versus", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 32.251);
+        tl.fromTo("#el-05-like-a-missile", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 32.251);
+        tl.addLabel("hf:transition:04-versus:05-like-a-missile:crossfade", 32.251);
+        tl.to("#el-05-like-a-missile", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 43.012);
+        tl.fromTo("#el-06-collision-course", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 43.012);
+        tl.addLabel("hf:transition:05-like-a-missile:06-collision-course:crossfade", 43.012);
+        tl.to("#el-06-collision-course", { filter: "blur(10px)", scale: 1.03, opacity: 0, duration: 0.6, ease: "power2.inOut" }, 53.496);
+        tl.fromTo("#el-07-nearly-vanished", { filter: "blur(10px)", scale: 0.97, opacity: 0 }, { filter: "blur(0px)", scale: 1, opacity: 1, duration: 0.6, ease: "power2.inOut" }, 53.496);
+        tl.addLabel("hf:transition:06-collision-course:07-nearly-vanished:blur-crossfade", 53.496);
+        tl.to("#el-07-nearly-vanished", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 66.945);
+        tl.fromTo("#el-08-comeback", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 66.945);
+        tl.addLabel("hf:transition:07-nearly-vanished:08-comeback:crossfade", 66.945);
+        tl.to("#el-08-comeback", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 77.898);
+        tl.fromTo("#el-09-look-up", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 77.898);
+        tl.addLabel("hf:transition:08-comeback:09-look-up:crossfade", 77.898);
+        tl.to("#el-09-look-up", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 84.643);
+        tl.fromTo("#el-10-end-card", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 84.643);
+        tl.addLabel("hf:transition:09-look-up:10-end-card:crossfade", 84.643);
+        tl.to({}, { duration: 89.143 }, 0); // full-span anchor — main.duration() == composition total (Studio master duration)
+      })();
+    </script>
+  </body>
+</html>

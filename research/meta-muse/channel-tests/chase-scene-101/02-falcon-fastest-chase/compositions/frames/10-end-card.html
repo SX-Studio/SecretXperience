@@ -1,0 +1,221 @@
+<template>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500-italic.woff2") format("woff2");font-weight:500;font-style:italic;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600-italic.woff2") format("woff2");font-weight:600;font-style:italic;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+#root, #root * { font-variant-numeric: lining-nums; }
+
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+      color: #2B2118;
+    }
+
+    /* ---- page: full-bleed paper ground (own clip layer) ---- */
+    #f10-paper {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background-color: #EFE6D2;
+    }
+    #f10-paper-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(to right, rgba(185, 169, 140, 0.25) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(185, 169, 140, 0.25) 1px, transparent 1px);
+      background-size: 40px 40px;
+      background-position: 20px 0;
+    }
+    #f10-paper-vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 78% 70% at 50% 46%, rgba(92, 74, 54, 0) 58%, rgba(92, 74, 54, 0.16) 100%);
+    }
+
+    /* ---- content group (fades to plain paper at the end) ---- */
+    #f10-content {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+
+    /* plate: Gould peregrines, cropped to the two falcons, multiply on paper */
+    #f10-plate {
+      position: absolute;
+      left: 250px;
+      top: 180px;
+      width: 580px;
+      height: 608px;
+      overflow: hidden;
+      transform-origin: 50% 40%;
+      -webkit-mask-image:
+        linear-gradient(to right, transparent 0%, #000 7%, #000 93%, transparent 100%),
+        linear-gradient(to bottom, transparent 0%, #000 5%, #000 76%, transparent 100%);
+      -webkit-mask-composite: source-in;
+      mask-image:
+        linear-gradient(to right, transparent 0%, #000 7%, #000 93%, transparent 100%),
+        linear-gradient(to bottom, transparent 0%, #000 5%, #000 76%, transparent 100%);
+      mask-composite: intersect;
+    }
+    #f10-plate-img {
+      position: absolute;
+      /* source crop x 180..1860, y 300..2060 of the 1920x2985 plate, scaled 0.34524 */
+      left: -62px;
+      top: -104px;
+      width: 663px;
+      height: 1031px;
+      display: block;
+      mix-blend-mode: multiply;
+    }
+
+    #f10-label {
+      position: absolute;
+      left: 72px;
+      right: 72px;
+      top: 850px;
+      text-align: center;
+      font-family: "Source Sans 3", sans-serif;
+      font-weight: 700;
+      font-size: 30px;
+      line-height: 1.2;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #5C4A36;
+      font-variant-numeric: lining-nums;
+    }
+
+    #f10-title {
+      position: absolute;
+      left: 72px;
+      right: 72px;
+      top: 905px;
+      margin: 0;
+      text-align: center;
+      font-family: "Cormorant Garamond", serif;
+      font-weight: 600;
+      font-size: 116px;
+      line-height: 1.0;
+      color: #2B2118;
+      font-variant-numeric: lining-nums;
+    }
+    #f10-title .f10-title-line {
+      display: block;
+    }
+    #f10-title .f10-title-italic {
+      font-style: italic;
+    }
+
+    #f10-rule {
+      position: absolute;
+      left: 440px;
+      top: 1195px;
+      width: 200px;
+      height: 2px;
+      background: #B9A98C;
+      transform-origin: 50% 50%;
+    }
+
+    #f10-sources-head {
+      position: absolute;
+      left: 72px;
+      right: 72px;
+      top: 1235px;
+      text-align: center;
+      font-family: "Source Sans 3", sans-serif;
+      font-weight: 700;
+      font-size: 30px;
+      line-height: 1.2;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #5C4A36;
+    }
+
+    #f10-sources {
+      position: absolute;
+      left: 72px;
+      right: 72px;
+      top: 1295px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      text-align: center;
+      font-family: "Source Sans 3", sans-serif;
+      font-weight: 400;
+      font-size: 34px;
+      line-height: 1.4;
+      color: #5C4A36;
+      font-variant-numeric: lining-nums;
+    }
+    #f10-sources .f10-source {
+      display: block;
+    }
+  </style>
+
+  <div id="root" data-composition-id="10-end-card" data-width="1080" data-height="1920">
+    <div id="f10-paper" class="clip" data-start="0" data-duration="4.5" data-track-index="0">
+      <div id="f10-paper-grid"></div>
+      <div id="f10-paper-vignette"></div>
+    </div>
+
+    <div id="f10-content">
+      <div id="f10-plate">
+        <img id="f10-plate-img" src="public/gould-peregrine.jpg" alt="" />
+      </div>
+
+      <div id="f10-label">Episode 2 · The Chase Scene 101</div>
+
+      <h1 id="f10-title">
+        <span id="f10-title-a" class="f10-title-line">The fastest chase</span>
+        <span id="f10-title-b" class="f10-title-line f10-title-italic">on Earth</span>
+      </h1>
+
+      <div id="f10-rule"></div>
+
+      <div id="f10-sources-head">Sources</div>
+      <ul id="f10-sources">
+        <li id="f10-src-1" class="f10-source">Mills et al., PLOS Comp. Biol. (2018)</li>
+        <li id="f10-src-2" class="f10-source">Brighton et al., PNAS (2017)</li>
+        <li id="f10-src-3" class="f10-source">U.S. Fish &amp; Wildlife Service (1999)</li>
+        <li id="f10-src-4" class="f10-source">Illustrations: Audubon, Gould, Naumann — public domain</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      // Scene 1 (0.0–~2.0s): content fades up in order, top to bottom.
+      tl.fromTo("#f10-plate", { opacity: 0, scale: 1.03 }, { opacity: 1, scale: 1, duration: 1.1, ease: "power2.out" }, 0);
+      tl.fromTo("#f10-label", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.7, ease: "power2.out" }, 0.2);
+      tl.fromTo("#f10-title-a", { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" }, 0.3);
+      tl.fromTo("#f10-title-b", { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" }, 0.5);
+      tl.fromTo("#f10-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: "power2.inOut" }, 0.95);
+      tl.fromTo("#f10-sources-head", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, 1.05);
+      ["#f10-src-1", "#f10-src-2", "#f10-src-3", "#f10-src-4"].forEach(function (sel, i) {
+        tl.fromTo(sel, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, 1.15 + i * 0.1);
+      });
+
+      // Scene 2 (~2.0–3.3s): held stillness — nothing moves.
+      // Final frame settle (3.3–4.5s): ease the whole frame back to plain paper.
+      tl.fromTo("#f10-content", { opacity: 1 }, { opacity: 0, duration: 1.2, ease: "power2.inOut" }, 3.3);
+
+      window.__timelines["10-end-card"] = tl;
+    })();
+  </script>
+</template>

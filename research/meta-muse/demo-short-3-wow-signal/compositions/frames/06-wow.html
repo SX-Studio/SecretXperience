@@ -1,0 +1,206 @@
+<template>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-400.woff2") format("woff2");font-weight:400;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-500.woff2") format("woff2");font-weight:500;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-600.woff2") format("woff2");font-weight:600;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-700.woff2") format("woff2");font-weight:700;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-800.woff2") format("woff2");font-weight:800;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-900.woff2") format("woff2");font-weight:900;font-style:normal;}
+@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/IBMPlexMono-400.woff2") format("woff2");font-weight:400;font-style:normal;}
+@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/IBMPlexMono-500.woff2") format("woff2");font-weight:500;font-style:normal;}
+@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/IBMPlexMono-600.woff2") format("woff2");font-weight:600;font-style:normal;}
+@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/IBMPlexMono-700.woff2") format("woff2");font-weight:700;font-style:normal;}
+
+    
+    
+
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      container-type: size;
+    }
+
+    /* Full-bleed orange register ground — its own full-duration clip layer. */
+    [id="06-wow-ground"] {
+      position: absolute;
+      inset: 0;
+      background: #e85d26;
+    }
+
+    [id="06-wow-stage"] {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* Hero group: word + underline share the slam scale and the -4deg tilt. */
+    [id="06-wow-slam"] {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 586px;
+      height: 420px;
+      transform-origin: 50% 220px;
+    }
+
+    [id="06-wow-word"] {
+      display: block;
+      margin: 0;
+      text-align: center;
+      font-family: "Barlow", sans-serif;
+      font-weight: 900;
+      font-size: 35cqw;
+      line-height: 0.88;
+      letter-spacing: -0.04em;
+      text-transform: lowercase;
+      color: #111111;
+      white-space: nowrap;
+    }
+
+    /* Static hand-lettered wobble per glyph (never animated). */
+    [id="06-wow-word"] [class~="06-wow-g"] {
+      display: inline-block;
+    }
+    [id="06-wow-g1"] { transform: rotate(-2deg) translateY(4px); }
+    [id="06-wow-g2"] { transform: rotate(1.5deg) translateY(10px); }
+    [id="06-wow-g3"] { transform: rotate(3deg) translateY(-6px); }
+    [id="06-wow-g4"] { transform: rotate(7deg) translateY(-2px); margin-left: 0.02em; }
+
+    [id="06-wow-underline"] {
+      position: absolute;
+      left: 50%;
+      top: 352px;
+      width: 860px;
+      height: 64px;
+      margin-left: -430px;
+      overflow: visible;
+    }
+    [id="06-wow-underline"] path {
+      fill: none;
+      stroke: #111111;
+      stroke-width: 15;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+    }
+
+    /* Supporting mono margin-note label, typed on beneath the word. */
+    [id="06-wow-label"] {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 1092px;
+      margin: 0;
+      text-align: center;
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 3cqw;
+      line-height: 1;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(17, 17, 17, 0.75);
+      white-space: pre;
+    }
+    [id="06-wow-label"] [class~="06-wow-ch"] {
+      display: inline-block;
+      white-space: pre;
+    }
+
+    [id="06-wow-rule"] {
+      position: absolute;
+      left: 50%;
+      top: 1052px;
+      width: 36px;
+      height: 2px;
+      margin-left: -18px;
+      background: #111111;
+      transform-origin: 50% 50%;
+    }
+  </style>
+
+  <div
+    id="root"
+    data-composition-id="06-wow"
+    data-start="0"
+    data-duration="3"
+    data-width="1080"
+    data-height="1920"
+  >
+    <div id="06-wow-ground" class="clip" data-start="0" data-duration="3" data-track-index="0"></div>
+
+    <div id="06-wow-stage" class="clip" data-start="0" data-duration="3" data-track-index="1">
+      <div id="06-wow-slam">
+        <h1 id="06-wow-word"><span id="06-wow-g1" class="06-wow-g">w</span><span id="06-wow-g2" class="06-wow-g">o</span><span id="06-wow-g3" class="06-wow-g">w</span><span id="06-wow-g4" class="06-wow-g">!</span></h1>
+        <svg id="06-wow-underline" viewBox="0 0 860 64" preserveAspectRatio="none" aria-hidden="true">
+          <path id="06-wow-underline-path" pathLength="1" d="M 34 40 C 180 26, 360 20, 520 24 C 650 27, 760 34, 826 22" />
+        </svg>
+      </div>
+      <div id="06-wow-rule"></div>
+      <p id="06-wow-label"></p>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var FRAME_ID = "06-wow";
+      var LABEL = "MARGIN NOTE, AUG 1977";
+
+      // Build the per-character spans for the deterministic type-on.
+      var labelEl = document.getElementById("06-wow-label");
+      var chars = [];
+      for (var i = 0; i < LABEL.length; i++) {
+        var s = document.createElement("span");
+        s.className = "06-wow-ch";
+        s.textContent = LABEL.charAt(i);
+        labelEl.appendChild(s);
+        chars.push(s);
+      }
+
+      var tl = gsap.timeline({ paused: true });
+
+      // Scene 1 (0.0–0.6s): hard cut to orange; "wow!" slams 1.08 -> 1.0 with a fast expo settle.
+      tl.fromTo(
+        document.getElementById("06-wow-slam"),
+        { scale: 1.08, rotation: -4 },
+        { scale: 1, rotation: -4, duration: 0.55, ease: "expo.out" },
+        0
+      );
+
+      // Brief ink-on-orange underline stroke drawing left -> right under the word.
+      tl.fromTo(
+        document.getElementById("06-wow-underline-path"),
+        { strokeDashoffset: 1 },
+        { strokeDashoffset: 0, duration: 0.36, ease: "power3.out" },
+        0.14
+      );
+
+      // Scene 2 (0.6–2.5s): ink rule stub ticks in, then the mono label types on; stillness after.
+      tl.fromTo(
+        document.getElementById("06-wow-rule"),
+        { scaleX: 0 },
+        { scaleX: 1, duration: 0.2, ease: "power3.out" },
+        0.6
+      );
+
+      var typeStart = 0.68;
+      var perChar = 0.045;
+      for (var c = 0; c < chars.length; c++) {
+        tl.fromTo(
+          chars[c],
+          { opacity: 0 },
+          { opacity: 1, duration: 0.01, ease: "none" },
+          typeStart + c * perChar
+        );
+      }
+
+      // Hold: absolute stillness to the end of the 2.5s beat.
+      tl.set({}, {}, 2.5);
+
+      window.__timelines[FRAME_ID] = tl;
+    })();
+  </script>
+</template>

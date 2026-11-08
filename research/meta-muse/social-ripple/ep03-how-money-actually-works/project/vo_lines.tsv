@@ -1,0 +1,55 @@
+n01	af_heart	1.0	This is one ten-dollar bill. By lunchtime, it's going to pay for four different things, for four different people. And nobody will lose a single cent.
+n02	af_heart	1.0	And on this tiny island, one loan is about to make the whole town richer... and then, almost broke. Same people. Same sandwiches. Same ten dollars.
+n03	af_heart	1.0	So let's figure out how money actually works. With one sandwich.
+n04	af_heart	1.0	Welcome to Crumb Island. Population: two hundred people, one bank, and the best sandwich shop in the ocean.
+n05	af_heart	1.0	This is Mo. Mo makes sandwiches. To make sandwiches, Mo needs bread from Bee. Bee wants fish from Finn. And Finn? Finn just wants a sandwich.
+mo_01	am_michael	1.05	One sandwich, please... I mean, here's a sandwich! Can I have bread?
+bea_01	bf_emma	1.05	I don't want a sandwich. I want fish.
+finn_01	am_fenrir	1.0	Don't look at me. I want a sandwich.
+n06	af_heart	1.0	Without money, everybody has to find someone who has what they need, and needs what they have, at the exact same moment. Economists call that the double coincidence of wants. Which is a fancy way of saying: good luck. And honestly? Historians have never found a town that really ran on pure barter. It's a thought experiment. But it shows why money is so handy.
+n07	af_heart	1.0	Money fixes it. Money is just something everyone agrees to accept. That's it. That's the whole trick. Everyone. Agrees.
+n08	af_heart	1.0	You see, money isn't really the paper. It's the agreement. On the island of Yap, in the Pacific, people used giant stone wheels as money. A visitor in the early nineteen hundreds was told about one huge stone that sank in a storm on its way home, generations earlier... and the family who owned it was still considered rich.
+n09	af_heart	1.0	Nobody could see the stone. Everybody agreed it was there. So money is a story we all believe together. And like every story on this channel... it ripples.
+n10	af_heart	1.0	Watch the ten dollars. Ana, a nurse coming off a night shift, buys a sandwich. Ten dollars goes to Mo.
+ana_01	af_bella	1.05	Oh, I needed this.
+n11	af_heart	1.0	Mo pays Bee for bread. Bee pays Finn for fish. And Finn, starving after a morning at sea, walks into Mo's and buys... a sandwich.
+finn_02	am_fenrir	1.0	Finally.
+n12	af_heart	1.0	One bill. Four purchases. Forty dollars of stuff made and sold. And the bill is still worth ten dollars. Here's the part most people never hear: your spending is someone else's income.
+n13	af_heart	1.0	Ray Dalio, who built one of the biggest investment firms in the world, puts it this way: one person's spending is another person's income. Every dollar you spend lands in somebody's pocket. And every dollar you earn... came out of somebody's.
+n14	af_heart	1.0	Which raises a weird question. What happens when someone spends money that doesn't exist yet?
+n15	af_heart	1.0	Mo has a dream. A second oven. Twice the sandwiches. The oven costs a thousand dollars. Mo has... sixty-two.
+n16	af_heart	1.0	So Mo goes to the Crumb Island Bank, to see Mister Penny.
+penny_01	bm_george	1.0	Reliable customer. Excellent sandwiches. Approved.
+n17	af_heart	1.0	Now, you probably think the bank takes a thousand dollars out of somebody's savings, and hands it to Mo. That's what most people think. It's not what happens.
+n18	af_heart	1.0	In 2014, the Bank of England explained it in plain words: whenever a bank makes a loan, it creates a matching deposit. Mister Penny types a thousand dollars into Mo's account... and a thousand new dollars exist that didn't exist a second ago.
+mo_02	am_michael	1.05	Wait. You just... typed it?
+penny_02	bm_george	1.0	And you'll pay it back. With interest.
+n19	af_heart	1.0	In Britain, about ninety-seven percent of money is bank deposits, not cash. And most of that starts life as a loan. Not printed. Lent. Banks can't do it forever: they're held back by profits, by rules, and by interest rates. And when a loan gets paid back, that money disappears again. Borrowing creates money. Repaying deletes it.
+n20	af_heart	1.0	Now watch the ripple. Mo pays Kai to build the oven in. Kai has money he didn't have yesterday, so he buys new boots, and takes his family out for crab.
+n21	af_heart	1.0	The Crab Shack is so busy it hires a new waiter. The waiter buys sandwiches. Mo sells more, so Mo buys more bread from Bee, and Bee buys more fish from Finn.
+n22	af_heart	1.0	One loan, and the whole town gets busier. Incomes go up. People feel richer. So... they borrow too.
+n23	af_heart	1.0	Bee borrows for a bigger bakery. Finn borrows for a faster boat. Everybody's spending more, so everybody's earning more. Crumb Island is booming.
+n24	af_heart	1.0	But there's a catch hiding in the party. When everyone has more money chasing the same sandwiches, prices creep up. The ten-dollar sandwich becomes twelve. Then fourteen.
+n25	af_heart	1.0	And every loan comes with a date on it. The day you have to pay it back.
+n26	af_heart	1.0	Repayment day. To pay the bank, Mo has to spend less. So does Bee. So does Finn. And all that money flows back to the bank... and disappears.
+n27	af_heart	1.0	But remember: one person's spending is another person's income. Mo spends less, so Kai earns less. Kai skips the crab. The Crab Shack lets the new waiter go. And the waiter stops buying sandwiches.
+n28	af_heart	1.0	The ripple runs backwards. And here's the strange part. Every single person is being sensible. Saving is smart! But when everybody tries to save at the same time, the whole town's income shrinks. Economists call it the paradox of thrift.
+n29	af_heart	1.0	Dalio calls the whole loop a debt cycle. Borrow, boom, pay back, bust. By his estimate, the short ones come around every five to eight years. There's no single villain. It's all of us, reacting to each other.
+n30	af_heart	1.0	Which brings us back to Ana. Her hours got cut. The rent is due. And her brain is doing something you might recognize.
+n31	af_heart	1.0	In one famous 2013 study, just thinking about a big, expensive car repair seemed to make people with less money do worse on reasoning puzzles. Like the worry was taking up space in their head. Fair warning: later attempts to repeat it have had mixed results, so scientists still disagree about how big that effect really is.
+n32	af_heart	1.0	But anyone who's been broke knows the feeling. The worry gets loud. Everything else gets quiet. And you're far from alone: in a 2026 survey by the American Psychological Association, seventy-one percent of American adults said money is a significant source of stress.
+n33	af_heart	1.0	So let's look at the same moment through two lenses.
+ana_02	af_bella	1.0	I'm terrible with money. I always mess everything up.
+n34	af_heart	1.0	Through the red lens, a town-wide slump becomes a personal failure. Through the gold lens...
+ana_03	af_bella	1.0	The whole island is struggling. This isn't just me. Okay. What can I actually do?
+n35	af_heart	1.0	First, the honest part: money stress is real. It isn't a mindset problem, and you can't positive-think your way out of rent. Real problems deserve real action.
+n36	af_heart	1.0	So psychologists suggest a two-question check. Question one: can I change this? If yes, change it. Make the call. Ask for a payment plan. Take one small step.
+penny_03	bm_george	1.0	A payment plan? Absolutely. Let's sort it out.
+n37	af_heart	1.0	Question two: if I can't change it right now, can I change how I see it? In one 2013 study of a hundred and seventy people, being good at reframing was linked to less depression when the stress was out of their control. But when they could have changed the situation, reframing alone was linked to more.
+n38	af_heart	1.0	So the trick isn't think positive. It's: change what you can, reframe what you can't. And notice which one you're facing.
+n39	af_heart	1.0	Back on Crumb Island, the slump doesn't last forever. Debts get paid down. Prices settle. And then... somebody goes first.
+n40	af_heart	1.0	Mo buys a loaf from Bee he doesn't strictly need. Bee buys a fish. Finn buys a sandwich. And the ripple starts turning forward again.
+n41	af_heart	1.0	Because an economy isn't some machine far away. It's every sandwich, every paycheck, every yes from a bank, and every person deciding to spend or to save. All of us, rippling into each other.
+n42	af_heart	1.0	Your ten dollars is somebody's income. Where you spend it is a tiny vote for what your town looks like. And when money stress gets loud, ask the two questions. Can I change it? Or can I reframe it?
+n43	af_heart	1.0	Quick question for the comments. If the whole island got scared at once, would you: A, save every coin you've got? Or B, keep buying sandwiches? There's no wrong answer. But the island needs both.
+n44	af_heart	1.0	Now if you'll excuse me... I'm getting a sandwich.
