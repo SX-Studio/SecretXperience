@@ -138,7 +138,7 @@
   M("you", tY + 1.9, "terrified", 0.15); Po("you", tY + 1.9, "cringe", 0.15); num("you", tY + 2.2, "2/10", RED); M("mo", tY + 2.1, "laugh", 0.2);
   M("you", tY + 3.2, "laughing", 0.3); Po("you", tY + 3.2, "relaxed", 0.4); num("you", tY + 3.4, null); num("mo", tY + 3.4, "9/10", GRN); prop("you", tY + 2.8, "mug"); prop("mo", tY + 2.8, null);
   const tEnd = S("n23") - 0.1;
-  shot(tEnd, "square", C(960, 560, 1.12, 960, 540, 1.0, "lin"), Object.assign({ you: Wd(1150, 1000, 0.62, 1), juno: Wd(1360, 1000, 0.62, -1) }, crowd(sqCrowd.map(([i, wx, wy, s]) => [i, wx < 960 ? wx - 100 : wx + 260, wy, s]))), 1, "SC09 together");
+  shot(tEnd, "square", C(960, 560, 1.12, 960, 540, 1.0, "lin"), Object.assign({ you: Wd(1380, 1010, 0.64, 1), juno: Wd(1600, 1010, 0.64, -1) }, crowd(sqCrowd.map(([i, wx, wy, s]) => [i, wx < 960 ? wx - 100 : (wy > 900 ? wx + 420 : wx + 300), wy, s]))), 1, "SC09 together");
   num("mo", tEnd, null); prop("you", tEnd, null); Po("you", tEnd, "relaxed", 0); M("you", tEnd, "happy", 0.4); M("juno", tEnd, "laugh", 0.4); Po("juno", tEnd + 0.4, "wave", 0.3);
 
   // ---------------- overlays ----------------
