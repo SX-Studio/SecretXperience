@@ -20,3 +20,13 @@ Read: the cover pulled people in; the slow-drawing first frame lost them.
 
 ## Check after each upload
 Studio → Analytics → Content → Shorts: "Viewed vs. swiped away" + retention graph; Reach → Traffic source (Shorts feed = first frame matters; search/channel/browse = cover matters).
+
+## Core principle: mirror what viewers are already thinking (applies to EVERYTHING)
+The algorithm matches content to people through the footprints of their thoughts: searches, watches, rewatches, pauses, comments. Content that voices what someone is already thinking gets shown to them.
+- **Topic:** start from a question people already ask themselves ("why do I keep quitting?"), then find the anime moment that answers it. Sources: YouTube search autocomplete ("why do I…", "how to stop…"), comments under anime clips, our own comments.
+- **Title:** in the viewer's inner voice ("Why You Quit After 2 Weeks (Solo Leveling Explains)"), with the anime name for search.
+- **Cover:** the moment they've personally lived, inside the anime world.
+- **First line:** say their thought back to them before any facts ("You start strong. Then by week three, you're done.").
+- **Captions:** highlight the words they'd use in their own head.
+- **Comment prompt:** ask for their version of the thought ("What's the habit you keep restarting?").
+- **Shorts → episode:** each Short voices one thought; the long video is the full answer.
