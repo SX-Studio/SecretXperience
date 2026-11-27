@@ -1,4 +1,25 @@
-# Cover + first-frame rules (from the ice-water Short's results)
+# Social Ripple: mission + content rules
+
+## Mission: food for the thought the viewer already has, guiding them correctly
+Working assumption: the algorithm shows people what they're thinking about. So every video replies to a thought the viewer already has and takes it somewhere better.
+
+**Arc for every episode and Short:**
+1. **Meet the thought:** in their inner voice ("Why do I always quit?").
+2. **Show it in the anime:** a character they love has the same thought, so they're not alone with it.
+3. **Reframe with real evidence:** what the research actually shows, limits included.
+4. **Hand them a better next thought:** one small, doable step.
+5. **Let them answer:** a comment prompt that invites their version of the thought.
+
+**Guardrails:**
+- Only claims checked against the original papers; never more than a study found.
+- No shame, no fear-bait: covers can carry a pain point, but every video ends better than it started.
+- Our suggestions are labelled as ours, not findings.
+- Heavy topics (loneliness, regret, grief): a gentle "talk to someone you trust" line, plus a support resource in the description.
+
+---
+
+
+## Cover + first-frame rules (from the ice-water Short's results)
 
 Day-1 data, "They Fooled Themselves With Ice Water" Short: 242 views, 0.8 h watch time ≈ 12 s average on 43 s (~25–30% viewed).
 Read: the cover pulled people in; the slow-drawing first frame lost them.
