@@ -41,6 +41,13 @@ Working assumption: the algorithm shows people what they're thinking about. Ever
 - **Match the energy:** fast and punchy for hooks and battles; slower, closer and quieter for the core truth.
 - **Shorts:** a move every 1.5–2.5 seconds.
 
+## 6b. Characters: likeness and motion
+- **Near-perfect likeness.** A fan must never think "that doesn't look like him." Every character detail is checked against references before drawing: face, hair, eyes, outfit, weapons, colours. Example: Jinwoo's first dagger, Kasaka's Venom Fang, is a small black dagger with a white edge and a bone hilt.
+- **Illustrated art, then rigged.** Characters come from a high-quality illustrated puppet sheet (separate head, mouth, eye, torso, arm, hand, leg and weapon parts), cut out and rigged for animation. Code-drawn chibis are a fallback only.
+- **Always alive:** breathing, blinking, a mouth that moves with the voice, small weight shifts. Never a frozen pose.
+- **Motion correlates with the narration:** characters act out what's said (push-ups when it says push-ups, a slash on "fight", stepping forward on "stays behind"), react to on-screen events (look at the System window, flinch at a slam) and shift expression on emotional lines.
+- **Camera and character move together:** a punch-in lands with the character's action, and shake comes with the impact.
+
 ## 7. Shorts
 - Hook line under 2 seconds; 20–30 seconds; one idea; last line loops into the first.
 - An anime character in every Short; each Short voices one thought, and the long video is the full answer.
@@ -69,6 +76,7 @@ Working assumption: the algorithm shows people what they're thinking about. Ever
 - [ ] Each lesson has a one-sentence core truth that gets its own moment?
 - [ ] Ends on a better next thought + a comment prompt asking for their version?
 - [ ] Cover = relatable situation + body sensation + mystery + specific number?
+- [ ] Characters: near-perfect likeness (checked against references, weapons included), always alive, actions matching the narration?
 - [ ] Camera never still; new move at least every ~4 s (1.5–2.5 s in Shorts); punch-ins on key words; push-in on the core truth?
 - [ ] (Shorts) first frame = cover, hook < 2 s, 20–30 s, loops?
 - [ ] No shame or fear-bait; suggestions labelled as ours; care line on heavy topics?
