@@ -8,7 +8,7 @@ Working assumption: the algorithm shows people what they're thinking about. Ever
 
 ## 2. The arc (every episode and every Short)
 1. **Meet the thought:** in the viewer's inner voice ("Why do I always quit?").
-2. **Mirror it in the anime:** a character they love has the same thought, so they're not alone with it.
+2. **Mirror it in the anime:** a moment from an anime they love where a character faces the same thought (told through narration; acted out by our own cast), so they're not alone with it.
 3. **Reframe with real evidence:** what the research actually shows, limits included.
 4. **Land the core truth:** one sentence per lesson, given its own moment.
 5. **Hand them a better next thought:** one small, doable step.
@@ -17,7 +17,7 @@ Working assumption: the algorithm shows people what they're thinking about. Ever
 ## 3. Depth: what matters most
 - Before writing, state each lesson's **core truth in one sentence**, and why it matters to the viewer's life. Every scene serves that sentence.
 - **Fewer lessons, deeper:** three that land beat five that skim. Each gets its "so what".
-- The core line gets **its own moment:** poster card, a beat of silence, the character feeling it.
+- The core line gets **its own moment:** poster card, a beat of silence, our character feeling it.
 - **End each lesson on the truth, not the statistic.** Close the episode on one sentence that ties it together.
 
 ## 4. Topics and words
@@ -28,7 +28,7 @@ Working assumption: the algorithm shows people what they're thinking about. Ever
 
 ## 5. Covers and first frames
 - Formula: **relatable situation + body sensation (a felt "ouch") + mystery + a specific number**.
-- The anime character sits *inside* an everyday moment the viewer has lived, not just a pose.
+- **Our own cast member** sits *inside* an everyday moment the viewer has lived (not just a pose); the anime name is carried by the big text.
 - **A Short's first frame = its cover:** fully drawn, big text, no blank paper.
 
 ## 6. Camera dynamics: stimulated from start to finish
@@ -41,16 +41,17 @@ Working assumption: the algorithm shows people what they're thinking about. Ever
 - **Match the energy:** fast and punchy for hooks and battles; slower, closer and quieter for the core truth.
 - **Shorts:** a move every 1.5–2.5 seconds.
 
-## 6b. Characters: likeness and motion
-- **Near-perfect likeness.** A fan must never think "that doesn't look like him." Every character detail is checked against references before drawing: face, hair, eyes, outfit, weapons, colours. Example: Jinwoo's first dagger, Kasaka's Venom Fang, is a small black dagger with a white edge and a bone hilt.
-- **Illustrated art, then rigged.** Characters come from a high-quality illustrated puppet sheet (separate head, mouth, eye, torso, arm, hand, leg and weapon parts), cut out and rigged for animation. Code-drawn chibis are a fallback only.
+## 6b. Characters: our own cast, fully alive
+- **Original characters only.** We never draw, trace, animate or rig the anime's characters (no likenesses, look-alikes or "styled versions"), and we never use official art, screenshots or footage. The anime appears through narration, names, episode numbers and paraphrased moments.
+- **A recurring Social Ripple cast**, designed by us, with distinct, memorable looks and personalities (host Nia plus a few regulars), so they become the channel's face across every anime we cover.
+- **Polished and rigged:** well-drawn characters with separate parts (head, mouths, eyes, torso, arms, hands, legs, props), rigged for animation.
 - **Always alive:** breathing, blinking, a mouth that moves with the voice, small weight shifts. Never a frozen pose.
-- **Motion correlates with the narration:** characters act out what's said (push-ups when it says push-ups, a slash on "fight", stepping forward on "stays behind"), react to on-screen events (look at the System window, flinch at a slam) and shift expression on emotional lines.
-- **Camera and character move together:** a punch-in lands with the character's action, and shake comes with the impact.
+- **Motion correlates with the narration:** our cast acts out the situation being described (push-ups when it says push-ups, stepping forward on "stays behind"), reacts to on-screen events (looks at a pop-up window, flinches at a slam) and shifts expression on emotional lines.
+- **Camera and character move together:** a punch-in lands with the action, and shake comes with the impact.
 
 ## 7. Shorts
 - Hook line under 2 seconds; 20–30 seconds; one idea; last line loops into the first.
-- An anime character in every Short; each Short voices one thought, and the long video is the full answer.
+- One of our cast in every Short, plus the anime name on screen; each Short voices one thought, and the long video is the full answer.
 
 ## 8. Truth and care (guardrails)
 - **Every claim checked against the original paper** (or the best primary source available), with limits stated honestly; never more than a study found. Anime plot facts checked too (episode numbers).
@@ -59,9 +60,9 @@ Working assumption: the algorithm shows people what they're thinking about. Ever
 - **Heavy topics** (loneliness, regret, grief, self-worth): a gentle "talk to someone you trust" line in the video, plus a support resource in the description.
 
 ## 9. Look, sound and rights
-- **Our own drawings only:** ink-notebook style, poster cards, anime characters drawn from their signature traits (hair, eyes, outfit, weapons such as Jinwoo's daggers). No official art, screenshots, footage, logos or soundtrack.
+- **Our own drawings and our own characters only:** ink-notebook style, poster cards, the Social Ripple cast. No anime characters (or look-alikes), official art, screenshots, footage, logos or soundtrack.
 - Narration: Nia (Kokoro af_heart). Music and sound: original. Loudness −14 LUFS. Captions on screen.
-- Credit the anime's creators in the description; it's commentary, with original drawings.
+- Credit the anime's creators in the description; it's commentary with original characters and drawings.
 
 ## 10. Delivery
 - Upload info (title, alternatives, description with sources and chapters, tags, settings, pinned comment) **in chat**.
@@ -71,12 +72,12 @@ Working assumption: the algorithm shows people what they're thinking about. Ever
 
 ## Pre-publish checklist (all must be YES)
 - [ ] Opens on the viewer's thought, in their inner voice?
-- [ ] An anime moment mirrors that thought?
+- [ ] An anime moment (told, not drawn) mirrors that thought?
 - [ ] Every claim verified against a primary source, limits stated?
 - [ ] Each lesson has a one-sentence core truth that gets its own moment?
 - [ ] Ends on a better next thought + a comment prompt asking for their version?
 - [ ] Cover = relatable situation + body sensation + mystery + specific number?
-- [ ] Characters: near-perfect likeness (checked against references, weapons included), always alive, actions matching the narration?
+- [ ] Only our own cast on screen (no anime characters or look-alikes); always alive; actions matching the narration?
 - [ ] Camera never still; new move at least every ~4 s (1.5–2.5 s in Shorts); punch-ins on key words; push-in on the core truth?
 - [ ] (Shorts) first frame = cover, hook < 2 s, 20–30 s, loops?
 - [ ] No shame or fear-bait; suggestions labelled as ours; care line on heavy topics?

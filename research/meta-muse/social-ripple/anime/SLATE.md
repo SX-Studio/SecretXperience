@@ -1,7 +1,7 @@
 # Social Ripple: anime life lessons (new direction)
 
 Format: one big moment from a popular anime + the real psychology behind it. Every study is checked against the primary paper before scripting; anime plot facts are checked too.
-Look: our own ink-notebook drawings with each character's signature traits (no official art, screenshots, footage, logos or music). Poster cards for big moments.
+Look: our own ink-notebook drawings and our own original cast acting out each situation; the anime is told through narration and names (no drawings of its characters, no official art, screenshots, footage, logos or music). Poster cards for big moments.
 
 | # | Anime | Moment | Lesson | Lead studies to verify |
 |---|---|---|---|---|
