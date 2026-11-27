@@ -1,6 +1,6 @@
 <!doctype html><html><head><meta charset="UTF-8">
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Patrick+Hand&family=Anton&display=swap" rel="stylesheet">
-<script src="ink.js"></script>
+<script src="ink.js"></script><script src="char.js"></script>
 <style>*{margin:0;padding:0}html,body{width:1080px;height:1920px;overflow:hidden;background:#F5EEDC}svg{position:absolute;inset:0}</style></head><body>
 <svg id="ov" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg"></svg>
 <script>
@@ -29,6 +29,11 @@ document.fonts.ready.then(() => {
     T("see who you're hurting", 540, Y + 100, 58, INKC, { font: "Patrick Hand", ls: 0 });
     const c = el("g", { transform: `translate(700,${Y + 160}) scale(1.6)` }, svg); el("path", { d: "M0,0 l0,92 l24,-21 l17,38 l17,-7 l-17,-37 l33,-2 z", fill: "#FFFDF6", stroke: INKC, "stroke-width": 5, "stroke-linejoin": "round" }, c);
     T("?", 870, Y - 160, 230, RED, { font: "Caveat", rot: 10 }); tag("one free click", 1060);
+  } else if (which === "days") {
+    T("21 DAYS?", 540, 330, 220, "#9A958C"); el("path", { d: "M150,250 L930,190", stroke: RED, "stroke-width": 26, "stroke-linecap": "round" }, svg);
+    T("IT'S 66.", 540, 610, 230, RED); T("what Solo Leveling gets right", 540, 760, 62, "#9A958C", { font: "Patrick Hand", ls: 0 });
+    for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2; el("path", { d: `M${540 + Math.cos(a) * 330},${1420 + Math.sin(a) * 400} l${Math.cos(a) * 70},${Math.sin(a) * 70}`, stroke: "#7B6CFF", "stroke-width": 10, "stroke-linecap": "round" }, svg); }
+    FIG.push(CHAR({ I }).draw(ink, "jinwoo", 540, 1850, 1.3, 0, { mood: "serious", glow: true, pose: "cross", daggers: true })); tag("[ daily quest ]", 985);
   } else {
     T("BAD NEWS?", 540, 360, 210, "#F4EFE6"); T("TEST AGAIN.", 540, 610, 210, RED); T("52% did", 540, 760, 70, "#9A958C", { font: "Patrick Hand", ls: 0 });
     const Y = 1530; FIG.push(I.figure(ink, 300, Y + 200, 1.2, 0, { mood: "worried", arms: `M300,${Y - 40} L220,${Y + 100} M300,${Y - 40} L560,${Y - 200}` }));
@@ -37,6 +42,6 @@ document.fonts.ready.then(() => {
     for (let i = 0; i < 12; i++) { const g = Math.floor(i / 5), j = i % 5, x = 560 + g * 170 + j * 30; I.path(ink, j === 4 ? `M${x - 125},${Y - 340} l135,-70` : `M${x},${Y - 420} v90`, 0, 0.1, { w: 8, color: RED }); }
     T("12x", 940, Y + 300, 120, RED, { rot: -6 }); tag("the spit test", 1060);
   }
-  I.ready(); I.update(99); FIG.forEach((f) => f.update(0.5)); I.setView(-50, -50, 1180, 2020); window.READY = true;
+  I.ready(); I.update(99); FIG.forEach((f) => f.update(9)); I.setView(-50, -50, 1180, 2020); window.READY = true;
 });
 </script></body></html>
