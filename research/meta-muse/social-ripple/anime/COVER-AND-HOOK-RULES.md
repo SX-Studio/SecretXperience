@@ -1,3 +1,5 @@
+> Superseded by ../CONTENT-STANDARDS.md (the absolute standards). Kept for the history and data behind them.
+
 # Social Ripple: mission + content rules
 
 ## Mission: food for the thought the viewer already has, guiding them correctly
