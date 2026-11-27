@@ -22,8 +22,8 @@
       point: { aR: -95, eR: 0, head: -6 }, think: { aR: -150, eR: -150, head: 8 }, look: { head: -12, torso: -3 },
       slump: { torso: 6, head: 22, aL: 4, eL: 0, aR: -4, eR: 0, lift: 6 },
       pockets: { aL: 18, eL: -40, aR: -18, eR: 40, head: 4 },
-      pushUp: { root: 68, lift: -40, side: 0, torso: 0, head: -66, aL: -80, eL: 0, aR: -80, eR: 0, lL: 0, kL: 0, lR: 0, kR: 0, plant: 1 },
-      pushDown: { root: 81, lift: -18, side: 0, torso: 0, head: -79, aL: -80, eL: 0, aR: -80, eR: 0, lL: 0, kL: 0, lR: 0, kR: 0, plant: 1 },
+      pushUp: { root: 62, lift: -40, side: 0, torso: 0, head: -58, aL: -80, eL: 0, aR: -80, eR: 0, lL: 0, kL: 0, lR: 0, kR: 0, plant: 1 },
+      pushDown: { root: 77, lift: -18, side: 0, torso: 0, head: -73, aL: -80, eL: 0, aR: -80, eR: 0, lL: 0, kL: 0, lR: 0, kR: 0, plant: 1 },
       flat: { root: 90, lift: 0, side: -46, torso: 0, head: -60, aL: -170, eL: 0, aR: -170, eR: 0, lL: 0, kL: 0, lR: 0, kR: 0, plant: 0 },
     };
     const JOINTS = ["root", "lift", "side", "torso", "head", "aL", "eL", "aR", "eR", "lL", "kL", "lR", "kR", "plant"];
@@ -130,10 +130,15 @@
         const th = (p.root + p.torso) * Math.PI / 180, pl = clamp(p.plant || 0, 0, 1);
         arms.forEach(({ ua, fa, d }, i) => { let a = i ? p.aR : p.aL, e = i ? p.eR : p.eL; if (walking && !pl && Math.abs(a) < 40) a += (i ? wk : -wk) * 18;
           let spx = ua.px;
-          if (pl > 0.01) { // hands planted on the floor: shoulder height above the floor → two-bone IK straight down (world)
-            const hgt = -(-128 + lift - 170) * Math.cos(th) - (p.side || 0) * Math.sin(th), R = clamp(hgt - 16, 30, 145), L1 = 72, L2 = 74;
-            const al = Math.acos(clamp((L1 * L1 + R * R - L2 * L2) / (2 * L1 * R), -1, 1)) * 180 / Math.PI, be = 180 - Math.acos(clamp((L1 * L1 + L2 * L2 - R * R) / (2 * L1 * L2), -1, 1)) * 180 / Math.PI;
-            const ia = -(p.root + p.torso) - al, ie = be; a = a + (ia - a) * pl; e = e + (ie - e) * pl; spx = ua.px * (1 - pl) + (i ? 8 : -8) * pl; }
+          if (pl > 0.01) { // hands planted: fixed palm on the floor under the up-position shoulder; elbows fold back toward the feet
+            const th0 = (p.root + p.torso) * Math.PI / 180, tA = th0 * 180 / Math.PI, ly = -128 + lift - 170, sxo = (p.side || 0) + (i ? 6 : -6);
+            const Xs = sxo * Math.cos(th0) - ly * Math.sin(th0), Ys = sxo * Math.sin(th0) + ly * Math.cos(th0) + 170;
+            const pu = POSES.pushUp, thU = pu.root * Math.PI / 180, Hx = -(-128 + pu.lift - 170) * Math.sin(thU) - 18, Hy = 154;
+            const L1 = 72, L2 = 74, dx = Hx - Xs, dy = Hy - Ys, R = clamp(Math.hypot(dx, dy), 20, L1 + L2 - 0.5), phi = Math.atan2(dy, dx);
+            const al = Math.acos(clamp((L1 * L1 + R * R - L2 * L2) / (2 * L1 * R), -1, 1));
+            let best = null; for (const sg of [1, -1]) { const ex = Xs + L1 * Math.cos(phi + sg * al), ey = Ys + L1 * Math.sin(phi + sg * al); if (!best || ex < best[0]) best = [ex, ey]; }
+            const A1 = Math.atan2(best[1] - Ys, best[0] - Xs) * 180 / Math.PI - 90, A2 = Math.atan2(Hy - best[1], Hx - best[0]) * 180 / Math.PI - 90;
+            const ia = A1 - tA, ie = A2 - A1; a = a + (ia - a) * pl; e = e + (ie - e) * pl; spx = ua.px * (1 - pl) + (i ? 6 : -6) * pl; }
           rot(ua.g, spx, ua.py, a + (i ? -breath * 0.6 : breath * 0.6)); rot(fa.g, 0, 72, e); });
         rot(headG, 0, 0, p.head + (talks.some(([a, b]) => t >= a && t < b) ? Math.sin(t * 9) * 2 : 0)); headG.setAttribute("transform", `rotate(${(p.head).toFixed(2)},0,-140)`);
         // face
