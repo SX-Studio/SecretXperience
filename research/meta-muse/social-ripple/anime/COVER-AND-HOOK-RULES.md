@@ -19,6 +19,23 @@ Working assumption: the algorithm shows people what they're thinking about. So e
 ---
 
 
+## Depth: what matters most from each lesson
+The study is the evidence, the anime is the mirror; the viewer keeps the **truth underneath**.
+1. Before writing, state each lesson's core truth in one sentence, and why it matters to the viewer's life. Every scene serves that sentence.
+2. Fewer lessons, deeper: three that land beat five that skim. Give each its "so what": how it shows up in their day, what changes if they get it.
+3. The core line gets its own moment: a poster card, a beat of silence, the character feeling it.
+4. End each lesson on the truth, not the statistic.
+5. Close the episode on one sentence that ties the lessons together.
+
+Example (Solo Leveling ep):
+- L1 "Still feeling hard doesn't mean it isn't working."
+- L2 "Don't wait to feel ready. Decide the moment ahead of time."
+- L3 "You can't feel growth day to day, so give yourself a way to see it."
+- L4 "The miss isn't the danger. Quitting because of the miss is."
+- Whole: "Jinwoo didn't become strong in one day. He became strong by coming back every day, even after the bad ones."
+
+---
+
 ## Cover + first-frame rules (from the ice-water Short's results)
 
 Day-1 data, "They Fooled Themselves With Ice Water" Short: 242 views, 0.8 h watch time ≈ 12 s average on 43 s (~25–30% viewed).
