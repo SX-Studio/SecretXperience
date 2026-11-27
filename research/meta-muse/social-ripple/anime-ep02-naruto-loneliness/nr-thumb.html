@@ -1,0 +1,25 @@
+<!doctype html><html><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Patrick+Hand&family=Anton&display=swap" rel="stylesheet">
+<script src="ink.js"></script><script src="cast.js"></script>
+<style>*{margin:0;padding:0}html,body{width:1280px;height:720px;overflow:hidden}svg{position:absolute;inset:0}</style></head><body>
+<svg id="ov" width="1280" height="720" viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg"></svg>
+<script>
+document.fonts.ready.then(() => {
+  const svg = document.getElementById("ov"), I = INK(svg), { el, INKC, RED } = I;
+  el("rect", { width: 1280, height: 720, fill: I.PAPER }, svg);
+  for (let i = 0; i < 16; i++) el("line", { x1: 0, x2: 1280, y1: 20 + i * 48, y2: 20 + i * 48, stroke: "#9CC3D9", "stroke-width": 2, opacity: 0.45 }, svg);
+  el("path", { d: "M700,0 H1280 V720 H620 Z", fill: "#0D0D0D" }, svg);
+  const FL = 680; el("line", { x1: 0, x2: 700, y1: FL, y2: FL, stroke: "#8A847A", "stroke-width": 4 }, svg);
+  el("path", { d: `M60,${FL} L150,250 L240,${FL} M380,${FL} L470,250 L560,${FL} M140,258 H480`, fill: "none", stroke: "#8A5A2B", "stroke-width": 10, "stroke-linecap": "round" }, svg);
+  el("path", { d: "M250,262 V505 M370,262 V505", stroke: INKC, "stroke-width": 5 }, svg); el("rect", { x: 232, y: 500, width: 158, height: 18, rx: 4, fill: "#A0703A", stroke: INKC, "stroke-width": 5 }, svg);
+  const g = el("g", {}, svg), C = CAST(I); const mo = C.make(g, "mo", 310, 505 + 170 * 0.62 - 74 * 0.62 + 4, 0.62, 0); mo.view(0, "side", 1).key(0, "sit", 0).face(0, "sad").key(0, { head: 20 }, 0); mo.update(5);
+  const P = (x, s, col) => { el("circle", { cx: x, cy: FL - 330 * s, r: 52 * s, fill: col }, svg); el("path", { d: `M${x - 62 * s},${FL} Q${x - 70 * s},${FL - 250 * s} ${x},${FL - 270 * s} Q${x + 70 * s},${FL - 250 * s} ${x + 62 * s},${FL} Z`, fill: col }, svg); };
+  [[560, 0.62, "#8F877A"], [630, 0.4, "#B8B0A2"]].forEach(([x, s, c]) => P(x, s, c));
+  const T = (txt, x, y, size, fill, o = {}) => { const t = el("text", { x, y, "font-family": o.font || "Anton", "font-size": size, fill, "text-anchor": "middle", "letter-spacing": o.ls ?? 2 }, svg); t.textContent = txt; };
+  T("SURROUNDED.", 975, 200, 96, "#F4EFE6"); T("STILL ALONE?", 975, 350, 112, RED);
+  const tg = el("g", { transform: "rotate(-3 960 560)" }, svg); el("rect", { x: 790, y: 505, width: 340, height: 100, rx: 12, fill: "#F2C230", stroke: INKC, "stroke-width": 6 }, tg);
+  const tt = el("text", { x: 960, y: 578, "text-anchor": "middle", "font-family": "Anton", "font-size": 70, fill: "#1E1B2E", "letter-spacing": 3 }, tg); tt.textContent = "NARUTO";
+  T("explains why", 960, 670, 54, "#9A958C", { font: "Patrick Hand", ls: 0 });
+  I.ready(); I.update(99); window.READY = true;
+});
+</script></body></html>
