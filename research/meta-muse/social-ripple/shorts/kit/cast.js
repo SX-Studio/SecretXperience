@@ -34,16 +34,19 @@
         el("path", { d: `M0,0 L0,${L}`, stroke: col, "stroke-width": w, "stroke-linecap": "round" }, seg); const j = G(g); return { g, j, px, py, L }; };
       // ---- legs (hip at 0,0; feet at y=+170)
       const legs = [-1, 1].map((d) => { const th = limb(body, d * 24, 0, 80, 30, c.pants); const sh = limb(th.j, 0, 80, 78, 26, c.pants);
-        const shoe = el("ellipse", { cx: d * 6, cy: 86, rx: 28, ry: 15, fill: c.shoe, stroke: INK, "stroke-width": 5 }, sh.j); return { th, sh, d }; });
+        const shoe = el("ellipse", { cx: d * 6, cy: 86, rx: 28, ry: 15, fill: c.shoe, stroke: INK, "stroke-width": 5 }, sh.j); return { th, sh, d, shoe }; });
       // ---- torso group (pivot at hip)
       const torso = G(body);
       if (c.hood) el("path", { d: "M-46,-150 Q0,-120 46,-150 Q30,-110 0,-108 Q-30,-110 -46,-150 Z", fill: c.top2, stroke: INK, "stroke-width": 5 }, torso);
-      if (c.coat) el("path", { d: "M-60,-130 Q-64,-146 -42,-148 L42,-148 Q64,-146 60,-130 L74,40 L-74,40 Z", fill: c.top, stroke: INK, "stroke-width": 6 }, torso);
-      else el("path", { d: "M-58,-128 Q-60,-146 -40,-148 L40,-148 Q60,-146 58,-128 L52,8 L-52,8 Z", fill: c.top, stroke: INK, "stroke-width": 6 }, torso);
+      const tFront = c.coat ? el("path", { d: "M-60,-130 Q-64,-146 -42,-148 L42,-148 Q64,-146 60,-130 L74,40 L-74,40 Z", fill: c.top, stroke: INK, "stroke-width": 6 }, torso)
+        : el("path", { d: "M-58,-128 Q-60,-146 -40,-148 L40,-148 Q60,-146 58,-128 L52,8 L-52,8 Z", fill: c.top, stroke: INK, "stroke-width": 6 }, torso);
+      const tSide = el("path", { d: c.coat ? "M-36,-130 Q-38,-148 -18,-150 L22,-150 Q42,-146 40,-128 L52,40 L-46,40 Z" : "M-34,-128 Q-36,-148 -16,-150 L22,-150 Q42,-146 40,-126 L36,8 L-34,8 Z", fill: c.top, stroke: INK, "stroke-width": 6, style: "display:none" }, torso);
+      const n0 = torso.childNodes.length;
       if (name === "kai") { el("path", { d: "M-34,-30 h68 l-6,30 h-56 z", fill: c.top2, stroke: INK, "stroke-width": 4 }, torso); el("path", { d: "M-12,-138 v40 M12,-138 v34", stroke: "#F4F4F0", "stroke-width": 4, "stroke-linecap": "round" }, torso); }
       if (name === "nia") { el("path", { d: "M-22,-146 L0,-96 L22,-146 Z", fill: c.top2, stroke: INK, "stroke-width": 4 }, torso); el("path", { d: "M0,-96 V6", stroke: "#B07A20", "stroke-width": 4 }, torso); [-70, -40, -10].forEach((yy) => el("circle", { cx: 8, cy: yy, r: 4, fill: "#7A4A10" }, torso)); }
       if (name === "mo") { el("path", { d: "M0,-140 V38", stroke: "#4A4D58", "stroke-width": 4 }, torso); el("path", { d: "M-52,-20 h30 M22,-20 h30", stroke: "#4A4D58", "stroke-width": 5 }, torso); }
       if (name === "rue") { el("path", { d: "M-40,-146 L-30,6 M40,-146 L30,6", stroke: "#3A2A3A", "stroke-width": 10, "stroke-linecap": "round" }, torso); el("path", { d: "M-58,-70 H58", stroke: "#FFF6E6", "stroke-width": 6 }, torso); }
+      const det = el("g", {}); Array.from(torso.childNodes).slice(n0).forEach((nd) => det.appendChild(nd)); torso.appendChild(det);
       // ---- arms (shoulders at ±50,-128)
       const sleeve = c.top;
       const arms = [-1, 1].map((d) => { const ua = limb(torso, d * 50, -128, 72, 26, sleeve); const fa = limb(ua.j, 0, 72, 68, 24, (c.torn && d > 0) ? c.skin : sleeve);
@@ -66,9 +69,11 @@
       if (c.hairStyle === "bob") P(poly([[-1.08, 0.55], [-1.1, -0.3], [-0.7, -1.02], [0, -1.12], [0.7, -1.02], [1.1, -0.3], [1.08, 0.55], [0.7, 0.62], [-0.7, 0.62]]), c.hair, 5);
       if (c.scarf) { el("path", { d: "M-70,-150 Q0,-110 70,-150 Q78,-128 60,-118 Q0,-96 -60,-118 Q-78,-128 -70,-150 Z", fill: c.scarf, stroke: INK, "stroke-width": 5 }, torso); }
       // ears + face
-      P(`M${U(-0.86, -0.02)} q${-0.22 * r},${0.02 * r} ${-0.16 * r},${0.26 * r} q${0.06 * r},${0.14 * r} ${0.2 * r},${0.06 * r} z M${U(0.86, -0.02)} q${0.22 * r},${0.02 * r} ${0.16 * r},${0.26 * r} q${-0.06 * r},${0.14 * r} ${-0.2 * r},${0.06 * r} z`, c.skin, 4);
+      P(`M${U(-0.86, -0.02)} q${-0.22 * r},${0.02 * r} ${-0.16 * r},${0.26 * r} q${0.06 * r},${0.14 * r} ${0.2 * r},${0.06 * r} z`, c.skin, 4);
+      const earR = P(`M${U(0.86, -0.02)} q${0.22 * r},${0.02 * r} ${0.16 * r},${0.26 * r} q${-0.06 * r},${0.14 * r} ${-0.2 * r},${0.06 * r} z`, c.skin, 4);
       P(`M${U(-0.9, -0.15)} C${U(-0.95, -1.08)} ${U(0.95, -1.08)} ${U(0.9, -0.15)} C${U(0.88, 0.42)} ${U(0.5, 0.8)} ${U(0, 0.96)} C${U(-0.5, 0.8)} ${U(-0.88, 0.42)} ${U(-0.9, -0.15)} Z`, c.skin, 6);
       if (c.phones) { el("path", { d: "M-58,-150 Q0,-196 58,-150", fill: "none", stroke: "#1E1E24", "stroke-width": 9 }, torso); [-1, 1].forEach((dd) => el("ellipse", { cx: dd * 58, cy: -146, rx: 20, ry: 15, fill: "#2A2A33", stroke: INK, "stroke-width": 4 }, torso)); }
+      const f0 = headG.childNodes.length;
       if (c.freckles) [-1, 1].forEach((dd) => [[0.5, 0.42], [0.6, 0.5], [0.42, 0.52]].forEach(([u, v]) => el("circle", { cx: dd * u * r, cy: -228 + v * r, r: 2.6, fill: "#B0603A" }, headG)));
       el("ellipse", { cx: -0.55 * r, cy: -228 + 0.48 * r, rx: 13, ry: 7, fill: "#F08A80", opacity: 0.35 }, headG); el("ellipse", { cx: 0.55 * r, cy: -228 + 0.48 * r, rx: 13, ry: 7, fill: "#F08A80", opacity: 0.35 }, headG);
       // eyes: open set + closed-happy set + tired lids
@@ -89,25 +94,33 @@
         grin: [`M${U(-0.32, 0.55)} Q${U(0, 0.62)} ${U(0.32, 0.55)} Q${U(0, 0.98)} ${U(-0.32, 0.55)} Z`, "#7A2A2A"] };
       const mouths = {}; for (const m in MO) mouths[m] = el("path", { d: MO[m][0], fill: MO[m][1], stroke: INK, "stroke-width": 5, "stroke-linecap": "round", "stroke-linejoin": "round", style: "display:none" }, headG);
       const talk = el("path", { d: "", fill: "#7A2A2A", stroke: INK, "stroke-width": 5, "stroke-linejoin": "round", style: "display:none" }, headG);
+      const faceG = el("g", {}); Array.from(headG.childNodes).slice(f0).forEach((nd) => faceG.appendChild(nd)); headG.appendChild(faceG);
       // front hair
       if (c.hairStyle === "swoop") P(poly([[-0.96, -0.36], [-0.86, -0.08], [-0.62, -0.34], [-0.4, -0.16], [-0.2, -0.38], [0.1, -0.2], [0.45, -0.42], [0.75, -0.26], [0.98, -0.02], [0.96, -0.42], [0.7, -0.92], [-0.7, -0.9]]), c.hair, 5);
       if (c.hairStyle === "shag") P(poly([[-1.0, -0.36], [-0.96, 0.2], [-0.8, -0.1], [-0.6, 0.0], [-0.44, -0.28], [-0.2, -0.02], [0.0, -0.3], [0.2, 0.12], [0.34, -0.1], [0.5, 0.28], [0.62, 0.0], [0.82, 0.34], [1.0, -0.36], [0.7, -0.92], [-0.7, -0.92]]), c.hair, 5);
       if (c.hairStyle === "bob") P(poly([[-1.04, -0.3], [-0.9, -0.16], [-0.5, -0.34], [-0.1, -0.22], [0.3, -0.36], [0.7, -0.2], [1.04, -0.3], [0.7, -0.95], [-0.7, -0.95]]), c.hair, 5);
       if (c.hairStyle === "puff") P(poly([[-0.92, -0.3], [-0.7, -0.44], [-0.4, -0.36], [-0.1, -0.5], [0.2, -0.38], [0.5, -0.48], [0.8, -0.34], [0.92, -0.3], [0.7, -0.9], [-0.7, -0.9]]), c.hair, 5);
       if (c.clips) [[-0.62, -0.42], [-0.44, -0.5]].forEach(([u, v]) => el("rect", { x: u * r - 14, y: -228 + v * r - 4, width: 28, height: 8, rx: 3, fill: "#F2C230", stroke: INK, "stroke-width": 3, transform: `rotate(-20 ${u * r} ${-228 + v * r})` }, headG));
-      if (c.glasses) { [-1, 1].forEach((d) => el("circle", { cx: d * 0.38 * r, cy: -228 + 0.14 * r, r: 0.27 * r, fill: "#FFFFFF", "fill-opacity": 0.12, stroke: "#3A2A22", "stroke-width": 6 }, headG)); el("path", { d: `M${U(-0.11, 0.1)} Q${U(0, 0.04)} ${U(0.11, 0.1)}`, fill: "none", stroke: "#3A2A22", "stroke-width": 6 }, headG); }
+      const glassG = G(headG);
+      if (c.glasses) { [-1, 1].forEach((d) => el("circle", { cx: d * 0.38 * r, cy: -228 + 0.14 * r, r: 0.27 * r, fill: "#FFFFFF", "fill-opacity": 0.12, stroke: "#3A2A22", "stroke-width": 6 }, glassG)); el("path", { d: `M${U(-0.11, 0.1)} Q${U(0, 0.04)} ${U(0.11, 0.1)}`, fill: "none", stroke: "#3A2A22", "stroke-width": 6 }, glassG); }
       // ---------- animation state ----------
-      const keys = [{ t: -1, p: Object.assign({}, POSES.stand), dur: 0 }], moves = [{ t: -1, x, dur: 0 }], faces = [[-1, "neutral"]], talks = [];
+      const keys = [{ t: -1, p: Object.assign({}, POSES.stand), dur: 0 }], moves = [{ t: -1, x, dur: 0 }], faces = [[-1, "neutral"]], talks = [], views = [[-1, "front", 1]]; let curView = "";
       const h = { root, name, at, x, y, s,
         key(t, pose, dur = 0.35) { keys.push({ t, p: typeof pose === "string" ? POSES[pose] : pose, dur }); return h; },
         move(t, nx, dur = 1) { moves.push({ t, x: nx, dur }); return h; },
         face(t, e) { faces.push([t, e]); return h; },
+        view(t, v, dir = 1) { views.push([t, v, dir]); return h; },
         say(id) { const st = window.DT[id][0]; window.WORDS[id].forEach((w) => talks.push([st + w.start, st + w.end])); return h; } };
       const poseAt = (t) => { let cur = Object.assign({}, POSES.stand); for (const k of keys) { if (t < k.t) break; const u = k.dur ? ease(clamp((t - k.t) / k.dur, 0, 1)) : 1, next = Object.assign({}, cur, k.p); for (const j of JOINTS) cur[j] = (cur[j] ?? 0) + ((next[j] ?? 0) - (cur[j] ?? 0)) * u; } return cur; };
       const xAt = (t) => { let px = moves[0].x, walking = 0; for (const m of moves) { if (t < m.t) break; const u = clamp((t - m.t) / m.dur, 0, 1); if (u < 1) walking = 1; px = px + (m.x - px) * u; } return [px, walking]; };
       const rot = (g, px, py, a) => g.setAttribute("transform", `translate(${px},${py}) rotate(${a.toFixed(2)})`);
       h.update = (t) => {
         const vis = t >= at; root.setAttribute("opacity", vis ? 1 : 0); if (!vis) return; const pop = clamp((t - at) / 0.35, 0, 1), sc = s * (0.6 + 0.4 * (1 + 1.7 * Math.pow(pop - 1, 3) + 0.7 * Math.pow(pop - 1, 2)));
+        let vw = views[0]; for (const q of views) if (t >= q[0]) vw = q; const side = vw[1] === "side", dir = vw[2];
+        if (curView !== vw[1] + dir) { curView = vw[1] + dir; tFront.style.display = side ? "none" : "inline"; tSide.style.display = side ? "inline" : "none"; det.style.display = side ? "none" : "inline";
+          earR.style.display = side ? "none" : "inline"; const ft = side ? `translate(${0.3 * r},0) translate(0,-228) scale(0.86,1) translate(0,228)` : ""; faceG.setAttribute("transform", ft); glassG.setAttribute("transform", ft);
+          body.setAttribute("transform", dir < 0 ? "scale(-1,1)" : ""); legs.forEach((lg) => { lg.th.px = side ? lg.d * 6 : lg.d * 24; lg.shoe.setAttribute("cx", side ? 16 : lg.d * 6); });
+          arms.forEach((a) => { a.ua.px = side ? 0 : a.d * 50; }); const far = arms[1].ua.g; if (side) torso.insertBefore(far, torso.firstChild); else torso.insertBefore(far, headG); }
         const p = poseAt(t), [px, walking] = xAt(t), wk = walking ? Math.sin(t * 11) : 0, breath = Math.sin(t * 2.4 + x) * 1.5;
         const lift = p.lift + (walking ? -Math.abs(Math.cos(t * 11)) * 6 : 0);
         root.setAttribute("transform", `translate(${px.toFixed(1)},${(y - 170 * s).toFixed(1)}) scale(${sc.toFixed(3)}) rotate(${p.root.toFixed(2)},0,170) translate(${(p.side || 0).toFixed(1)},${lift.toFixed(1)})`);

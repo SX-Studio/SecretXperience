@@ -8,17 +8,17 @@
 
   // ---------- Kai ----------
   const kai = mk(g0, "kai", X0 - 1150, FL, 1.05, 0.0);
-  kai.face(0, "smile").move(0.15, X0 - 220, 1.5).key(W("k1", 0), "wave", 0.25).key(W("k1", 0) + 0.9, "stand", 0.3);
+  kai.view(0, "side", 1).view(1.62, "front").face(0, "smile").move(0.15, X0 - 220, 1.5).key(W("k1", 0), "wave", 0.25).key(W("k1", 0) + 0.9, "stand", 0.3);
   kai.key(W("k1", -1) - 0.1, "fist", 0.2).face(W("k1", -1) - 0.1, "grin");
   // day 1: fast push-ups
-  const p1 = S("k2") - 0.15; kai.key(p1, "pushUp", 0.35).face(p1, "grin");
+  const p1 = S("k2") - 0.15; kai.view(p1, "side", 1).key(p1, "pushUp", 0.35).face(p1, "grin");
   const fast = []; for (let tt = p1 + 0.4; tt < E("k2") + 0.2; tt += 0.34) fast.push(tt);
   fast.forEach((tt) => kai.key(tt, "pushDown", 0.15).key(tt + 0.17, "pushUp", 0.15));
   // day 9: slow, straining reps, then collapse
   const slow = [S("k3") + 0.1, S("k3") + 1.15]; slow.forEach((tt) => kai.key(tt, "pushDown", 0.45).key(tt + 0.55, "pushUp", 0.45));
   kai.face(S("k3"), "strain"); const col = W("k3", -1) - 0.1; kai.key(col, "flat", 0.35).face(col, "sad");
   // day 10: gets up, skips it
-  kai.key(S("k4") + 0.1, "stand", 0.6).key(S("k4") + 0.8, "slump", 0.5).face(S("k4") + 0.8, "sad");
+  kai.view(S("k4") + 0.35, "front").key(S("k4") + 0.1, "stand", 0.6).key(S("k4") + 0.8, "slump", 0.5).face(S("k4") + 0.8, "sad");
   // Nia's point: he looks up
   kai.key(F("n1", 0.45), "look", 0.4).face(F("n1", 0.45), "wow").key(F("n1", 0.8), "stand", 0.4).face(F("n1", 0.8), "smile");
 
@@ -39,8 +39,8 @@
 
   // ---------- Nia ----------
   const nia = mk(g0, "nia", X0 + 1250, FL, 1.0, S("n1") - 1.0);
-  nia.face(0, "smile").move(S("n1") - 0.9, X0 + 380, 1.1).say("n1").say("n2").key(F("n1", 0.35), { aL: 92, eL: -8, head: -6 }, 0.3).key(F("n1", 0.95), "stand", 0.3);
-  L.sign(g0, "the work still counts ✓", X0 + 380, 230, 520, 100, F("n1", 0.6), { size: 60, fill: "#E3F2D6", color: L.GREEN, rot: 3 });
+  nia.view(0, "side", -1).view(S("n1") + 0.22, "front").face(0, "smile").move(S("n1") - 0.9, X0 + 820, 1.1).say("n1").say("n2").key(F("n1", 0.35), { aL: 92, eL: -8, head: -6 }, 0.3).key(F("n1", 0.95), "stand", 0.3);
+  L.sign(g0, "the work still counts ✓", X0 + 420, 560, 520, 100, F("n1", 0.6), { size: 60, fill: "#E3F2D6", color: L.GREEN, rot: 3 });
 
   // ---------- lineup: the crew ----------
   const X1 = X(1), g1 = B(1); I.path(g1, `M${X1 - 1100},${FL} H${X1 + 1100}`, S("n2") - 0.4, 0.6, { w: 5, color: "#8A847A", silent: true });
@@ -51,7 +51,7 @@
 
   // ---------- camera: shots + punches ----------
   const shots = [[0, X0 - 300, 540, 1.0], [W("k1", -1) - 0.2, X0 - 240, 520, 1.18, -1.2], [S("k2") - 0.2, X0 - 120, 600, 1.12, 1], [S("k3") - 0.2, X0 - 80, 620, 1.25, -1.5],
-    [S("k4") - 0.1, X0 + 40, 560, 1.05], [F("k4", 0.6), X0 - 200, 520, 1.3], [S("n1") - 0.6, X0 + 60, 540, 1.0], [S("n2") - 0.3, X1, 540, 1.0]];
+    [S("k4") - 0.1, X0 + 40, 560, 1.05], [F("k4", 0.6), X0 - 200, 520, 1.3], [S("n1") - 0.6, X0 + 260, 540, 1.0], [S("n2") - 0.3, X1, 540, 1.0]];
   const punches = [{ t: W("k1", -1), z: 1.12 }, { t: W("k2", 1), z: 1.08 }, { t: col + 0.2, z: 1.15 }, { t: W("n1", 4), z: 1.1 }];
   K.run({ shots, punches, shakes: [{ t: col + 0.3, a: 12 }], events: [{ type: "whoosh", at: 0.2 }, { type: "slam", at: col + 0.3 }, { type: "whoosh", at: S("n1") - 0.9 }].concat(fast.map((tt) => ({ type: "pop", at: tt + 0.15 }))),
     extra(t) { cast.forEach((h) => h.update(t)); ups.forEach((u) => u(t)); } });
