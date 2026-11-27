@@ -40,8 +40,8 @@ Example (Solo Leveling ep):
 
 ## Cover + first-frame rules (from the ice-water Short's results)
 
-Day-1 data, "They Fooled Themselves With Ice Water" Short: 242 views, 0.8 h watch time ≈ 12 s average on 43 s (~25–30% viewed).
-Read: the cover pulled people in; the slow-drawing first frame lost them.
+Day-1 data, "They Fooled Themselves With Ice Water" Short (43 s): 242 views; YouTube's avg view duration **0:25 (~58%)**; **47.9% stayed to watch / 52.1% swiped away**. (An earlier estimate of ~12 s from watch time ÷ views was wrong; use Studio's figure.)
+Read: the content holds people who stay; the first frame loses half of them. Targets: stayed-to-watch 60–70%+, avg viewed 70%+.
 
 ## Why the cover worked (user's observations)
 1. **Relatable visually:** an everyday scene anyone has lived (cold water, a bucket, a stopwatch), readable in under a second.
