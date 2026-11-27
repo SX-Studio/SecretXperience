@@ -35,6 +35,28 @@
         else { r.setAttribute("width", s.thick); r.setAttribute("height", (s.len * v).toFixed(1)); r.setAttribute("y", (s.y - s.len * v).toFixed(1)); } }); };
     // a TRICK poster: "TRICK #n" then the name, word-timed
     L.trick = (n, on, nameLines) => ({ on, slashAt: nameLines[nameLines.length - 1].at, shakeAt: nameLines[nameLines.length - 1].at, lines: [{ txt: `TRICK #${n}`, x: 120, y: 260, size: 120, fill: "#9A958C", at: on[0] + 0.05 }].concat(nameLines.map((l, i) => Object.assign({ x: 120, y: 560 + i * 270, size: 250, fill: i === nameLines.length - 1 ? RED : "#F4EFE6", big: i === nameLines.length - 1 }, l))) });
+    // Solo Leveling set pieces (our own drawings)
+    L.statue = (p, x, y, s, at) => { const g = el("g", {}, p), S = (v) => v * s;
+      I.fill(g, el("path", { d: `M${x - S(260)},${y} L${x - S(200)},${y - S(380)} Q${x},${y - S(440)} ${x + S(200)},${y - S(380)} L${x + S(260)},${y} Z`, fill: "#A9A39A", stroke: INKC, "stroke-width": 7, opacity: 0 }), at, 0.3, { sound: "slap" });
+      I.fill(g, el("circle", { cx: x, cy: y - S(560), r: S(170), fill: "#B7B1A8", stroke: INKC, "stroke-width": 7, opacity: 0 }), at + 0.15, 0.3, { sound: false });
+      I.path(g, `M${x - S(110)},${y - S(500)} Q${x},${y - S(420)} ${x + S(110)},${y - S(500)}`, at + 0.4, 0.3, { w: 8 });
+      for (let i = -3; i <= 3; i++) I.path(g, `M${x + S(i * 28)},${y - S(492 - Math.abs(i) * 6)} l0,${S(26)}`, at + 0.6, 0.1, { w: 4, silent: true });
+      I.path(g, `M${x - S(150)},${y - S(330)} q${S(-60)},${S(120)} ${S(-30)},${S(240)} M${x + S(150)},${y - S(330)} q${S(60)},${S(120)} ${S(30)},${S(240)}`, at + 0.3, 0.4, { w: 6, color: "#6B6359", silent: true });
+      const eyes = el("g", { opacity: 0 }, g); [-1, 1].forEach((d) => { el("ellipse", { cx: x + d * S(65), cy: y - S(600), rx: S(38), ry: S(16), fill: "#FF3B2E", opacity: 0.35 }, eyes); el("ellipse", { cx: x + d * S(65), cy: y - S(600), rx: S(22), ry: S(9), fill: "#FF3B2E" }, eyes); });
+      const plain = el("g", {}, g); [-1, 1].forEach((d) => el("path", { d: `M${x + d * S(40)},${y - S(600)} l${d * S(50)},0`, stroke: INKC, "stroke-width": 7, "stroke-linecap": "round" }, plain));
+      return (t, onAt) => { const v = t >= onAt; eyes.setAttribute("opacity", v ? 1 : 0); plain.setAttribute("opacity", t >= at + 0.5 && !v ? 1 : 0); }; };
+    L.centipede = (p, x, y, n, at, dir = 1) => { const g = el("g", {}, p); for (let i = 0; i < n; i++) { const cx = x + dir * i * 46, cy = y + Math.sin(i * 0.7) * 26;
+        I.path(g, `M${cx},${cy + 18} l${-dir * 10},34 M${cx},${cy - 18} l${-dir * 10},-34`, at + i * 0.04, 0.1, { w: 5, color: "#5A2E1E", silent: true });
+        I.fill(g, el("ellipse", { cx, cy, rx: 30, ry: 24, fill: i ? "#9C4A2A" : "#7A3420", stroke: INKC, "stroke-width": 5, opacity: 0 }), at + i * 0.04, 0.1, { sound: i ? false : "pop" }); }
+      I.path(g, `M${x + dir * 18},${y - 14} l${dir * 30},-30 M${x + dir * 18},${y + 14} l${dir * 30},30`, at, 0.15, { w: 5, color: "#5A2E1E", silent: true }); return g; };
+    L.dunes = (p, x0, x1, y, at) => { I.path(p, `M${x0},${y} q${(x1 - x0) / 6},-80 ${(x1 - x0) / 3},0 t${(x1 - x0) / 3},0 t${(x1 - x0) / 3},0`, at, 0.6, { w: 7, color: "#B08A4A" });
+      I.path(p, `M${x0 + 60},${y + 70} q${(x1 - x0) / 5},-50 ${(x1 - x0) / 2.5},0 t${(x1 - x0) / 2.5},0`, at + 0.2, 0.5, { w: 5, color: "#C9A66B", silent: true }); };
+    L.bed = (p, x, y, at) => { I.path(p, `M${x - 260},${y} v-160 M${x + 260},${y} v-110 M${x - 260},${y - 60} h520`, at, 0.4, { w: 8 }); L.rect(p, x - 250, y - 120, 500, 60, at + 0.2, "#FFFDF6", { rx: 12, sound: false }); L.rect(p, x - 240, y - 150, 120, 40, at + 0.3, "#E8EEF5", { rx: 16, sound: false }); };
+    L.calendar = (p, x, y, cols, rows, cw, at, marks = []) => { I.path(p, `M${x},${y} h${cols * cw} v${rows * cw} h${-cols * cw} z`, at, 0.4, { w: 7 });
+      for (let c = 1; c < cols; c++) I.path(p, `M${x + c * cw},${y} v${rows * cw}`, at + 0.2 + c * 0.02, 0.12, { w: 3, silent: true });
+      for (let r = 1; r < rows; r++) I.path(p, `M${x},${y + r * cw} h${cols * cw}`, at + 0.25 + r * 0.02, 0.12, { w: 3, silent: true });
+      marks.forEach(([i, t, col]) => { const c = i % cols, r = Math.floor(i / cols), a = x + c * cw + cw * 0.2, b = y + r * cw + cw * 0.2, w = cw * 0.6;
+        I.path(p, `M${a},${b} l${w},${w} M${a + w},${b} l${-w},${w}`, t, 0.12, { w: 7, color: col || RED, silent: i % 3 > 0 }); }); };
     return L;
   };
 })();
