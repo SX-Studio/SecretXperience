@@ -38,13 +38,20 @@
         const L = Math.min(1040, c.w.join(" ").length * 35 + 70); capBox.setAttribute("x", 540 - L / 2); capBox.setAttribute("width", L);
         const k = clamp((t - c.t) / 0.15, 0, 1); capG.setAttribute("transform", `translate(540,${CY - 20}) scale(${(0.85 + 0.15 * back(k)).toFixed(3)}) translate(-540,${-(CY - 20)})`); }
       // ---------- camera: shots [t, x, y, zoom]; a glide of 0.6 s starts at t
-      const shots = cfg.shots, G = cfg.glide || 0.6;
-      const camAt = (t) => { let i = 0; while (i + 1 < shots.length && t >= shots[i + 1][0]) i++; const b = shots[i]; if (i === 0) return b.slice(1); const a = shots[i - 1], u = ease(sm(b[0], b[0] + G, t));
-        return [a[1] + (b[1] - a[1]) * u, a[2] + (b[2] - a[2]) * u, a[3] + (b[3] - a[3]) * u]; };
+      const shots = cfg.shots, G = cfg.glide || 0.6, DRIFT = cfg.drift ?? 0.012;
+      // camera dynamics: glide between shots (ease), slow push-in drift + gentle sway inside each shot, punch-ins on key words, shake on slams
+      const punches = (cfg.punches || []).map((p) => Object.assign({ z: 1.12, dur: 0.9 }, p));
+      const shakes = (cfg.shakes || []).concat((cfg.posters || []).flatMap((p) => p.lines.filter((l) => l.big).map((l) => ({ t: l.at, a: 14 }))));
+      const camAt = (t) => { let i = 0; while (i + 1 < shots.length && t >= shots[i + 1][0]) i++; const b = shots[i], a = shots[i - 1] || b, u = i === 0 ? 1 : ease(sm(b[0], b[0] + G, t));
+        let x = a[1] + (b[1] - a[1]) * u, y = a[2] + (b[2] - a[2]) * u, z = a[3] + (b[3] - a[3]) * u, r = (a[4] || 0) + ((b[4] || 0) - (a[4] || 0)) * u;
+        const since = Math.max(0, t - b[0]); z *= 1 + Math.min(DRIFT * since, 0.08); x += Math.sin(t * 0.45) * 6; y += Math.cos(t * 0.37) * 4; r += Math.sin(t * 0.3) * 0.25;
+        for (const p of punches) { const q = (t - p.t) / p.dur; if (q > 0 && q < 1) { const k = q < 0.25 ? ease(q / 0.25) : 1 - ease((q - 0.25) / 0.75) * 0.6; z *= 1 + (p.z - 1) * k; if (p.x != null) { x += (p.x - x) * 0.35 * k; y += (p.y - y) * 0.35 * k; } } }
+        let sx = 0, sy = 0; for (const sh of shakes) { const d = t - sh.t; if (d > 0 && d < 0.35) { const k = (1 - d / 0.35) * (sh.a || 10); sx += Math.sin(t * 90) * k; sy += Math.cos(t * 73) * k * 0.8; } }
+        return [x, y, z, r, sx, sy]; };
       I.ready();
       function draw(t) {
         I.update(t); figs.forEach((f) => f.update(t));
-        const [x, y, z] = camAt(t); cam.setAttribute("transform", `translate(540,960) scale(${z.toFixed(4)}) translate(${(-x).toFixed(1)},${(-y).toFixed(1)})`);
+        const [x, y, z, rr, sx, sy] = camAt(t); cam.setAttribute("transform", `translate(${(540 + sx).toFixed(1)},${(960 + sy).toFixed(1)}) rotate(${rr.toFixed(3)}) scale(${z.toFixed(4)}) translate(${(-x).toFixed(1)},${(-y).toFixed(1)})`);
         I.setView(x - 620 / z, y - 1040 / z, 1240 / z, 2080 / z); ink.setAttribute("filter", `url(#boil${Math.floor(t * 8) % 3})`);
         for (const { p, g, slash, lines } of posters) { const v = t >= p.on[0] && t < p.on[1]; g.setAttribute("opacity", v ? 1 : 0); if (!v) continue;
           for (const { t: n, l } of lines) { const u = clamp((t - l.at) / 0.18, 0, 1); n.setAttribute("opacity", u > 0 ? 1 : 0); const s = 1.35 - 0.35 * ease(u), bb = n.getBBox(), ax = l.anchor === "middle" ? bb.x + bb.width / 2 : bb.x;

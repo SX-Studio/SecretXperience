@@ -31,22 +31,32 @@ Working assumption: the algorithm shows people what they're thinking about. Ever
 - The anime character sits *inside* an everyday moment the viewer has lived, not just a pose.
 - **A Short's first frame = its cover:** fully drawn, big text, no blank paper.
 
-## 6. Shorts
+## 6. Camera dynamics: stimulated from start to finish
+- **The frame is never still.** Every shot slowly pushes in, with gentle drift and sway (built into the engine).
+- **No shot longer than ~4 seconds** without a new camera move, cut, or reveal.
+- **Punch-in on every key word and number:** a quick zoom toward the word or face as it's said.
+- **Push in on the face for the core truth:** the emotional line lands close on the character.
+- **Shake on impacts:** poster slams, hits, big reveals.
+- **Vary the transitions:** glide, whip-pan, zoom-through, pull-out reveal, poster cut. Never the same move twice in a row.
+- **Match the energy:** fast and punchy for hooks and battles; slower, closer and quieter for the core truth.
+- **Shorts:** a move every 1.5–2.5 seconds.
+
+## 7. Shorts
 - Hook line under 2 seconds; 20–30 seconds; one idea; last line loops into the first.
 - An anime character in every Short; each Short voices one thought, and the long video is the full answer.
 
-## 7. Truth and care (guardrails)
+## 8. Truth and care (guardrails)
 - **Every claim checked against the original paper** (or the best primary source available), with limits stated honestly; never more than a study found. Anime plot facts checked too (episode numbers).
 - **No shame, no fear-bait:** covers can carry a pain point, but every video ends better than it started.
 - **Our suggestions are labelled as ours**, never presented as findings.
 - **Heavy topics** (loneliness, regret, grief, self-worth): a gentle "talk to someone you trust" line in the video, plus a support resource in the description.
 
-## 8. Look, sound and rights
+## 9. Look, sound and rights
 - **Our own drawings only:** ink-notebook style, poster cards, anime characters drawn from their signature traits (hair, eyes, outfit, weapons such as Jinwoo's daggers). No official art, screenshots, footage, logos or soundtrack.
 - Narration: Nia (Kokoro af_heart). Music and sound: original. Loudness −14 LUFS. Captions on screen.
 - Credit the anime's creators in the description; it's commentary, with original drawings.
 
-## 9. Delivery
+## 10. Delivery
 - Upload info (title, alternatives, description with sources and chapters, tags, settings, pinned comment) **in chat**.
 - Everything saved and pushed to the repo.
 
@@ -59,6 +69,7 @@ Working assumption: the algorithm shows people what they're thinking about. Ever
 - [ ] Each lesson has a one-sentence core truth that gets its own moment?
 - [ ] Ends on a better next thought + a comment prompt asking for their version?
 - [ ] Cover = relatable situation + body sensation + mystery + specific number?
+- [ ] Camera never still; new move at least every ~4 s (1.5–2.5 s in Shorts); punch-ins on key words; push-in on the core truth?
 - [ ] (Shorts) first frame = cover, hook < 2 s, 20–30 s, loops?
 - [ ] No shame or fear-bait; suggestions labelled as ours; care line on heavy topics?
 - [ ] Own drawings only; no official assets; creators credited?
