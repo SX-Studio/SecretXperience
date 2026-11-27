@@ -21,6 +21,7 @@
       wave: { aR: -150, eR: 25 }, fist: { aR: -168, eR: 12, head: -4 }, cheer: { aL: 160, eL: 20, aR: -160, eR: -20 },
       point: { aR: -95, eR: 0, head: -6 }, think: { aR: -150, eR: -150, head: 8 }, look: { head: -12, torso: -3 },
       slump: { torso: 6, head: 22, aL: 4, eL: 0, aR: -4, eR: 0, lift: 6 },
+      sit: { lL: -84, kL: 86, lR: -76, kR: 80, lift: 74, torso: -4, head: 4, aL: -168, eL: 14, aR: -168, eR: 14 },
       pockets: { aL: 18, eL: -40, aR: -18, eR: 40, head: 4 },
       pushUp: { root: 62, lift: -40, side: 0, torso: 0, head: -58, aL: -80, eL: 0, aR: -80, eR: 0, lL: 0, kL: 0, lR: 0, kR: 0, plant: 1 },
       pushDown: { root: 77, lift: -18, side: 0, torso: 0, head: -73, aL: -80, eL: 0, aR: -80, eR: 0, lL: 0, kL: 0, lR: 0, kR: 0, plant: 1 },
