@@ -1,0 +1,21 @@
+<!doctype html><html><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Patrick+Hand&family=Anton&display=swap" rel="stylesheet">
+<script src="ink.js"></script><script src="char.js"></script>
+<style>*{margin:0;padding:0}html,body{width:1280px;height:720px;overflow:hidden}svg{position:absolute;inset:0}</style></head><body>
+<svg id="ov" width="1280" height="720" viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg"></svg>
+<script>
+document.fonts.ready.then(() => {
+  const svg = document.getElementById("ov"), I = INK(svg), { el, INKC, RED } = I;
+  el("rect", { width: 1280, height: 720, fill: I.PAPER }, svg);
+  for (let i = 0; i < 16; i++) el("line", { x1: 0, x2: 1280, y1: 20 + i * 48, y2: 20 + i * 48, stroke: "#9CC3D9", "stroke-width": 2, opacity: 0.45 }, svg);
+  el("path", { d: "M610,0 H1280 V720 H520 Z", fill: "#0D0D0D" }, svg);
+  for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2; el("path", { d: `M${300 + Math.cos(a) * 250},${380 + Math.sin(a) * 300} l${Math.cos(a) * 70},${Math.sin(a) * 70}`, stroke: "#7B6CFF", "stroke-width": 9, "stroke-linecap": "round" }, svg); }
+  const ink = el("g", {}, svg), C = CHAR({ I }); const j = C.draw(ink, "jinwoo", 300, 705, 1.13, 0, { mood: "serious", glow: true, pose: "cross", daggers: true });
+  const T = (txt, x, y, size, fill, o = {}) => { const t = el("text", { x, y, "font-family": o.font || "Anton", "font-size": size, fill, "text-anchor": o.anchor || "middle", "letter-spacing": o.ls ?? 2, transform: o.rot ? `rotate(${o.rot} ${x} ${y})` : "" }, svg); t.textContent = txt; return t; };
+  T("21 DAYS", 930, 230, 150, "#9A958C"); el("path", { d: "M730,190 L1130,160", stroke: RED, "stroke-width": 22, "stroke-linecap": "round" }, svg);
+  T("IT'S", 760, 470, 110, "#F4EFE6", { rot: -4 }); T("66", 1010, 560, 330, RED);
+  const g = el("g", { transform: "rotate(-3 960 650)" }, svg); el("rect", { x: 770, y: 615, width: 380, height: 70, rx: 10, fill: "#0E1B2E", stroke: "#7CCBFF", "stroke-width": 4 }, g);
+  T("[ DAILY QUEST ]", 960, 664, 44, "#BFE6FF", { p: g });
+  I.ready(); I.update(99); j.update(5); I.setView(-50, -50, 1380, 820); window.READY = true;
+});
+</script></body></html>
