@@ -70,6 +70,7 @@ Some viewers come for the anime first, so every episode and Short gives them a r
   - bold two-word captions over the scene;
   - a character highlight in the first half (see 6c).
   This is a hypothesis, not a finding. Judge it on Studio's "viewed vs. swiped away" for the One Piece Shorts against the earlier ones, then keep it, change it or drop it.
+- **Improve forward, don't redo.** Lessons from each upload go into the next piece. Published or delivered content is not re-cut, re-rendered or re-issued unless the channel owner asks for that specific piece (owner's instruction, 2026-11-28).
 
 ## 8. Truth and care (guardrails)
 - **Every claim checked against the original paper** (or the best primary source available), with limits stated honestly; never more than a study found. Anime plot facts checked too (episode numbers).
