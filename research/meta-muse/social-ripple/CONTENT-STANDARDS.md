@@ -85,7 +85,14 @@ Some viewers come for the anime first, so every episode and Short gives them a r
   12. **Stakes before steps.** Say what the study proves and why it matters to the viewer before describing what the researchers did.
   13. **Pattern interrupt every 3 seconds, in sound as well as picture:** a whoosh, riser or bass hit under each realisation; alternate medium shot, extreme close-up on text, split screen and illustration; on-screen words arrive one to three at a time with the voice.
   14. **No spoken call to action.** No "full breakdown on the channel", no "subscribe". Any pointer to the long video is an on-screen graphic or the pinned comment while the voice keeps delivering.
-  Retention target once they stay: 80%+ average viewed.
+  15. **Sound at 0.00 s.** The voice starts on the first frame, mid-action, with no leading silence (measured on the DBZ Shorts: first sound at 0.03 s, voice at about 0.07 s; trim it to zero).
+  16. **Micro-bait first frame.** The opening picture is incomplete, in fast motion or puzzling, so it cannot be fully read in a fifth of a second.
+  17. **Text anchor dead centre, one to three words.** The headline band sits across the middle of the frame, over the action, in the same slab style (black band, white and red text, yellow anime tag) the channel owner likes, instead of filling the top third like a title card.
+  18. **Hook type is one of three:** a direct challenge ("...and you won't catch it"), a counter-intuitive truth ("everything you believe about X is backward"), or a high-stakes story with zero exposition.
+  19. **End on the payoff word.** No recap after the answer. The only words allowed after it are an unfinished clause that forces the loop.
+  20. **No audible seam at the loop.** Music keeps the same level and beat through the last card and across the restart: no fade, drop or silence (the DBZ Shorts cut the music for the truth card, leaving about 0.2 s of near silence before the loop; do not repeat that).
+  21. **A reason to rewatch.** Plant one small visual detail early and point at it in the final line, so viewers let the loop run to check.
+  Studio's bands: stayed to watch 40–50% is the normal baseline (we are at 44.7%), 65–75% is highly engaging, 80–85% is top tier and about the ceiling. Average viewed 70–80% is solid; 90–100%+ means people rewatch. First goal: 65%+ stayed, 80%+ viewed.
 - **Improve forward, don't redo.** Lessons from each upload go into the next piece. Published or delivered content is not re-cut, re-rendered or re-issued unless the channel owner asks for that specific piece (owner's instruction, 2026-11-28).
 
 ## 8. Truth and care (guardrails)
