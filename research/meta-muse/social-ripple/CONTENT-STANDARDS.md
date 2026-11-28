@@ -79,6 +79,13 @@ Some viewers come for the anime first, so every episode and Short gives them a r
   6. **Trim every breath.** Gaps between narration lines of about 0.12 s, voice a little faster, no trailing silence.
   7. **No exit signals.** No "so", "that's why", "in conclusion", "remember". Deliver the punchline and end.
   8. **Seamless loop.** The last sentence runs grammatically into the first one, with no bridge phrase, and the picture is back on the first frame.
+  9. **Second person, never third.** The hook accuses or addresses the viewer ("Your brain is lying to you right now"), not a character or "these students". The anime name arrives in the second line.
+  10. **Camera already moving at frame zero.** A fast push-in, whip or object in motion on the first frame; never a fade-in, and never a still picture for more than 1.5 s during the hook.
+  11. **No history or origin.** No researcher names, years, book titles or "it comes from..." in the narration: that is where the habit Short lost people (48.0% retention, against 72.3% for the ice-water Short, which went straight through one study). Go from the myth to the surprising result. Citations live in the description and as small on-screen labels.
+  12. **Stakes before steps.** Say what the study proves and why it matters to the viewer before describing what the researchers did.
+  13. **Pattern interrupt every 3 seconds, in sound as well as picture:** a whoosh, riser or bass hit under each realisation; alternate medium shot, extreme close-up on text, split screen and illustration; on-screen words arrive one to three at a time with the voice.
+  14. **No spoken call to action.** No "full breakdown on the channel", no "subscribe". Any pointer to the long video is an on-screen graphic or the pinned comment while the voice keeps delivering.
+  Retention target once they stay: 80%+ average viewed.
 - **Improve forward, don't redo.** Lessons from each upload go into the next piece. Published or delivered content is not re-cut, re-rendered or re-issued unless the channel owner asks for that specific piece (owner's instruction, 2026-11-28).
 
 ## 8. Truth and care (guardrails)
