@@ -15,6 +15,7 @@
       kai: { skin: "#C98E62", hair: "#1E1612", hairStyle: "fade", top: "#7A8B5A", top2: "#66764A", pants: "#2E2E33", shoe: "#F4F4F0", eye: "#5A3A1E", brows: "thick", hood: true, hoodie: true, cargo: true, chunky: true, wide: true },
       mo: { skin: "#E8C7A8", hair: "#2A2230", hairStyle: "curtain", top: "#2A2A30", top2: "#1E1E24", pants: "#3D5A80", shoe: "#F4F4F0", eye: "#6F8FAF", phones: true, tired: true, hood: true, vest: "#8A93A6", wide: true, chunky: true },
       // anime characters (drawn in our style) for the moments a lesson references them
+      luffy: { skin: "#F7D3AE", hair: "#1B1A1F", hairStyle: "luffy", top: "#D8322A", top2: "#B8261F", pants: "#3D6FB0", shoe: "#C9A27A", sole: "#8A5A2B", eye: "#1B1A1F", eyeScar: true, openVest: true, shorts: true, sleeveless: true, sandals: true, accs: ["strawhat"], acc: "strawhat" },
       naruto: { skin: "#F6CFA4", hair: "#F7C531", hairStyle: "naruto", top: "#F28C28", top2: "#2C5AA0", pants: "#F28C28", shoe: "#2C5AA0", sole: "#1E3E73", eye: "#2F7FE0", whiskers: true, narutoJacket: true, holster: true, accs: ["goggles", "band"], acc: "goggles", brows: "thick", browCol: "#C9962A" },
       iruka: { skin: "#D9A679", hair: "#5A3A28", hairStyle: "topknot", top: "#2C3E63", top2: "#22304E", pants: "#2C3E63", shoe: "#2C5AA0", sole: "#1E3E73", eye: "#3A2A1E", noseScar: true, flak: "#6B8E4E", accs: ["band"], acc: "band" },
       gaara: { skin: "#F3DCC8", hair: "#A8322A", hairStyle: "gaara", top: "#3A2A2E", top2: "#2A1E22", pants: "#3A2A2E", shoe: "#2A2A30", sole: "#1E1E24", eye: "#7FC8B8", rings: true, noBrows: true, kanji: true, sash: true, gourd: true },
@@ -39,10 +40,12 @@
       const limb = (p, px, py, L, w, col, end) => { const g = G(p); const seg = G(g); el("path", { d: `M0,0 L0,${L}`, stroke: INK, "stroke-width": w + 8, "stroke-linecap": "round" }, seg);
         el("path", { d: `M0,0 L0,${L}`, stroke: col, "stroke-width": w, "stroke-linecap": "round" }, seg); const j = G(g); return { g, j, px, py, L }; };
       // ---- legs (hip at 0,0; feet at y=+170)
-      const legs = [-1, 1].map((d) => { const th = limb(body, d * 24, 0, 80, c.wide ? 36 : 30, c.pants); const sh = limb(th.j, 0, 80, 78, c.wide ? 34 : 26, c.pants);
+      const legs = [-1, 1].map((d) => { const th = limb(body, d * 24, 0, 80, c.wide ? 36 : 30, c.pants); const sh = limb(th.j, 0, 80, 78, c.shorts ? 22 : (c.wide ? 34 : 26), c.shorts ? c.skin : c.pants);
+        if (c.shorts) { th.g.insertBefore(el("path", { d: "M-20,78 H20", stroke: c.cuff || "#5C86C4", "stroke-width": 12, "stroke-linecap": "round" }), th.j); }
         if (c.cargo) el("rect", { x: d > 0 ? 8 : -26, y: 30, width: 18, height: 26, rx: 3, fill: c.pants, stroke: "#55555E", "stroke-width": 3 }, th.g);
         if (c.holster && d > 0) th.g.insertBefore(el("rect", { x: -19, y: 26, width: 38, height: 24, rx: 3, fill: "#FFF6E6", stroke: INK, "stroke-width": 3 }), th.j);
-        const shoe = el("ellipse", { cx: d * 6, cy: 86, rx: c.chunky ? 33 : 28, ry: c.chunky ? 18 : 14, fill: c.shoe, stroke: INK, "stroke-width": 5 }, sh.j);
+        const shoe = el("ellipse", { cx: d * 6, cy: c.sandals ? 90 : 86, rx: c.chunky ? 33 : 28, ry: c.sandals ? 8 : (c.chunky ? 18 : 14), fill: c.shoe, stroke: INK, "stroke-width": 5 }, sh.j);
+        if (c.sandals) { el("ellipse", { cx: d * 6 + 4, cy: 80, rx: 20, ry: 10, fill: c.skin, stroke: INK, "stroke-width": 4 }, sh.j); el("path", { d: `M${d * 6 - 14},84 L${d * 6 + 6},72 L${d * 6 + 22},84`, fill: "none", stroke: c.strap || "#8A5A2B", "stroke-width": 5, "stroke-linecap": "round" }, sh.j); }
         el("path", { d: `M${d * 6 - (c.chunky ? 31 : 26)},${92} h${c.chunky ? 62 : 52}`, stroke: c.sole || "#CFC6B4", "stroke-width": c.chunky ? 7 : 5, "stroke-linecap": "round" }, sh.j); return { th, sh, d, shoe }; });
       // ---- torso group (pivot at hip)
       const torso = G(body);
@@ -56,6 +59,7 @@
       if (c.halfzip) { el("path", { d: "M-30,-150 Q0,-136 30,-150 L28,-128 Q0,-116 -28,-128 Z", fill: c.top2, stroke: INK, "stroke-width": 4 }, torso); el("path", { d: "M0,-128 V-70", stroke: "#8A847A", "stroke-width": 4 }, torso); el("circle", { cx: 0, cy: -70, r: 5, fill: "#8A847A" }, torso); el("path", { d: "M-50,0 H50", stroke: c.top2, "stroke-width": 9 }, torso); }
       if (c.vest) { el("path", { d: "M-56,-132 Q-40,-150 -18,-142 L-10,6 L-54,6 Z M56,-132 Q40,-150 18,-142 L10,6 L54,6 Z", fill: c.vest, stroke: INK, "stroke-width": 5 }, torso); for (let k = 0; k < 4; k++) el("path", { d: `M-52,${-110 + k * 30} H-14 M14,${-110 + k * 30} H52`, stroke: "#6E7688", "stroke-width": 3 }, torso); }
       if (c.puffer) { for (let k = 0; k < 4; k++) el("path", { d: `M-54,${-118 + k * 28} Q0,${-110 + k * 28} 54,${-118 + k * 28}`, fill: "none", stroke: c.top2, "stroke-width": 4 }, torso); el("path", { d: "M0,-146 V-24", stroke: INK, "stroke-width": 3 }, torso); el("path", { d: "M-50,-24 H50 L52,8 H-52 Z", fill: "#FFF6E6", stroke: INK, "stroke-width": 4 }, torso); }
+      if (c.openVest) { el("path", { d: "M-30,-148 L30,-148 L26,8 L-26,8 Z", fill: c.skin, stroke: INK, "stroke-width": 4 }, torso); [-1, 1].forEach((d) => [-60, -20].forEach((yy) => el("circle", { cx: d * 34, cy: yy, r: 6, fill: "#F2C230", stroke: INK, "stroke-width": 2.5 }, torso))); el("path", { d: "M-10,-70 q10,8 20,0", fill: "none", stroke: "#C99A7A", "stroke-width": 3 }, torso); }
       if (c.narutoJacket) { el("path", { d: "M-58,-128 Q-60,-146 -40,-148 L40,-148 Q60,-146 58,-128 L56,-98 Q0,-86 -56,-98 Z", fill: c.top2, stroke: INK, "stroke-width": 5 }, torso); el("path", { d: "M0,-96 V6", stroke: INK, "stroke-width": 3 }, torso);
         el("path", { d: "M-34,-152 L0,-112 L34,-152 L24,-160 L0,-134 L-24,-160 Z", fill: "#FFFFFF", stroke: INK, "stroke-width": 4, "stroke-linejoin": "round" }, torso); el("circle", { cx: -26, cy: -60, r: 9, fill: "#FFFFFF", stroke: INK, "stroke-width": 3 }, torso); el("path", { d: "M-52,2 H52", stroke: c.top2, "stroke-width": 9 }, torso); }
       if (c.flak) { el("path", { d: "M-56,-132 Q-40,-150 -14,-146 L-6,6 L-54,6 Z M56,-132 Q40,-150 14,-146 L6,6 L54,6 Z", fill: c.flak, stroke: INK, "stroke-width": 5 }, torso); [-1, 1].forEach((d) => { el("rect", { x: d > 0 ? 16 : -46, y: -112, width: 30, height: 30, rx: 3, fill: c.flak, stroke: INK, "stroke-width": 3 }, torso); el("path", { d: `M${d > 0 ? 16 : -46},-100 h30`, stroke: INK, "stroke-width": 3 }, torso); });
@@ -66,7 +70,7 @@
         el("path", { d: "M-66,-40 H66 L68,-14 H-68 Z", fill: "#8A5A3A", stroke: INK, "stroke-width": 4 }, torso); }
       const det = el("g", {}); Array.from(torso.childNodes).slice(n0).forEach((nd) => det.appendChild(nd)); torso.appendChild(det);
       // ---- arms (shoulders at ±50,-128)
-      const sleeve = c.top;
+      const sleeve = c.sleeveless ? c.skin : (c.sleeve || c.top);
       const arms = [-1, 1].map((d) => { const ua = limb(torso, d * 50, -128, 72, 26, sleeve); const fa = limb(ua.j, 0, 72, 68, 24, (c.torn && d > 0) ? c.skin : sleeve);
         if (c.narutoJacket) ua.g.insertBefore(el("path", { d: "M0,0 L0,24", stroke: c.top2, "stroke-width": 26, "stroke-linecap": "round" }), ua.j);
         if (c.torn && d > 0) el("path", { d: "M-14,4 l6,8 l6,-6 l6,8 l6,-6", fill: "none", stroke: INK, "stroke-width": 4 }, fa.g);
@@ -85,6 +89,7 @@
  if (c.hairStyle === "braidbun") { P(poly(ring(150, 390, 18, 0.99, 1.05, 0.0).concat([[0.95, 0.05], [-0.95, 0.05]])), c.hair, 5); el("circle", { cx: 0, cy: -228 - 1.3 * r, r: 0.52 * r, fill: c.hair, stroke: INK, "stroke-width": 5 }, headG);
         for (let k = 0; k < 6; k++) el("path", { d: `M${(-0.4 + k * 0.16) * r},${-228 - 1.72 * r} q8,${0.42 * r} 0,${0.84 * r}`, fill: "none", stroke: "#4A3A30", "stroke-width": 3 }, headG); }
       if (c.hairStyle === "fade") { P(poly(ring(150, 390, 18, 0.99, 1.04, 0.0).concat([[0.95, 0.05], [-0.95, 0.05]])), c.hair, 5); [[-0.55, -0.85], [-0.3, -1.0], [0, -1.05], [0.3, -1.0], [0.55, -0.85], [-0.15, -0.88], [0.15, -0.88], [-0.42, -0.7], [0.42, -0.7]].forEach(([u, v]) => el("circle", { cx: u * r, cy: -228 + v * r, r: 0.2 * r, fill: c.hair, stroke: INK, "stroke-width": 4 }, headG)); }
+      if (c.hairStyle === "luffy") P(poly(ring(150, 390, 18, 0.98, 1.2, 0.06).concat([[0.95, 0.1], [-0.95, 0.1]])), c.hair, 5);
       if (c.hairStyle === "naruto") P(poly(ring(150, 390, 22, 0.98, 1.72, 0.14).concat([[0.9, 0.05], [-0.9, 0.05]])), c.hair, 5);
       if (c.hairStyle === "gaara") P(poly(ring(150, 390, 26, 0.99, 1.24, 0.08).concat([[0.95, 0.1], [-0.95, 0.1]])), c.hair, 5);
       if (c.hairStyle === "topknot") { P(poly([[-0.2, -0.95], [-0.5, -1.6], [-0.14, -1.34], [0, -1.82], [0.14, -1.34], [0.5, -1.6], [0.2, -0.95]]), c.hair, 5); P(poly(ring(150, 390, 18, 0.99, 1.04, 0.0).concat([[0.95, 0.05], [-0.95, 0.05]])), c.hair, 5); el("rect", { x: -18, y: -228 - 1.08 * r, width: 36, height: 14, rx: 4, fill: "#C9B48A", stroke: INK, "stroke-width": 3 }, headG); }
@@ -107,6 +112,7 @@
       el("ellipse", { cx: -0.55 * r, cy: -228 + 0.48 * r, rx: 13, ry: 7, fill: "#F08A80", opacity: 0.35 }, headG); el("ellipse", { cx: 0.55 * r, cy: -228 + 0.48 * r, rx: 13, ry: 7, fill: "#F08A80", opacity: 0.35 }, headG);
       if (c.rings) [-1, 1].forEach((dd) => el("ellipse", { cx: dd * 0.38 * r, cy: -228 + 0.14 * r, rx: 0.28 * r, ry: 0.31 * r, fill: "#1E1A1E" }, headG));
       if (c.whiskers) for (const dd of [-1, 1]) for (let i = 0; i < 3; i++) el("path", { d: `M${U(dd * 0.5, 0.36 + i * 0.11)} L${U(dd * 0.84, 0.32 + i * 0.14)}`, stroke: "#5A3A22", "stroke-width": 4, "stroke-linecap": "round" }, headG);
+      if (c.eyeScar) el("path", { d: `M${U(0.2, 0.44)} Q${U(0.38, 0.52)} ${U(0.56, 0.44)} M${U(0.3, 0.4)} l3,10 M${U(0.45, 0.4)} l3,10`, fill: "none", stroke: "#8A4A3A", "stroke-width": 3.5, "stroke-linecap": "round" }, headG);
       if (c.noseScar) el("path", { d: `M${U(-0.5, 0.3)} Q${U(0, 0.36)} ${U(0.5, 0.3)}`, fill: "none", stroke: "#8A4A3A", "stroke-width": 5, "stroke-linecap": "round" }, headG);
       // eyes: open set + closed-happy set + tired lids
       const eyesOpen = G(headG), eyesHappy = G(headG, { style: "display:none" }), lids = G(headG, { style: "display:none" });
@@ -138,6 +144,7 @@
       if (c.hairStyle === "shag") P(poly([[-1.0, -0.36], [-0.96, 0.2], [-0.8, -0.1], [-0.6, 0.0], [-0.44, -0.28], [-0.2, -0.02], [0.0, -0.3], [0.2, 0.12], [0.34, -0.1], [0.5, 0.28], [0.62, 0.0], [0.82, 0.34], [1.0, -0.36], [0.7, -0.92], [-0.7, -0.92]]), c.hair, 5);
       if (c.hairStyle === "bob") P(poly([[-1.04, -0.3], [-0.9, -0.16], [-0.5, -0.34], [-0.1, -0.22], [0.3, -0.36], [0.7, -0.2], [1.04, -0.3], [0.7, -0.95], [-0.7, -0.95]]), c.hair, 5);
       if (c.hairStyle === "puff") P(poly([[-0.92, -0.3], [-0.7, -0.44], [-0.4, -0.36], [-0.1, -0.5], [0.2, -0.38], [0.5, -0.48], [0.8, -0.34], [0.92, -0.3], [0.7, -0.9], [-0.7, -0.9]]), c.hair, 5);
+      if (c.hairStyle === "luffy") P(poly([[-0.95, -0.4], [-0.82, -0.12], [-0.62, -0.34], [-0.44, -0.16], [-0.22, -0.36], [0.0, -0.18], [0.2, -0.38], [0.4, -0.14], [0.62, -0.36], [0.84, -0.1], [0.95, -0.4], [0.7, -0.9], [-0.7, -0.9]]), c.hair, 5);
       if (c.hairStyle === "naruto") P(poly([[-0.95, -0.42], [-0.78, -0.1], [-0.6, -0.4], [-0.38, -0.08], [-0.18, -0.4], [0.05, -0.12], [0.22, -0.42], [0.44, -0.1], [0.62, -0.42], [0.8, -0.12], [0.95, -0.42], [0.7, -0.85], [-0.7, -0.85]]), c.hair, 5);
       if (c.hairStyle === "topknot") P(poly([[-0.92, -0.4], [-0.5, -0.58], [0, -0.64], [0.5, -0.58], [0.92, -0.4], [0.7, -0.9], [-0.7, -0.9]]), c.hair, 5);
       if (c.hairStyle === "gaara") P(poly([[-0.98, -0.2], [-0.8, -0.12], [-0.66, -0.4], [-0.44, -0.24], [-0.26, -0.5], [-0.06, -0.4], [0.1, -0.64], [0.4, -0.7], [0.7, -0.62], [0.98, -0.2], [0.7, -0.94], [-0.7, -0.94]]), c.hair, 5);
@@ -146,6 +153,8 @@
       if (c.kanji) { const kt = el("text", { x: 0.36 * r, y: -228 - 0.3 * r, "text-anchor": "middle", "font-family": "WenQuanYi Zen Hei, sans-serif", "font-size": 0.34 * r, "font-weight": 700, fill: "#B8322A" }, headG); kt.textContent = "愛"; }
       const accs = {};
       for (const an of (c.accs || [])) { const ag = G(headG, { style: "display:none" }); accs[an] = ag; const col = an === "band" ? "#2C3E73" : "#3F6B5A";
+        if (an === "strawhat") { P(`M${U(-1.6, -0.62)} Q${U(0, -0.98)} ${U(1.6, -0.62)} Q${U(0, -0.22)} ${U(-1.6, -0.62)} Z`, "#E9C46A", 5, ag); P(`M${U(-0.78, -0.62)} Q${U(-0.82, -1.5)} ${U(0, -1.52)} Q${U(0.82, -1.5)} ${U(0.78, -0.62)} Z`, "#E9C46A", 5, ag);
+          P(`M${U(-0.8, -0.92)} Q${U(0, -1.02)} ${U(0.8, -0.92)} L${U(0.79, -0.66)} Q${U(0, -0.76)} ${U(-0.79, -0.66)} Z`, "#C62F2A", 4, ag); el("path", { d: `M${U(-1.2, -0.56)} Q${U(-0.9, -0.5)} ${U(-0.6, -0.48)} M${U(0.6, -0.48)} Q${U(0.9, -0.5)} ${U(1.2, -0.56)} M${U(-0.4, -1.2)} q${0.4 * r},${-0.12 * r} ${0.8 * r},0`, fill: "none", stroke: "#B8913E", "stroke-width": 3 }, ag); continue; }
         if (an === "mask") { P(`M${U(-0.84, -0.3)} C${U(-0.88, -0.86)} ${U(0.88, -0.86)} ${U(0.84, -0.3)} C${U(0.84, 0.4)} ${U(0.46, 0.76)} ${U(0, 0.9)} C${U(-0.46, 0.76)} ${U(-0.84, 0.4)} ${U(-0.84, -0.3)} Z`, "#F6F2EA", 5, ag);
           [-1, 1].forEach((dd) => P(`M${U(dd * 0.2, 0.1)} Q${U(dd * 0.4, -0.02)} ${U(dd * 0.6, 0.12)} Q${U(dd * 0.4, 0.2)} ${U(dd * 0.2, 0.1)} Z`, "#1E1A1E", 2, ag));
           el("path", { d: `M${U(-0.3, 0.56)} q${0.1 * r},${-0.12 * r} ${0.2 * r},0 t${0.2 * r},0 t${0.2 * r},0 M${U(-0.2, 0.72)} q${0.1 * r},${-0.1 * r} ${0.2 * r},0 t${0.2 * r},0`, fill: "none", stroke: "#C62F2A", "stroke-width": 6, "stroke-linecap": "round" }, ag);
