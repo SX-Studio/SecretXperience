@@ -11,10 +11,10 @@
     const el = I.el, INK = I.INKC, NS = "http://www.w3.org/2000/svg";
     const clamp = (v, a, b) => Math.max(a, Math.min(b, v)), ease = (u) => (u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2);
     const D = {
-      nia: { skin: "#A8714E", hair: "#2B1D16", hairStyle: "puff", top: "#E0A030", top2: "#FFF6E6", pants: "#5B3A2A", shoe: "#3A2A22", eye: "#4A2E1E", glasses: true, notebook: true, lash: true },
-      kai: { skin: "#F2C9A0", hair: "#5A3520", hairStyle: "swoop", top: "#2F8F8A", top2: "#25706C", pants: "#2D3142", shoe: "#F4F4F0", eye: "#C07A2A", brows: "thick", torn: true, wristband: true, hood: true },
-      mo: { skin: "#E8C7A8", hair: "#1E2235", hairStyle: "shag", top: "#6E7280", top2: "#5C606C", pants: "#3B3E48", shoe: "#2A2A30", eye: "#6F8FAF", scarf: "#A68FD6", phones: true, tired: true, coat: true },
-      rue: { skin: "#F6D2B4", hair: "#C8442E", hairStyle: "bob", top: "#F2C230", top2: "#E0A81E", pants: "#3D6FB0", shoe: "#C8442E", eye: "#3E8E5A", freckles: true, straps: true, bandage: true, clips: true },
+      nia: { skin: "#A8714E", hair: "#231813", hairStyle: "braidbun", top: "#EFE6D6", top2: "#D9CDB8", pants: "#6E8FB8", shoe: "#F4F4F0", eye: "#4A2E1E", glasses: true, lash: true, halfzip: true, wide: true, chunky: true },
+      kai: { skin: "#C98E62", hair: "#1E1612", hairStyle: "fade", top: "#7A8B5A", top2: "#66764A", pants: "#2E2E33", shoe: "#F4F4F0", eye: "#5A3A1E", brows: "thick", hood: true, hoodie: true, cargo: true, chunky: true, wide: true },
+      mo: { skin: "#E8C7A8", hair: "#2A2230", hairStyle: "curtain", top: "#2A2A30", top2: "#1E1E24", pants: "#3D5A80", shoe: "#F4F4F0", eye: "#6F8FAF", phones: true, tired: true, hood: true, vest: "#8A93A6", wide: true, chunky: true },
+      rue: { skin: "#F6D2B4", hair: "#6B3A22", hairStyle: "pony", top: "#F28C6A", top2: "#E07A58", pants: "#7F9CC8", shoe: "#F4F4F0", sole: "#C8A070", eye: "#3E8E5A", freckles: true, bandage: true, puffer: true, wide: true },
     };
     const POSES = {
       stand: { root: 0, lift: 0, side: 0, torso: 0, head: 0, aL: 10, eL: -6, aR: -10, eR: 6, lL: 4, kL: 0, lR: -4, kR: 0 },
@@ -34,8 +34,10 @@
       const limb = (p, px, py, L, w, col, end) => { const g = G(p); const seg = G(g); el("path", { d: `M0,0 L0,${L}`, stroke: INK, "stroke-width": w + 8, "stroke-linecap": "round" }, seg);
         el("path", { d: `M0,0 L0,${L}`, stroke: col, "stroke-width": w, "stroke-linecap": "round" }, seg); const j = G(g); return { g, j, px, py, L }; };
       // ---- legs (hip at 0,0; feet at y=+170)
-      const legs = [-1, 1].map((d) => { const th = limb(body, d * 24, 0, 80, 30, c.pants); const sh = limb(th.j, 0, 80, 78, 26, c.pants);
-        const shoe = el("ellipse", { cx: d * 6, cy: 86, rx: 28, ry: 15, fill: c.shoe, stroke: INK, "stroke-width": 5 }, sh.j); return { th, sh, d, shoe }; });
+      const legs = [-1, 1].map((d) => { const th = limb(body, d * 24, 0, 80, c.wide ? 36 : 30, c.pants); const sh = limb(th.j, 0, 80, 78, c.wide ? 34 : 26, c.pants);
+        if (c.cargo) el("rect", { x: d > 0 ? 8 : -26, y: 30, width: 18, height: 26, rx: 3, fill: c.pants, stroke: "#55555E", "stroke-width": 3 }, th.g);
+        const shoe = el("ellipse", { cx: d * 6, cy: 86, rx: c.chunky ? 33 : 28, ry: c.chunky ? 18 : 14, fill: c.shoe, stroke: INK, "stroke-width": 5 }, sh.j);
+        el("path", { d: `M${d * 6 - (c.chunky ? 31 : 26)},${92} h${c.chunky ? 62 : 52}`, stroke: c.sole || "#CFC6B4", "stroke-width": c.chunky ? 7 : 5, "stroke-linecap": "round" }, sh.j); return { th, sh, d, shoe }; });
       // ---- torso group (pivot at hip)
       const torso = G(body);
       if (c.hood) el("path", { d: "M-46,-150 Q0,-120 46,-150 Q30,-110 0,-108 Q-30,-110 -46,-150 Z", fill: c.top2, stroke: INK, "stroke-width": 5 }, torso);
@@ -43,10 +45,10 @@
         : el("path", { d: "M-58,-128 Q-60,-146 -40,-148 L40,-148 Q60,-146 58,-128 L52,8 L-52,8 Z", fill: c.top, stroke: INK, "stroke-width": 6 }, torso);
       const tSide = el("path", { d: c.coat ? "M-36,-130 Q-38,-148 -18,-150 L22,-150 Q42,-146 40,-128 L52,40 L-46,40 Z" : "M-34,-128 Q-36,-148 -16,-150 L22,-150 Q42,-146 40,-126 L36,8 L-34,8 Z", fill: c.top, stroke: INK, "stroke-width": 6, style: "display:none" }, torso);
       const n0 = torso.childNodes.length;
-      if (name === "kai") { el("path", { d: "M-34,-30 h68 l-6,30 h-56 z", fill: c.top2, stroke: INK, "stroke-width": 4 }, torso); el("path", { d: "M-12,-138 v40 M12,-138 v34", stroke: "#F4F4F0", "stroke-width": 4, "stroke-linecap": "round" }, torso); }
-      if (name === "nia") { el("path", { d: "M-22,-146 L0,-96 L22,-146 Z", fill: c.top2, stroke: INK, "stroke-width": 4 }, torso); el("path", { d: "M0,-96 V6", stroke: "#B07A20", "stroke-width": 4 }, torso); [-70, -40, -10].forEach((yy) => el("circle", { cx: 8, cy: yy, r: 4, fill: "#7A4A10" }, torso)); }
-      if (name === "mo") { el("path", { d: "M0,-140 V38", stroke: "#4A4D58", "stroke-width": 4 }, torso); el("path", { d: "M-52,-20 h30 M22,-20 h30", stroke: "#4A4D58", "stroke-width": 5 }, torso); }
-      if (name === "rue") { el("path", { d: "M-40,-146 L-30,6 M40,-146 L30,6", stroke: "#3A2A3A", "stroke-width": 10, "stroke-linecap": "round" }, torso); el("path", { d: "M-58,-70 H58", stroke: "#FFF6E6", "stroke-width": 6 }, torso); }
+      if (c.hoodie || c.hood) { el("path", { d: "M-36,-30 h72 l-8,32 h-56 z", fill: c.top2, stroke: INK, "stroke-width": 4 }, torso); el("path", { d: "M-12,-138 v40 M12,-138 v34", stroke: "#F4F4F0", "stroke-width": 4, "stroke-linecap": "round" }, torso); el("path", { d: "M-52,2 H52", stroke: c.top2, "stroke-width": 8 }, torso); }
+      if (c.halfzip) { el("path", { d: "M-30,-150 Q0,-136 30,-150 L28,-128 Q0,-116 -28,-128 Z", fill: c.top2, stroke: INK, "stroke-width": 4 }, torso); el("path", { d: "M0,-128 V-70", stroke: "#8A847A", "stroke-width": 4 }, torso); el("circle", { cx: 0, cy: -70, r: 5, fill: "#8A847A" }, torso); el("path", { d: "M-50,0 H50", stroke: c.top2, "stroke-width": 9 }, torso); }
+      if (c.vest) { el("path", { d: "M-56,-132 Q-40,-150 -18,-142 L-10,6 L-54,6 Z M56,-132 Q40,-150 18,-142 L10,6 L54,6 Z", fill: c.vest, stroke: INK, "stroke-width": 5 }, torso); for (let k = 0; k < 4; k++) el("path", { d: `M-52,${-110 + k * 30} H-14 M14,${-110 + k * 30} H52`, stroke: "#6E7688", "stroke-width": 3 }, torso); }
+      if (c.puffer) { for (let k = 0; k < 4; k++) el("path", { d: `M-54,${-118 + k * 28} Q0,${-110 + k * 28} 54,${-118 + k * 28}`, fill: "none", stroke: c.top2, "stroke-width": 4 }, torso); el("path", { d: "M0,-146 V-24", stroke: INK, "stroke-width": 3 }, torso); el("path", { d: "M-50,-24 H50 L52,8 H-52 Z", fill: "#FFF6E6", stroke: INK, "stroke-width": 4 }, torso); }
       const det = el("g", {}); Array.from(torso.childNodes).slice(n0).forEach((nd) => det.appendChild(nd)); torso.appendChild(det);
       // ---- arms (shoulders at ±50,-128)
       const sleeve = c.top;
@@ -64,7 +66,13 @@
       const ring = (a0, a1, n, rin, rout, jit) => { const pts = []; for (let i = 0; i <= n; i++) { const a = (a0 + (a1 - a0) * i / n) * Math.PI / 180, rr = i % 2 ? rout + (((i * 37) % 7) - 3) / 3 * jit : rin; pts.push([Math.cos(a) * rr, Math.sin(a) * rr]); } return pts; };
       const poly = (pts) => "M" + pts.map((q) => U(q[0], q[1])).join(" L") + " Z";
       // back hair
-      if (c.hairStyle === "puff") { [[-0.7, -0.55, 0.42], [0, -0.85, 0.5], [0.7, -0.55, 0.42], [-0.95, 0.0, 0.34], [0.95, 0.0, 0.34], [0, -1.45, 0.48]].forEach(([u, v, rr]) => el("circle", { cx: u * r, cy: -228 + v * r, r: rr * r, fill: c.hair, stroke: INK, "stroke-width": 5 }, headG)); }
+ if (c.hairStyle === "braidbun") { P(poly(ring(150, 390, 18, 0.99, 1.05, 0.0).concat([[0.95, 0.05], [-0.95, 0.05]])), c.hair, 5); el("circle", { cx: 0, cy: -228 - 1.3 * r, r: 0.52 * r, fill: c.hair, stroke: INK, "stroke-width": 5 }, headG);
+        for (let k = 0; k < 6; k++) el("path", { d: `M${(-0.4 + k * 0.16) * r},${-228 - 1.72 * r} q8,${0.42 * r} 0,${0.84 * r}`, fill: "none", stroke: "#4A3A30", "stroke-width": 3 }, headG); }
+      if (c.hairStyle === "fade") { P(poly(ring(150, 390, 18, 0.99, 1.04, 0.0).concat([[0.95, 0.05], [-0.95, 0.05]])), c.hair, 5); [[-0.55, -0.85], [-0.3, -1.0], [0, -1.05], [0.3, -1.0], [0.55, -0.85], [-0.15, -0.88], [0.15, -0.88], [-0.42, -0.7], [0.42, -0.7]].forEach(([u, v]) => el("circle", { cx: u * r, cy: -228 + v * r, r: 0.2 * r, fill: c.hair, stroke: INK, "stroke-width": 4 }, headG)); }
+      if (c.hairStyle === "curtain") P(poly(ring(150, 390, 20, 1.0, 1.1, 0.0).concat([[1.0, 0.25], [-1.0, 0.25]])), c.hair, 5);
+      if (c.hairStyle === "pony") { P(`M${U(0.35, -0.95)} Q${U(1.25, -1.35)} ${U(1.15, -0.4)} Q${U(1.05, 0.4)} ${U(1.3, 0.95)} Q${U(0.8, 0.55)} ${U(0.85, -0.3)} Z`, c.hair, 5); P(poly(ring(150, 390, 18, 0.99, 1.04, 0.0).concat([[0.95, 0.05], [-0.95, 0.05]])), c.hair, 5);
+        el("rect", { x: 0.55 * r - 16, y: -228 - 0.98 * r - 10, width: 32, height: 20, rx: 6, fill: "#3E8E5A", stroke: INK, "stroke-width": 3 }, headG); }
+     if (c.hairStyle === "puff") { [[-0.7, -0.55, 0.42], [0, -0.85, 0.5], [0.7, -0.55, 0.42], [-0.95, 0.0, 0.34], [0.95, 0.0, 0.34], [0, -1.45, 0.48]].forEach(([u, v, rr]) => el("circle", { cx: u * r, cy: -228 + v * r, r: rr * r, fill: c.hair, stroke: INK, "stroke-width": 5 }, headG)); }
       if (c.hairStyle === "swoop") P(poly(ring(160, 380, 16, 0.98, 1.2, 0.05).concat([[0.95, 0.05], [-0.95, 0.05]])), c.hair, 5);
       if (c.hairStyle === "shag") P(poly(ring(150, 390, 22, 1.0, 1.16, 0.04).concat([[1.0, 0.5], [0.85, 0.3], [-0.85, 0.3], [-1.0, 0.5]])), c.hair, 5);
       if (c.hairStyle === "bob") P(poly([[-1.08, 0.55], [-1.1, -0.3], [-0.7, -1.02], [0, -1.12], [0.7, -1.02], [1.1, -0.3], [1.08, 0.55], [0.7, 0.62], [-0.7, 0.62]]), c.hair, 5);
@@ -73,7 +81,7 @@
       P(`M${U(-0.86, -0.02)} q${-0.22 * r},${0.02 * r} ${-0.16 * r},${0.26 * r} q${0.06 * r},${0.14 * r} ${0.2 * r},${0.06 * r} z`, c.skin, 4);
       const earR = P(`M${U(0.86, -0.02)} q${0.22 * r},${0.02 * r} ${0.16 * r},${0.26 * r} q${-0.06 * r},${0.14 * r} ${-0.2 * r},${0.06 * r} z`, c.skin, 4);
       P(`M${U(-0.9, -0.15)} C${U(-0.95, -1.08)} ${U(0.95, -1.08)} ${U(0.9, -0.15)} C${U(0.88, 0.42)} ${U(0.5, 0.8)} ${U(0, 0.96)} C${U(-0.5, 0.8)} ${U(-0.88, 0.42)} ${U(-0.9, -0.15)} Z`, c.skin, 6);
-      if (c.phones) { el("path", { d: "M-58,-150 Q0,-196 58,-150", fill: "none", stroke: "#1E1E24", "stroke-width": 9 }, torso); [-1, 1].forEach((dd) => el("ellipse", { cx: dd * 58, cy: -146, rx: 20, ry: 15, fill: "#2A2A33", stroke: INK, "stroke-width": 4 }, torso)); }
+      if (c.phones) { const ph = el("g", {}); el("path", { d: "M-58,-150 Q0,-196 58,-150", fill: "none", stroke: "#1E1E24", "stroke-width": 9 }, ph); [-1, 1].forEach((dd) => el("ellipse", { cx: dd * 58, cy: -146, rx: 20, ry: 15, fill: "#2A2A33", stroke: INK, "stroke-width": 4 }, ph)); torso.insertBefore(ph, headG); }
       const f0 = headG.childNodes.length;
       if (c.freckles) [-1, 1].forEach((dd) => [[0.5, 0.42], [0.6, 0.5], [0.42, 0.52]].forEach(([u, v]) => el("circle", { cx: dd * u * r, cy: -228 + v * r, r: 2.6, fill: "#B0603A" }, headG)));
       el("ellipse", { cx: -0.55 * r, cy: -228 + 0.48 * r, rx: 13, ry: 7, fill: "#F08A80", opacity: 0.35 }, headG); el("ellipse", { cx: 0.55 * r, cy: -228 + 0.48 * r, rx: 13, ry: 7, fill: "#F08A80", opacity: 0.35 }, headG);
@@ -97,7 +105,12 @@
       const talk = el("path", { d: "", fill: "#7A2A2A", stroke: INK, "stroke-width": 5, "stroke-linejoin": "round", style: "display:none" }, headG);
       const faceG = el("g", {}); Array.from(headG.childNodes).slice(f0).forEach((nd) => faceG.appendChild(nd)); headG.appendChild(faceG);
       // front hair
-      if (c.hairStyle === "swoop") P(poly([[-0.96, -0.36], [-0.86, -0.08], [-0.62, -0.34], [-0.4, -0.16], [-0.2, -0.38], [0.1, -0.2], [0.45, -0.42], [0.75, -0.26], [0.98, -0.02], [0.96, -0.42], [0.7, -0.92], [-0.7, -0.9]]), c.hair, 5);
+ if (c.hairStyle === "braidbun") P(poly([[-0.94, -0.32], [-0.6, -0.5], [-0.2, -0.56], [0.0, -0.5], [0.2, -0.56], [0.6, -0.5], [0.94, -0.32], [0.7, -0.92], [-0.7, -0.92]]), c.hair, 5);
+      if (c.hairStyle === "fade") { P(poly([[-0.9, -0.42], [-0.6, -0.6], [-0.2, -0.66], [0.2, -0.66], [0.6, -0.6], [0.9, -0.42], [0.7, -0.9], [-0.7, -0.9]]), c.hair, 5); [[-0.5, -0.62], [-0.18, -0.68], [0.16, -0.68], [0.48, -0.62]].forEach(([u, v]) => el("circle", { cx: u * r, cy: -228 + v * r, r: 0.16 * r, fill: c.hair, stroke: INK, "stroke-width": 3 }, headG)); }
+      if (c.hairStyle === "curtain") { P(`M${U(0, -0.98)} Q${U(-0.5, -0.9)} ${U(-0.98, -0.1)} L${U(-1.0, 0.25)} Q${U(-0.8, -0.2)} ${U(-0.55, -0.32)} Q${U(-0.2, -0.45)} ${U(-0.04, -0.62)} Z`, c.hair, 5);
+        P(`M${U(0, -0.98)} Q${U(0.5, -0.9)} ${U(0.98, -0.1)} L${U(1.0, 0.25)} Q${U(0.8, -0.2)} ${U(0.55, -0.32)} Q${U(0.2, -0.45)} ${U(0.04, -0.62)} Z`, c.hair, 5); }
+      if (c.hairStyle === "pony") { P(poly([[-0.94, -0.3], [-0.6, -0.55], [-0.1, -0.64], [0.4, -0.6], [0.94, -0.3], [0.7, -0.95], [-0.7, -0.95]]), c.hair, 5); el("path", { d: `M${U(-0.5, -0.78)} Q${U(-0.1, -0.88)} ${U(0.3, -0.82)}`, fill: "none", stroke: "#8A5A3A", "stroke-width": 4 }, headG); }
+     if (c.hairStyle === "swoop") P(poly([[-0.96, -0.36], [-0.86, -0.08], [-0.62, -0.34], [-0.4, -0.16], [-0.2, -0.38], [0.1, -0.2], [0.45, -0.42], [0.75, -0.26], [0.98, -0.02], [0.96, -0.42], [0.7, -0.92], [-0.7, -0.9]]), c.hair, 5);
       if (c.hairStyle === "shag") P(poly([[-1.0, -0.36], [-0.96, 0.2], [-0.8, -0.1], [-0.6, 0.0], [-0.44, -0.28], [-0.2, -0.02], [0.0, -0.3], [0.2, 0.12], [0.34, -0.1], [0.5, 0.28], [0.62, 0.0], [0.82, 0.34], [1.0, -0.36], [0.7, -0.92], [-0.7, -0.92]]), c.hair, 5);
       if (c.hairStyle === "bob") P(poly([[-1.04, -0.3], [-0.9, -0.16], [-0.5, -0.34], [-0.1, -0.22], [0.3, -0.36], [0.7, -0.2], [1.04, -0.3], [0.7, -0.95], [-0.7, -0.95]]), c.hair, 5);
       if (c.hairStyle === "puff") P(poly([[-0.92, -0.3], [-0.7, -0.44], [-0.4, -0.36], [-0.1, -0.5], [0.2, -0.38], [0.5, -0.48], [0.8, -0.34], [0.92, -0.3], [0.7, -0.9], [-0.7, -0.9]]), c.hair, 5);
