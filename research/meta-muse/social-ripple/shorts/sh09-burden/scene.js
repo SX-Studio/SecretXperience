@@ -1,13 +1,13 @@
 /* Short 9: "Afraid you're a burden?" — Robin at Enies Lobby (One Piece ep 278); helpers are more willing and less bothered than we expect (Zhao & Epley 2022). First frame = cover; loops. */
 (function () {
-  const K = SHORT({ keys: { afraid: 1, burden: 1, twenty: 1, "20": 1, years: 1, sold: 1, deal: 1, safety: 1, crew: 1, anyway: 1, live: 1, gap: 1, photo: 1, willing: 1, bothered: 1, taking: 1, show: 1 }, noCap: ["b5"], fix: { b2: { 20: "friends'" }, b6: { 5: "believe," } } });
+  const K = SHORT({ keys: { afraid: 1, burden: 1, twenty: 1, "20": 1, years: 1, sold: 1, deal: 1, safety: 1, crew: 1, anyway: 1, live: 1, gap: 1, photo: 1, willing: 1, bothered: 1, taking: 1, show: 1 }, noCap: ["b5"], capStyle: "big", capY: 1480, fix: { b1: { 0: "Feel", 3: "burden?", 4: "So", 6: "Robin." }, b2: { 20: "friends'" }, b6: { 2: "you…" } } });
   const { S, E, W, T, I, Y, el, INKC, RED, clamp, ease } = K, L = LIB(K), C = CAST(I), N = NSHORT(K, L, C), { F, mk, person } = N, ink = K.ink;
 
-  // ---------- B0: the cover — Robin, cuffed, her crew far away ----------
-  const Y0 = Y(0), FL0 = Y0 + 300; N.floor(Y0); N.hook(Y0, ["AFRAID YOU'RE", 138], ["A BURDEN?", 165], "ONE PIECE");
-  const far = [[70, 0.52, "#A9A39A"], [170, 0.6, "#8F877A"], [280, 0.52, "#A9A39A"], [372, 0.46, "#B8B0A2"]].map(([x, s, c]) => person(x, FL0, s, -2, c));
-  N.ups.push((t) => { const u = t >= S("b5") ? 0 : ease(clamp((t - 0.3) / 2.6, 0, 1)); far.forEach((g) => g.setAttribute("transform", `translate(${(u * 46).toFixed(1)},0)`)); });
-  const robin0 = mk(ink, "robin", 790, FL0, 1.3, -2); robin0.key(0, "cuffed", 0).key(0, { head: 12 }, 0).face(0, "sad").key(0.5, { head: 24 }, 1.0).key(S("b5"), { head: 12 }, 0);
+  // ---------- B0: the hook, in motion from frame 0 — Robin, cuffed, as her crew arrives behind her ----------
+  const Y0 = Y(0), FLc = Y0 + 640; N.floor(Y0); N.hook2(Y0, ["FEEL LIKE", 210], ["A BURDEN?", 210], "ONE PIECE", 250);
+  const far = [[-140, 0.74, "#A9A39A"], [-30, 0.84, "#8F877A"], [90, 0.74, "#A9A39A"], [190, 0.66, "#B8B0A2"]].map(([x, s, c]) => person(x, Y0 + 300, s, -2, c));
+  N.ups.push((t) => { const u = t >= S("b5") ? 0 : ease(clamp(t / 1.1, 0, 1)); far.forEach((g) => g.setAttribute("transform", `translate(${(u * 190).toFixed(1)},0)`)); });
+  const robin0 = mk(ink, "robin", 700, FLc, 1.8, -2); robin0.key(0, "cuffed", 0).key(0, { head: 6 }, 0).face(0, "sad").key(0.1, { head: 24 }, 0.5).cry(1.0, S("b5")).face(1.0, "strain").key(1.9, { head: 10 }, 0.5).face(S("b5"), "sad").key(S("b5"), { head: 6 }, 0);
 
   // ---------- B1: twenty years; the deal ----------
   const Y1 = Y(1), FL1 = Y1 + 300; N.floor(Y1);
@@ -44,7 +44,7 @@
 
   const posters = [{ on: [S("b5") - 0.05, E("b5") + 0.3], shakeAt: F("b5", 0.72), lines: [
     { txt: "ASKING ISN'T", x: 90, y: 620, size: 160, at: S("b5") }, { txt: "TAKING.", x: 90, y: 830, size: 220, at: F("b5", 0.2) }, { txt: "IT'S LETTING SOMEONE", x: 90, y: 1010, size: 96, fill: "#9A958C", at: F("b5", 0.48) }, { txt: "SHOW UP FOR YOU.", x: 90, y: 1200, size: 122, fill: RED, at: F("b5", 0.72), big: true }] }];
-  const shots = [[0, 540, Y0 - 120, 1.05], [1.2, 600, Y0 - 90, 1.14, 1], [S("b2") - 0.35, 540, Y1 - 120, 1.05, -1], [F("b2", 0.5), 540, Y1 - 165, 1.12], [S("b3") - 0.35, 540, Y2 - 120, 1.05, 1], [F("b3", 0.48), 360, Y2 - 20, 1.3, -1], [F("b3", 0.8), 810, Y2 - 180, 1.3, 1],
+  const shots = [[0, 540, Y0 - 120, 1.05], [0.9, 565, Y0 - 92, 1.13, 1], [2.4, 520, Y0 - 90, 1.1, -1], [S("b2") - 0.35, 540, Y1 - 120, 1.05, -1], [F("b2", 0.5), 540, Y1 - 165, 1.12], [S("b3") - 0.35, 540, Y2 - 120, 1.05, 1], [F("b3", 0.48), 360, Y2 - 20, 1.3, -1], [F("b3", 0.8), 810, Y2 - 180, 1.3, 1],
     [S("b4") - 0.35, 540, Y3 - 120, 1.05], [F("b4", 0.2), 480, Y3 + 20, 1.22, -1], [F("b4", 0.56), 540, Y3 - 200, 1.05, 1], [S("b6") - 0.25, 540, Y0 - 120, 1.05]];
-  K.run({ shots, posters, drift: 0.02, punches: [{ t: F("b2", 0.52), z: 1.07 }, { t: F("b3", 0.86), z: 1.08 }, { t: F("b4", 0.74), z: 1.06 }], shakes: [{ t: F("b3", 0.52), a: 12 }], extra: N.tick });
+  K.run({ shots, posters, drift: 0.02, events: [{ type: "bigslam", at: 0.03 }], punches: [{ t: F("b2", 0.52), z: 1.07 }, { t: F("b3", 0.86), z: 1.08 }, { t: F("b4", 0.74), z: 1.06 }], shakes: [{ t: F("b3", 0.52), a: 12 }], extra: N.tick });
 })();

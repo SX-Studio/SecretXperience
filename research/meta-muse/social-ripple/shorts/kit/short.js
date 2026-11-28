@@ -29,12 +29,13 @@
       // ---------- captions
       const KEY = o.keys || {}, inPoster = (t) => posters.some(({ p }) => t >= p.on[0] && t < p.on[1]);
       const caps = []; for (const id of Object.keys(T)) { if ((o.noCap || []).includes(id)) continue; let ch = []; const ws = WD[id];
-        ws.forEach((w, k) => { ch.push(w); if (ch.length === 3 || /[.,!?]$/.test(w.text) || k === ws.length - 1) { caps.push({ t: S(id) + ch[0].start, e: S(id) + (ws[k + 1] ? ws[k + 1].start : T[id][1] + 0.3), w: ch.map((x) => x.text) }); ch = []; } }); }
+        ws.forEach((w, k) => { ch.push(w); if (ch.length === (o.capStyle === "big" ? 2 : 3) || /[.,!?]$/.test(w.text) || k === ws.length - 1) { caps.push({ t: S(id) + ch[0].start, e: S(id) + (ws[k + 1] ? ws[k + 1].start : T[id][1] + 0.3), w: ch.map((x) => x.text) }); ch = []; } }); }
       const CY = o.capY || 1520, capG = el("g", {}, svg), capBox = el("rect", { y: CY - 72, height: 104, rx: 16, fill: "#FFFDF6", stroke: INKC, "stroke-width": 5 }, capG);
       const capT = el("text", { x: 540, y: CY, "text-anchor": "middle", "font-family": "Patrick Hand", "font-size": 76, fill: INKC }, capG);
+      const BIG = o.capStyle === "big"; if (BIG) { capBox.setAttribute("display", "none"); capT.setAttribute("font-family", "Anton"); capT.setAttribute("font-size", 112); capT.setAttribute("fill", "#FFFDF6"); capT.setAttribute("stroke", INKC); capT.setAttribute("stroke-width", 12); capT.setAttribute("stroke-linejoin", "round"); capT.setAttribute("paint-order", "stroke"); capT.setAttribute("letter-spacing", 5); }
       function setCap(t) { const c = caps.find((c) => t >= c.t && t < c.e); if (!c || inPoster(t)) { capG.setAttribute("opacity", 0); return; }
         capG.setAttribute("opacity", 1); while (capT.firstChild) capT.removeChild(capT.firstChild);
-        c.w.forEach((w, i) => { const ts = el("tspan", {}, capT); ts.textContent = (i ? " " : "") + w; if (KEY[w.toLowerCase().replace(/[^a-z0-9%]/g, "")]) ts.setAttribute("fill", RED); });
+        c.w.forEach((w, i) => { const ts = el("tspan", {}, capT); ts.textContent = (i ? " " : "") + w; if (BIG) ts.textContent = ts.textContent.toUpperCase(); if (KEY[w.toLowerCase().replace(/[^a-z0-9%]/g, "")]) ts.setAttribute("fill", BIG ? "#F2C230" : RED); });
         const L = Math.min(1040, c.w.join(" ").length * 35 + 70); capBox.setAttribute("x", 540 - L / 2); capBox.setAttribute("width", L);
         const k = clamp((t - c.t) / 0.15, 0, 1); capG.setAttribute("transform", `translate(540,${CY - 20}) scale(${(0.85 + 0.15 * back(k)).toFixed(3)}) translate(-540,${-(CY - 20)})`); }
       // ---------- camera: shots [t, x, y, zoom]; a glide of 0.6 s starts at t

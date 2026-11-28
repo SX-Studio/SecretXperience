@@ -1,12 +1,12 @@
 # One Piece Shorts (batch 3): upload kit
 
-Built to the content standards: first frame = cover, hook under 3 s, 26–30 s, loops, One Piece characters on screen when the story references them, crew for the studies. Facts: `../anime-ep03-one-piece-help/RESEARCH.md`. Long-form these point to: "Why You Can't Ask for Help (One Piece Explains)".
+Built to the content standards with the new test opening (no title slab, close-up scene, motion and voice from frame 0, the viewer's thought as a question): first frame = cover, 26–30 s, loops, One Piece characters on screen when the story references them, crew for the studies. Facts: `../anime-ep03-one-piece-help/RESEARCH.md`. Long-form these point to: "Why You Can't Ask for Help (One Piece Explains)".
 
 | File | Cover | Title |
 |---|---|---|
-| social-ripple-sh08-two-words.mp4 | thumb-sh08-two-words.jpg | Nami Couldn't Say 2 Words for 8 Years #Shorts |
-| social-ripple-sh09-burden.mp4 | thumb-sh09-burden.jpg | Afraid You're a Burden? Robin Was Too #Shorts |
-| social-ripple-sh10-knock.mp4 | thumb-sh10-knock.jpg | They're Waiting for You to Ask (One Piece) #Shorts |
+| social-ripple-sh08-two-words.mp4 | thumb-sh08-two-words.jpg | Can't Ask for Help? Neither Could Nami #Shorts |
+| social-ripple-sh09-burden.mp4 | thumb-sh09-burden.jpg | Feel Like a Burden? So Did Robin #Shorts |
+| social-ripple-sh10-knock.mp4 | thumb-sh10-knock.jpg | Waiting to Be Noticed? (One Piece) #Shorts |
 
 ## Descriptions
 
@@ -63,4 +63,4 @@ If what you're carrying is heavy, please talk to someone you trust. Find a free 
 - sh10: `Who's one person you could knock for this week? 👇`
 
 ## Posting order
-sh08 first (it mirrors the long-form cover), then sh09, then sh10, one per day.
+sh08 first, then sh09, then sh10, one per day. After each has a day of data, compare "viewed vs. swiped away" with the Naruto Shorts: that is the test of the new opening.

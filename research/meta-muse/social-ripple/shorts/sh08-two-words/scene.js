@@ -1,15 +1,14 @@
 /* Short 8: "8 years alone. 2 words fixed it." — Nami, "help me" (One Piece ep 37); people say yes more than we expect (Flynn & Lake 2008). First frame = cover; loops. */
 (function () {
-  const K = SHORT({ keys: { two: 1, words: 1, eight: 1, years: 1, alone: 1, killed: 1, help: 1, why: 1, twenty: 1, "20": 1, strangers: 1, ten: 1, "10": 1, no: 1, head: 1 }, noCap: ["a5"], fix: { a1: { 0: "Nami" }, a6: { 0: "Which", 3: "why," } } });
+  const K = SHORT({ keys: { two: 1, words: 1, eight: 1, years: 1, alone: 1, killed: 1, help: 1, why: 1, twenty: 1, "20": 1, strangers: 1, ten: 1, "10": 1, no: 1, head: 1 }, noCap: ["a5"], capStyle: "big", capY: 1480, fix: { a1: { 3: "help?", 4: "Neither", 6: "Nami.", 7: "For" }, a6: { 2: "you…" } } });
   const { S, E, W, T, I, Y, el, INKC, RED, clamp, ease } = K, L = LIB(K), C = CAST(I), N = NSHORT(K, L, C), { F, mk, person } = N, ink = K.ink;
   const icon = (x, y, at, col, s = 1) => { const g = el("g", { opacity: 0 }, ink); el("circle", { cx: x, cy: y, r: 20 * s, fill: col, stroke: INKC, "stroke-width": 4 }, g); el("path", { d: `M${x - 24 * s},${y + 78 * s} Q${x - 26 * s},${y + 26 * s} ${x},${y + 24 * s} Q${x + 26 * s},${y + 26 * s} ${x + 24 * s},${y + 78 * s} Z`, fill: col, stroke: INKC, "stroke-width": 4 }, g); I.fill(ink, g, at, 0.12, { sound: false }); return g; };
   const chest = (x, fl, fillH) => { const g = el("g", {}, ink); el("path", { d: `M${x},${fl - 16} h300 v-160 h-300 z M${x},${fl - 176} q150,-96 300,0`, fill: "#FFFDF6", stroke: "#8A5A2B", "stroke-width": 8, "stroke-linejoin": "round" }, g); const c = el("rect", { x: x + 18, y: fl - 26 - fillH, width: 264, height: fillH, fill: "#F2C230", stroke: INKC, "stroke-width": 5 }, g); return [g, c]; };
 
-  // ---------- B0: the cover — Nami alone with eight years of savings ----------
-  const Y0 = Y(0), FL0 = Y0 + 300; N.floor(Y0); N.hook(Y0, ["8 YEARS ALONE.", 140], ["2 WORDS FIXED IT.", 116], "ONE PIECE");
-  const [cg0] = chest(600, FL0, 124); cg0.setAttribute("transform", `translate(600,${FL0}) scale(1.35) translate(-600,${-FL0})`); const c0 = el("text", { x: 802, y: FL0 - 372, "text-anchor": "middle", "font-family": "Anton", "font-size": 92, fill: INKC }, ink); c0.textContent = "93,000,000";
-  const s0 = el("text", { x: 802, y: FL0 - 480, "text-anchor": "middle", "font-family": "Caveat", "font-weight": 700, "font-size": 72, fill: RED }, ink); s0.textContent = "7 million short";
-  const nami0 = mk(ink, "nami", 290, FL0, 1.45, -2); nami0.key(0, "kneel", 0).key(0, { head: 14 }, 0).face(0, "sad").cry(0).key(0.5, { head: 24 }, 0.9).key(S("a5"), { head: 14 }, 0);
+  // ---------- B0: the hook, in motion from frame 0 — Luffy puts his hat on a crying Nami ----------
+  const Y0 = Y(0), FLc = Y0 + 640; N.hook2(Y0, ["CAN'T ASK", 210], ["FOR HELP?", 210], "ONE PIECE", 250);
+  const nami0 = mk(ink, "nami", 390, FLc, 2.0, -2); nami0.key(0, "kneel", 0).key(0, { head: 18 }, 0).face(0, "sad").cry(0).acc(0.5, "strawhat").key(0.5, { head: 26 }, 0.2).key(1.5, { head: 2 }, 0.5).acc(S("a5"), "none").key(S("a5"), { head: 18 }, 0);
+  const luffy0 = mk(ink, "luffy", 810, FLc, 1.9, -2); luffy0.face(0, "determined").key(0, { aL: 150, eL: 24 }, 0).key(0.12, { aL: 108, eL: -4 }, 0.36).acc(0.5, "none").key(0.9, "stand", 0.4).face(1.6, "grin").acc(S("a5"), "strawhat").face(S("a5"), "determined").key(S("a5"), { aL: 150, eL: 24 }, 0);
 
   // ---------- B1: buying the village back, alone ----------
   const Y1 = Y(1), FL1 = Y1 + 300; N.floor(Y1);
@@ -42,7 +41,7 @@
 
   const posters = [{ on: [S("a5") - 0.05, E("a5") + 0.3], shakeAt: F("a5", 0.72), lines: [
     { txt: "THE \"NO\"", x: 90, y: 650, size: 230, at: S("a5") }, { txt: "YOU'RE AFRAID OF", x: 90, y: 840, size: 118, fill: "#9A958C", at: F("a5", 0.28) }, { txt: "IS MOSTLY", x: 90, y: 1030, size: 170, at: F("a5", 0.55) }, { txt: "IN YOUR HEAD.", x: 90, y: 1240, size: 150, fill: RED, at: F("a5", 0.72), big: true }] }];
-  const shots = [[0, 540, Y0 - 120, 1.05], [1.2, 566, Y0 - 90, 1.12, -1], [S("a2") - 0.35, 540, Y1 - 120, 1.05, 1], [F("a2", 0.6), 500, Y1 - 160, 1.14], [S("a3") - 0.35, 540, Y2 - 120, 1.05, -1], [W("a3", 6) - 0.2, 500, Y2 - 40, 1.25], [F("a3", 0.76), 560, Y2 - 80, 1.12, 1],
+  const shots = [[0, 540, Y0 - 120, 1.05], [0.9, 560, Y0 - 92, 1.13, -1], [2.0, 520, Y0 - 90, 1.1, 1], [S("a2") - 0.35, 540, Y1 - 120, 1.05, 1], [F("a2", 0.6), 500, Y1 - 160, 1.14], [S("a3") - 0.35, 540, Y2 - 120, 1.05, -1], [W("a3", 6) - 0.2, 500, Y2 - 40, 1.25], [F("a3", 0.76), 560, Y2 - 80, 1.12, 1],
     [S("a4") - 0.35, 270, Y3 + 60, 1.6], [F("a4", 0.33), 540, Y3 - 130, 1.05, 1], [F("a4", 0.45), 540, Y3 - 190, 1.06, -1], [F("a4", 0.86), 540, Y3 - 140, 1.1, 1], [S("a6") - 0.25, 540, Y0 - 120, 1.05]];
-  K.run({ shots, posters, drift: 0.02, punches: [{ t: F("a2", 0.4), z: 1.07 }, { t: W("a3", 6), z: 1.08 }, { t: F("a4", 0.95), z: 1.06 }], shakes: [{ t: S("a2") + 0.5, a: 8 }], extra: N.tick });
+  K.run({ shots, posters, drift: 0.02, events: [{ type: "bigslam", at: 0.03 }], punches: [{ t: F("a2", 0.4), z: 1.07 }, { t: W("a3", 6), z: 1.08 }, { t: F("a4", 0.95), z: 1.06 }], shakes: [{ t: S("a2") + 0.5, a: 8 }], extra: N.tick });
 })();

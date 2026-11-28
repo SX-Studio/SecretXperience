@@ -53,6 +53,13 @@ Working assumption: the algorithm shows people what they're thinking about. Ever
 ## 7. Shorts
 - Hook line under 2 seconds; 20–30 seconds; one idea; last line loops into the first.
 - The referenced anime character in every Short, plus the anime name on screen; each Short voices one thought, and the long video is the full answer.
+- **Opening under test (from 2026-11-28).** Every Short so far has had under 50% "stayed to watch", across different topics, so the shared opening is the suspect. The test format for the first two seconds:
+  - no black title slab: the scene fills the frame, with the character in close-up;
+  - the viewer's own thought as a question of four words or fewer, on screen and spoken, with the voice starting on the first frame ("Can't ask for help?");
+  - something moving from frame 0 (a hat placed, a head dropping, a hand raised to knock), and a sound hit on the headline;
+  - the anime name in the first two seconds;
+  - bold two-word captions over the scene.
+  This is a hypothesis, not a finding. Judge it on Studio's "viewed vs. swiped away" for the One Piece Shorts against the earlier ones, then keep it, change it or drop it.
 
 ## 8. Truth and care (guardrails)
 - **Every claim checked against the original paper** (or the best primary source available), with limits stated honestly; never more than a study found. Anime plot facts checked too (episode numbers).
@@ -80,7 +87,7 @@ Working assumption: the algorithm shows people what they're thinking about. Ever
 - [ ] Cover = relatable situation + body sensation + mystery + specific number?
 - [ ] Anime characters when referenced, matching their locked canon model sheets (outfit, colours, accessories); crew for conclusions; always alive; correct anatomy; actions matching the narration?
 - [ ] Camera never still; new move at least every ~4 s (1.5–2.5 s in Shorts); punch-ins on key words; push-in on the core truth?
-- [ ] (Shorts) first frame = cover, hook < 2 s, 20–30 s, loops?
+- [ ] (Shorts) first frame = cover, scene fills the frame, motion and voice from frame 0, hook question < 2 s, 20–30 s, loops?
 - [ ] No shame or fear-bait; suggestions labelled as ours; care line on heavy topics?
 - [ ] Own drawings only; no official assets; creators credited?
 - [ ] −14 LUFS, captions, upload info in chat, pushed?
