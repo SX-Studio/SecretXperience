@@ -21,9 +21,10 @@
 
   // ---------- B1: the other side ----------
   const X1 = X(1), g1 = B(1); floor(g1, X1, S("u3") - 0.4);
-  L.pop(g1, "THE POISON", X1 - 520, 190, 110, F("u3", 0.06), RED, "Anton", "slap", -3);
+  L.pop(g1, "THE POISON", X1 - 520, 190, 110, S("u3") - 0.2, RED, "Anton", "slap", -3);
+  const ref = mk(g1, "mo", X1 + 170, FL, 0.8, S("u3") - 0.2); ref.face(0, "determined").key(F("u3", 0.2), "fist", 0.3); L.rect(win(g1, F("u3", 0.2) + 0.2, 1e9), X1 + 212, FL - 440, 46, 64, F("u3", 0.2) + 0.2, "#F2C230", { rx: 5, rot: 8, sound: "pop" });
   L.pop(g1, "7 seasons of Italian football", X1 - 440, 300, 54, F("u3", 0.18), L.GREY, "Patrick Hand", false);
-  const cards = (y, n, at, lb, val) => { L.pop(g1, lb, X1 - 860, y + 58, 50, at, INKC, "Patrick Hand", false, 0, "start"); for (let i = 0; i < n; i++) L.rect(g1, X1 - 480 + i * 74, y, 54, 78, at + 0.1 + i * 0.06, "#F2C230", { rx: 6, rot: -6 + (i % 3) * 5, sound: i ? false : "pop" }); L.pop(g1, val, X1 + 30, y + 64, 70, at + 0.5, RED, "Anton", false); };
+  const cards = (y, n, at, lb, val) => { L.pop(g1, lb, X1 - 860, y + 58, 50, at, INKC, "Patrick Hand", false, 0, "start"); for (let i = 0; i < n; i++) L.rect(g1, X1 - 540 + i * 74, y, 54, 78, at + 0.1 + i * 0.06, "#F2C230", { rx: 6, rot: -6 + (i % 3) * 5, sound: i ? false : "pop" }); L.pop(g1, val, X1 - 30, y + 64, 70, at + 0.5, RED, "Anton", false); };
   cards(360, 6, F("u3", 0.34), "same-city rivals", "6.0"); cards(500, 4, F("u3", 0.42), "other matches", "4.3"); L.pop(g1, "yellow cards per match", X1 - 440, 660, 46, F("u3", 0.46), L.GREY, "Patrick Hand", false);
   L.pop(g1, "who lied to win a little money?", X1 + 530, 230, 50, F("u3", 0.56), L.GREY, "Patrick Hand", false);
   ups.push(L.bars(g1, [{ x: X1 + 330, y: 800, len: 430, thick: 150, fill: "#D8322A", at: F("u3", 0.72) }, { x: X1 + 580, y: 800, len: 104, thick: 150, fill: "#B8B0A2", at: F("u3", 0.8) }]));
@@ -53,7 +54,7 @@
   L.arrow(g3, X3 - 800, 520, X3 - 640, 400, F("u5", 0.3), { w: 9, color: L.GREEN }); L.sign(g3, "\"I want to get up there too\"", X3 - 500, 215, 700, 96, F("u5", 0.28), { size: 50, rot: -3, fill: "#E3F2D6", color: L.GREEN });
   const nT = mk(g3, "nia", X3 + 540, FL - 220, 0.8, F("u5", 0.43)); nT.face(0, "smile"); const mD = mk(g3, "mo", X3 + 240, FL, 0.9, F("u5", 0.45)); mD.face(0, "tired").key(F("u5", 0.5), "arms", 0.3);
   L.arrow(g3, X3 + 460, 400, X3 + 330, 560, F("u5", 0.54), { w: 9, color: RED }); L.sign(g3, "\"I want them brought down\"", X3 + 500, 215, 680, 96, F("u5", 0.52), { size: 50, rot: 3, fill: "#FFD9C9", color: RED });
-  L.pop(g3, "✓ worked harder", X3 - 190, 640, 60, F("u5", 0.84), L.GREEN, "Caveat", "pop"); L.pop(g3, "(small experiments with students)", X3, 960, 42, F("u5", 0.74), L.GREY, "Patrick Hand", false);
+  L.pop(g3, "✓ worked harder", X3 - 190, 640, 60, F("u5", 0.84), L.GREEN, "Caveat", "pop"); L.pop(g3, "(small experiments with students)", X3, 170, 42, F("u5", 0.74), L.GREY, "Patrick Hand", false);
 
   const posters = [{ on: [S("u1") - 0.05, E("u1") + 0.5], shakeAt: F("u1", 0.62), lines: [{ txt: "LESSON #2", y: 260, size: 120, fill: "#9A958C", at: S("u1") }, { txt: "A RIVAL CAN PUSH YOU", y: 540, size: 176, at: F("u1", 0.3) }, { txt: "OR POISON YOU.", y: 800, size: 220, fill: RED, at: F("u1", 0.62), big: true }] },
     { on: [S("u6") - 0.05, K.D + 0.1], shakeAt: F("u6", 0.74), lines: [{ txt: "A RIVAL MAKES YOU BETTER", y: 340, size: 146, at: F("u6", 0.03) }, { txt: "WHILE YOU WANT TO CLIMB.", y: 520, size: 146, fill: "#9A958C", at: F("u6", 0.25) }, { txt: "AND WORSE THE MOMENT", y: 760, size: 150, at: F("u6", 0.52) }, { txt: "YOU WANT THEM TO FALL.", y: 950, size: 160, fill: RED, at: F("u6", 0.74), big: true }] }];

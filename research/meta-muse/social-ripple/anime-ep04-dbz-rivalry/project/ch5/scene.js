@@ -26,8 +26,8 @@
   const cl = el("circle", { cx: fx + 10, cy: fy - 10, r: 20, fill: "#FFFDF0", stroke: "#F2C230", "stroke-width": 6 }, fin);
   ups.push((t) => { fin.setAttribute("transform", `translate(${(Math.sin(t * 1.3) * 26).toFixed(1)},${(Math.cos(t * 1.7) * 18).toFixed(1)})`); buu.setAttribute("transform", `translate(${(Math.sin(t * 9) * 10).toFixed(1)},${(Math.cos(t * 7) * 8).toFixed(1)})`); cl.setAttribute("r", (16 + 16 * Math.abs(Math.sin(t * 8))).toFixed(1)); });
   L.pop(win(g0, 0, F("v4", 0.44)), "the final enemy", X0 + 660, 400, 48, F("v2", 0.3), "#4A4466", "Patrick Hand", false);
-  const tw = win(g0, S("v3") - 0.1, F("v4", 0.3)); L.thought(tw, X0 - 20, 330, 640, 200, S("v3")); L.pop(tw, "Kakarot is better.", X0 - 20, 350, 70, F("v3", 0.22), INKC, "Caveat", false);
-  const pw = win(g0, 0, F("v4", 0.3)); L.plate(pw, X0 + 170, 610, "YOU ARE NUMBER ONE", F("v3", 0.66), { size: 76, sub: "(in the original)" });
+  const tw = win(g0, S("v3") - 0.1, S("v4") - 0.15); L.thought(tw, X0 - 20, 330, 640, 200, S("v3")); L.pop(tw, "Kakarot is better.", X0 - 20, 350, 70, F("v3", 0.22), INKC, "Caveat", false);
+  const pw = win(g0, 0, S("v4") - 0.15); L.plate(pw, X0 + 170, 610, "YOU ARE NUMBER ONE", F("v3", 0.66), { size: 76, sub: "(in the original)" });
   const bx = win(g0, F("v4", 0.46), 1e9); L.rect(bx, X0 - 120, 340, 900, 530, F("v4", 0.48), "#FFFDF6", { rx: 16, sound: "pop" });
   const gh = mk(bx, "goku", X0 + 120, 850, 0.72, F("v4", 0.5)); gh.view(0, "side", 1).face(0, "determined"); ups.push(() => gh.root.setAttribute("opacity", Math.min(0.35, +gh.root.getAttribute("opacity")))); L.pop(bx, "yesterday's Goku", X0 + 110, 404, 44, F("v4", 0.52), L.GREY, "Patrick Hand", false);
   const gn = mk(bx, "goku", X0 + 250, 850, 0.72, F("v4", 0.6)); gn.view(0, "side", 1).face(0, "grin").move(F("v4", 0.66), X0 + 600, T.v4[1] * 0.28); L.pop(bx, "racing his own limits", X0 + 530, 404, 54, F("v4", 0.76), L.GREEN, "Caveat", "pop");
