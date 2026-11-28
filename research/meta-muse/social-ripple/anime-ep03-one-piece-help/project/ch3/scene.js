@@ -26,6 +26,7 @@
   // ---------- B2: 14,000+ strangers; the chance of a yes ----------
   const X2 = X(2), g2 = B(2);
   L.tx(g2, "14,000+ strangers asked", X2 - 820, 170, 96, S("w4"), 0.8);
+  for (let i = 0; i < 39; i++) icon(g2, X2 + 150 + (i % 13) * 58, 70 + Math.floor(i / 13) * 72, S("w4") + 0.25 + i * 0.05, i % 3 ? "#D9D4CB" : "#C9E2B8", 0.62);
   L.tx(g2, "the yes we expect", X2 - 820, 330, 60, F("w4", 0.45), 0.4, { font: "Patrick Hand" }); L.tx(g2, "the yes we get", X2 - 820, 570, 60, F("w4", 0.7), 0.4, { font: "Patrick Hand" });
   ups.push(L.bars(g2, [{ x: X2 - 820, y: 350, len: 520, thick: 110, fill: "#B8B0A2", at: F("w4", 0.5), horizontal: true }, { x: X2 - 820, y: 590, len: 1040, thick: 110, fill: "#7FB069", at: F("w4", 0.75), horizontal: true }]));
   L.pop(g2, "underestimated by about half", X2 + 240, 450, 58, F("w4", 0.85), RED, "Caveat", "slap", -3);
@@ -34,6 +35,6 @@
 
   const posters = [{ on: [S("w1") - 0.05, E("w1") + 0.45], shakeAt: F("w1", 0.7), lines: [{ txt: "LESSON #1", y: 260, size: 120, fill: "#9A958C", at: S("w1") }, { txt: "PEOPLE WANT TO HELP", y: 540, size: 180, at: F("w1", 0.3) }, { txt: "MORE THAN YOU THINK.", y: 800, size: 172, fill: RED, at: F("w1", 0.7), big: true }] },
     { on: [S("w6") - 0.05, K.D + 0.1], shakeAt: F("w6", 0.7), lines: [{ txt: "THE \"NO\"", y: 360, size: 230, at: F("w6", 0.05) }, { txt: "YOU'RE AFRAID OF", y: 560, size: 150, fill: "#9A958C", at: F("w6", 0.3) }, { txt: "IS MOSTLY", y: 760, size: 170, at: F("w6", 0.55) }, { txt: "IN YOUR HEAD.", y: 970, size: 190, fill: RED, at: F("w6", 0.72), big: true }] }];
-  const shots = [[0, X0, 540, 1.0], [F("w2", 0.2), X0 + 200, 500, 1.12, 1], [F("w2", 0.7), X0 + 150, 540, 1.08, -1], [S("w3") - 0.4, X1, 540, 1.0], [F("w3", 0.45), X1 - 100, 500, 1.1, 1], [F("w3", 0.85), X1 - 60, 620, 1.15, -1], [S("w4") - 0.4, X2, 540, 1.0], [F("w4", 0.7), X2 - 200, 520, 1.08, 1], [S("w5"), X2, 600, 1.05, -1]];
+  const shots = [[0, X0, 540, 1.0], [F("w2", 0.2), X0 + 200, 500, 1.12, 1], [F("w2", 0.7), X0 + 150, 540, 1.08, -1], [S("w3") - 0.4, X1 - 480, 625, 1.3], [F("w3", 0.2), X1 - 60, 540, 1.0, 1], [F("w3", 0.45), X1 - 100, 500, 1.1, 1], [F("w3", 0.85), X1 - 60, 620, 1.15, -1], [S("w4") - 0.4, X2, 540, 1.0], [F("w4", 0.7), X2 - 200, 520, 1.08, 1], [S("w5"), X2, 600, 1.05, -1]];
   K.run({ shots, posters, punches: [{ t: F("w3", 0.95), z: 1.06 }, { t: F("w4", 0.85), z: 1.08 }, { t: F("w5", 0.8), z: 1.06 }], extra(t) { cast.forEach((h) => h.update(t)); ups.forEach((u) => u(t)); } });
 })();

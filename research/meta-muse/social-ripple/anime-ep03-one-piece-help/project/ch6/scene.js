@@ -28,6 +28,6 @@
   [["nia", -600, "wave", "smile"], ["kai", -200, "fist", "grin"], ["mo", 200, "stand", "smile"], ["rue", 600, "cheer", "grin"]].forEach(([n, dx, p, f], i) => { const h = mk(g2, n, X2 + dx, FL, 0.95, S("z7") + i * 0.15); h.face(0, f).key(S("z7") + i * 0.15 + 0.3, p, 0.3); if (n === "nia") h.say("z7"); });
 
   const posters = [{ on: [S("z6") - 0.05, E("z6") + 0.5], shakeAt: F("z6", 0.8), lines: [{ txt: "SHE DIDN'T GET WEAKER", y: 380, size: 160, at: F("z6", 0.05) }, { txt: "WHEN SHE ASKED.", y: 580, size: 160, fill: "#9A958C", at: F("z6", 0.25) }, { txt: "SHE STOPPED", y: 800, size: 190, at: F("z6", 0.6) }, { txt: "FIGHTING ALONE.", y: 1000, size: 190, fill: RED, at: F("z6", 0.8), big: true }] }];
-  const shots = [[0, X0 - 200, 540, 1.0], [S("z2") - 0.2, X0 + 100, 540, 1.0, 1], [F("z2", 0.6), X0 + 640, 585, 1.15, -1], [S("z3") - 0.1, X0 + 100, 525, 1.01, 1], [S("z4") - 0.1, X0 + 115, 545, 1.0, -1], [S("z5") - 0.4, X1, 540, 1.0], [F("z5", 0.55), X1, 520, 1.1], [S("z7") - 0.3, X2, 540, 1.0]];
+  const shots = [[0, X0 - 200, 540, 1.0], [S("z2") - 0.2, X0 + 100, 540, 1.0, 1], [F("z2", 0.6), X0 + 640, 585, 1.15, -1], [S("z3") - 0.1, X0 + 100, 525, 1.01, 1], [S("z4") - 0.1, X0 + 115, 545, 1.0, -1], [S("z5") - 0.4, X1 - 360, 640, 1.35], [F("z5", 0.48), X1 - 40, 530, 1.08, 1], [S("z7") - 0.3, X2, 540, 1.0]];
   K.run({ shots, posters, punches: [{ t: S("z2"), z: 1.05 }, { t: S("z3"), z: 1.05 }, { t: S("z4"), z: 1.05 }], extra(t) { cast.forEach((h) => h.update(t)); ups.forEach((u) => u(t)); } });
 })();

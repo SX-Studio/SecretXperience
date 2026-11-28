@@ -39,11 +39,11 @@
     .face(F("v7", 0.6), "sad").key(F("v7", 0.6), { head: -6 }, 0.5).acc(F("v8", 0.32), "strawhat").key(F("v8", 0.35), { head: 14 }, 0.4);
   const luffy = mk(g2, "luffy", X2 + 900, FL, 1.0, F("v5", 0.6)); luffy.view(0, "side", -1).move(F("v5", 0.62), X2 - 110, 0.7).view(F("v5", 0.88), "front").face(0, "determined").key(F("v5", 0.88), { aL: 62, eL: 30 }, 0.2)
     .key(F("v6", 0.75), "stand", 0.4).face(F("v7", 0.8), "neutral").key(F("v8", 0.2), { aL: 120, eL: 20 }, 0.3).acc(F("v8", 0.32), "none").key(F("v8", 0.45), "stand", 0.3)
-    .view(F("v8", 0.5), "side", 1).move(F("v8", 0.5), X2 + 420, 0.9).view(F("v8", 0.72), "front").key(F("v8", 0.74), "cheer", 0.2).face(F("v8", 0.74), "strain");
+    .view(F("v8", 0.5), "side", 1).move(F("v8", 0.5), X2 + 420, 0.9).view(F("v8", 0.72), "front").key(F("v8", 0.74), { aL: 146, eL: -14, aR: -146, eR: 14, head: -8 }, 0.2).face(F("v8", 0.74), "strain");
   const wb = win(g2, S("v6") - 0.1, F("v6", 0.7)), ws = win(g2, 0, S("v7") - 0.1), wh = win(g2, 0, F("v8", 0.3));
   for (let i = 0; i < 5; i++) { const a = (-150 + i * 30) * Math.PI / 180; I.path(wb, `M${X2 - 320 + Math.cos(a) * 250},${560 + Math.sin(a) * 250} l${Math.cos(a) * 60},${Math.sin(a) * 60}`, S("v6") + i * 0.04, 0.15, { w: 8, color: RED, silent: i > 0 }); }
   L.pop(ws, "he stays.", X2 + 160, 420, 80, F("v6", 0.78), INKC, "Caveat", false);
-  [[-380, 560], [-262, 566]].forEach(([dx, y], i) => I.path(g2, `M${X2 + dx},${y} q10,20 0,30 q-10,-10 0,-30`, F("v7", 0.5) + i * 0.1, 0.2, { w: 5, color: L.BLUE, silent: true }));
+  nami.cry(F("v6", 0.75));
   L.rect(wh, X2 - 660, 300, 300, 110, W("v7", -2) - 0.1, "#FFFDF6", { rx: 36, sound: "pop" }); L.pop(wh, "help me.", X2 - 510, 375, 72, W("v7", -2), RED, "Caveat", false);
   L.pop(g2, "OF COURSE!", X2 + 420, 250, 130, F("v8", 0.76), RED, "Anton", "bigslam", -3);
 

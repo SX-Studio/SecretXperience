@@ -2,6 +2,7 @@
    const C = CAST(I);  const kai = C.make(parent, "kai", x, feetY, scale, appearAt);
    kai.key(t, pose, dur)      blend to a named pose (or a partial pose object) starting at t over dur
    kai.move(t, x, dur)        walk/slide the root to x (legs cycle while moving)
+   kai.cry(t0, t1)            tears under the eyes between t0 and t1 (they follow the head)
    kai.face(t, expr)          expression: neutral | smile | grin | talk | sad | strain | wow | determined | tired
    kai.say(lineId)            mouth moves with the narration words of that line (uses window.WORDS / window.DT)
    kai.update(t)
@@ -168,6 +169,7 @@
       const mouths = {}; for (const m in MO) mouths[m] = el("path", { d: MO[m][0], fill: MO[m][1], stroke: INK, "stroke-width": 5, "stroke-linecap": "round", "stroke-linejoin": "round", style: "display:none" }, headG);
       const talk = el("path", { d: "", fill: "#7A2A2A", stroke: INK, "stroke-width": 5, "stroke-linejoin": "round", style: "display:none" }, headG);
       const faceG = el("g", {}); Array.from(headG.childNodes).slice(f0).forEach((nd) => faceG.appendChild(nd)); headG.appendChild(faceG);
+      const tearG = el("g", { style: "display:none" }, faceG), cries = []; [-1, 1].forEach((dd) => el("path", { d: `M${U(dd * 0.44, 0.34)} q10,22 0,34 q-10,-12 0,-34 z`, fill: "#8CC8F0", stroke: INK, "stroke-width": 3 }, tearG));
       const fh0 = headG.childNodes.length;
       // front hair
  if (c.hairStyle === "braidbun") P(poly([[-0.94, -0.32], [-0.6, -0.5], [-0.2, -0.56], [0.0, -0.5], [0.2, -0.56], [0.6, -0.5], [0.94, -0.32], [0.7, -0.92], [-0.7, -0.92]]), c.hair, 5);
@@ -223,11 +225,13 @@
         face(t, e) { faces.push([t, e]); return h; },
         view(t, v, dir = 1) { views.push([t, v, dir]); return h; },
         acc(t, a) { accKeys.push([t, a]); return h; },
+        cry(t0, t1 = 1e9) { cries.push([t0, t1]); return h; },
         say(id) { const st = window.DT[id][0]; window.WORDS[id].forEach((w) => talks.push([st + w.start, st + w.end])); return h; } };
       const poseAt = (t) => { let cur = Object.assign({}, POSES.stand); for (const k of keys) { if (t < k.t) break; const u = k.dur ? ease(clamp((t - k.t) / k.dur, 0, 1)) : 1, next = Object.assign({}, cur, k.p); for (const j of JOINTS) cur[j] = (cur[j] ?? 0) + ((next[j] ?? 0) - (cur[j] ?? 0)) * u; } return cur; };
       const xAt = (t) => { let px = moves[0].x, walking = 0; for (const m of moves) { if (t < m.t) break; const u = clamp((t - m.t) / m.dur, 0, 1); if (u < 1) walking = 1; px = px + (m.x - px) * u; } return [px, walking]; };
       const rot = (g, px, py, a) => g.setAttribute("transform", `translate(${px},${py}) rotate(${a.toFixed(2)})`);
       h.update = (t) => {
+        if (cries.length) { const on = cries.some(([a, b]) => t >= a && t < b); tearG.style.display = on ? "inline" : "none"; if (on) tearG.setAttribute("transform", `translate(0,${(((t * 0.9) % 1) * 10).toFixed(1)})`); }
         const vis = t >= at; root.setAttribute("opacity", vis ? 1 : 0); if (!vis) return; const pop = clamp((t - at) / 0.35, 0, 1), sc = s * (0.6 + 0.4 * (1 + 1.7 * Math.pow(pop - 1, 3) + 0.7 * Math.pow(pop - 1, 2)));
         let vw = views[0]; for (const q of views) if (t >= q[0]) vw = q; const side = vw[1] === "side", dir = vw[2];
         if (curView !== vw[1] + dir) { curView = vw[1] + dir; tFront.style.display = side ? "none" : "inline"; tSide.style.display = side ? "inline" : "none"; det.setAttribute("transform", side ? "translate(2,0) scale(0.62,1)" : "");
