@@ -9,4 +9,4 @@ All four are our own designs, rigged in `../shorts/kit/cast.js` (joints, poses, 
 | **Mo** | The quiet one who feels left out | Middle-part curtain hair | Black hoodie under a grey puffer vest, baggy jeans, headphones round the neck |
 | **Rue** | The loyal friend who shows up | Sleek high ponytail, claw clip | Cropped coral puffer over a white tee, light-wash baggy jeans, low-profile sneakers |
 
-Per-story characters: when an episode needs a specific role (the shunned kid, the mentor, the rival), we design an original character for that story, clearly distinct from the anime's designs.
+Anime characters: when a lesson references an anime moment, that anime's characters appear, drawn by us on the same rig (so far: Naruto with goggles/headband, Iruka, Gaara, Haku). The crew handles hosting, viewer situations, conclusions and summaries.

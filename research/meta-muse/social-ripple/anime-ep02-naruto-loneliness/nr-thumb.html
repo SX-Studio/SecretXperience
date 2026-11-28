@@ -12,7 +12,7 @@ document.fonts.ready.then(() => {
   const FL = 680; el("line", { x1: 0, x2: 700, y1: FL, y2: FL, stroke: "#8A847A", "stroke-width": 4 }, svg);
   el("path", { d: `M60,${FL} L150,250 L240,${FL} M380,${FL} L470,250 L560,${FL} M140,258 H480`, fill: "none", stroke: "#8A5A2B", "stroke-width": 10, "stroke-linecap": "round" }, svg);
   el("path", { d: "M250,262 V505 M370,262 V505", stroke: INKC, "stroke-width": 5 }, svg); el("rect", { x: 232, y: 500, width: 158, height: 18, rx: 4, fill: "#A0703A", stroke: INKC, "stroke-width": 5 }, svg);
-  const g = el("g", {}, svg), C = CAST(I); const mo = C.make(g, "mo", 310, 505 + 170 * 0.62 - 74 * 0.62 + 4, 0.62, 0); mo.view(0, "side", 1).key(0, "sit", 0).face(0, "sad").key(0, { head: 20 }, 0); mo.update(5);
+  const g = el("g", {}, svg), C = CAST(I); const mo = C.make(g, "naruto", 310, 505 + 170 * 0.62 - 74 * 0.62 + 4, 0.62, 0); mo.view(0, "side", 1).key(0, "sit", 0).face(0, "sad").key(0, { head: 20 }, 0); mo.update(5);
   const P = (x, s, col) => { el("circle", { cx: x, cy: FL - 330 * s, r: 52 * s, fill: col }, svg); el("path", { d: `M${x - 62 * s},${FL} Q${x - 70 * s},${FL - 250 * s} ${x},${FL - 270 * s} Q${x + 70 * s},${FL - 250 * s} ${x + 62 * s},${FL} Z`, fill: col }, svg); };
   [[560, 0.62, "#8F877A"], [630, 0.4, "#B8B0A2"]].forEach(([x, s, c]) => P(x, s, c));
   const T = (txt, x, y, size, fill, o = {}) => { const t = el("text", { x, y, "font-family": o.font || "Anton", "font-size": size, fill, "text-anchor": "middle", "letter-spacing": o.ls ?? 2 }, svg); t.textContent = txt; };

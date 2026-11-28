@@ -35,7 +35,7 @@ Research in this video:
 • Masi, Chen, Hawkley & Cacioppo (2011). A meta-analysis of interventions to reduce loneliness. Personality and Social Psychology Review. (50 studies; small overall effects; addressing negative social thoughts looked most promising, based on few studies.)
 • Epley & Schroeder (2014). Mistakenly seeking solitude. Journal of Experimental Psychology: General. (Commuters who talked to a stranger had a more pleasant ride.)
 
-"Send one message this week" is our suggestion, not a study finding. Naruto is by Masashi Kishimoto, anime by Studio Pierrot. This is an original animated commentary: the story is told in our own words and all characters on screen are our own (no footage or official art). Music and sound: original.
+"Send one message this week" is our suggestion, not a study finding. Naruto is by Masashi Kishimoto, anime by Studio Pierrot. This is an original animated commentary: the story is told in our own words with our own drawings (no footage or official art). Music and sound: original.
 
 #Naruto #Loneliness #Psychology #AnimeLifeLessons #SocialRipple
 ```
