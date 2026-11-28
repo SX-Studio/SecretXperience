@@ -1,0 +1,42 @@
+<!doctype html><html><head><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@900&display=swap" rel="stylesheet">
+<script src="assets/sr-engine-v1.js"></script><script src="assets/sr-v3.js"></script><script src="studio.js"></script>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{width:1280px;height:720px;overflow:hidden;background:#0f1a3a}
+#bg{position:absolute;inset:0;background:radial-gradient(circle at 62% 62%,#ffcf5a 0%,#ff7a3c 14%,#2f6fd8 42%,#162a6e 70%,#0b1230 100%)}
+svg{position:absolute;inset:0}
+.t{position:absolute;left:34px;top:30px;font-family:Outfit;font-weight:900;line-height:.92;color:#fff;-webkit-text-stroke:14px #1E1B22;paint-order:stroke fill;text-shadow:0 10px 0 #1E1B22}
+.t .a{font-size:128px;color:#FFD23F}.t .b{font-size:150px}
+.ui{position:absolute;left:44px;bottom:46px;background:#2B2140;border:7px solid #FFC94A;border-radius:26px;padding:10px 26px 4px;font-family:Outfit;font-weight:900;color:#fff;box-shadow:0 0 36px #ffc94acc,0 10px 0 rgba(0,0,0,.35)}
+.ui small{display:block;font-size:26px;color:#FFE3A0;letter-spacing:4px}.ui b{font-size:84px;line-height:1}</style></head>
+<body><div id="bg"></div><svg id="art" viewBox="0 0 1280 720"></svg>
+<div class="t"><div class="a">1 SANDWICH.</div></div><div class="ui"><small>LIVES TOUCHED</small><b>347</b></div>
+<script>
+const svg=document.getElementById('art'); TS.defs(svg); const {el}=SR;
+{ const d=svg.querySelector('defs'); const f=SR.el('filter',{id:'ghost'},d); }
+const MO={color:"#E8834A",outfit:"apron",hair:"short",hairColor:"#3A2A22",pants:"#3A4A63",seed:7};
+const LOOKS=[{color:"#8A93A6",outfit:"hoodie",hair:"short",hairColor:"#6A4A3A",pants:"#3A4050",seed:21},{color:"#FF8A2A",outfit:"jacket",hair:"cap",hairColor:"#E0B020",pants:"#3A4A63",seed:6},
+ {skin:"ink",color:"#F2C14E",outfit:"apron",hair:"ponytail",hairColor:"#1E1B22",pants:"#6A4A8A",seed:4},{color:"#3FA7A0",outfit:"tee",hair:"bun",hairColor:"#5A3A2A",pants:"#2E7A74",seed:5},
+ {color:"#F4C430",outfit:"coat",hair:"cap",hairColor:"#2E4A6A",pants:"#3A4A63",seed:11},{skin:"ink",color:"#E8634A",outfit:"jacket",hair:"curly",hairColor:"#1E1B22",pants:"#2E3A5A",seed:9},
+ {color:"#5A7FD8",outfit:"shirt",hair:"short",hairColor:"#3A2A22",pants:"#2A3050",seed:31},{skin:"ink",color:"#E05A8A",outfit:"dress",hair:"long",hairColor:"#1E1B22",pants:"#4A3A5A",seed:32},
+ {color:"#7DBA5A",outfit:"tee",hair:"curly",hairColor:"#8A5A2E",pants:"#3A4A63",seed:41},{color:"#B07FC0",outfit:"coat",hair:"bun",hairColor:"#9A9AA6",pants:"#4A3A5A",seed:14}];
+const sx=650, sy=560;   // the sandwich
+// every thread ends at a person: translucent "lives touched" (head point x,y; scale = depth)
+const G=[[70,330,0.62],[200,250,0.5],[350,215,0.42],[480,200,0.36],[620,195,0.34],[930,150,0.36],[260,420,0.66],[1225,500,0.8],[420,330,0.5],[560,300,0.44],[790,160,0.38],[1040,250,0.48],[1180,330,0.6],[1230,170,0.42]];
+const ghosts=el("g",{opacity:0.6},svg), gl=el("g",{filter:"url(#glow)"},svg), fx=el("g",{opacity:0.85},svg);
+// each life touched shows satisfaction its own way: [pose, mood, extra]
+const WAYS=[["wave","joy","spark"],["holdBoth","laughing","sand"],["hug","inlove","heart"],["proud","proud",""],["hipsHands","happy","spark"],["shout","laughing",""],["give","happy","sand"],
+  ["wave","starstruck","spark"],["hands","hopeful","heart"],["hug","content","heart"],["proud","joy",""],["point","happy",""],["holdBoth","inlove","heart"],["wave","laughing","spark"]];
+const heart=(x,y,k)=>el("path",{d:"M0,6 C-10,-4 -22,6 -11,16 L0,26 L11,16 C22,6 10,-4 0,6 Z",fill:"#FF5A7A",stroke:"#1E1B22","stroke-width":3,transform:`translate(${x},${y}) scale(${k})`},fx);
+const spark=(x,y,k)=>el("path",{d:"M0,-16 L4,-4 L16,0 L4,4 L0,16 L-4,4 L-16,0 L-4,-4 Z",fill:"#FFE27A",transform:`translate(${x},${y}) scale(${k})`},fx);
+const mini=(x,y,k)=>{const g=el("g",{transform:`translate(${x},${y}) scale(${k*0.9})`},fx);el("path",{d:"M-38,4 Q0,-36 38,4 Z",fill:"#E8B06A",stroke:"#1E1B22","stroke-width":5},g);el("rect",{x:-40,y:4,width:80,height:9,rx:4,fill:"#7DBA5A",stroke:"#1E1B22","stroke-width":4},g);el("rect",{x:-38,y:13,width:76,height:13,rx:6,fill:"#E8B06A",stroke:"#1E1B22","stroke-width":5},g);};
+G.forEach(([hx,hy,k],i)=>{ const feet=hy+175*k, chestY=hy+70*k, [pose,mood,ex]=WAYS[i%WAYS.length], dir=hx<sx?1:-1;
+  TS.thread(svg,sx,sy,hx,chestY,3+k*4,-(60+(i*37)%110));
+  TS.char(ghosts,LOOKS[i%LOOKS.length],{id:"g"+i,x:hx,y:feet+18*k,scale:k,mood,facing:dir,pose});
+  {const hg=el("g",{transform:`translate(${hx},${chestY-12*k}) scale(${0.9+1.1*k})`},gl); el("path",{d:"M0,6 C-10,-4 -22,6 -11,16 L0,26 L11,16 C22,6 10,-4 0,6 Z",fill:"#FF5A7A",stroke:"#FFE7A0","stroke-width":3},hg);}
+  if(ex==="heart"){heart(hx-26*k,hy-70*k,1.1*k);heart(hx+30*k,hy-92*k,0.8*k);}
+  if(ex==="spark"){spark(hx-34*k,hy-64*k,1.2*k);spark(hx+36*k,hy-80*k,0.9*k);}
+  if(ex==="sand"){mini(hx+dir*46*k,hy+86*k,0.55*k);} });
+const hg=el("g",{filter:"url(#rim)"},svg); TS.char(hg,MO,{id:"mo",x:860,y:1230,scale:3.0,pose:"give",mood:"starstruck",facing:-1,look:{x:-0.3,y:0.1}});
+const s=el("g",{transform:`translate(${sx},${sy}) scale(2.2)`,filter:"url(#glow)"},svg);
+el("path",{d:"M-38,4 Q0,-36 38,4 Z",fill:"#E8B06A",stroke:"#1E1B22","stroke-width":5},s);el("rect",{x:-40,y:4,width:80,height:9,rx:4,fill:"#7DBA5A",stroke:"#1E1B22","stroke-width":4},s);
+el("rect",{x:-38,y:13,width:76,height:8,rx:4,fill:"#E2574C",stroke:"#1E1B22","stroke-width":4},s);el("rect",{x:-38,y:21,width:76,height:13,rx:6,fill:"#E8B06A",stroke:"#1E1B22","stroke-width":5},s);
+</script></body></html>

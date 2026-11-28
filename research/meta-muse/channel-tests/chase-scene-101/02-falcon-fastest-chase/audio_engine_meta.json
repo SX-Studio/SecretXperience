@@ -1,0 +1,1256 @@
+{
+  "tts_provider": "kokoro",
+  "voice_id": "bm_george",
+  "bgm": null,
+  "bgm_pending": false,
+  "bgm_provider": null,
+  "bgm_pid": null,
+  "bgm_log": null,
+  "bgm_mode": null,
+  "bgm_target_duration_s": null,
+  "bgm_seed_duration_s": null,
+  "bgm_loop_count": null,
+  "voices": [
+    {
+      "id": "01",
+      "path": "assets/voice/01.wav",
+      "duration_s": 3.392,
+      "words": [
+        {
+          "id": "w0",
+          "text": "242",
+          "start": 0.16,
+          "end": 1.68
+        },
+        {
+          "id": "w1",
+          "text": "miles",
+          "start": 2.08,
+          "end": 2.64
+        },
+        {
+          "id": "w2",
+          "text": "an",
+          "start": 2.64,
+          "end": 2.88
+        },
+        {
+          "id": "w3",
+          "text": "hour.",
+          "start": 2.88,
+          "end": 3.28
+        }
+      ]
+    },
+    {
+      "id": "02",
+      "path": "assets/voice/02.wav",
+      "duration_s": 7.232,
+      "words": [
+        {
+          "id": "w0",
+          "text": "The",
+          "start": 0,
+          "end": 0.24
+        },
+        {
+          "id": "w1",
+          "text": "fastest",
+          "start": 0.24,
+          "end": 0.8
+        },
+        {
+          "id": "w2",
+          "text": "any",
+          "start": 0.8,
+          "end": 1.12
+        },
+        {
+          "id": "w3",
+          "text": "animal",
+          "start": 1.12,
+          "end": 1.44
+        },
+        {
+          "id": "w4",
+          "text": "has",
+          "start": 1.44,
+          "end": 1.68
+        },
+        {
+          "id": "w5",
+          "text": "ever",
+          "start": 1.68,
+          "end": 1.84
+        },
+        {
+          "id": "w6",
+          "text": "been",
+          "start": 1.84,
+          "end": 2.08
+        },
+        {
+          "id": "w7",
+          "text": "clocked,",
+          "start": 2.08,
+          "end": 2.96
+        },
+        {
+          "id": "w8",
+          "text": "not",
+          "start": 2.96,
+          "end": 3.12
+        },
+        {
+          "id": "w9",
+          "text": "a",
+          "start": 3.2,
+          "end": 3.36
+        },
+        {
+          "id": "w10",
+          "text": "cheetah,",
+          "start": 3.36,
+          "end": 4.16
+        },
+        {
+          "id": "w11",
+          "text": "a",
+          "start": 4.16,
+          "end": 4.32
+        },
+        {
+          "id": "w12",
+          "text": "bird,",
+          "start": 4.32,
+          "end": 4.8
+        },
+        {
+          "id": "w13",
+          "text": "and",
+          "start": 4.8,
+          "end": 5.04
+        },
+        {
+          "id": "w14",
+          "text": "it",
+          "start": 5.04,
+          "end": 5.2
+        },
+        {
+          "id": "w15",
+          "text": "isn't",
+          "start": 5.2,
+          "end": 5.52
+        },
+        {
+          "id": "w16",
+          "text": "escaping,",
+          "start": 5.52,
+          "end": 6.32
+        },
+        {
+          "id": "w17",
+          "text": "it's",
+          "start": 6.32,
+          "end": 6.56
+        },
+        {
+          "id": "w18",
+          "text": "hunting.",
+          "start": 6.56,
+          "end": 7.04
+        }
+      ]
+    },
+    {
+      "id": "03",
+      "path": "assets/voice/03.wav",
+      "duration_s": 6.507,
+      "words": [
+        {
+          "id": "w0",
+          "text": "The",
+          "start": 0,
+          "end": 0.08
+        },
+        {
+          "id": "w1",
+          "text": "peregrine",
+          "start": 0.08,
+          "end": 0.72
+        },
+        {
+          "id": "w2",
+          "text": "falcon",
+          "start": 0.72,
+          "end": 1.28
+        },
+        {
+          "id": "w3",
+          "text": "climbs",
+          "start": 1.28,
+          "end": 1.68
+        },
+        {
+          "id": "w4",
+          "text": "high",
+          "start": 1.68,
+          "end": 1.92
+        },
+        {
+          "id": "w5",
+          "text": "above",
+          "start": 1.92,
+          "end": 2.24
+        },
+        {
+          "id": "w6",
+          "text": "its",
+          "start": 2.24,
+          "end": 2.4
+        },
+        {
+          "id": "w7",
+          "text": "prey,",
+          "start": 2.4,
+          "end": 3.04
+        },
+        {
+          "id": "w8",
+          "text": "folds",
+          "start": 3.04,
+          "end": 3.52
+        },
+        {
+          "id": "w9",
+          "text": "its",
+          "start": 3.52,
+          "end": 3.68
+        },
+        {
+          "id": "w10",
+          "text": "wings,",
+          "start": 3.68,
+          "end": 4.16
+        },
+        {
+          "id": "w11",
+          "text": "and",
+          "start": 4.16,
+          "end": 4.4
+        },
+        {
+          "id": "w12",
+          "text": "drops.",
+          "start": 4.4,
+          "end": 5.2
+        },
+        {
+          "id": "w13",
+          "text": "It's",
+          "start": 5.2,
+          "end": 5.44
+        },
+        {
+          "id": "w14",
+          "text": "called",
+          "start": 5.44,
+          "end": 5.68
+        },
+        {
+          "id": "w15",
+          "text": "the",
+          "start": 5.68,
+          "end": 5.84
+        },
+        {
+          "id": "w16",
+          "text": "stoop.",
+          "start": 5.84,
+          "end": 6.48
+        }
+      ]
+    },
+    {
+      "id": "04",
+      "path": "assets/voice/04.wav",
+      "duration_s": 13.12,
+      "words": [
+        {
+          "id": "w0",
+          "text": "Last",
+          "start": 0,
+          "end": 0.32
+        },
+        {
+          "id": "w1",
+          "text": "time",
+          "start": 0.32,
+          "end": 0.56
+        },
+        {
+          "id": "w2",
+          "text": "we",
+          "start": 0.56,
+          "end": 0.72
+        },
+        {
+          "id": "w3",
+          "text": "saw",
+          "start": 0.72,
+          "end": 0.88
+        },
+        {
+          "id": "w4",
+          "text": "the",
+          "start": 0.88,
+          "end": 1.04
+        },
+        {
+          "id": "w5",
+          "text": "cheeta",
+          "start": 1.04,
+          "end": 1.36
+        },
+        {
+          "id": "w6",
+          "text": "slow",
+          "start": 1.6,
+          "end": 2
+        },
+        {
+          "id": "w7",
+          "text": "down",
+          "start": 2,
+          "end": 2.24
+        },
+        {
+          "id": "w8",
+          "text": "to",
+          "start": 2.24,
+          "end": 2.4
+        },
+        {
+          "id": "w9",
+          "text": "win,",
+          "start": 2.4,
+          "end": 3.04
+        },
+        {
+          "id": "w10",
+          "text": "the",
+          "start": 3.04,
+          "end": 3.2
+        },
+        {
+          "id": "w11",
+          "text": "Falcon",
+          "start": 3.2,
+          "end": 3.84
+        },
+        {
+          "id": "w12",
+          "text": "does",
+          "start": 3.84,
+          "end": 4.08
+        },
+        {
+          "id": "w13",
+          "text": "the",
+          "start": 4.08,
+          "end": 4.24
+        },
+        {
+          "id": "w14",
+          "text": "opposite.",
+          "start": 4.24,
+          "end": 5.04
+        },
+        {
+          "id": "w15",
+          "text": "Physics",
+          "start": 5.04,
+          "end": 5.6
+        },
+        {
+          "id": "w16",
+          "text": "simulations",
+          "start": 5.6,
+          "end": 6.32
+        },
+        {
+          "id": "w17",
+          "text": "show",
+          "start": 6.32,
+          "end": 6.64
+        },
+        {
+          "id": "w18",
+          "text": "that",
+          "start": 6.64,
+          "end": 6.88
+        },
+        {
+          "id": "w19",
+          "text": "diving",
+          "start": 6.88,
+          "end": 7.44
+        },
+        {
+          "id": "w20",
+          "text": "faster",
+          "start": 7.44,
+          "end": 7.92
+        },
+        {
+          "id": "w21",
+          "text": "gives",
+          "start": 7.92,
+          "end": 8.24
+        },
+        {
+          "id": "w22",
+          "text": "it",
+          "start": 8.24,
+          "end": 8.4
+        },
+        {
+          "id": "w23",
+          "text": "more",
+          "start": 8.4,
+          "end": 8.64
+        },
+        {
+          "id": "w24",
+          "text": "force",
+          "start": 8.64,
+          "end": 9.04
+        },
+        {
+          "id": "w25",
+          "text": "to",
+          "start": 9.04,
+          "end": 9.2
+        },
+        {
+          "id": "w26",
+          "text": "steer.",
+          "start": 9.2,
+          "end": 10
+        },
+        {
+          "id": "w27",
+          "text": "The",
+          "start": 10,
+          "end": 10.24
+        },
+        {
+          "id": "w28",
+          "text": "faster",
+          "start": 10.24,
+          "end": 10.72
+        },
+        {
+          "id": "w29",
+          "text": "it",
+          "start": 10.72,
+          "end": 10.88
+        },
+        {
+          "id": "w30",
+          "text": "falls,",
+          "start": 10.88,
+          "end": 11.6
+        },
+        {
+          "id": "w31",
+          "text": "the",
+          "start": 11.6,
+          "end": 11.76
+        },
+        {
+          "id": "w32",
+          "text": "harder",
+          "start": 11.76,
+          "end": 12.16
+        },
+        {
+          "id": "w33",
+          "text": "it",
+          "start": 12.16,
+          "end": 12.32
+        },
+        {
+          "id": "w34",
+          "text": "can",
+          "start": 12.32,
+          "end": 12.56
+        },
+        {
+          "id": "w35",
+          "text": "turn.",
+          "start": 12.56,
+          "end": 12.96
+        }
+      ]
+    },
+    {
+      "id": "05",
+      "path": "assets/voice/05.wav",
+      "duration_s": 10.261,
+      "words": [
+        {
+          "id": "w0",
+          "text": "So",
+          "start": 0,
+          "end": 0.24
+        },
+        {
+          "id": "w1",
+          "text": "how",
+          "start": 0.24,
+          "end": 0.4
+        },
+        {
+          "id": "w2",
+          "text": "does",
+          "start": 0.4,
+          "end": 0.56
+        },
+        {
+          "id": "w3",
+          "text": "it",
+          "start": 0.56,
+          "end": 0.72
+        },
+        {
+          "id": "w4",
+          "text": "aim?",
+          "start": 0.72,
+          "end": 1.36
+        },
+        {
+          "id": "w5",
+          "text": "Scientists",
+          "start": 1.36,
+          "end": 2.08
+        },
+        {
+          "id": "w6",
+          "text": "in",
+          "start": 2.08,
+          "end": 2.16
+        },
+        {
+          "id": "w7",
+          "text": "Wales",
+          "start": 2.16,
+          "end": 2.64
+        },
+        {
+          "id": "w8",
+          "text": "put",
+          "start": 2.64,
+          "end": 2.96
+        },
+        {
+          "id": "w9",
+          "text": "GPS",
+          "start": 2.96,
+          "end": 3.6
+        },
+        {
+          "id": "w10",
+          "text": "trackers",
+          "start": 3.6,
+          "end": 4.24
+        },
+        {
+          "id": "w11",
+          "text": "and",
+          "start": 4.24,
+          "end": 4.48
+        },
+        {
+          "id": "w12",
+          "text": "tiny",
+          "start": 4.48,
+          "end": 4.88
+        },
+        {
+          "id": "w13",
+          "text": "cameras",
+          "start": 4.88,
+          "end": 5.36
+        },
+        {
+          "id": "w14",
+          "text": "on",
+          "start": 5.36,
+          "end": 5.52
+        },
+        {
+          "id": "w15",
+          "text": "falcons.",
+          "start": 5.52,
+          "end": 6.56
+        },
+        {
+          "id": "w16",
+          "text": "They",
+          "start": 6.56,
+          "end": 6.8
+        },
+        {
+          "id": "w17",
+          "text": "steer",
+          "start": 6.8,
+          "end": 7.28
+        },
+        {
+          "id": "w18",
+          "text": "with",
+          "start": 7.28,
+          "end": 7.44
+        },
+        {
+          "id": "w19",
+          "text": "the",
+          "start": 7.44,
+          "end": 7.6
+        },
+        {
+          "id": "w20",
+          "text": "same",
+          "start": 7.6,
+          "end": 7.92
+        },
+        {
+          "id": "w21",
+          "text": "rule",
+          "start": 7.92,
+          "end": 8.4
+        },
+        {
+          "id": "w22",
+          "text": "as",
+          "start": 8.4,
+          "end": 8.64
+        },
+        {
+          "id": "w23",
+          "text": "most",
+          "start": 8.64,
+          "end": 8.96
+        },
+        {
+          "id": "w24",
+          "text": "guided",
+          "start": 8.96,
+          "end": 9.52
+        },
+        {
+          "id": "w25",
+          "text": "missiles.",
+          "start": 9.52,
+          "end": 10.16
+        }
+      ]
+    },
+    {
+      "id": "06",
+      "path": "assets/voice/06.wav",
+      "duration_s": 9.984,
+      "words": [
+        {
+          "id": "w0",
+          "text": "Sailors",
+          "start": 0,
+          "end": 0.64
+        },
+        {
+          "id": "w1",
+          "text": "know",
+          "start": 0.64,
+          "end": 0.8
+        },
+        {
+          "id": "w2",
+          "text": "it.",
+          "start": 0.8,
+          "end": 1.2
+        },
+        {
+          "id": "w3",
+          "text": "If",
+          "start": 1.2,
+          "end": 1.44
+        },
+        {
+          "id": "w4",
+          "text": "a",
+          "start": 1.44,
+          "end": 1.6
+        },
+        {
+          "id": "w5",
+          "text": "ship",
+          "start": 1.6,
+          "end": 1.92
+        },
+        {
+          "id": "w6",
+          "text": "holds",
+          "start": 1.92,
+          "end": 2.24
+        },
+        {
+          "id": "w7",
+          "text": "the",
+          "start": 2.24,
+          "end": 2.4
+        },
+        {
+          "id": "w8",
+          "text": "same",
+          "start": 2.4,
+          "end": 2.64
+        },
+        {
+          "id": "w9",
+          "text": "bearing",
+          "start": 2.64,
+          "end": 3.2
+        },
+        {
+          "id": "w10",
+          "text": "as",
+          "start": 3.2,
+          "end": 3.36
+        },
+        {
+          "id": "w11",
+          "text": "it",
+          "start": 3.36,
+          "end": 3.52
+        },
+        {
+          "id": "w12",
+          "text": "closes",
+          "start": 3.52,
+          "end": 4.08
+        },
+        {
+          "id": "w13",
+          "text": "in,",
+          "start": 4.08,
+          "end": 4.48
+        },
+        {
+          "id": "w14",
+          "text": "you're",
+          "start": 4.48,
+          "end": 4.72
+        },
+        {
+          "id": "w15",
+          "text": "on",
+          "start": 4.72,
+          "end": 4.88
+        },
+        {
+          "id": "w16",
+          "text": "a",
+          "start": 4.88,
+          "end": 4.96
+        },
+        {
+          "id": "w17",
+          "text": "collision",
+          "start": 4.96,
+          "end": 5.6
+        },
+        {
+          "id": "w18",
+          "text": "course.",
+          "start": 5.6,
+          "end": 6.16
+        },
+        {
+          "id": "w19",
+          "text": "The",
+          "start": 6.16,
+          "end": 6.4
+        },
+        {
+          "id": "w20",
+          "text": "falcon",
+          "start": 6.4,
+          "end": 7.04
+        },
+        {
+          "id": "w21",
+          "text": "turns",
+          "start": 7.04,
+          "end": 7.6
+        },
+        {
+          "id": "w22",
+          "text": "just",
+          "start": 7.6,
+          "end": 7.76
+        },
+        {
+          "id": "w23",
+          "text": "enough",
+          "start": 7.76,
+          "end": 8.08
+        },
+        {
+          "id": "w24",
+          "text": "to",
+          "start": 8.08,
+          "end": 8.24
+        },
+        {
+          "id": "w25",
+          "text": "keep",
+          "start": 8.24,
+          "end": 8.48
+        },
+        {
+          "id": "w26",
+          "text": "its",
+          "start": 8.48,
+          "end": 8.72
+        },
+        {
+          "id": "w27",
+          "text": "target",
+          "start": 8.72,
+          "end": 9.2
+        },
+        {
+          "id": "w28",
+          "text": "right",
+          "start": 9.2,
+          "end": 9.52
+        },
+        {
+          "id": "w29",
+          "text": "there.",
+          "start": 9.52,
+          "end": 9.84
+        }
+      ]
+    },
+    {
+      "id": "07",
+      "path": "assets/voice/07.wav",
+      "duration_s": 12.949,
+      "words": [
+        {
+          "id": "w0",
+          "text": "Yet",
+          "start": 0,
+          "end": 0.24
+        },
+        {
+          "id": "w1",
+          "text": "this",
+          "start": 0.32,
+          "end": 0.48
+        },
+        {
+          "id": "w2",
+          "text": "perfect",
+          "start": 0.48,
+          "end": 0.88
+        },
+        {
+          "id": "w3",
+          "text": "hunter",
+          "start": 0.88,
+          "end": 1.28
+        },
+        {
+          "id": "w4",
+          "text": "nearly",
+          "start": 1.44,
+          "end": 1.84
+        },
+        {
+          "id": "w5",
+          "text": "vanished.",
+          "start": 1.84,
+          "end": 2.64
+        },
+        {
+          "id": "w6",
+          "text": "The",
+          "start": 2.64,
+          "end": 2.8
+        },
+        {
+          "id": "w7",
+          "text": "pesticide",
+          "start": 2.8,
+          "end": 3.52
+        },
+        {
+          "id": "w8",
+          "text": "DDT",
+          "start": 3.52,
+          "end": 4.32
+        },
+        {
+          "id": "w9",
+          "text": "thinned",
+          "start": 4.32,
+          "end": 4.8
+        },
+        {
+          "id": "w10",
+          "text": "its",
+          "start": 4.8,
+          "end": 4.96
+        },
+        {
+          "id": "w11",
+          "text": "eggshells",
+          "start": 4.96,
+          "end": 6
+        },
+        {
+          "id": "w12",
+          "text": "by",
+          "start": 6,
+          "end": 6.32
+        },
+        {
+          "id": "w13",
+          "text": "1975,",
+          "start": 6.32,
+          "end": 8.48
+        },
+        {
+          "id": "w14",
+          "text": "just",
+          "start": 8.48,
+          "end": 8.8
+        },
+        {
+          "id": "w15",
+          "text": "324",
+          "start": 8.8,
+          "end": 10
+        },
+        {
+          "id": "w16",
+          "text": "breeding",
+          "start": 10.16,
+          "end": 10.64
+        },
+        {
+          "id": "w17",
+          "text": "pair",
+          "start": 10.64,
+          "end": 11.12
+        },
+        {
+          "id": "w18",
+          "text": "were",
+          "start": 11.12,
+          "end": 11.28
+        },
+        {
+          "id": "w19",
+          "text": "left",
+          "start": 11.28,
+          "end": 11.68
+        },
+        {
+          "id": "w20",
+          "text": "in",
+          "start": 11.68,
+          "end": 11.92
+        },
+        {
+          "id": "w21",
+          "text": "North",
+          "start": 11.92,
+          "end": 12.24
+        },
+        {
+          "id": "w22",
+          "text": "America.",
+          "start": 12.24,
+          "end": 12.8
+        }
+      ]
+    },
+    {
+      "id": "08",
+      "path": "assets/voice/08.wav",
+      "duration_s": 10.453,
+      "words": [
+        {
+          "id": "w0",
+          "text": "After",
+          "start": 0,
+          "end": 0.32
+        },
+        {
+          "id": "w1",
+          "text": "DDT",
+          "start": 0.32,
+          "end": 1.12
+        },
+        {
+          "id": "w2",
+          "text": "was",
+          "start": 1.12,
+          "end": 1.28
+        },
+        {
+          "id": "w3",
+          "text": "banned,",
+          "start": 1.28,
+          "end": 1.84
+        },
+        {
+          "id": "w4",
+          "text": "and",
+          "start": 1.84,
+          "end": 2.08
+        },
+        {
+          "id": "w5",
+          "text": "with",
+          "start": 2.08,
+          "end": 2.32
+        },
+        {
+          "id": "w6",
+          "text": "years",
+          "start": 2.32,
+          "end": 2.56
+        },
+        {
+          "id": "w7",
+          "text": "of",
+          "start": 2.56,
+          "end": 2.72
+        },
+        {
+          "id": "w8",
+          "text": "captive",
+          "start": 2.72,
+          "end": 3.28
+        },
+        {
+          "id": "w9",
+          "text": "breeding,",
+          "start": 3.28,
+          "end": 3.92
+        },
+        {
+          "id": "w10",
+          "text": "the",
+          "start": 3.92,
+          "end": 4.08
+        },
+        {
+          "id": "w11",
+          "text": "falcon",
+          "start": 4.08,
+          "end": 4.72
+        },
+        {
+          "id": "w12",
+          "text": "came",
+          "start": 4.72,
+          "end": 5.12
+        },
+        {
+          "id": "w13",
+          "text": "back.",
+          "start": 5.12,
+          "end": 5.6
+        },
+        {
+          "id": "w14",
+          "text": "Today",
+          "start": 5.6,
+          "end": 6
+        },
+        {
+          "id": "w15",
+          "text": "it",
+          "start": 6.08,
+          "end": 6.24
+        },
+        {
+          "id": "w16",
+          "text": "nests",
+          "start": 6.24,
+          "end": 6.72
+        },
+        {
+          "id": "w17",
+          "text": "on",
+          "start": 6.72,
+          "end": 6.96
+        },
+        {
+          "id": "w18",
+          "text": "skyscrapers,",
+          "start": 6.96,
+          "end": 8.24
+        },
+        {
+          "id": "w19",
+          "text": "hunting",
+          "start": 8.24,
+          "end": 8.8
+        },
+        {
+          "id": "w20",
+          "text": "pigeons",
+          "start": 8.8,
+          "end": 9.28
+        },
+        {
+          "id": "w21",
+          "text": "above",
+          "start": 9.28,
+          "end": 9.68
+        },
+        {
+          "id": "w22",
+          "text": "our",
+          "start": 9.68,
+          "end": 9.84
+        },
+        {
+          "id": "w23",
+          "text": "cities.",
+          "start": 9.84,
+          "end": 10.32
+        }
+      ]
+    },
+    {
+      "id": "09",
+      "path": "assets/voice/09.wav",
+      "duration_s": 5.845,
+      "words": [
+        {
+          "id": "w0",
+          "text": "So",
+          "start": 0,
+          "end": 0.24
+        },
+        {
+          "id": "w1",
+          "text": "next",
+          "start": 0.24,
+          "end": 0.56
+        },
+        {
+          "id": "w2",
+          "text": "time",
+          "start": 0.56,
+          "end": 0.72
+        },
+        {
+          "id": "w3",
+          "text": "you're",
+          "start": 0.72,
+          "end": 1.04
+        },
+        {
+          "id": "w4",
+          "text": "downtown,",
+          "start": 1.04,
+          "end": 1.92
+        },
+        {
+          "id": "w5",
+          "text": "look",
+          "start": 1.92,
+          "end": 2.24
+        },
+        {
+          "id": "w6",
+          "text": "up.",
+          "start": 2.24,
+          "end": 2.8
+        },
+        {
+          "id": "w7",
+          "text": "The",
+          "start": 2.8,
+          "end": 2.96
+        },
+        {
+          "id": "w8",
+          "text": "fastest",
+          "start": 2.96,
+          "end": 3.52
+        },
+        {
+          "id": "w9",
+          "text": "chase",
+          "start": 3.52,
+          "end": 3.92
+        },
+        {
+          "id": "w10",
+          "text": "on",
+          "start": 3.92,
+          "end": 4.08
+        },
+        {
+          "id": "w11",
+          "text": "earth",
+          "start": 4.08,
+          "end": 4.48
+        },
+        {
+          "id": "w12",
+          "text": "might",
+          "start": 4.48,
+          "end": 4.8
+        },
+        {
+          "id": "w13",
+          "text": "be",
+          "start": 4.8,
+          "end": 4.96
+        },
+        {
+          "id": "w14",
+          "text": "right",
+          "start": 4.96,
+          "end": 5.2
+        },
+        {
+          "id": "w15",
+          "text": "above",
+          "start": 5.2,
+          "end": 5.52
+        },
+        {
+          "id": "w16",
+          "text": "you.",
+          "start": 5.52,
+          "end": 5.76
+        }
+      ]
+    }
+  ],
+  "sfx": [],
+  "total_duration_s": 79.743
+}

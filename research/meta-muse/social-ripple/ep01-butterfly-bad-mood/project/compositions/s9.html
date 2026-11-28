@@ -1,0 +1,91 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #s9-svg { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+    #s9-svg text { font-family: "Outfit"; }
+  </style>
+  <div id="root" data-composition-id="s9" data-width="1920" data-height="1080">
+    <svg id="s9-svg" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" data-layout-ignore></svg>
+  </div>
+  <script>
+    (function () {
+      const SR = window.SR; const { el, Camera, Butterfly, PAL, EASE, clamp, mulberry32, drive } = SR;
+      const svg = document.getElementById("s9-svg");
+      const D = 15.5, CX = 0, CY = 0;
+      el("rect", { x: 0, y: 0, width: 1920, height: 1080, fill: "#DCE3CF" }, svg);
+      const world = el("g", {}, svg);
+      const ground = el("g", {}, world), roads = el("g", {}, world), blocks = el("g", {}, world), treesL = el("g", {}, world), web = el("g", {}, world), dotsL = el("g", {}, world), fx = el("g", {}, world);
+      const R = mulberry32(2019);
+      const SPAN = 3600, CELL = 240;
+      el("rect", { x: -SPAN, y: -SPAN, width: SPAN * 2, height: SPAN * 2, fill: "#DCE3CF" }, ground);
+      // road grid
+      for (let v = -SPAN; v <= SPAN; v += CELL) {
+        el("rect", { x: v - 18, y: -SPAN, width: 36, height: SPAN * 2, fill: "#CFC6BA" }, roads);
+        el("rect", { x: -SPAN, y: v - 18, width: SPAN * 2, height: 36, fill: "#CFC6BA" }, roads);
+      }
+      // city blocks (buildings from above), parks left empty for trees
+      const cols = [PAL.sand, PAL.terracotta, PAL.slate, PAL.sage, "#C9B49A", PAL.plum];
+      const parks = [];
+      for (let gx = -SPAN; gx < SPAN; gx += CELL) for (let gy = -SPAN; gy < SPAN; gy += CELL) {
+        const x = gx + 30, y = gy + 30, w = CELL - 60;
+        if (gx === -CELL / 2 - 0 && gy === -CELL / 2) continue;
+        if (R() < 0.3) { parks.push({ x, y, w }); el("rect", { x, y, width: w, height: w, rx: 10, fill: "#C9D8B4" }, blocks); continue; }
+        const n = R() < 0.5 ? 1 : 2;
+        for (let i = 0; i < n; i++) {
+          const bw = n === 1 ? w : w / 2 - 8;
+          el("rect", { x: x + i * (bw + 16), y, width: bw, height: w, rx: 6, fill: cols[Math.floor(R() * cols.length)], stroke: "rgba(0,0,0,0.15)", "stroke-width": 4 }, blocks);
+        }
+      }
+      // the school at the centre (red roof, tiny flag)
+      el("rect", { x: -90, y: -90, width: 180, height: 180, rx: 8, fill: "#B8453F", stroke: PAL.ink, "stroke-width": 6 }, blocks);
+      el("path", { d: "M-90,-90 L90,90 M90,-90 L-90,90", stroke: "rgba(0,0,0,0.25)", "stroke-width": 5 }, blocks);
+      el("path", { d: "M0,-90 L0,-150 L40,-136 L0,-122", fill: PAL.kind, stroke: PAL.ink, "stroke-width": 4 }, blocks);
+      const schoolLbl = el("text", { x: 0, y: 140, "text-anchor": "middle", "font-family": "Outfit", "font-weight": 900, "font-size": 44, fill: PAL.ink }, blocks); schoolLbl.textContent = "LILY'S SCHOOL";
+      const dim = el("rect", { x: -SPAN, y: -SPAN, width: SPAN * 2, height: SPAN * 2, fill: "#F1EDE2", opacity: 0 }, blocks);
+      // people: dots along the roads
+      const dots = [];
+      for (let i = 0; i < 620; i++) {
+        const onX = R() < 0.5;
+        const a = Math.round((R() * 2 - 1) * SPAN / CELL) * CELL, b = (R() * 2 - 1) * SPAN * 0.95;
+        const x = onX ? b : a + (R() - 0.5) * 20, y = onX ? a + (R() - 0.5) * 20 : b;
+        const d = Math.hypot(x - CX, y - CY);
+        dots.push({ x, y, d, el: el("circle", { cx: x, cy: y, r: 9, fill: PAL.ink }, dotsL) });
+      }
+      dots.sort((p, q) => p.d - q.d);
+      // web: each dot connects to its 2 nearest neighbours
+      const edges = [];
+      dots.forEach((p, i) => {
+        const near = dots.map((q, j) => [j, Math.hypot(q.x - p.x, q.y - p.y)]).filter(([j]) => j !== i).sort((a, b) => a[1] - b[1]).slice(0, 3);
+        near.forEach(([j, len]) => { if (len < 700) { const q = dots[j]; const ln = el("line", { x1: p.x, y1: p.y, x2: q.x, y2: q.y, stroke: PAL.kind, "stroke-width": 5, "stroke-linecap": "round", opacity: 0 }, web); edges.push({ ln, d: Math.max(p.d, q.d), len }); } });
+      });
+      // trees (#TeamTrees) sprout in parks and along the edges, outward from the school
+      const trees = [];
+      parks.forEach((pk) => { for (let k = 0; k < 9; k++) { const x = pk.x + 24 + R() * (pk.w - 48), y = pk.y + 24 + R() * (pk.w - 48); trees.push({ x, y, d: Math.hypot(x, y), r: 22 + R() * 14 }); } });
+      trees.sort((a, b) => a.d - b.d);
+      trees.forEach((tr) => { tr.el = el("g", { opacity: 0 }, treesL); el("circle", { cx: tr.x, cy: tr.y, r: tr.r, fill: "#4E8A5A", stroke: "#2F5A3A", "stroke-width": 3 }, tr.el); el("circle", { cx: tr.x - tr.r * 0.3, cy: tr.y - tr.r * 0.3, r: tr.r * 0.35, fill: "#6FAE77" }, tr.el); });
+      // rings from the school
+      const rings = [0, 1, 2].map(() => el("circle", { cx: CX, cy: CY, r: 0, fill: "none", stroke: PAL.kind, "stroke-width": 14, opacity: 0 }, fx));
+      // overlay chip
+      const chip = el("g", { opacity: 0 }, svg);
+      el("rect", { x: -330, y: -46, width: 660, height: 92, rx: 46, fill: "#FBF7EE", stroke: PAL.ink, "stroke-width": 5 }, chip);
+      const ct = el("text", { x: 0, y: 3, "text-anchor": "middle", "dominant-baseline": "central", "font-family": "Outfit", "font-weight": 900, "font-size": 44, fill: "#2F5A3A" }, chip); ct.textContent = "#TeamTrees · 20 million trees";
+      const bf = Butterfly(svg, { x: [[0, 2100], [9.5, 2100], [12.5, 1500, "out"]], y: [[0, 300], [9.5, 300], [12.5, 520, "out"]], scale: 1.1, flap: 3 });
+      const cam = Camera(world, [[0, { x: 0, y: 0, z: 3.4, r: 0 }], [1.2, { x: 0, y: 0, z: 3.0, r: 0 }, "in"], [8.0, { x: 0, y: 0, z: 0.62, r: 0 }, "out"], [D, { x: 0, y: 0, z: 0.36, r: 8 }, "linear"]]);
+      const tl = gsap.timeline({ paused: true });
+      drive(tl, D, (t) => {
+        const c = cam.update(t); const z = c.z;
+        dim.setAttribute("opacity", 0.66 * clamp((t - 3.0) / 2.5, 0, 1));
+        const front = Math.max(0, (t - 0.8)) * 420;            // the gold wavefront, in world units
+        const treeFront = Math.max(0, (t - 3.2)) * 520;
+        edges.forEach((e) => { const k = clamp((front - e.d) / 300, 0, 1); e.ln.setAttribute("opacity", k * 0.95); e.ln.setAttribute("stroke-width", Math.max(5, 3.2 / z)); });
+        dots.forEach((p) => { const k = clamp((front - p.d) / 200, 0, 1); p.el.setAttribute("fill", k > 0.5 ? "#8A5A12" : PAL.ink); p.el.setAttribute("r", Math.max(9, 6 / z) * (1 + 0.6 * Math.sin(k * Math.PI))); });
+        trees.forEach((tr) => { const k = clamp((treeFront - tr.d) / 260, 0, 1); tr.el.setAttribute("opacity", k > 0 ? 1 : 0); tr.el.setAttribute("transform", `translate(${tr.x},${tr.y}) scale(${EASE.back(k)}) translate(${-tr.x},${-tr.y})`); });
+        rings.forEach((r, i) => { const k = clamp(((t - 0.8 - i * 3.6) % 7.2) / 4.5, 0, 1); r.setAttribute("r", EASE.out(k) * 3200); r.setAttribute("stroke-width", Math.max(14, 8 / z)); r.setAttribute("opacity", t > 0.8 + i * 3.6 && k < 1 ? (1 - k) * 0.9 : 0); });
+        const kc = clamp((t - 6.0) / 0.35, 0, 1) * (1 - clamp((t - 9.6) / 0.4, 0, 1));
+        chip.setAttribute("opacity", kc); chip.setAttribute("transform", `translate(960,130) scale(${0.6 + 0.4 * EASE.back(clamp((t - 6.0) / 0.35, 0, 1))})`);
+        bf.update(t);
+      });
+      window.__timelines["s9"] = tl;
+    })();
+  </script>
+</template>

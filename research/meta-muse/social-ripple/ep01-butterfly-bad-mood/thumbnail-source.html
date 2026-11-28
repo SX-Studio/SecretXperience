@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1280, height=720" />
+    <script src="assets/sr-engine.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1280px; height: 720px; overflow: hidden; background: #F7D3B5; }
+      #root { position: relative; width: 1280px; height: 720px; }
+      #art { position: absolute; inset: 0; width: 1280px; height: 720px; }
+      .t { position: absolute; font-family: "Outfit"; font-weight: 900; letter-spacing: -0.03em; line-height: 0.92; white-space: nowrap; }
+      #t1 { left: 590px; top: 64px; font-size: 112px; color: #1E1B22; }
+      #t2 { left: 590px; top: 178px; font-size: 96px; color: #E2412F; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="1" data-width="1280" data-height="720" data-no-timeline>
+      <svg id="art" viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" data-layout-ignore></svg>
+      <div id="t1" class="t">1 HONK.</div>
+      <div id="t2" class="t">3 STRANGERS.</div>
+    </div>
+    <script>
+      (function () {
+        const SR = window.SR; const { el, Set, Character, Butterfly, PAL } = SR;
+        const svg = document.getElementById("art");
+        const bg = el("g", {}, svg), fg = el("g", {}, svg), fx = el("g", {}, svg);
+        el("rect", { x: 0, y: 0, width: 1280, height: 720, fill: "#F7D3B5" }, bg);
+        Set.building(bg, -40, 260, 520, 720, PAL.sage, { cols: 2 });
+        Set.building(bg, 1080, 260, 300, 720, PAL.slate, { cols: 2 });
+        // Maya, huge, furious, looking at the viewer
+        const maya = Character(fg, { id: "th-maya", color: PAL.teal, hair: "ponytail", seed: 5, scale: 2.35, x: [[0, 320]], y: [[0, 1110]], pose: [[0, "shout", 0]], mood: [[0, "angry", 0]], look: [[0, { x: 0.2, y: 0 }]] });
+        const m = maya.update(0.5);
+        el("circle", { cx: m.headX, cy: m.headY, r: 128, fill: "none", stroke: PAL.rude, "stroke-width": 12 }, fx);
+        el("circle", { cx: m.headX, cy: m.headY, r: 178, fill: "none", stroke: PAL.rude, "stroke-width": 7, opacity: 0.5 }, fx);
+        // the red thread to two small strangers, the last one a sad kid
+        const leo = Character(fg, { id: "th-leo", color: PAL.mustard, hair: "curly", glasses: true, seed: 9, scale: 1.0, x: [[0, 820]], y: [[0, 700]], facing: [[0, -1]], pose: [[0, "hipsHands", 0]], mood: [[0, "annoyed", 0]] });
+        const sam = Character(fg, { id: "th-sam", color: "#6BA8D9", hair: "cap", hairColor: PAL.rude, seed: 2, scale: 0.82, x: [[0, 1060]], y: [[0, 700]], facing: [[0, -1]], pose: [[0, "slump", 0]], mood: [[0, "sad", 0]], look: [[0, { x: 0, y: 0.6 }]] });
+        const l = leo.update(0.5), s = sam.update(0.5);
+        const arc = (a, b, h) => `M${a.x},${a.y} Q${(a.x + b.x) / 2},${Math.min(a.y, b.y) - h} ${b.x},${b.y}`;
+        el("path", { d: arc({ x: m.headX + 110, y: m.headY - 30 }, { x: l.headX, y: l.headY - 50 }, 120), fill: "none", stroke: PAL.rude, "stroke-width": 10, "stroke-linecap": "round" }, fx);
+        el("path", { d: arc({ x: l.headX, y: l.headY - 50 }, { x: s.headX, y: s.headY - 44 }, 80), fill: "none", stroke: PAL.rude, "stroke-width": 10, "stroke-linecap": "round" }, fx);
+        [[l, "2°"], [s, "3°"]].forEach(([p, txt]) => { el("circle", { cx: p.headX, cy: p.headY, r: p === s ? 40 : 46, fill: "none", stroke: PAL.rude, "stroke-width": 6 }, fx); });
+        Butterfly(fx, { x: [[0, 1196]], y: [[0, 600]], scale: 0.8, flap: 0, rot: 20 });
+        Set.grain(svg, "tgrain", 0.05, 1280, 720);
+      })();
+    </script>
+  </body>
+</html>

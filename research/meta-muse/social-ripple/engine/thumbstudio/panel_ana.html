@@ -1,0 +1,9 @@
+<!doctype html><html><head><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@900&display=swap" rel="stylesheet"><script src="assets/sr-engine-v1.js"></script><script src="assets/sr-v3.js"></script><script src="studio.js"></script><script src="panel.js"></script>
+<style>*{margin:0;padding:0}body{width:1280px;height:720px;overflow:hidden;background:radial-gradient(circle at 60% 45%,#5b6b9a 0%,#2c3157 45%,#14152b 100%)}svg{position:absolute;inset:0}</style></head>
+<body><svg id="art" viewBox="0 0 1280 720"></svg><script>
+const svg=document.getElementById('art'); TS.defs(svg); const {el}=SR;
+TS.focusLines(svg,760,330,"#0b0c1c",110,4); TS.gloom(svg,300,1250,0,720,"#8FA3D6",7);
+const ANA={color:"#3FA7A0",outfit:"tee",hair:"bun",hairColor:"#5A3A2A",pants:"#2E7A74",seed:5};
+const hg=el("g",{filter:"url(#rim)"},svg); TS.char(hg,ANA,{id:"ana",x:760,y:1880,scale:5.3,mood:"embarrassed",pose:"relaxed",facing:-1,look:{x:-0.2,y:0}});
+TS.prop(svg,"storm",760,70,2.6); TS.bubble(svg,330,250,"I'm fine!",{fs:56,tail:40});
+</script></body></html>

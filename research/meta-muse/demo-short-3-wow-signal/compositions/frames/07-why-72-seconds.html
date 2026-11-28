@@ -1,0 +1,386 @@
+<template>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-400.woff2") format("woff2");font-weight:400;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-500.woff2") format("woff2");font-weight:500;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-600.woff2") format("woff2");font-weight:600;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-700.woff2") format("woff2");font-weight:700;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-800.woff2") format("woff2");font-weight:800;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-900.woff2") format("woff2");font-weight:900;font-style:normal;}
+@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/IBMPlexMono-400.woff2") format("woff2");font-weight:400;font-style:normal;}
+@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/IBMPlexMono-500.woff2") format("woff2");font-weight:500;font-style:normal;}
+@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/IBMPlexMono-600.woff2") format("woff2");font-weight:600;font-style:normal;}
+@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/IBMPlexMono-700.woff2") format("woff2");font-weight:700;font-style:normal;}
+
+    
+
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      container-type: size;
+      font-family: "IBM Plex Mono", monospace;
+      color: #f0ece5;
+    }
+  </style>
+
+  <div
+    id="root"
+    data-composition-id="07-why-72-seconds"
+    data-width="1080"
+    data-height="1920"
+    data-duration="9.789"
+  >
+    <!-- Full-bleed dark-register ground on its own clip layer -->
+    <div
+      id="07-why-72-seconds-ground"
+      class="clip"
+      data-start="0"
+      data-duration="9.789"
+      data-track-index="0"
+      style="position: absolute; inset: 0; background: #111111"
+    ></div>
+
+    <!-- Content layer -->
+    <div
+      id="07-why-72-seconds-stage"
+      class="clip"
+      data-start="0"
+      data-duration="9.789"
+      data-track-index="1"
+      style="position: absolute; inset: 0"
+    >
+      <!-- Camera: slow macro push underneath the whole shot -->
+      <div id="07-why-72-seconds-cam" style="position: absolute; inset: 0">
+        <svg
+          id="07-why-72-seconds-svg"
+          viewBox="0 0 1080 1920"
+          width="100%"
+          height="100%"
+          style="position: absolute; inset: 0; overflow: visible"
+        >
+          <defs>
+            <clipPath id="07-why-72-seconds-curveclip">
+              <rect id="07-why-72-seconds-cliprect" x="0" y="960" width="100" height="600"></rect>
+            </clipPath>
+          </defs>
+
+          <!-- Starfield (seeded, built in script) — drifts right-to-left -->
+          <g id="07-why-72-seconds-starwrap">
+            <g id="07-why-72-seconds-stars"></g>
+          </g>
+
+          <!-- Fixed beam wedge from the dish -->
+          <g id="07-why-72-seconds-beam">
+            <polygon
+              id="07-why-72-seconds-beamfill"
+              points="540,598 420,205 660,205"
+              fill="#E85D26"
+              fill-opacity="0.08"
+            ></polygon>
+            <line x1="540" y1="598" x2="420" y2="205" stroke="#E85D26" stroke-opacity="0.7" stroke-width="1"></line>
+            <line x1="540" y1="598" x2="660" y2="205" stroke="#E85D26" stroke-opacity="0.7" stroke-width="1"></line>
+          </g>
+
+          <!-- Earth disc (top-down), longitude spokes rotate inside a fixed outline -->
+          <g id="07-why-72-seconds-earth">
+            <circle cx="540" cy="800" r="180" fill="#111111" stroke="#888880" stroke-width="1.5"></circle>
+            <g id="07-why-72-seconds-spin"></g>
+            <circle cx="540" cy="800" r="4" fill="#888880"></circle>
+          </g>
+
+          <!-- Dish marker on the rim -->
+          <g id="07-why-72-seconds-dish">
+            <path d="M514 588 Q540 624 566 588" fill="none" stroke="#E85D26" stroke-width="4" stroke-linecap="square"></path>
+            <line x1="540" y1="606" x2="540" y2="620" stroke="#E85D26" stroke-width="4"></line>
+            <circle cx="540" cy="598" r="3.5" fill="#E85D26"></circle>
+          </g>
+
+          <!-- Spin arrow (clockwise) -->
+          <path
+            id="07-why-72-seconds-arc"
+            d="M703.93 662.44 A214 214 0 0 1 703.93 937.56"
+            fill="none"
+            stroke="#E85D26"
+            stroke-width="2"
+          ></path>
+          <path id="07-why-72-seconds-arrowhead" d="" fill="none" stroke="#E85D26" stroke-width="2"></path>
+
+          <!-- Chart: axis 0–72 s -->
+          <g id="07-why-72-seconds-chart">
+            <line id="07-why-72-seconds-yaxis" x1="100" y1="1470" x2="100" y2="1470" stroke="#505048" stroke-width="1"></line>
+            <g id="07-why-72-seconds-stems"></g>
+            <line id="07-why-72-seconds-xaxis" x1="100" y1="1470" x2="100" y2="1470" stroke="#888880" stroke-width="1"></line>
+            <g id="07-why-72-seconds-ticks"></g>
+            <text
+              id="07-why-72-seconds-lab0"
+              x="100"
+              y="1526"
+              text-anchor="start"
+              fill="#888880"
+              style="font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 28px; letter-spacing: 0.14em"
+            >0 S</text>
+            <text
+              id="07-why-72-seconds-lab72"
+              x="984"
+              y="1526"
+              text-anchor="end"
+              fill="#888880"
+              style="font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 28px; letter-spacing: 0.14em"
+            >72 S</text>
+            <path
+              id="07-why-72-seconds-curve"
+              d=""
+              fill="none"
+              stroke="#F0ECE5"
+              stroke-width="4"
+              stroke-linejoin="round"
+              stroke-linecap="round"
+              clip-path="url(#07-why-72-seconds-curveclip)"
+            ></path>
+            <circle id="07-why-72-seconds-pen" cx="100" cy="1470" r="7" fill="#F0ECE5" opacity="0"></circle>
+            <g id="07-why-72-seconds-dots"></g>
+          </g>
+        </svg>
+
+        <!-- Kickers (mono chrome, fire-orange on dark) -->
+        <div
+          id="07-why-72-seconds-k1"
+          data-text="FIXED DISH"
+          style="position: absolute; right: 56.48cqw; top: 52.41cqw; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 2.5cqw; line-height: 1; letter-spacing: 0.14em; text-transform: uppercase; color: #E85D26; white-space: pre"
+        ></div>
+        <div
+          id="07-why-72-seconds-stub"
+          style="position: absolute; left: 44.63cqw; top: 53.61cqw; width: 36px; height: 2px; background: #E85D26"
+        ></div>
+        <div
+          id="07-why-72-seconds-k2"
+          data-text="EARTH’S SPIN"
+          style="position: absolute; left: 72.22cqw; top: 72.87cqw; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 2.5cqw; line-height: 1; letter-spacing: 0.14em; text-transform: uppercase; color: #E85D26; white-space: pre"
+        ></div>
+
+        <!-- Payoff label beside the peak -->
+        <div
+          id="07-why-72-seconds-code"
+          data-text="6EQUJ5"
+          style="position: absolute; left: 60.19cqw; top: 98.33cqw; font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 3.7cqw; line-height: 1; letter-spacing: 0.14em; color: #F0ECE5; white-space: pre"
+        ></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var FID = "07-why-72-seconds";
+      var D = 9.289;
+      var NS = "http://www.w3.org/2000/svg";
+      function el(id) {
+        return document.getElementById(FID + "-" + id);
+      }
+      function mk(tag, attrs, parent) {
+        var n = document.createElementNS(NS, tag);
+        for (var k in attrs) n.setAttribute(k, attrs[k]);
+        if (parent) parent.appendChild(n);
+        return n;
+      }
+
+      // ── Data: antenna response over the 0–72 s transit window ──────────────
+      // Six real samples (~12 s apart) + gentle tails; smooth Hermite spline through them.
+      var P = [[0, 2.2], [6, 6], [18, 14], [30, 26], [42, 30], [54, 19], [66, 5], [72, 1.8]];
+      var SAMPLES = [[6, 6], [18, 14], [30, 26], [42, 30], [54, 19], [66, 5]];
+      var n = P.length;
+      var M = [];
+      for (var i = 0; i < n; i++) {
+        var a = P[Math.max(0, i - 1)], b = P[Math.min(n - 1, i + 1)];
+        M.push((b[1] - a[1]) / (b[0] - a[0]));
+      }
+      function f(s) {
+        var j = 0;
+        while (j < n - 2 && s > P[j + 1][0]) j++;
+        var x0 = P[j][0], y0 = P[j][1], x1 = P[j + 1][0], y1 = P[j + 1][1];
+        var h = x1 - x0, t = (s - x0) / h, t2 = t * t, t3 = t2 * t;
+        return (2 * t3 - 3 * t2 + 1) * y0 + (t3 - 2 * t2 + t) * h * M[j] +
+          (-2 * t3 + 3 * t2) * y1 + (t3 - t2) * h * M[j + 1];
+      }
+      var X0 = 100, XW = 880, BASE = 1470, VS = 12;
+      function X(s) { return X0 + (s / 72) * XW; }
+      function Y(v) { return BASE - v * VS; }
+
+      var peak = 0, peakS = 0;
+      for (var q = 0; q <= 720; q++) {
+        var sv = q / 10, fv = f(sv);
+        if (fv > peak) { peak = fv; peakS = sv; }
+      }
+      function g(s) { return f(s) / peak; }
+
+      // Curve path
+      var d = "";
+      for (var k = 0; k <= 144; k++) {
+        var s = k / 2;
+        d += (k === 0 ? "M" : "L") + X(s).toFixed(2) + " " + Y(f(s)).toFixed(2) + " ";
+      }
+      el("curve").setAttribute("d", d);
+
+      // ── Timing ─────────────────────────────────────────────────────────────
+      var CURVE_T0 = 4.4, CURVE_T1 = 7.4, CURVE_DUR = CURVE_T1 - CURVE_T0;
+      var SPS = 72 / CURVE_DUR;              // chart seconds per real second
+      var K = 3.4;                           // star px per chart second
+      var V = K * SPS;                       // sky drift px/s
+      var RAMP0 = 1.8, RAMP1 = 2.4;
+      var DR = V * (RAMP1 - RAMP0) / 2;      // distance covered in the power1.in ramp
+      var TP = CURVE_T0 + peakS / SPS;       // moment the bright star sits on the beam axis
+      var BX = 540 + DR + V * (TP - RAMP1);  // bright star base x (so it crosses at TP)
+      var BY = 380;
+      var DRIFT_END = DR + V * (D - RAMP1);
+
+      // ── Starfield (seeded PRNG, deterministic) ─────────────────────────────
+      function mulberry32(a) {
+        return function () {
+          a |= 0; a = (a + 0x6d2b79f5) | 0;
+          var t = Math.imul(a ^ (a >>> 15), 1 | a);
+          t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+      var rnd = mulberry32(0x77a1c3);
+      var stars = el("stars");
+      var FIELD_W = 1080 + DRIFT_END + 40;
+      for (var si = 0; si < 150; si++) {
+        var sx = -20 + rnd() * FIELD_W;
+        var sy = 205 + rnd() * 800;
+        var tier = rnd();
+        var r = tier < 0.7 ? 1.1 + rnd() * 0.6 : tier < 0.93 ? 1.8 + rnd() * 0.5 : 2.4 + rnd() * 0.5;
+        var op = tier < 0.7 ? 0.22 + rnd() * 0.25 : 0.45 + rnd() * 0.35;
+        // keep the bright star's lane uncluttered
+        if (Math.abs(sy - BY) < 18) sy += 40;
+        mk("circle", { cx: sx.toFixed(1), cy: sy.toFixed(1), r: r.toFixed(2), fill: "#F0ECE5", "fill-opacity": op.toFixed(2) }, stars);
+      }
+      var halo = mk("circle", { cx: BX.toFixed(2), cy: BY, r: "8", fill: "#E85D26", opacity: "0" }, stars);
+      mk("circle", { cx: BX.toFixed(2), cy: BY, r: "4", fill: "#F0ECE5" }, stars);
+
+      // ── Earth longitude spokes + latitude rings ────────────────────────────
+      var spin = el("spin");
+      mk("circle", { cx: 540, cy: 800, r: 60, fill: "none", stroke: "#505048", "stroke-width": 1 }, spin);
+      mk("circle", { cx: 540, cy: 800, r: 120, fill: "none", stroke: "#505048", "stroke-width": 1 }, spin);
+      for (var L = 0; L < 12; L++) {
+        var ang = (L * 30 - 90) * Math.PI / 180;
+        mk("line", {
+          x1: 540, y1: 800,
+          x2: (540 + 180 * Math.cos(ang)).toFixed(2), y2: (800 + 180 * Math.sin(ang)).toFixed(2),
+          stroke: L === 2 ? "#F0ECE5" : "#505048",
+          "stroke-opacity": L === 2 ? 0.75 : 1,
+          "stroke-width": L === 2 ? 2 : 1
+        }, spin);
+      }
+
+      // Arrowhead at the clockwise end of the spin arc (angle +40°)
+      (function () {
+        var th = 40 * Math.PI / 180;
+        var ex = 540 + 214 * Math.cos(th), ey = 800 + 214 * Math.sin(th);
+        var tx = -Math.sin(th), ty = Math.cos(th); // clockwise tangent
+        function arm(sign) {
+          var a = sign * 28 * Math.PI / 180;
+          var bx = -(tx * Math.cos(a) - ty * Math.sin(a));
+          var by = -(tx * Math.sin(a) + ty * Math.cos(a));
+          return (ex + bx * 20).toFixed(2) + " " + (ey + by * 20).toFixed(2);
+        }
+        el("arrowhead").setAttribute("d", "M" + arm(1) + " L" + ex.toFixed(2) + " " + ey.toFixed(2) + " L" + arm(-1));
+      })();
+
+      // ── Chart ticks, stems, dots ───────────────────────────────────────────
+      var ticks = [];
+      for (var ti = 0; ti <= 6; ti++) {
+        ticks.push(mk("line", { x1: X(ti * 12), y1: BASE, x2: X(ti * 12), y2: BASE + 14, stroke: "#888880", "stroke-width": 1 }, el("ticks")));
+      }
+      var stems = [], dots = [];
+      SAMPLES.forEach(function (p) {
+        stems.push(mk("line", { x1: X(p[0]).toFixed(2), y1: BASE, x2: X(p[0]).toFixed(2), y2: BASE, stroke: "#505048", "stroke-width": 1 }, el("stems")));
+        dots.push(mk("circle", { cx: X(p[0]).toFixed(2), cy: Y(p[1]).toFixed(2), r: 13, fill: "#E85D26" }, el("dots")));
+      });
+
+      // ── Split mono text into per-character spans (type-on) ─────────────────
+      function split(node) {
+        var txt = node.getAttribute("data-text");
+        var out = [];
+        for (var c = 0; c < txt.length; c++) {
+          var sp = document.createElement("span");
+          sp.textContent = txt[c];
+          node.appendChild(sp);
+          out.push(sp);
+        }
+        return out;
+      }
+      var k1 = split(el("k1")), k2 = split(el("k2")), code = split(el("code"));
+
+      // ── Timeline ───────────────────────────────────────────────────────────
+      var tl = gsap.timeline({ paused: true });
+
+      // Camera: slow push under everything
+      tl.fromTo(el("cam"), { scale: 1 }, { scale: 1.03, duration: D, ease: "sine.inOut", transformOrigin: "50% 46.875%" }, 0);
+
+      // Scene 1 (0–1.8): Earth, dish, fixed beam, "FIXED DISH"
+      tl.fromTo(el("starwrap"), { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.out" }, 0);
+      tl.fromTo(el("earth"), { opacity: 0, scale: 0.94, svgOrigin: "540 800" }, { opacity: 1, scale: 1, svgOrigin: "540 800", duration: 0.5, ease: "power3.out" }, 0);
+      tl.fromTo(el("dish"), { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 0.15);
+      tl.fromTo(el("beam"), { scaleY: 0, svgOrigin: "540 598" }, { scaleY: 1, svgOrigin: "540 598", duration: 0.7, ease: "power2.out" }, 0.3);
+      tl.fromTo(el("stub"), { scaleX: 0 }, { scaleX: 1, transformOrigin: "100% 50%", duration: 0.3, ease: "power2.out" }, 0.55);
+      k1.forEach(function (sp, i) {
+        tl.fromTo(sp, { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none" }, 0.7 + i * 0.045);
+      });
+
+      // Scene 2 (1.8–4.0): Earth spins, sky drifts right-to-left, "EARTH'S SPIN"
+      var W = 9; // deg/s once up to speed
+      var RR = W * (RAMP1 - RAMP0) / 2;
+      tl.fromTo(el("spin"), { rotation: 0, svgOrigin: "540 800" }, { rotation: RR, svgOrigin: "540 800", duration: RAMP1 - RAMP0, ease: "power1.in" }, RAMP0);
+      tl.fromTo(el("spin"), { rotation: RR, svgOrigin: "540 800" }, { rotation: RR + W * (D - RAMP1), svgOrigin: "540 800", duration: D - RAMP1, ease: "none", immediateRender: false }, RAMP1);
+      tl.fromTo(el("stars"), { x: 0 }, { x: -DR, duration: RAMP1 - RAMP0, ease: "power1.in" }, RAMP0);
+      tl.fromTo(el("stars"), { x: -DR }, { x: -DRIFT_END, duration: D - RAMP1, ease: "none", immediateRender: false }, RAMP1);
+      var arcLen = 214 * (80 * Math.PI / 180);
+      tl.fromTo(el("arc"), { attr: { "stroke-dasharray": arcLen + " " + arcLen, "stroke-dashoffset": arcLen } }, { attr: { "stroke-dashoffset": 0 }, duration: 0.65, ease: "power2.inOut" }, 1.85);
+      tl.fromTo(el("arrowhead"), { opacity: 0 }, { opacity: 1, duration: 0.15, ease: "none" }, 2.42);
+      k2.forEach(function (sp, i) {
+        tl.fromTo(sp, { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none" }, 2.1 + i * 0.045);
+      });
+
+      // Scene 3 (4.0–7.4): axis draws, then the curve self-draws as the bright star crosses the beam
+      tl.fromTo(el("xaxis"), { attr: { x2: X0 } }, { attr: { x2: X0 + XW }, duration: 0.45, ease: "power2.out" }, 4.0);
+      tl.fromTo(el("yaxis"), { attr: { y2: BASE } }, { attr: { y2: 1080 }, duration: 0.4, ease: "power2.out" }, 4.0);
+      ticks.forEach(function (tk, i) {
+        tl.fromTo(tk, { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "none" }, 4.05 + i * 0.05);
+      });
+      tl.fromTo(el("lab0"), { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.3, ease: "power3.out" }, 4.12);
+      tl.fromTo(el("lab72"), { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.3, ease: "power3.out" }, 4.32);
+
+      tl.fromTo(el("cliprect"), { attr: { width: X0 } }, { attr: { width: X0 + XW + 8 }, duration: CURVE_DUR, ease: "none" }, CURVE_T0);
+      tl.fromTo(el("pen"), { opacity: 0 }, { opacity: 1, duration: 0.15, ease: "none" }, CURVE_T0);
+
+      // Pen + star brightness + beam glow follow the same response, segment by segment
+      var SEG = 36, dt = CURVE_DUR / SEG;
+      gsap.set(el("pen"), { attr: { cx: X(0), cy: Y(f(0)) } });
+      gsap.set(halo, { attr: { r: 8 + 18 * g(0) }, opacity: 0.5 * g(0) });
+      gsap.set(el("beamfill"), { attr: { "fill-opacity": 0.08 + 0.16 * g(0) } });
+      for (var sg = 0; sg < SEG; sg++) {
+        var s0 = (sg / SEG) * 72, s1 = ((sg + 1) / SEG) * 72, at = CURVE_T0 + sg * dt;
+        tl.fromTo(el("pen"), { attr: { cx: X(s0), cy: Y(f(s0)) } }, { attr: { cx: X(s1), cy: Y(f(s1)) }, duration: dt, ease: "none", immediateRender: false }, at);
+        tl.fromTo(halo, { attr: { r: 8 + 18 * g(s0) }, opacity: 0.5 * g(s0) }, { attr: { r: 8 + 18 * g(s1) }, opacity: 0.5 * g(s1), duration: dt, ease: "none", immediateRender: false }, at);
+        tl.fromTo(el("beamfill"), { attr: { "fill-opacity": 0.08 + 0.16 * g(s0) } }, { attr: { "fill-opacity": 0.08 + 0.16 * g(s1) }, duration: dt, ease: "none", immediateRender: false }, at);
+      }
+      tl.to(el("pen"), { opacity: 0, duration: 0.2, ease: "power1.in" }, CURVE_T1);
+
+      // Scene 4 (7.4–9.289): six fire-orange samples pop onto the curve, "6EQUJ5" beside the peak, hold
+      SAMPLES.forEach(function (p, i) {
+        var at4 = 7.45 + i * 0.11;
+        tl.fromTo(stems[i], { attr: { y2: BASE } }, { attr: { y2: Y(p[1]) }, duration: 0.4, ease: "power3.out" }, at4);
+        tl.fromTo(dots[i], { attr: { r: 0 } }, { attr: { r: 13 }, duration: 0.5, ease: "back.out(1.5)" }, at4);
+      });
+      code.forEach(function (sp, i) {
+        tl.fromTo(sp, { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none" }, 8.1 + i * 0.06);
+      });
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines[FID] = tl;
+    })();
+  </script>
+</template>

@@ -1,0 +1,27 @@
+<!doctype html><html><head><meta charset="UTF-8"><link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@700&display=swap" rel="stylesheet">
+<script src="../assets/sr-engine-v1.js"></script><script src="../assets/face5rig.js"></script><script src="../assets/paper-rig.js"></script><script src="../assets/paper-sets.js"></script><script src="../assets/ep7b-sets.js"></script><script src="../assets/director.js"></script>
+<style>*{margin:0}body{width:1920px;height:1080px;overflow:hidden;background:#000}svg{position:absolute;inset:0}</style></head><body>
+<svg id="ov" viewBox="0 0 1920 1080" width="1920" height="1080"></svg>
+<script>
+const V = new URLSearchParams(location.search).get("v") || "A";
+Object.assign(SR.PAPER_POSES, { thumbsUp: { shF: 62, elF: 96, shB: 4, elB: 8 } });
+const svg = document.getElementById("ov"), Dr = DIR.make(svg, 10), el = SR.el;
+Dr.set("square", SETS.square);
+const L = { you: { skin: "#E3AE85", shirt: "#6C5CE7", pants: "#2E3A5A", shoes: "#F2EDE4", hair: "#1E1B22", hairStyle: "short", seed: 51 },
+  ana: { skin: "#9A6440", shirt: "#3FA7A0", pants: "#2E5A74", shoes: "#F2EDE4", hair: "#2A1A14", hairStyle: "bun", seed: 5, body: "slim" } };
+const ana = Dr.actor("ana", L.ana), you = Dr.actor("you", L.you);
+ana.mood.push([0, "forced", 0]); ana.pose.push([0, "thumbsUp", 0]); you.mood.push([0, "shock", 0]); you.look.push([0, { x: 0.8, y: -0.8 }]);
+const xs = []; for (let i = 0; i < 6; i++) { const r = SR.mulberry32(300 + i * 13), pk = (a) => a[Math.floor(r() * a.length)];
+  xs.push(Dr.actor("x" + i, { skin: pk(["#F6D2B4", "#E3AE85", "#C98B5E", "#B07448", "#7A4A32"]), shirt: pk(["#E8834A", "#F2C14E", "#5E9E5A", "#D85A8A", "#4F7FB0"]), pants: "#3A4A63", shoes: "#3B3446", hair: pk(["#1E1B22", "#6A4A3A", "#C79A5A"]), hairStyle: pk(["short", "curly", "ponytail", "spiky"]), seed: 40 + i }, { extra: true, mood: "grin" })); }
+const cast = V === "A" ? { ana: { fx: 0.66, fy: 0.76, hd: 0.36, f: -1 }, you: { fx: 0.17, fy: 0.70, hd: 0.27, f: 1 } } : { ana: { fx: 0.50, fy: 0.78, hd: 0.38, f: 1 } };
+[[0, 120, 830, 0.42], [1, 470, 820, 0.38], [2, 1450, 820, 0.38], [3, 1800, 830, 0.42], [4, 820, 800, 0.32], [5, 1180, 800, 0.32]].forEach(([i, wx, wy, s]) => cast["x" + i] = { wx, wy, s, f: wx < 960 ? 1 : -1 });
+Dr.shot({ t: 0, set: "square", cam: { x: 960, y: 540, z: 1 }, cast, k: 1 });
+Dr.weather("ana", [[0, 4]], -1, 3.0); xs.forEach((x, i) => Dr.weather("x" + i, [[0, [3, 2.6, 4, 2, 3.4, 2.8][i]]], -1, 1.2));
+Dr.compile(); Dr.draw(3.2); Dr.sets.square.L.front.setAttribute("display", "none");   // no fountain over the hero
+{ const J = ana.c.joints, top = J.headY - J.headR * 1.75, k = Math.min(3.0, (top - 215) / 118); ana.wx.w.set(4, 3.2, k, 1); ana.wx.w.g.setAttribute("transform", `translate(${J.headX.toFixed(1)},${(top - 118 * k).toFixed(1)})`); }
+// crowd behind fades back so the hero reads
+xs.forEach((x) => x.c.g.setAttribute("opacity", 0.55));
+const T = (txt, x, y, fs, fill, rot = -4) => { const t = el("text", { x, y, "text-anchor": "middle", "font-family": "Fredoka", "font-weight": 700, "font-size": fs, fill, stroke: "#1a1512", "stroke-width": fs * 0.14, "paint-order": "stroke", transform: `rotate(${rot} ${x} ${y})` }, svg); t.textContent = txt; };
+if (V === "A") T("I'M FINE!", 470, 300, 200, "#FFD84A"); else { T("I'M", 330, 420, 200, "#FFFFFF", -6); T("FINE!", 1600, 440, 200, "#FFD84A", 5); }
+window.READY = true;
+</script></body></html>

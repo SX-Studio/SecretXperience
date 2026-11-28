@@ -1,0 +1,20 @@
+<!doctype html><html><head><meta charset="UTF-8"><link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@700&display=swap" rel="stylesheet">
+<style>*{margin:0}body{width:1920px;height:1080px;overflow:hidden;background:#000}img{position:absolute;inset:0;width:1920px;height:1080px;object-fit:cover}svg{position:absolute;inset:0}</style></head><body>
+<img id="bg"><svg id="ov" viewBox="0 0 1920 1080" width="1920" height="1080"></svg>
+<script>
+/* Finisher for AI-made thumbnails: adds our glowing labels (ConChaser-style neon) on top of the image.
+   ?img=path&labels=JSON  labels: [{t:"I'M FINE!", x:560, y:215, fs:190, c:"#5BFF8F", arrow:[x1,y1,x2,y2]}] */
+const q = new URLSearchParams(location.search), NS = "http://www.w3.org/2000/svg", svg = document.getElementById("ov");
+document.getElementById("bg").src = q.get("img");
+const el = (n, a, p) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); p.appendChild(e); return e; };
+const defs = el("defs", {}, svg), f = el("filter", { id: "neon", x: "-30%", y: "-60%", width: "160%", height: "220%" }, defs);
+el("feGaussianBlur", { in: "SourceGraphic", stdDeviation: 14, result: "b1" }, f); el("feGaussianBlur", { in: "SourceGraphic", stdDeviation: 4, result: "b2" }, f);
+const m = el("feMerge", {}, f); ["b1", "b1", "b2", "SourceGraphic"].forEach((i) => el("feMergeNode", { in: i }, m));
+for (const L of JSON.parse(q.get("labels") || "[]")) {
+  const base = { x: L.x, y: L.y, "text-anchor": "middle", "font-family": "Fredoka", "font-weight": 700, "font-size": L.fs || 160, "letter-spacing": 3 };
+  el("text", Object.assign({}, base, { fill: "none", stroke: "#0b1210", "stroke-width": (L.fs || 160) * 0.14, "stroke-linejoin": "round" }), svg).textContent = L.t;
+  const g = el("g", { filter: "url(#neon)" }, svg); el("text", Object.assign({}, base, { fill: L.c || "#5BFF8F" }), g).textContent = L.t;
+  if (L.arrow) { const [x1, y1, x2, y2] = L.arrow, a = Math.atan2(y2 - y1, x2 - x1), h = 46;
+    el("path", { d: `M${x1},${y1} L${x2},${y2} M${x2},${y2} L${x2 - h * Math.cos(a - 0.5)},${y2 - h * Math.sin(a - 0.5)} M${x2},${y2} L${x2 - h * Math.cos(a + 0.5)},${y2 - h * Math.sin(a + 0.5)}`, stroke: L.c || "#5BFF8F", "stroke-width": 13, "stroke-linecap": "round", fill: "none" }, g); }
+}
+</script></body></html>

@@ -1,0 +1,26 @@
+<!doctype html><html><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Patrick+Hand&family=Anton&display=swap" rel="stylesheet">
+<script src="ink.js"></script><script src="cast.js"></script>
+<style>*{margin:0;padding:0}html,body{width:1280px;height:720px;overflow:hidden}svg{position:absolute;inset:0}</style></head><body>
+<svg id="ov" width="1280" height="720" viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg"></svg>
+<script>
+document.fonts.ready.then(() => {
+  const svg = document.getElementById("ov"), I = INK(svg), { el, INKC, RED } = I;
+  el("rect", { width: 1280, height: 720, fill: I.PAPER }, svg);
+  for (let i = 0; i < 16; i++) el("line", { x1: 0, x2: 1280, y1: 20 + i * 48, y2: 20 + i * 48, stroke: "#9CC3D9", "stroke-width": 2, opacity: 0.45 }, svg);
+  el("path", { d: "M700,0 H1280 V720 H620 Z", fill: "#0D0D0D" }, svg);
+  const FL = 660; el("line", { x1: 0, x2: 690, y1: FL, y2: FL, stroke: "#8A847A", "stroke-width": 4 }, svg);
+  const g = el("g", {}, svg), C = CAST(I);
+  const nami = C.make(g, "nami", 250, FL, 1.25, 0); nami.acc(0, "strawhat").key(0, "kneel", 0).face(0, "sad").key(0, { head: 14 }, 0);
+  const luffy = C.make(g, "luffy", 530, FL, 1.25, 0); luffy.acc(0, "none").face(0, "determined").key(0, { aL: 118, eL: -8 }, 0);
+  nami.update(5); luffy.update(5);
+  // tears
+  [[244, 352], [338, 374]].forEach(([x, y]) => el("path", { d: `M${x},${y} q12,26 0,40 q-12,-14 0,-40`, fill: "#7FB8E0", stroke: INKC, "stroke-width": 3 }, svg));
+  const T = (txt, x, y, size, fill, o = {}) => { const t = el("text", { x, y, "font-family": o.font || "Anton", "font-size": size, fill, "text-anchor": "middle", "letter-spacing": o.ls ?? 2 }, svg); t.textContent = txt; };
+  T("2 WORDS", 975, 215, 150, "#F4EFE6"); T("YOU CAN'T SAY.", 975, 360, 98, RED);
+  const tg = el("g", { transform: "rotate(-3 960 560)" }, svg); el("rect", { x: 770, y: 455, width: 400, height: 100, rx: 12, fill: "#F2C230", stroke: INKC, "stroke-width": 6 }, tg);
+  const tt = el("text", { x: 970, y: 528, "text-anchor": "middle", "font-family": "Anton", "font-size": 70, fill: "#1E1B2E", "letter-spacing": 3 }, tg); tt.textContent = "ONE PIECE";
+  T("explains why", 965, 640, 54, "#9A958C", { font: "Patrick Hand", ls: 0 });
+  I.ready(); I.update(99); window.READY = true;
+});
+</script></body></html>

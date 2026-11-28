@@ -1,0 +1,81 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #s3-svg { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+    #s3-svg text { font-family: "Nunito"; }
+  </style>
+  <div id="root" data-composition-id="s3" data-width="1920" data-height="1080">
+    <svg id="s3-svg" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" data-layout-ignore></svg>
+  </div>
+  <script>
+    (function () {
+      const SR = window.SR; const { el, Set, Character, Crowd, Camera, Bubble, PAL, EASE, clamp, sampleTrack, drive } = SR;
+      const svg = document.getElementById("s3-svg");
+      const sky = el("g", {}, svg);
+      Set.sky(sky, "morning", 1920, 1080); Set.sun(sky, 1500, 150, 80);
+      const far = el("g", {}, svg);            // parallax layer (moves at 45%)
+      const world = el("g", {}, svg);
+      const mid = el("g", {}, world), walkers = el("g", {}, world), hero = el("g", {}, world), front = el("g", {}, world), fx = el("g", {}, world);
+      const G = 860, D = 13.5;
+      // far skyline
+      const cols = [PAL.sage, PAL.sand, PAL.plum, PAL.slate, PAL.terracotta, PAL.sage, PAL.sand, PAL.slate];
+      for (let i = 0; i < 9; i++) Set.building(far, -200 + i * 420, 400, 420 + ((i * 97) % 220), G - 120, cols[i % cols.length], { cols: 3 });
+      // street level: shops, trees, lamps, the café at the end
+      el("rect", { x: -800, y: G - 120, width: 6000, height: 120, fill: "#E8D7C2" }, mid);
+      el("rect", { x: -800, y: G, width: 800, height: 600, fill: PAL.street }, mid); el("rect", { x: -800, y: G, width: 800, height: 70, fill: PAL.walk }, mid);
+      for (let i = 0; i < 6; i++) { Set.tree(mid, 200 + i * 640, G, 0.75); Set.lamp(mid, 520 + i * 640, G); }
+      Set.shopfront(mid, 3000, 700, G, PAL.terracotta, "THE DAILY GRIND", { awning: PAL.teal });
+      Set.street(mid, G, 5200);
+      // crowd: background walkers on the sidewalk, plus a few big foreground passers for depth
+      const crowd = Crowd(walkers, { n: 16, seed: 303, x0: -300, x1: 3600, y: G + 6, dur: D, speed: [70, 130], scale: [0.66, 0.76], idp: "s3c" });
+      const foreA = Character(front, { id: "s3-fa", color: PAL.navy, hair: "cap", seed: 31, scale: 1.45, x: [[0, 1500], [D, 1500 - 220 * D, "linear"]], y: [[0, G + 250]], facing: [[0, -1]], pose: [[0, "phone", 0]], mood: [[0, "neutral", 0]], prop: { kind: "phone" } });
+      const foreB = Character(front, { id: "s3-fb", color: "#7B9E87", hair: "bun", seed: 32, scale: 1.4, x: [[0, 4100], [D, 4100 - 230 * D, "linear"]], y: [[0, G + 250]], facing: [[0, -1]], pose: [[0, "relaxed", 0]], mood: [[0, "content", 0]], prop: { kind: "bag" } });
+      const fore = { update: (t) => { foreA.update(t); foreB.update(t); } };
+      const mayaX = [[0, 620], [D, 2960, "linear"]];
+      // passers-by flinch as Maya passes (the mood is visible)
+      crowd.people.forEach((p) => {
+        for (let t = 7.8; t < D; t += 0.05) {
+          const px = sampleTrack(p.spec.x, t, 0), mx = sampleTrack(mayaX, t, 0);
+          if (Math.abs(px - mx) < 70) { p.spec.mood = [[0, "neutral", 0], [t, "worried", 0.25], [t + 1.6, "neutral", 0.5]]; p.spec.look = [[0, { x: 0, y: 0 }], [t, { x: -1, y: 0 }], [t + 1.6, { x: 0, y: 0 }]]; break; }
+        }
+      });
+      const maya = Character(hero, { id: "s3-maya", color: PAL.teal, hair: "ponytail", seed: 5, x: mayaX, y: [[0, G + 60]], scale: 1.05,
+        pose: [[0, "relaxed", 0], [4.15, "startle", 0.12], [4.9, "relaxed", 0.4], [8.2, "crossed", 0.35], [9.8, "relaxed", 0.4]],
+        mood: [[0, "annoyed", 0], [4.15, "shock", 0.1], [5.0, "angry", 0.3], [9.8, "annoyed", 0.4]],
+        squash: [[4.12, 0.08]], look: [[0, { x: 1, y: 0 }]], prop: { kind: "phone" } });
+      // gag: "took eleven years off her life" - her hair goes grey for a beat
+      const hairOrig = PAL.ink, grey = "#CFCAC4";
+      // thought bubble: the car that honked
+      const thought = el("g", { opacity: 0 }, fx);
+      [[0, 0, 70], [-70, 70, 16], [-100, 108, 9]].forEach(([x, y, r], i) => el(i ? "circle" : "ellipse", i ? { cx: x, cy: y, r, fill: PAL.white, stroke: PAL.ink, "stroke-width": 4 } : { cx: x, cy: y, rx: 120, ry: r, fill: PAL.white, stroke: PAL.ink, "stroke-width": 4 }, thought));
+      Set.car(el("g", { transform: "translate(0,32) scale(0.42)" }, thought), 0, 0, "#C9A227", 1);
+      // the mood mark and its "FREE" price tag
+      const mark = el("circle", { r: 60, fill: "none", stroke: PAL.rude, "stroke-width": 6 }, fx);
+      const tag = el("g", { opacity: 0 }, fx);
+      el("path", { d: "M0,0 L0,40", stroke: PAL.ink, "stroke-width": 3 }, tag);
+      el("path", { d: "M-46,40 L36,40 L56,66 L36,92 L-46,92 Z", fill: "#FFF6C7", stroke: PAL.ink, "stroke-width": 4, "stroke-linejoin": "round" }, tag);
+      el("circle", { cx: 38, cy: 66, r: 6, fill: PAL.ink }, tag);
+      const tagT = el("text", { x: -6, y: 67, "text-anchor": "middle", "dominant-baseline": "central", "font-family": "Outfit", "font-weight": 900, "font-size": 30, fill: PAL.rude }, tag); tagT.textContent = "FREE";
+      const cam = Camera(world, [[0, { x: 760, y: 790, z: 1.42, r: 0 }], [D, { x: 3060, y: 780, z: 1.5, r: 0 }, "linear"]]);
+      const tl = gsap.timeline({ paused: true });
+      drive(tl, D, (t) => {
+        const c = cam.update(t);
+        far.setAttribute("transform", `translate(${960 - c.x * 0.45 * c.z},${540 - 790 * c.z + 150}) scale(${c.z})`);
+        crowd.update(t); fore.update(t);
+        const m = maya.update(t);
+        const greyK = clamp((t - 5.55) / 0.15, 0, 1) * (1 - clamp((t - 7.0) / 0.4, 0, 1));
+        maya.hair.forEach((h) => h.setAttribute("fill", greyK > 0.5 ? grey : hairOrig));
+        const kth = clamp((t - 4.0) / 0.25, 0, 1) * (1 - clamp((t - 6.9) / 0.3, 0, 1));
+        thought.setAttribute("opacity", kth);
+        thought.setAttribute("transform", `translate(${m.headX + 150},${m.headY - 170}) scale(${0.6 + 0.4 * EASE.back(clamp((t - 4.0) / 0.3, 0, 1))})`);
+        mark.setAttribute("cx", m.headX); mark.setAttribute("cy", m.headY);
+        mark.setAttribute("r", 60 + 5 * Math.sin(t * 5)); mark.setAttribute("opacity", 0.8 + 0.2 * Math.sin(t * 5));
+        const kt = clamp((t - 11.25) / 0.3, 0, 1);
+        const swing = Math.sin((t - 11.25) * 7) * 18 * Math.exp(-(t - 11.25) * 1.2);
+        tag.setAttribute("opacity", t > 11.25 ? 1 : 0);
+        tag.setAttribute("transform", `translate(${m.headX + 42},${m.headY + 44}) rotate(${t > 11.25 ? swing : 0}) scale(${EASE.back(kt)})`);
+      });
+      window.__timelines["s3"] = tl;
+    })();
+  </script>
+</template>

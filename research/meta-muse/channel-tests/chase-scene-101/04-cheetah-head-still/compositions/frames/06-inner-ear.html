@@ -1,0 +1,265 @@
+<template>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500-italic.woff2") format("woff2");font-weight:500;font-style:italic;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600-italic.woff2") format("woff2");font-weight:600;font-style:italic;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+#root, #root * { font-variant-numeric: lining-nums; }
+
+#root, #root * { font-variant-numeric: lining-nums; }
+
+    #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; }
+
+    #f06-ground { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; }
+
+    #f06-hud { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; pointer-events: none; }
+
+    #f06-lines { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible;
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6)); }
+
+    /* tracked anchors: position written by render(); inner element owns the GSAP scale */
+    .f06-anchor { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+    #f06-ret { position: absolute; left: -160px; top: -160px; width: 320px; height: 320px; transform-origin: 50% 50%;
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6)); }
+    #f06-ear { position: absolute; left: -20px; top: -20px; width: 40px; height: 40px; transform-origin: 50% 50%;
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6)); }
+    #f06-tgt { position: absolute; left: 1024px; top: 1264px; width: 44px; height: 44px; transform-origin: 50% 50%;
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6)); }
+
+    /* inset: centre (300,1322), r 170 */
+    #f06-inset-drift { position: absolute; left: 130px; top: 1152px; width: 340px; height: 340px; transform-origin: 50% 50%; }
+    #f06-inset { position: absolute; left: 0; top: 0; width: 340px; height: 340px; transform-origin: 50% 50%; }
+    #f06-inset svg { display: block; width: 340px; height: 340px; overflow: visible; }
+
+    .f06-pill {
+      position: absolute; white-space: nowrap;
+      font-family: "Courier Prime", monospace; font-weight: 700; font-size: 32px; line-height: 1.2;
+      letter-spacing: 0.08em; text-transform: uppercase; color: #FFFFFF;
+      background: rgba(10, 8, 6, 0.72); border-left: 2px solid #E8553F;
+      padding: 8px 16px 8px 14px; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    }
+    .f06-red { color: #E8553F; }
+    #f06-lbl-vest { left: 32px; top: 1086px; }
+    #f06-lbl-large { left: 32px; top: 1500px; font-size: 30px; }
+    #f06-lbl-target { right: 40px; top: 1314px; }
+
+    #f06-src {
+      position: absolute; left: 32px; top: 1018px; white-space: nowrap;
+      font-family: "Source Sans 3", sans-serif; font-weight: 700; font-size: 28px; line-height: 1.2;
+      letter-spacing: 0.1em; text-transform: uppercase; color: #2B2118;
+      background: rgba(239, 230, 210, 0.92); border: 2px solid #B9A98C; padding: 4px 10px;
+    }
+  </style>
+
+  <div id="root" data-composition-id="06-inner-ear" data-width="1080" data-height="1920">
+    <video id="f06-ground" src="public/clips/s6_raw.mp4" muted playsinline class="clip"
+      data-start="0" data-duration="5.705" data-track-index="0"></video>
+
+    <div id="f06-hud" class="clip" data-start="0" data-duration="5.705" data-track-index="1">
+      <!-- dynamic lines (tracked) -->
+      <svg id="f06-lines" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+        <line id="f06-call-line" x1="0" y1="0" x2="0" y2="0" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-linecap="round" opacity="0" />
+        <line id="f06-sight-line" x1="0" y1="0" x2="0" y2="0" stroke="#E8553F" stroke-width="4" stroke-linecap="round" stroke-dasharray="16 12" opacity="0" />
+        <circle id="f06-sight-dot" cx="0" cy="0" r="6" fill="#E8553F" opacity="0" />
+      </svg>
+
+      <!-- reticle on the face (eyes midpoint, tracked) -->
+      <div id="f06-ret-pos" class="f06-anchor">
+        <div id="f06-ret">
+          <svg width="320" height="320" viewBox="-160 -160 320 320" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="0" cy="0" r="125" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2" />
+            <circle id="f06-ret-red" cx="0" cy="0" r="125" fill="none" stroke="#E8553F" stroke-width="3" opacity="0" />
+            <g stroke="#E8553F" stroke-width="4" stroke-linecap="round">
+              <line x1="0" y1="-108" x2="0" y2="-146" />
+              <line x1="0" y1="108" x2="0" y2="146" />
+              <line x1="-108" y1="0" x2="-146" y2="0" />
+              <line x1="108" y1="0" x2="146" y2="0" />
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <!-- ear-base marker (callout origin, tracked) -->
+      <div id="f06-ear-pos" class="f06-anchor">
+        <div id="f06-ear">
+          <svg width="40" height="40" viewBox="-20 -20 40 40" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="0" cy="0" r="11" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2" />
+            <circle cx="0" cy="0" r="4" fill="#E8553F" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- inset: schematic inner ear -->
+      <div id="f06-inset-drift">
+        <div id="f06-inset">
+          <svg viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="170" cy="170" r="169" fill="rgba(10,8,6,0.78)" stroke="#E8553F" stroke-width="2" />
+            <circle cx="170" cy="170" r="150" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="1" />
+            <text id="f06-schem" x="170" y="42" text-anchor="middle" font-family="Courier Prime, monospace" font-weight="700"
+              font-size="16" letter-spacing="2.5" fill="rgba(255,255,255,0.62)">SCHEMATIC</text>
+
+            <!-- vestibule -->
+            <ellipse id="f06-vest" cx="178" cy="184" rx="22" ry="18" fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.92)" stroke-width="4" />
+
+            <!-- three semicircular canals: loops from the vestibule at 0°, 60°, 120° -->
+            <g fill="none" stroke="rgba(255,255,255,0.95)" stroke-width="6" stroke-linecap="round">
+              <path id="f06-canal-a" pathLength="1" stroke-dasharray="1 1" stroke-dashoffset="1"
+                d="M178 184 A70 26 0 1 1 318 184 A70 26 0 1 1 178 184" />
+              <path id="f06-canal-b" pathLength="1" stroke-dasharray="1 1" stroke-dashoffset="1" transform="rotate(-60 178 184)"
+                d="M178 184 A70 26 0 1 1 318 184 A70 26 0 1 1 178 184" />
+              <path id="f06-canal-c" pathLength="1" stroke-dasharray="1 1" stroke-dashoffset="1" transform="rotate(-120 178 184)"
+                d="M178 184 A70 26 0 1 1 318 184 A70 26 0 1 1 178 184" />
+            </g>
+            <!-- red "active" copies (fade in on 'locked') -->
+            <g id="f06-canals-red" fill="none" stroke="#E8553F" stroke-width="6" stroke-linecap="round" opacity="0">
+              <path d="M178 184 A70 26 0 1 1 318 184 A70 26 0 1 1 178 184" />
+              <path transform="rotate(-60 178 184)" d="M178 184 A70 26 0 1 1 318 184 A70 26 0 1 1 178 184" />
+              <path transform="rotate(-120 178 184)" d="M178 184 A70 26 0 1 1 318 184 A70 26 0 1 1 178 184" />
+            </g>
+
+            <!-- duct + spiral cochlea -->
+            <path id="f06-cochlea" pathLength="1" stroke-dasharray="1 1" stroke-dashoffset="1" fill="none"
+              stroke="rgba(255,255,255,0.6)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"
+              d="M178 184 L130.2 225.8 L123.7 220.4 L116.4 216.6 L108.5 214.5 L100.4 214.0 L92.6 215.3 L85.2 218.1 L78.8 222.4 L73.4 227.8 L69.4 234.2 L66.8 241.1 L65.8 248.4 L66.3 255.6 L68.3 262.4 L71.6 268.6 L76.1 273.8 L81.5 277.9 L87.5 280.8 L93.9 282.3 L100.4 282.4 L106.6 281.1 L112.3 278.6 L117.3 275.0 L121.4 270.6 L124.4 265.4 L126.2 259.9 L126.7 254.2 L126.1 248.6 L124.3 243.4 L121.5 238.8 L117.9 234.9 L113.6 231.9 L109.0 230.0 L104.1 229.1 L99.2 229.3 L94.6 230.4 L90.4 232.5 L86.8 235.3 L84.0 238.8 L82.1 242.7 L81.0 246.8 L80.8 250.9 L81.5 254.8 L83.0 258.5 L85.2 261.6 L87.9 264.1 L91.0 266.0 L94.3 267.1 L97.6 267.5 L100.9 267.1 L103.9 266.1 L106.5 264.5 L108.7 262.5 L110.3 260.1 L111.3 257.6 L111.7 254.9 L111.6 252.4 L110.9 250.1 L109.8 248.0 L108.3 246.3 L106.6 245.1 L104.7 244.3 L102.8 243.9 L101.0 244.0 L99.4 244.5 L98.0 245.3 L96.9 246.3 L96.1 247.5" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- target marker at the end of the sight line (fixed) -->
+      <div id="f06-tgt">
+        <svg width="44" height="44" viewBox="-22 -22 44 44" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="0" cy="0" r="13" fill="rgba(10,8,6,0.5)" stroke="#E8553F" stroke-width="3" />
+          <g stroke="#FFFFFF" stroke-width="2" stroke-linecap="round">
+            <line x1="0" y1="-16" x2="0" y2="-21" /><line x1="0" y1="16" x2="0" y2="21" />
+            <line x1="-16" y1="0" x2="-21" y2="0" /><line x1="16" y1="0" x2="21" y2="0" />
+          </g>
+          <circle cx="0" cy="0" r="3.5" fill="#E8553F" />
+        </svg>
+      </div>
+
+      <!-- labels -->
+      <div id="f06-src">Grohé et al., Sci. Rep. 2018</div>
+      <div id="f06-lbl-vest" class="f06-pill">Vestibular system</div>
+      <div id="f06-lbl-large" class="f06-pill"><span class="f06-red">Unusually large</span> in cheetahs</div>
+      <div id="f06-lbl-target" class="f06-pill">Target · <span class="f06-red">Locked</span></div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      window.__timelines = window.__timelines || {};
+      var DUR = 5.705, FPS = 24;
+
+      // s6.json head (CSRT face track, composite px), rounded; frames[i].t = i/24
+      var HX = [909,909,911,913,915,917,919,919,921,921,922,922,919,919,919,917,917,917,915,915,913,913,911,911,909,908,908,908,908,906,908,906,906,906,906,906,906,908,906,906,906,906,906,906,906,906,906,908,908,906,908,908,906,906,904,904,904,902,902,902,902,900,900,898,898,896,894,894,892,891,891,889,889,889,889,887,887,887,887,885,887,887,887,887,887,887,887,887,885,885,885,887,887,885,885,885,887,887,887,887,887,887,891,889,891,891,892,892,892,892,892,892,894,894,894,894,896,894,894,894,896,896,894,896,896,894,892,892,891,891,891,891,891,889,887,889,889,891,889,891,889];
+      var HY = [853,855,857,859,861,862,864,866,866,868,870,872,876,876,878,879,879,878,876,874,870,870,868,868,866,862,862,859,861,862,864,866,866,864,866,868,868,866,864,864,864,864,862,862,862,861,861,861,859,859,859,859,859,859,859,859,861,859,857,859,859,859,857,855,855,853,853,851,851,849,849,849,849,848,848,848,846,846,846,848,846,848,848,848,849,849,851,849,851,851,853,851,853,851,849,851,851,851,853,855,855,855,859,861,861,862,864,866,868,868,868,870,870,870,870,870,868,866,862,861,859,857,855,853,853,855,855,853,849,848,844,844,840,838,836,834,832,829,827,823,821];
+      var N = HX.length;
+
+      // offsets calibrated on the footage: head point = forehead; eyes midpoint and ear base relative to it
+      var EYE_DX = 30, EYE_DY = 115, EAR_DX = -150, EAR_DY = -30;
+      var INSET = { x: 300, y: 1322, r: 170 };
+      var TGT = { x: 1046, y: 1286 };
+
+      var root = document.querySelector('[data-composition-id="06-inner-ear"]');
+      function $(id) { return root.querySelector("#" + id); }
+      var retPos = $("f06-ret-pos"), earPos = $("f06-ear-pos"), drift = $("f06-inset-drift");
+      var callLine = $("f06-call-line"), sightLine = $("f06-sight-line"), sightDot = $("f06-sight-dot");
+
+      function clamp01(v) { return v < 0 ? 0 : (v > 1 ? 1 : v); }
+      function out3(v) { var u = 1 - v; return 1 - u * u * u; }
+      function headAt(t) {
+        var f = Math.max(0, t) * FPS;
+        var i = Math.min(N - 1, Math.floor(f));
+        var j = Math.min(N - 1, i + 1);
+        var a = i >= N - 1 ? 0 : f - i;
+        return [HX[i] + (HX[j] - HX[i]) * a, HY[i] + (HY[j] - HY[i]) * a];
+      }
+      function setLine(el, x1, y1, x2, y2) {
+        el.setAttribute("x1", x1.toFixed(1)); el.setAttribute("y1", y1.toFixed(1));
+        el.setAttribute("x2", x2.toFixed(1)); el.setAttribute("y2", y2.toFixed(1));
+      }
+
+      // single writer for every tracked / time-derived position
+      function render(t) {
+        var h = headAt(t);
+        var ex = h[0] + EYE_DX, ey = h[1] + EYE_DY;   // between the eyes
+        var ax = h[0] + EAR_DX, ay = h[1] + EAR_DY;   // ear base
+        retPos.style.transform = "translate(" + ex.toFixed(1) + "px," + ey.toFixed(1) + "px)";
+        earPos.style.transform = "translate(" + ax.toFixed(1) + "px," + ay.toFixed(1) + "px)";
+
+        // slow 2% push on the inset during the hold
+        var ds = 1 + 0.02 * clamp01((t - 2.0) / (DUR - 2.0));
+        drift.style.transform = "scale(" + ds.toFixed(4) + ")";
+
+        // callout: ear base -> inset ring (draws on 'balance')
+        var dx = ax - INSET.x, dy = ay - INSET.y, L = Math.sqrt(dx * dx + dy * dy) || 1;
+        var rr = INSET.r * ds;
+        var rx = INSET.x + dx / L * rr, ry = INSET.y + dy / L * rr;
+        var pc = out3(clamp01((t - 0.96) / 0.42));
+        setLine(callLine, ax, ay, ax + (rx - ax) * pc, ay + (ry - ay) * pc);
+        callLine.setAttribute("opacity", pc > 0 ? "1" : "0");
+
+        // sight line: between the eyes -> target (draws on 'eyes')
+        var ps = out3(clamp01((t - 3.84) / 0.42));
+        setLine(sightLine, ex, ey, ex + (TGT.x - ex) * ps, ey + (TGT.y - ey) * ps);
+        sightLine.setAttribute("opacity", ps > 0 ? "1" : "0");
+        sightDot.setAttribute("cx", ex.toFixed(1)); sightDot.setAttribute("cy", ey.toFixed(1));
+        sightDot.setAttribute("opacity", ps > 0 ? "1" : "0");
+      }
+
+      var tl = gsap.timeline({ paused: true });
+
+      // driver: one linear proxy over the whole frame (seek-safe tracking).
+      // The proxy prop is a getter/setter so render() runs on every timeline render,
+      // including seeks that suppress callbacks; onUpdate kept as the documented hook.
+      var cur = 0;
+      var D = { t: function (v) { if (arguments.length) { cur = v; render(v); } return cur; } };
+      tl.fromTo(D, { t: 0 }, { t: DUR, duration: DUR, ease: "none", onUpdate: function () { render(cur); } }, 0);
+
+      // Scene 1 — reticle locks onto the face (2-step snap)
+      tl.fromTo("#f06-ret", { opacity: 0 }, { opacity: 1, duration: 0.06, ease: "none" }, 0.2);
+      tl.fromTo("#f06-ret", { scale: 1.4 }, { scale: 0.9, duration: 0.14, ease: "expo.out", immediateRender: true }, 0.2);
+      tl.to("#f06-ret", { scale: 1, duration: 0.2, ease: "power2.out" }, 0.34);
+
+      // Scene 2 — 'balance organ': callout from the ear, inset, inner ear draws on
+      tl.fromTo("#f06-ear", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.3, ease: "expo.out" }, 0.96);
+      tl.fromTo("#f06-inset", { opacity: 0, scale: 0.86 }, { opacity: 1, scale: 1, duration: 0.5, ease: "power3.out" }, 1.22);
+      tl.fromTo("#f06-vest", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 1.4);
+      tl.fromTo("#f06-lbl-vest", { opacity: 0, x: -18 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 1.44);
+      ["#f06-canal-a", "#f06-canal-b", "#f06-canal-c"].forEach(function (sel, k) {
+        var at = 1.5 + k * 0.25;
+        tl.fromTo(sel, { opacity: 0 }, { opacity: 1, duration: 0.06, ease: "none" }, at);
+        tl.fromTo(sel, { attr: { "stroke-dashoffset": 1 } }, { attr: { "stroke-dashoffset": 0 }, duration: 0.6, ease: "power2.inOut" }, at);
+      });
+      // 'inner ear': cochlea + schematic tag
+      tl.fromTo("#f06-cochlea", { opacity: 0 }, { opacity: 1, duration: 0.06, ease: "none" }, 2.16);
+      tl.fromTo("#f06-cochlea", { attr: { "stroke-dashoffset": 1 } }, { attr: { "stroke-dashoffset": 0 }, duration: 0.8, ease: "power2.inOut" }, 2.16);
+      tl.fromTo("#f06-schem", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power2.out" }, 2.4);
+      // 'ear': size note, then source
+      tl.fromTo("#f06-lbl-large", { opacity: 0, x: -18 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 2.72);
+      tl.fromTo("#f06-src", { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, 3.1);
+
+      // Scene 3 — 'eyes locked on the target' (sight line drawn by render from 3.84)
+      tl.to("#f06-ret", { scale: 0.88, duration: 0.1, ease: "expo.out" }, 4.16);
+      tl.to("#f06-ret", { scale: 1, duration: 0.22, ease: "power2.out" }, 4.26);
+      tl.fromTo("#f06-ret-red", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power2.out" }, 4.16);
+      tl.fromTo("#f06-canals-red", { opacity: 0 }, { opacity: 1, duration: 0.35, ease: "power2.out" }, 4.16);
+      tl.fromTo("#f06-tgt", { opacity: 0, scale: 1.4 }, { opacity: 1, scale: 0.9, duration: 0.12, ease: "expo.out" }, 4.26);
+      tl.to("#f06-tgt", { scale: 1, duration: 0.18, ease: "power2.out" }, 4.38);
+      tl.fromTo("#f06-lbl-target", { opacity: 0, x: 18 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 4.48);
+      // hold to the end (no exit)
+
+      render(0);
+      window.__timelines["06-inner-ear"] = tl;
+    })();
+  </script>
+</template>

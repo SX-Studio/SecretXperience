@@ -1,0 +1,107 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #s7-svg { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+    #s7-svg text { font-family: "Nunito"; }
+  </style>
+  <div id="root" data-composition-id="s7" data-width="1920" data-height="1080">
+    <svg id="s7-svg" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" data-layout-ignore></svg>
+  </div>
+  <script>
+    (function () {
+      const SR = window.SR; const { el, Set, Character, Camera, Bubble, Ripple, Butterfly, Crowd, PAL, EASE, clamp, sampleTrack, drive } = SR;
+      const svg = document.getElementById("s7-svg");
+      const D = 20.0, C1 = 6.8, C2 = 15.0;
+      // ===== A: café — Leo cracks, Maya cracks =====
+      const A = el("g", {}, svg);
+      const L = { bg: el("g", {}, A), board: el("g", {}, A), back: el("g", {}, A), counterL: el("g", {}, A), front: el("g", {}, A), fx: el("g", {}, A) };
+      const cafe = window.EP1.cafe(L, { id: "s7" }); const G = cafe.G;
+      const maya = Character(L.back, { id: "s7-maya", color: PAL.teal, hair: "ponytail", seed: 5, scale: 0.95, x: [[0, 600]], y: [[0, G + 30]], facing: [[0, 1]],
+        pose: [[0, "sit", 0], [4.9, "sitSlump", 0.1], [5.05, "sit", 0.25]], mood: [[0, "annoyed", 0], [3.0, "surprised", 0.3], [4.95, "joy", 0.25]], squash: [[4.95, 0.08]], prop: { kind: "cup" }, look: [[0, { x: 1, y: 0 }]] });
+      const leo = Character(L.counterL, { id: "s7-leo", color: PAL.mustard, hair: "curly", glasses: true, seed: 9, x: [[0, 1420]], y: [[0, G - 64]], facing: [[0, -1]], noWalk: true,
+        pose: [[0, "hold", 0], [0.55, "shrug", 0.15], [1.8, "relaxed", 0.3], [2.2, "wave", 0.3], [3.4, "give", 0.3]], mood: [[0, "surprised", 0], [0.55, "joy", 0.15], [2.2, "happy", 0.3]], squash: [[0.6, 0.1], [0.9, 0.06]] });
+      const machine = cafe.counter();
+      // the pinned drawing on the espresso machine
+      const pinned = el("g", { opacity: 0 }, L.counterL);
+      el("rect", { x: -34, y: -26, width: 68, height: 52, fill: "#FFFDF6", stroke: PAL.ink, "stroke-width": 3 }, pinned);
+      el("path", { d: "M-14,-4 a8,8 0 1,0 16,0 a8,8 0 1,0 -16,0 M-6,4 L-6,18 M-16,10 L4,10 M-6,18 L-12,24 M-6,18 L0,24", fill: "none", stroke: "#2E5FA8", "stroke-width": 3 }, pinned);
+      el("path", { d: "M-6,6 Q-26,10 -22,22 L-6,14", fill: "none", stroke: PAL.rude, "stroke-width": 3 }, pinned);
+      el("circle", { cx: 0, cy: -22, r: 4, fill: PAL.rude }, pinned);
+      const onMe = Bubble(L.fx, { text: "Rough morning? This one's on me.", t0: 2.2, t1: 4.6, side: -1 });
+      const toMaya = Ripple(L.fx, { color: PAL.kind, t: 3.5, dur: 1.0, maxR: 140, rings: 2, width: 7, tThread: 3.4, threadDur: 0.8, threadHold: 0.6, arc: 200 });
+      const mayaMark = el("circle", { r: 58, fill: "none", stroke: PAL.rude, "stroke-width": 6 }, L.fx);
+      const leoGold = el("circle", { r: 62, fill: "none", stroke: PAL.kind, "stroke-width": 6 }, L.fx);
+      const laughRing = Ripple(L.fx, { color: PAL.kind, t: 0.6, dur: 1.2, maxR: 300, rings: 3, width: 8 });
+      const camA = Camera(A, [[0, { x: 1300, y: 600, z: 1.5, r: 0 }], [1.6, { x: 1300, y: 600, z: 1.55, r: 0 }, "linear"], [2.6, { x: 1000, y: 580, z: 1.05, r: 0 }, "inOut"], [4.6, { x: 900, y: 600, z: 1.15, r: 0 }, "linear"], [5.2, { x: 680, y: 660, z: 1.9, r: 0 }, "out"], [C1, { x: 670, y: 660, z: 2.0, r: 0 }, "linear"]]);
+      // ===== B: the crosswalk — Maya waves a car through; it's Dev =====
+      const B = el("g", { opacity: 0 }, svg);
+      const bBg = el("g", {}, B), bRoad = el("g", {}, B), bMid = el("g", {}, B), bFg = el("g", {}, B), bFx = el("g", {}, B);
+      const GB = 700, LANE = 1000;
+      Set.sky(bBg, "noon", 3200, 1700); el("rect", { x: -800, y: -400, width: 4000, height: 520, fill: "#CDE4EC" }, bBg);
+      [[-420, PAL.slate], [0, PAL.sage], [360, PAL.sand], [820, PAL.terracotta], [1120, PAL.plum], [1540, PAL.sage], [1920, PAL.slate]].forEach(([x, c], i) => Set.building(bBg, x, [420, 360, 460, 300, 420, 380, 520][i], [640, 520, 600, 470, 700, 560, 650][i], GB, c, { cols: 3 }));
+      Set.clockSign(bBg, 590, 210, "7:56");
+      Set.street(bBg, GB, 3200); el("rect", { x: -800, y: GB, width: 800, height: 1000, fill: PAL.street }, bBg); el("rect", { x: -800, y: GB, width: 4000, height: 70, fill: PAL.walk }, bBg);
+      Set.crosswalk(bRoad, 960, GB, 440, 7);
+      const carG = el("g", {}, bRoad);
+      const devWrap = el("g", { "clip-path": SR.clip(carG, "s7-devclip", "M-66,-150 L-36,-150 L-36,-102 L-100,-102 Z M-24,-150 L64,-150 Q80,-150 90,-130 L110,-102 L-24,-102 Z") }, carG);
+      const dev = Character(devWrap, { id: "s7-dev", color: PAL.navy, hair: "short", seed: 21, scale: 0.8, x: [[0, 60]], y: [[0, 40]], noWalk: true,
+        pose: [[0, "drive", 0], [9.9, "driveWave", 0.3], [11.4, "drive", 0.3]], mood: [[0, "worried", 0], [8.6, "surprised", 0.25], [9.6, "joy", 0.3]], look: [[0, { x: 1, y: 0 }], [8.6, { x: 1, y: -0.5 }]] });
+      Set.car(carG, 0, 0, "#C9A227", 1, { holes: true });
+      // the school-play flyer on the dashboard
+      const flyer = el("g", {}, carG);
+      el("rect", { x: 70, y: -128, width: 34, height: 22, fill: "#FFF6C7", stroke: PAL.ink, "stroke-width": 2 }, flyer);
+      el("path", { d: "M80,-118 q4,-6 8,0 q4,-6 8,0", fill: "none", stroke: PAL.kind, "stroke-width": 3 }, flyer);
+      const carX = [[0, -500], [C1, -500], [8.1, 560, "out"], [14.2, 560], [15.0, 2400, "in"]];
+      const mayaB = Character(bFg, { id: "s7-mayaB", color: PAL.teal, hair: "ponytail", seed: 5, x: [[0, 1000]], y: [[0, GB + 60]], scale: 1.0,
+        pose: [[0, "relaxed", 0], [C1 + 1.4, "wave", 0.3], [C1 + 3.4, "relaxed", 0.4]], mood: [[0, "content", 0], [C1 + 1.4, "happy", 0.3]], look: [[0, { x: -1, y: 0.4 }]], facing: [[0, -1]] });
+      const crowdB = Crowd(bMid, { n: 7, seed: 756, x0: -100, x1: 2300, y: GB + 40, dur: 9, speed: [60, 100], scale: [0.6, 0.7], idp: "s7c" });
+      const toDev = Ripple(bFx, { color: PAL.kind, t: C1 + 1.5, dur: 1.2, maxR: 200, rings: 2, width: 7, tThread: C1 + 1.6, threadDur: 0.9, threadHold: 1.0, arc: 120 });
+      const flyerTag = Bubble(bFx, { text: "SCHOOL PLAY · 8:00 AM", t0: 12.6, t1: 14.6, side: 1, size: 26, color: "#FFF6C7" });
+      const camB = Camera(B, [[C1, { x: 820, y: 760, z: 1.2, r: 0 }], [8.4, { x: 820, y: 800, z: 1.35, r: 0 }, "inOut"], [9.3, { x: 820, y: 800, z: 1.35, r: 0 }], [9.9, { x: 640, y: 880, z: 2.6, r: 0 }, "inOut"],
+        [12.4, { x: 640, y: 880, z: 2.7, r: 0 }, "linear"], [13.0, { x: 790, y: 860, z: 2.5, r: 0 }, "out"], [14.4, { x: 800, y: 860, z: 2.6, r: 0 }, "linear"], [C2, { x: 1100, y: 800, z: 1.6, r: 0 }, "in"]]);
+      // ===== C: the school play =====
+      const Cg = el("g", { opacity: 0 }, svg);
+      const cBg = el("g", {}, Cg), cStage = el("g", {}, Cg), cAud = el("g", {}, Cg), cFx = el("g", {}, Cg);
+      Set.stage(cBg, 760, 1920);
+      const kids = [
+        Character(cStage, { id: "s7-k1", color: PAL.forest, hair: "bun", seed: 81, scale: 0.62, x: [[0, 640]], y: [[0, 760]], pose: [[0, "proud", 0]], mood: [[0, "happy", 0]] }),
+        Character(cStage, { id: "s7-k2", color: PAL.rose, hair: "curly", seed: 82, scale: 0.62, x: [[0, 1290]], y: [[0, 760]], facing: [[0, -1]], pose: [[0, "proud", 0]], mood: [[0, "content", 0]] }),
+      ];
+      const lily = Character(cStage, { id: "s7-lily", color: "#E8A4C8", hair: "ponytail", hairColor: "#6B4A35", seed: 88, scale: 0.68, wings: true, flap: 1.4, x: [[0, 960]], y: [[0, 760]],
+        pose: [[0, "proud", 0], [C2 + 1.9, "wave", 0.3]], mood: [[0, "joy", 0]], look: [[0, { x: 0.6, y: 0.4 }]] });
+      const heads = Set.audienceRows(cAud, 3, 890, 1920, 7);
+      // Dev slips in at the back, right side, and waves
+      const devC = Character(cAud, { id: "s7-devC", color: PAL.navy, hair: "short", seed: 21, scale: 1.25, x: [[0, 2200], [C2 + 0.2, 2200], [C2 + 1.6, 1600, "out"]], y: [[0, 1180]], facing: [[0, -1]],
+        pose: [[0, "relaxed", 0], [C2 + 1.8, "wave", 0.3]], mood: [[0, "worried", 0], [C2 + 1.7, "joy", 0.3]], look: [[0, { x: 0, y: -1 }]] });
+      const mascot = Butterfly(cFx, { x: [[0, 2100], [C2 + 1.0, 2100], [C2 + 3.6, 1560, "out"]], y: [[0, 200], [C2 + 1.0, 200], [C2 + 3.6, 150, "out"]], scale: 0.9, flap: 3 });
+      const camC = Camera(Cg, [[C2, { x: 960, y: 700, z: 1.45, r: 0 }], [C2 + 1.6, { x: 1000, y: 720, z: 1.5, r: 0 }, "linear"], [C2 + 2.4, { x: 1180, y: 760, z: 1.35, r: 0 }, "inOut"], [D, { x: 1200, y: 760, z: 1.4, r: 0 }, "linear"]]);
+      const tl = gsap.timeline({ paused: true });
+      drive(tl, D, (t) => {
+        const part = t < C1 ? 0 : t < C2 ? 1 : 2;
+        A.setAttribute("opacity", part === 0 ? 1 : 0); B.setAttribute("opacity", part === 1 ? 1 : 0); Cg.setAttribute("opacity", part === 2 ? 1 : 0);
+        if (part === 0) {
+          camA.update(t);
+          const m = maya.update(t), l = leo.update(t);
+          const mh = { x: m.headX, y: m.headY }, lh = { x: l.headX, y: l.headY };
+          const kp = clamp((t - 1.2) / 0.35, 0, 1);
+          pinned.setAttribute("opacity", kp > 0 ? 1 : 0); pinned.setAttribute("transform", `translate(1700,${640}) rotate(${-6 + 4 * (1 - kp)}) scale(${EASE.back(kp)})`);
+          laughRing.update(t, lh); onMe.update(t, lh); toMaya.update(t, lh, mh);
+          leoGold.setAttribute("cx", lh.x); leoGold.setAttribute("cy", lh.y); leoGold.setAttribute("r", 62 + 4 * Math.sin(t * 5)); leoGold.setAttribute("opacity", clamp((t - 0.6) / 0.3, 0, 1));
+          const kg = clamp((t - 4.95) / 0.3, 0, 1);
+          mayaMark.setAttribute("cx", mh.x); mayaMark.setAttribute("cy", mh.y); mayaMark.setAttribute("stroke", kg > 0.5 ? PAL.kind : PAL.rude); mayaMark.setAttribute("r", 58 + 4 * Math.sin(t * 5) + kg * 8);
+        } else if (part === 1) {
+          camB.update(t); crowdB.update(t - C1);
+          const cx = sampleTrack(carX, t, 0);
+          carG.setAttribute("transform", `translate(${cx},${LANE})`);
+          const d = dev.update(t), mb = mayaB.update(t);
+          toDev.update(t, { x: mb.headX, y: mb.headY }, { x: cx + 40, y: LANE - 128 });
+          flyerTag.update(t, { x: cx + 86, y: LANE - 120 });
+        } else {
+          camC.update(t);
+          kids.forEach((k) => k.update(t)); lily.update(t); devC.update(t); mascot.update(t);
+        }
+      });
+      window.__timelines["s7"] = tl;
+    })();
+  </script>
+</template>

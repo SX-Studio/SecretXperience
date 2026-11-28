@@ -1,0 +1,447 @@
+<template>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-400.woff2") format("woff2");font-weight:400;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-500.woff2") format("woff2");font-weight:500;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-600.woff2") format("woff2");font-weight:600;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-700.woff2") format("woff2");font-weight:700;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-800.woff2") format("woff2");font-weight:800;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-900.woff2") format("woff2");font-weight:900;font-style:normal;}
+@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/IBMPlexMono-400.woff2") format("woff2");font-weight:400;font-style:normal;}
+@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/IBMPlexMono-500.woff2") format("woff2");font-weight:500;font-style:normal;}
+@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/IBMPlexMono-600.woff2") format("woff2");font-weight:600;font-style:normal;}
+@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/IBMPlexMono-700.woff2") format("woff2");font-weight:700;font-style:normal;}
+
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+      container-type: size;
+      color: #f0ece5;
+      font-family: "Barlow", sans-serif;
+    }
+    .f01-bg {
+      position: absolute;
+      inset: 0;
+      background: #111111;
+    }
+    .f01-field {
+      position: absolute;
+      inset: 0;
+    }
+    .f01-field canvas {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .f01-stage {
+      position: absolute;
+      inset: 0;
+      transform-origin: 50% 42%;
+    }
+    /* ── kicker block (just below the 9% global overlay band) ── */
+    .f01-rule {
+      position: absolute;
+      top: 20.4cqh;
+      left: calc(50% - 18px);
+      width: 36px;
+      height: 2px;
+      background: #e85d26;
+      transform-origin: 50% 50%;
+    }
+    .f01-kicker {
+      position: absolute;
+      top: 22cqh;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 2.8cqw;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #e85d26;
+      white-space: pre;
+      line-height: 1;
+    }
+    .f01-caret {
+      display: inline-block;
+      width: 0.55em;
+      height: 1em;
+      margin-left: 0.12em;
+      vertical-align: -0.14em;
+      background: #e85d26;
+    }
+    /* ── hero number ── */
+    .f01-numbox {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 26.4cqh;
+      height: 31.2cqh;
+    }
+    .f01-glow {
+      position: absolute;
+      left: calc(50% - 470px);
+      top: calc(50% - 380px);
+      width: 940px;
+      height: 760px;
+      background: radial-gradient(
+        ellipse at 50% 50%,
+        rgba(232, 93, 38, 0.95) 0%,
+        rgba(232, 93, 38, 0.35) 38%,
+        rgba(232, 93, 38, 0) 68%
+      );
+      z-index: 1;
+    }
+    .f01-num {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Barlow", sans-serif;
+      font-weight: 900;
+      font-size: 60cqw;
+      line-height: 0.88;
+      letter-spacing: -0.04em;
+      white-space: nowrap;
+    }
+    .f01-num-dots {
+      z-index: 2;
+      color: transparent;
+      background-image: radial-gradient(circle, #f0ece5 0 2.3px, rgba(240, 236, 229, 0) 3px);
+      background-size: 9px 9px;
+      background-position: 0 0;
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+    .f01-num-solid {
+      z-index: 3;
+      color: #f0ece5;
+    }
+    /* ── unit word ── */
+    .f01-unit {
+      position: absolute;
+      top: 58.4cqh;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-family: "Barlow", sans-serif;
+      font-weight: 700;
+      font-size: 11cqw;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      text-transform: lowercase;
+      color: #f0ece5;
+    }
+    /* ── runtime readout ── */
+    .f01-hair {
+      position: absolute;
+      top: 69cqh;
+      left: 24cqw;
+      width: 52cqw;
+      height: 1px;
+      background: #282826;
+      transform-origin: 50% 50%;
+    }
+    .f01-readout {
+      position: absolute;
+      top: 71cqh;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 3.6cqw;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      white-space: pre;
+      line-height: 1;
+    }
+    .f01-readout-label {
+      color: #888880;
+    }
+    .f01-readout-value {
+      color: #f0ece5;
+    }
+  </style>
+
+  <div
+    id="root"
+    data-composition-id="01-seventy-two-seconds"
+    data-start="0"
+    data-duration="8.957"
+    data-width="1080"
+    data-height="1920"
+  >
+    <div
+      id="f01-bg"
+      class="clip f01-bg"
+      data-start="0"
+      data-duration="8.957"
+      data-track-index="0"
+    ></div>
+
+    <div
+      id="f01-field"
+      class="clip f01-field"
+      data-start="0"
+      data-duration="8.957"
+      data-track-index="1"
+    >
+      <canvas id="f01-canvas" width="1080" height="1920"></canvas>
+    </div>
+
+    <div
+      id="f01-stage"
+      class="clip f01-stage"
+      data-start="0"
+      data-duration="8.957"
+      data-track-index="2"
+    >
+      <div id="f01-rule" class="f01-rule"></div>
+      <div id="f01-kicker" class="f01-kicker"><span id="f01-kicker-text"></span><span id="f01-kicker-caret" class="f01-caret"></span></div>
+
+      <div id="f01-numbox" class="f01-numbox">
+        <div id="f01-glow" class="f01-glow"></div>
+        <div id="f01-num-dots" class="f01-num f01-num-dots">72</div>
+        <div id="f01-num-solid" class="f01-num f01-num-solid">72</div>
+      </div>
+
+      <div id="f01-unit" class="f01-unit">seconds</div>
+
+      <div id="f01-hair" class="f01-hair"></div>
+      <div id="f01-readout" class="f01-readout"><span id="f01-readout-label" class="f01-readout-label"></span><span id="f01-readout-value" class="f01-readout-value"></span><span id="f01-readout-caret" class="f01-caret"></span></div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var FID = "01-seventy-two-seconds";
+      var DUR = 8.457;
+      var W = 1080;
+      var H = 1920;
+      window.__timelines = window.__timelines || {};
+
+      // ── deterministic randomness: seeded mulberry32 + integer hash (no Math.random, no clocks)
+      function mulberry32(a) {
+        return function () {
+          a |= 0;
+          a = (a + 0x6d2b79f5) | 0;
+          var t = Math.imul(a ^ (a >>> 15), 1 | a);
+          t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+      function hash(n) {
+        n = (n ^ 61) ^ (n >>> 16);
+        n = Math.imul(n, 9);
+        n = n ^ (n >>> 4);
+        n = Math.imul(n, 0x27d4eb2d);
+        n = n ^ (n >>> 15);
+        return (n >>> 0) / 4294967296;
+      }
+      function clamp01(v) {
+        return v < 0 ? 0 : v > 1 ? 1 : v;
+      }
+
+      // ── static dot field: home positions across the full frame; ~72% converge into the number
+      var rand = mulberry32(1977);
+      var N = 760;
+      var CX = W / 2;
+      var CY = H * 0.42;
+      var dots = [];
+      for (var i = 0; i < N; i++) {
+        var hx = rand() * W;
+        var hy = rand() * H;
+        var converge = rand() < 0.72;
+        // target inside the "72" glyph region (approx. 700 × 450 around 0.42H)
+        var ang = rand() * Math.PI * 2;
+        var rad = Math.sqrt(rand());
+        dots.push({
+          hx: hx,
+          hy: hy,
+          tx: CX + Math.cos(ang) * rad * 340,
+          ty: CY + Math.sin(ang) * rad * 215,
+          size: 2 + Math.floor(rand() * 3),
+          base: 0.35 + rand() * 0.65,
+          delay: rand() * 0.28,
+          conv: converge,
+        });
+      }
+
+      var canvas = document.getElementById("f01-canvas");
+      var ctx = canvas.getContext("2d");
+      var easeConv = gsap.parseEase("power3.inOut");
+      var easeDrift = gsap.parseEase("sine.inOut");
+      var FIELD_ALPHA = 0.42; // background dimmed (~35–45%)
+
+      // convergence progress as a pure function of time
+      function convergeAt(t) {
+        // pre-drift on "something in deep space" (1.6–2.88): a faint pull inward
+        var pre = easeDrift(clamp01((t - 1.6) / 1.28)) * 0.08;
+        // main collapse on "broke through the static" (2.88–3.95)
+        var main = clamp01((t - 2.88) / 1.07);
+        return pre + (1 - 0.08) * main;
+      }
+      // remnant thinning: field outside the number fades to near-nothing as it arrives
+      function thinAt(t) {
+        return 1 - 0.8 * easeConv(clamp01((t - 2.9) / 1.3));
+      }
+
+      var kickerText = document.getElementById("f01-kicker-text");
+      var kickerCaret = document.getElementById("f01-kicker-caret");
+      var readLabel = document.getElementById("f01-readout-label");
+      var readValue = document.getElementById("f01-readout-value");
+      var readCaret = document.getElementById("f01-readout-caret");
+      var KICKER = "AUG 15 1977 · BIG EAR";
+      var LABEL = "THIS VIDEO: ";
+      var VALUE = "72.0 S";
+
+      function draw(t) {
+        // ── field
+        ctx.clearRect(0, 0, W, H);
+        var P = convergeAt(t);
+        var thin = thinAt(t);
+        var frame = Math.floor(t * 20); // static flicker steps at 20 Hz
+        ctx.fillStyle = "#F0ECE5";
+        for (var i = 0; i < N; i++) {
+          var d = dots[i];
+          var h = hash(i * 7919 + frame * 104729 + 13);
+          if (h < 0.14) continue; // dropout — reads as static
+          var flick = 0.3 + 0.7 * h;
+          var x = d.hx;
+          var y = d.hy;
+          var a = d.base * flick * FIELD_ALPHA;
+          var s = d.size;
+          if (d.conv) {
+            var local = clamp01((P - d.delay) / (1 - d.delay));
+            var e = easeConv(local);
+            x = d.hx + (d.tx - d.hx) * e;
+            y = d.hy + (d.ty - d.hy) * e;
+            // brighten in transit, then dissolve into the glyph on arrival
+            a = a * (1 + 0.9 * Math.sin(Math.PI * e)) * (1 - e * e);
+            s = s * (1 - 0.45 * e);
+          } else {
+            a = a * thin;
+            // subtle jitter on static remnants
+            var jx = (hash(i * 31 + frame * 977 + 5) - 0.5) * 3;
+            var jy = (hash(i * 57 + frame * 613 + 9) - 0.5) * 3;
+            x += jx;
+            y += jy;
+          }
+          if (a <= 0.004) continue;
+          ctx.globalAlpha = a > 1 ? 1 : a;
+          ctx.fillRect(Math.round(x), Math.round(y), s, s);
+        }
+        ctx.globalAlpha = 1;
+
+        // ── kicker type-on with trailing caret (on "In 1977")
+        var kn = Math.round(clamp01((t - 0.2) / 1.05) * KICKER.length);
+        kickerText.textContent = KICKER.slice(0, kn);
+        var kOn = t >= 0.12 && t < 1.95 && (t < 1.25 || Math.floor(t * 2.6) % 2 === 0);
+        kickerCaret.style.opacity = kOn ? "1" : "0";
+
+        // ── runtime readout type-on (on "This video lasts exactly that long")
+        var full = LABEL + VALUE;
+        var rn = Math.round(clamp01((t - 5.92) / 1.48) * full.length);
+        readLabel.textContent = full.slice(0, Math.min(rn, LABEL.length));
+        readValue.textContent = rn > LABEL.length ? full.slice(LABEL.length, rn) : "";
+        var rOn = t >= 5.82 && (t < 7.4 || Math.floor(t * 2.4) % 2 === 0);
+        readCaret.style.opacity = rOn ? "1" : "0";
+      }
+
+      var tl = gsap.timeline({ paused: true });
+
+      // master clock: field + type-ons are pure functions of time (seek-safe)
+      var clock = { t: 0 };
+      tl.to(
+        clock,
+        {
+          t: DUR,
+          duration: DUR,
+          ease: "none",
+          onUpdate: function () {
+            draw(clock.t);
+          },
+        },
+        0,
+      );
+
+      // slow push underneath the whole shot (type layer only → parallax against the field)
+      tl.fromTo("#f01-stage", { scale: 1 }, { scale: 1.035, duration: DUR, ease: "none" }, 0);
+
+      // Scene 1 — rule stub + kicker (type-on handled by the clock)
+      tl.fromTo("#f01-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.35, ease: "power3.out" }, 0.08);
+
+      // hidden "72" buried in the static from the first frames — the signal in the noise
+      tl.fromTo("#f01-num-dots", { opacity: 0 }, { opacity: 0.13, duration: 0.4, ease: "power1.out" }, 0);
+      tl.to("#f01-num-dots", { opacity: 0.2, duration: 1.28, ease: "sine.inOut" }, 1.6);
+
+      // Scene 2 — field collapses inward; the dotted glyph fills, then resolves solid
+      tl.to("#f01-num-dots", { opacity: 0.95, duration: 0.8, ease: "power2.in" }, 2.9);
+      tl.fromTo(
+        "#f01-num-solid",
+        { opacity: 0, scale: 1.1, filter: "blur(22px)" },
+        {
+          opacity: 1,
+          scale: 1,
+          filter: "blur(0px)",
+          
+          duration: 0.85,
+          ease: "expo.out",
+        },
+        3.32,
+      );
+      tl.to("#f01-num-dots", { opacity: 0, duration: 0.45, ease: "power1.out" }, 3.95);
+
+      // Scene 3 — "72" spoken: turns fire-orange as the glow blooms behind it (one beat)
+      tl.to("#f01-num-solid", { color: "#E85D26", duration: 0.5, ease: "power2.out" }, 4.16);
+      tl.to("#f01-num-solid", { scale: 1.025, duration: 0.16, ease: "power2.out" }, 4.18);
+      tl.to("#f01-num-solid", { scale: 1, duration: 0.5, ease: "back.out(2)" }, 4.34);
+      tl.fromTo(
+        "#f01-glow",
+        { opacity: 0, scale: 0.85 },
+        { opacity: 0.26, scale: 1, duration: 0.8, ease: "power2.out" },
+        4.0,
+      );
+      // bounded breathe during the hold (finite phase tween, not a loop)
+      var glowEl = document.getElementById("f01-glow");
+      var breathe = { p: 0 };
+      tl.to(
+        breathe,
+        {
+          p: Math.PI * 2,
+          duration: DUR - 4.8,
+          ease: "none",
+          onUpdate: function () {
+            var s = Math.sin(breathe.p);
+            glowEl.style.opacity = String(0.26 + s * 0.04);
+            glowEl.style.transform = "scale(" + (1 + s * 0.02) + ")";
+          },
+        },
+        4.8,
+      );
+
+      // "seconds" lands on its cue
+      tl.fromTo(
+        "#f01-unit",
+        { opacity: 0, y: 36, filter: "blur(10px)" },
+        { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.5, ease: "power3.out" },
+        4.78,
+      );
+
+      // Scene 4 — hairline draws, readout types on beneath (type-on via the clock), then hold
+      tl.fromTo("#f01-hair", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power3.out" }, 5.55);
+
+      draw(0);
+      window.__timelines[FID] = tl;
+    })();
+  </script>
+</template>

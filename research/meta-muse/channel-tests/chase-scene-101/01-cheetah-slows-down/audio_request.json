@@ -1,0 +1,46 @@
+{
+  "provider": "auto",
+  "speed": "0.94",
+  "lines": [
+    {
+      "id": "01",
+      "text": "The cheetah is the fastest animal on land. So why does it so often slow down, in the middle of a chase?"
+    },
+    {
+      "id": "02",
+      "text": "In Botswana, scientists fitted five wild cheetahs with collars carrying GPS and motion sensors. They recorded three hundred and sixty-seven runs."
+    },
+    {
+      "id": "03",
+      "text": "The fastest reached fifty-eight miles an hour. But most hunts were run at far more moderate speeds."
+    },
+    {
+      "id": "04",
+      "text": "Because a chase isn't won on the straight. It's won in the turns."
+    },
+    {
+      "id": "05",
+      "text": "At full speed, no animal can turn sharply. So when an impala swerves, the cheetah brakes. Hard. In a later study, the hunters could brake about seventy percent harder than the animals they chased."
+    },
+    {
+      "id": "06",
+      "text": "Brake. Turn with the prey. Then accelerate out of the turn."
+    },
+    {
+      "id": "07",
+      "text": "And the old belief that cheetahs give up because they overheat? Another team measured it. Body temperature stayed steady through the chase. It rose afterwards."
+    },
+    {
+      "id": "08",
+      "text": "Even with all that skill, only about one run in four ended in a meal."
+    },
+    {
+      "id": "09",
+      "text": "The fastest animal on Earth doesn't win by running flat out. It wins by knowing when to slow down."
+    }
+  ],
+  "bgm": {
+    "mode": "none"
+  },
+  "voice": "bm_george"
+}

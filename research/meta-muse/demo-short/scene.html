@@ -1,0 +1,446 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>html,body{margin:0;background:#070d1a}canvas{display:block}</style>
+</head><body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+const W = 1080, H = 1920;
+const cv = document.getElementById('c');
+const ctx = cv.getContext('2d');
+let TL = null; // timeline injected from outside
+
+const C = {
+  bg0: '#060b17', bg1: '#0c1a33', grid: 'rgba(120,170,255,0.08)',
+  steel: '#8a97a8', steelHi: '#c9d3df', water0: '#0f3557', water1: '#0a2440',
+  cyan: '#5fd4ff', cyanSoft: 'rgba(95,212,255,0.35)', white: '#f4f7fb',
+  red: '#ff5a45', amber: '#ffb347', rust: '#b4552d', rustDark: '#7a3418', mg: '#d9e2ea'
+};
+
+// ---------- easing / helpers ----------
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const lerp = (a, b, k) => a + (b - a) * k;
+const eio = k => k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;   // easeInOutCubic
+const eo = k => 1 - Math.pow(1 - k, 3);                                           // easeOutCubic
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+// appear: fade + scale + blur over ~0.5 s, optional disappear
+function vis(t, a, b = 1e9, d = 0.5) {
+  const i = eo(prog(t, a, a + d)), o = 1 - eo(prog(t, b, b + d * 0.8));
+  return Math.min(i, o);
+}
+function withAppear(v, cx, cy, fn) {
+  if (v <= 0.001) return;
+  ctx.save();
+  ctx.globalAlpha *= v;
+  const s = 0.92 + 0.08 * v;
+  ctx.translate(cx, cy); ctx.scale(s, s); ctx.translate(-cx, -cy);
+  const blur = (1 - v) * 10;
+  if (blur > 0.3) ctx.filter = `blur(${blur.toFixed(1)}px)`;
+  fn();
+  ctx.restore();
+}
+function rr(x, y, w, h, r) {
+  ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+}
+// deterministic pseudo-random
+function rnd(i) { const x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); }
+
+// ---------- camera ----------
+// keyframes: time, scale, world center x, y
+const CAM = [
+  [0.0, 0.80, 540, 1000], [4.4, 0.92, 545, 990],
+  [5.6, 1.55, 610, 800], [8.9, 1.62, 612, 790],
+  [10.0, 1.18, 560, 960], [13.9, 1.22, 560, 950],
+  [15.0, 1.40, 600, 1010], [16.8, 1.44, 600, 1010],
+  [17.6, 1.15, 565, 900], [19.7, 1.18, 565, 900],
+  [20.8, 1.02, 540, 1120], [24.1, 1.06, 540, 1130],
+  [25.2, 0.58, 540, 1260], [30.1, 0.60, 540, 1250]
+];
+function camAt(t) {
+  if (t <= CAM[0][0]) return CAM[0];
+  for (let i = 0; i < CAM.length - 1; i++) {
+    const a = CAM[i], b = CAM[i + 1];
+    if (t <= b[0]) {
+      const k = eio((t - a[0]) / (b[0] - a[0]));
+      return [t, lerp(a[1], b[1], k), lerp(a[2], b[2], k), lerp(a[3], b[3], k)];
+    }
+  }
+  return CAM[CAM.length - 1];
+}
+
+// ---------- world geometry ----------
+const TANK = { x: 310, y: 560, w: 460, h: 860 };     // body (excluding dome)
+const ROD = { x: 612, top: 520, len: 720, th: 24 };
+
+function rodRemaining(t) { // 1 -> 0.12 between 14.2 and 19.6
+  return lerp(1, 0.12, eio(prog(t, 14.2, 19.6)));
+}
+
+function drawBackground(t, cam) {
+  const g = ctx.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0, C.bg1); g.addColorStop(1, C.bg0);
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  // dot grid with slight parallax so the camera move is felt
+  const s = 0.6 + cam[1] * 0.25, ox = -(cam[2] - 540) * 0.25, oy = -(cam[3] - 1000) * 0.25;
+  const step = 54 * s;
+  ctx.fillStyle = C.grid;
+  for (let y = ((oy % step) + step) % step - step; y < H + step; y += step)
+    for (let x = ((ox % step) + step) % step - step; x < W + step; x += step) {
+      ctx.beginPath(); ctx.arc(x, y, 2.2, 0, Math.PI * 2); ctx.fill();
+    }
+  // soft vignette
+  const v = ctx.createRadialGradient(W / 2, H / 2, 300, W / 2, H / 2, 1200);
+  v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,0.55)');
+  ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
+}
+
+function drawTank(t) {
+  const { x, y, w, h } = TANK;
+  // pipes on top
+  ctx.lineCap = 'round';
+  ctx.lineWidth = 26; ctx.strokeStyle = '#3a78c9';
+  ctx.beginPath(); ctx.moveTo(410, y - 40); ctx.lineTo(410, y - 170); ctx.stroke();
+  ctx.strokeStyle = '#c9553e';
+  ctx.beginPath(); ctx.moveTo(670, y - 40); ctx.lineTo(670, y - 170); ctx.stroke();
+  // dome
+  ctx.fillStyle = '#5c6878';
+  ctx.beginPath(); ctx.ellipse(x + w / 2, y + 4, w / 2 + 14, 70, 0, Math.PI, 0); ctx.fill();
+  // outer shell
+  rr(x - 14, y, w + 28, h + 20, 28); ctx.fillStyle = '#4b5666'; ctx.fill();
+  // cutaway interior: water
+  rr(x, y + 10, w, h - 6, 18);
+  const wg = ctx.createLinearGradient(0, y, 0, y + h);
+  wg.addColorStop(0, C.water0); wg.addColorStop(1, C.water1);
+  ctx.fillStyle = wg; ctx.fill();
+  // inner steel wall highlight
+  ctx.lineWidth = 6; ctx.strokeStyle = 'rgba(201,211,223,0.55)'; rr(x, y + 10, w, h - 6, 18); ctx.stroke();
+  // water shimmer lines
+  ctx.save(); rr(x, y + 10, w, h - 6, 18); ctx.clip();
+  ctx.strokeStyle = 'rgba(140,200,255,0.10)'; ctx.lineWidth = 3;
+  for (let i = 0; i < 9; i++) {
+    const yy = y + 90 + i * 90 + Math.sin(t * 1.3 + i) * 6;
+    ctx.beginPath();
+    for (let xx = x; xx <= x + w; xx += 20) ctx.lineTo(xx, yy + Math.sin(xx * 0.03 + t * 2 + i) * 5);
+    ctx.stroke();
+  }
+  ctx.restore();
+  // burner and flames
+  ctx.fillStyle = '#2a313c'; rr(x + 40, y + h + 26, w - 80, 46, 12); ctx.fill();
+  for (let i = 0; i < 7; i++) {
+    const fx = x + 90 + i * 47, fh = 30 + 12 * Math.sin(t * 9 + i * 1.7);
+    const fg = ctx.createLinearGradient(0, y + h + 26, 0, y + h + 26 - fh);
+    fg.addColorStop(0, '#3fa9ff'); fg.addColorStop(1, 'rgba(255,170,60,0)');
+    ctx.fillStyle = fg; ctx.beginPath();
+    ctx.moveTo(fx - 12, y + h + 30); ctx.quadraticCurveTo(fx, y + h + 26 - fh * 1.4, fx + 12, y + h + 30); ctx.fill();
+  }
+}
+
+function drawRust(t) {
+  const k = eo(prog(t, 20.2, 23.8));
+  if (k <= 0) return;
+  const { x, y, w, h } = TANK;
+  ctx.save(); rr(x - 8, y + 4, w + 16, h + 4, 20); ctx.clip();
+  for (let i = 0; i < 26; i++) {
+    const side = i % 2 === 0;
+    const px = side ? x + 6 + rnd(i) * 26 : x + w - 6 - rnd(i) * 26;
+    const py = y + 120 + rnd(i + 50) * (h - 160);
+    const start = rnd(i + 99) * 0.6;
+    const kk = clamp((k - start) / 0.4);
+    if (kk <= 0) continue;
+    const r = (10 + rnd(i + 7) * 26) * eo(kk);
+    const g = ctx.createRadialGradient(px, py, 0, px, py, r);
+    g.addColorStop(0, C.rustDark); g.addColorStop(0.6, C.rust); g.addColorStop(1, 'rgba(180,85,45,0)');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(px, py, r, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.restore();
+}
+
+function drawLeak(t) {
+  const a = prog(t, 22.0, 22.6);
+  if (a <= 0) return;
+  const { x, y, w, h } = TANK;
+  const lx = x + w - 30, ly = y + h + 18;
+  // puddle grows
+  const pk = eo(prog(t, 22.4, 24.6));
+  ctx.fillStyle = 'rgba(95,170,255,0.45)';
+  ctx.beginPath(); ctx.ellipse(lx + 30, y + h + 118, 30 + 120 * pk, 8 + 14 * pk, 0, 0, Math.PI * 2); ctx.fill();
+  // drips: repeating every 0.7 s
+  for (let n = 0; n < 4; n++) {
+    const tt = (t - 22.0 - n * 0.7);
+    if (tt < 0) continue;
+    const ph = (tt % 2.8) / 0.7;
+    if (ph > 1) continue;
+    const dy = ly + eio(ph) * 95;
+    ctx.fillStyle = 'rgba(140,200,255,0.95)';
+    ctx.beginPath(); ctx.arc(lx, dy, 9, 0, Math.PI * 2);
+    ctx.moveTo(lx - 9, dy); ctx.lineTo(lx, dy - 20); ctx.lineTo(lx + 9, dy); ctx.fill();
+  }
+}
+
+function drawRod(t) {
+  const rem = rodRemaining(t);
+  const len = ROD.len * (0.25 + 0.75 * rem);
+  const th = ROD.th * (0.35 + 0.65 * rem);
+  const x = ROD.x, top = ROD.top;
+  // highlight glow when introduced
+  const glow = vis(t, 4.9, 14.0, 0.6) * (0.6 + 0.4 * Math.sin(t * 4));
+  if (glow > 0.01) {
+    ctx.save(); ctx.shadowColor = C.cyan; ctx.shadowBlur = 40 * glow;
+    ctx.fillStyle = C.cyanSoft; rr(x - th / 2 - 8, top, th + 16, len + 8, 14); ctx.fill(); ctx.restore();
+  }
+  // hex head
+  ctx.fillStyle = '#9aa6b5'; rr(x - 26, top - 30, 52, 34, 6); ctx.fill();
+  // rod body with pitting once dissolving
+  const g = ctx.createLinearGradient(x - th / 2, 0, x + th / 2, 0);
+  g.addColorStop(0, '#9aa7b4'); g.addColorStop(0.5, C.mg); g.addColorStop(1, '#8794a2');
+  ctx.fillStyle = g;
+  ctx.beginPath();
+  const seg = 18;
+  for (let i = 0; i <= seg; i++) {
+    const yy = top + len * i / seg;
+    const pit = (1 - rem) * 7 * rnd(i * 3 + 1);
+    ctx.lineTo(x - th / 2 + pit, yy);
+  }
+  for (let i = seg; i >= 0; i--) {
+    const yy = top + len * i / seg;
+    const pit = (1 - rem) * 7 * rnd(i * 5 + 2);
+    ctx.lineTo(x + th / 2 - pit, yy);
+  }
+  ctx.closePath(); ctx.fill();
+}
+
+function drawWaterAttack(t) {
+  // water "attackers" streaming toward the rod (9.1 - 17)
+  const v = vis(t, 9.3, 16.9, 0.6);
+  if (v <= 0) return;
+  ctx.save(); ctx.globalAlpha *= v;
+  const rem = rodRemaining(t);
+  for (let i = 0; i < 34; i++) {
+    const side = i % 2 ? 1 : -1;
+    const sy = TANK.y + 120 + rnd(i) * (ROD.len * (0.25 + 0.75 * rem) - 60);
+    const sx = side > 0 ? TANK.x + TANK.w - 30 : TANK.x + 30;
+    const ph = ((t * 0.55 + rnd(i + 20)) % 1);
+    const px = lerp(sx, ROD.x + side * 18, eio(ph)), py = sy + Math.sin(ph * 6 + i) * 10;
+    ctx.fillStyle = `rgba(95,212,255,${0.25 + 0.6 * (1 - Math.abs(ph - 0.5) * 2)})`;
+    ctx.beginPath(); ctx.arc(px, py, 6, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.restore();
+}
+
+function drawDissolve(t) {
+  // metal ions leaving the rod (14 - 20)
+  const v = vis(t, 14.1, 19.8, 0.5);
+  if (v <= 0) return;
+  ctx.save(); ctx.globalAlpha *= v;
+  const rem = rodRemaining(t), len = ROD.len * (0.25 + 0.75 * rem);
+  for (let i = 0; i < 46; i++) {
+    const ph = ((t * 0.4 + rnd(i + 3)) % 1);
+    const yy = ROD.top + 30 + rnd(i + 9) * (len - 30);
+    const dir = rnd(i + 11) > 0.5 ? 1 : -1;
+    const px = ROD.x + dir * (14 + ph * 140), py = yy - ph * 60;
+    ctx.fillStyle = `rgba(217,226,234,${(1 - ph) * 0.8})`;
+    ctx.beginPath(); ctx.arc(px, py, 4 + 3 * (1 - ph), 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.restore();
+}
+
+function drawShield(t) {
+  // "steel tank protected" shield on the wall (14.3 - 19.6)
+  const v = vis(t, 14.3, 19.4, 0.5);
+  withAppear(v, 380, 1040, () => {
+    ctx.save();
+    ctx.translate(380, 1040);
+    ctx.fillStyle = 'rgba(95,212,255,0.16)'; ctx.strokeStyle = C.cyan; ctx.lineWidth = 5;
+    ctx.beginPath(); ctx.moveTo(0, -60); ctx.lineTo(48, -42); ctx.lineTo(44, 14); ctx.quadraticCurveTo(30, 48, 0, 64);
+    ctx.quadraticCurveTo(-30, 48, -44, 14); ctx.lineTo(-48, -42); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = C.white; ctx.lineWidth = 7; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(-18, 2); ctx.lineTo(-4, 18); ctx.lineTo(22, -14); ctx.stroke();
+    ctx.restore();
+  });
+}
+
+// ---------- world-space labels (move with camera) ----------
+function leaderLabel(t, a, b, ax, ay, lx, ly, title, sub, color) {
+  const v = vis(t, a, b, 0.5);
+  if (v <= 0) return;
+  const draw = eo(prog(t, a, a + 0.6));
+  ctx.save(); ctx.globalAlpha *= v;
+  ctx.strokeStyle = color; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(ax, ay);
+  ctx.lineTo(lerp(ax, lx, draw), lerp(ay, ly, draw)); ctx.stroke();
+  ctx.fillStyle = color; ctx.beginPath(); ctx.arc(ax, ay, 7, 0, Math.PI * 2); ctx.fill();
+  ctx.restore();
+  withAppear(eo(prog(t, a + 0.35, a + 0.85)) * v, lx, ly, () => {
+    ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+    ctx.fillStyle = C.white; ctx.font = '800 38px Inter';
+    ctx.fillText(title, lx + 12, ly - 6);
+    if (sub) { ctx.fillStyle = color; ctx.font = '600 26px Inter'; ctx.fillText(sub, lx + 12, ly + 28); }
+  });
+}
+
+function chip(text, cx, cy, color, v) {
+  withAppear(v, cx, cy, () => {
+    ctx.font = '800 34px Inter';
+    const tw = ctx.measureText(text).width, pw = tw + 48, ph = 62;
+    rr(cx - pw / 2, cy - ph / 2, pw, ph, 31);
+    ctx.fillStyle = 'rgba(7,13,26,0.82)'; ctx.fill();
+    ctx.lineWidth = 3; ctx.strokeStyle = color; ctx.stroke();
+    ctx.fillStyle = color; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(text, cx, cy + 1);
+  });
+}
+
+// ---------- screen-space overlays ----------
+function drawHook(t) {
+  const v = vis(t, 0.15, 4.3, 0.45);
+  withAppear(v, W / 2, 250, () => {
+    ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+    ctx.fillStyle = C.white; ctx.font = '900 66px "Inter Display", Inter';
+    ctx.fillText('THIS ROD KEEPS YOUR', W / 2, 238);
+    ctx.fillStyle = C.cyan;
+    ctx.fillText('WATER HEATER ALIVE', W / 2, 314);
+  });
+}
+
+function drawReactivity(t) {
+  // "more reactive metal first": two rows ranking Mg above steel (10.6 - 13.9)
+  const v = vis(t, 10.4, 13.9, 0.5);
+  withAppear(v, W / 2, 300, () => {
+    const x0 = 170, w = 740;
+    ctx.fillStyle = 'rgba(7,13,26,0.82)'; rr(x0, 190, w, 230, 26); ctx.fill();
+    ctx.strokeStyle = 'rgba(95,212,255,0.4)'; ctx.lineWidth = 2; rr(x0, 190, w, 230, 26); ctx.stroke();
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = 'rgba(244,247,251,0.65)'; ctx.font = '700 26px Inter';
+    ctx.fillText('CORRODES FIRST', x0 + 32, 228);
+    const rows = [['Magnesium rod', 0.92, C.cyan], ['Steel tank', 0.38, C.steelHi]];
+    rows.forEach((r, i) => {
+      const yy = 290 + i * 78, k = eo(prog(t, 10.8 + i * 0.25, 11.6 + i * 0.25));
+      ctx.fillStyle = C.white; ctx.font = '800 32px Inter'; ctx.fillText(r[0], x0 + 32, yy);
+      ctx.fillStyle = 'rgba(255,255,255,0.08)'; rr(x0 + 330, yy - 16, 370, 32, 16); ctx.fill();
+      ctx.fillStyle = r[2]; rr(x0 + 330, yy - 16, Math.max(32, 370 * r[1] * k), 32, 16); ctx.fill();
+    });
+  });
+}
+
+function drawYears(t) {
+  const v = vis(t, 17.0, 19.9, 0.4);
+  if (v <= 0) return;
+  const yr = Math.min(5, 1 + Math.floor(prog(t, 17.1, 19.3) * 5));
+  withAppear(v, W / 2, 280, () => {
+    ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+    ctx.fillStyle = 'rgba(244,247,251,0.7)'; ctx.font = '700 30px Inter'; ctx.fillText('AFTER', W / 2, 210);
+    ctx.fillStyle = C.white; ctx.font = '900 120px "Inter Display", Inter';
+    ctx.fillText(`${yr} YEAR${yr > 1 ? 'S' : ''}`, W / 2, 330);
+    // progress pips
+    for (let i = 0; i < 5; i++) {
+      ctx.fillStyle = i < yr ? C.cyan : 'rgba(255,255,255,0.15)';
+      rr(W / 2 - 150 + i * 62, 360, 52, 12, 6); ctx.fill();
+    }
+  });
+}
+
+function drawPrices(t) {
+  const cards = [
+    { a: 24.6, x: 290, label: 'NEW ANODE ROD', price: '$20', color: C.cyan },
+    { a: 26.6, x: 790, label: 'NEW WATER HEATER', price: '$1,000+', color: C.red }
+  ];
+  cards.forEach(c => {
+    const v = vis(t, c.a, 1e9, 0.55);
+    withAppear(v, c.x, 1210, () => {
+      ctx.fillStyle = 'rgba(7,13,26,0.9)'; rr(c.x - 225, 1105, 450, 230, 30); ctx.fill();
+      ctx.strokeStyle = c.color; ctx.lineWidth = 4; rr(c.x - 225, 1105, 450, 230, 30); ctx.stroke();
+      ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+      ctx.fillStyle = 'rgba(244,247,251,0.75)'; ctx.font = '700 28px Inter'; ctx.fillText(c.label, c.x, 1160);
+      ctx.fillStyle = c.color; ctx.font = '900 104px "Inter Display", Inter'; ctx.fillText(c.price, c.x, 1280);
+    });
+  });
+}
+
+function drawEnd(t) {
+  const v = vis(t, 28.75, 1e9, 0.45);
+  withAppear(v, W / 2, 280, () => {
+    ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+    ctx.fillStyle = C.white; ctx.font = '900 112px "Inter Display", Inter';
+    ctx.fillText('CHECK YOURS.', W / 2, 310);
+    const k = eo(prog(t, 29.0, 29.6));
+    ctx.strokeStyle = C.cyan; ctx.lineWidth = 10; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(W / 2 - 330, 345); ctx.lineTo(W / 2 - 330 + 660 * k, 345); ctx.stroke();
+  });
+}
+
+function drawCaptions(t) {
+  if (!TL) return;
+  const words = TL.words;
+  let idx = -1;
+  for (let i = 0; i < words.length; i++) if (t >= words[i].s - 0.02) idx = i;
+  if (idx < 0) return;
+  const cur = words[idx];
+  if (t > cur.e + 0.6) return;            // nothing spoken for a while
+  // chunk of up to 3 words within the same line
+  const lineWords = words.filter(w => w.line === cur.line);
+  const pos = lineWords.indexOf(cur);
+  const start = Math.floor(pos / 3) * 3;
+  const chunk = lineWords.slice(start, start + 3);
+  ctx.font = '900 76px "Inter Display", Inter';
+  ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
+  const space = 34, widths = chunk.map(w => ctx.measureText(w.w.toUpperCase()).width);
+  const total = widths.reduce((a, b) => a + b, 0) + space * (chunk.length - 1);
+  let x = W / 2 - total / 2; const y = 1470;
+  ctx.fillStyle = 'rgba(4,8,18,0.55)'; rr(x - 34, y - 78, total + 68, 104, 26); ctx.fill();
+  chunk.forEach((w, i) => {
+    const active = w === cur;
+    const pop = active ? eo(clamp((t - w.s) / 0.12)) : 1;
+    const txt = w.w.toUpperCase();
+    ctx.save();
+    const cx = x + widths[i] / 2;
+    const sc = active ? 1 + 0.05 * pop : 1;
+    ctx.translate(cx, y); ctx.scale(sc, sc); ctx.translate(-cx, -y);
+    ctx.lineJoin = 'round'; ctx.lineWidth = 14; ctx.strokeStyle = 'rgba(4,8,18,0.92)';
+    ctx.strokeText(txt, x, y);
+    const said = t >= w.s - 0.02;
+    ctx.fillStyle = active ? C.cyan : (said ? C.white : 'rgba(244,247,251,0.55)');
+    ctx.fillText(txt, x, y);
+    ctx.restore();
+    x += widths[i] + space;
+  });
+}
+
+// ---------- main ----------
+function render(t) {
+  const cam = camAt(t);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.globalAlpha = 1; ctx.filter = 'none';
+  drawBackground(t, cam);
+
+  // world
+  ctx.save();
+  ctx.translate(W / 2, H / 2 - 40); ctx.scale(cam[1], cam[1]); ctx.translate(-cam[2], -cam[3]);
+  const intro = eo(prog(t, 0, 0.7));
+  ctx.globalAlpha = intro;
+  drawTank(t);
+  drawRust(t);
+  drawWaterAttack(t);
+  drawRod(t);
+  drawDissolve(t);
+  drawShield(t);
+  drawLeak(t);
+  leaderLabel(t, 5.3, 9.9, ROD.x + 14, ROD.top + 150, 650, 430, 'ANODE ROD', 'magnesium', C.cyan);
+  chip('PROTECTED', 380, 1140, C.cyan, vis(t, 14.9, 19.4, 0.5));
+  chip('STEEL UNDER ATTACK', 540, 760, C.red, vis(t, 20.6, 24.2, 0.5));
+  ctx.restore();
+
+  // screen overlays
+  ctx.globalAlpha = 1;
+  drawHook(t);
+  drawReactivity(t);
+  drawYears(t);
+  drawPrices(t);
+  drawEnd(t);
+  drawCaptions(t);
+  // fade out the last 0.25 s
+  const out = prog(t, TL ? TL.total - 0.25 : 29.8, TL ? TL.total : 30.05);
+  if (out > 0) { ctx.fillStyle = `rgba(6,11,23,${out})`; ctx.fillRect(0, 0, W, H); }
+}
+window.render = render;
+window.setTimeline = tl => { TL = tl; };
+</script></body></html>

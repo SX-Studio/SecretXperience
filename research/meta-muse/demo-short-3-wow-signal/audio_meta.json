@@ -1,0 +1,1061 @@
+{
+ "bgm": null,
+ "bgm_pending": false,
+ "voices": [
+  {
+   "frame": 1,
+   "path": "assets/voice/01.wav",
+   "duration_s": 7.957,
+   "words": [
+    {
+     "id": "w0",
+     "text": "In",
+     "start": 0,
+     "end": 0.24
+    },
+    {
+     "id": "w1",
+     "text": "1977,",
+     "start": 0.24,
+     "end": 1.6
+    },
+    {
+     "id": "w2",
+     "text": "something",
+     "start": 1.6,
+     "end": 1.92
+    },
+    {
+     "id": "w3",
+     "text": "in",
+     "start": 1.92,
+     "end": 2.08
+    },
+    {
+     "id": "w4",
+     "text": "deep",
+     "start": 2.08,
+     "end": 2.48
+    },
+    {
+     "id": "w5",
+     "text": "space",
+     "start": 2.48,
+     "end": 2.88
+    },
+    {
+     "id": "w6",
+     "text": "broke",
+     "start": 2.88,
+     "end": 3.12
+    },
+    {
+     "id": "w7",
+     "text": "through",
+     "start": 3.12,
+     "end": 3.36
+    },
+    {
+     "id": "w8",
+     "text": "the",
+     "start": 3.36,
+     "end": 3.52
+    },
+    {
+     "id": "w9",
+     "text": "static",
+     "start": 3.52,
+     "end": 4
+    },
+    {
+     "id": "w10",
+     "text": "for",
+     "start": 4,
+     "end": 4.16
+    },
+    {
+     "id": "w11",
+     "text": "72",
+     "start": 4.16,
+     "end": 4.8
+    },
+    {
+     "id": "w12",
+     "text": "seconds.",
+     "start": 4.8,
+     "end": 5.6
+    },
+    {
+     "id": "w13",
+     "text": "This",
+     "start": 5.6,
+     "end": 5.92
+    },
+    {
+     "id": "w14",
+     "text": "video",
+     "start": 5.92,
+     "end": 6.24
+    },
+    {
+     "id": "w15",
+     "text": "lasts",
+     "start": 6.24,
+     "end": 6.8
+    },
+    {
+     "id": "w16",
+     "text": "exactly",
+     "start": 6.8,
+     "end": 7.2
+    },
+    {
+     "id": "w17",
+     "text": "that",
+     "start": 7.2,
+     "end": 7.44
+    },
+    {
+     "id": "w18",
+     "text": "long.",
+     "start": 7.44,
+     "end": 7.84
+    }
+   ]
+  },
+  {
+   "frame": 2,
+   "path": "assets/voice/02.wav",
+   "duration_s": 6.379,
+   "words": [
+    {
+     "id": "w0",
+     "text": "August",
+     "start": 0,
+     "end": 0.48
+    },
+    {
+     "id": "w1",
+     "text": "fifteenth.",
+     "start": 0.48,
+     "end": 1.12
+    },
+    {
+     "id": "w2",
+     "text": "Ohio",
+     "start": 1.28,
+     "end": 1.84
+    },
+    {
+     "id": "w3",
+     "text": "State's",
+     "start": 1.84,
+     "end": 2.32
+    },
+    {
+     "id": "w4",
+     "text": "Big",
+     "start": 2.32,
+     "end": 2.56
+    },
+    {
+     "id": "w5",
+     "text": "Ear",
+     "start": 2.56,
+     "end": 2.88
+    },
+    {
+     "id": "w6",
+     "text": "telescope",
+     "start": 2.88,
+     "end": 3.44
+    },
+    {
+     "id": "w7",
+     "text": "listens",
+     "start": 3.44,
+     "end": 3.84
+    },
+    {
+     "id": "w8",
+     "text": "to",
+     "start": 3.84,
+     "end": 3.92
+    },
+    {
+     "id": "w9",
+     "text": "the",
+     "start": 3.92,
+     "end": 4.08
+    },
+    {
+     "id": "w10",
+     "text": "sky,",
+     "start": 4.08,
+     "end": 4.48
+    },
+    {
+     "id": "w11",
+     "text": "and",
+     "start": 4.48,
+     "end": 4.72
+    },
+    {
+     "id": "w12",
+     "text": "a",
+     "start": 4.72,
+     "end": 4.8
+    },
+    {
+     "id": "w13",
+     "text": "computer",
+     "start": 4.8,
+     "end": 5.2
+    },
+    {
+     "id": "w14",
+     "text": "prints",
+     "start": 5.2,
+     "end": 5.6
+    },
+    {
+     "id": "w15",
+     "text": "what",
+     "start": 5.6,
+     "end": 5.76
+    },
+    {
+     "id": "w16",
+     "text": "it",
+     "start": 5.76,
+     "end": 5.92
+    },
+    {
+     "id": "w17",
+     "text": "hears.",
+     "start": 5.92,
+     "end": 6.32
+    }
+   ]
+  },
+  {
+   "frame": 3,
+   "path": "assets/voice/03.wav",
+   "duration_s": 5.376,
+   "words": [
+    {
+     "id": "w0",
+     "text": "Most",
+     "start": 0,
+     "end": 0.24
+    },
+    {
+     "id": "w1",
+     "text": "of",
+     "start": 0.24,
+     "end": 0.32
+    },
+    {
+     "id": "w2",
+     "text": "the",
+     "start": 0.32,
+     "end": 0.4
+    },
+    {
+     "id": "w3",
+     "text": "page",
+     "start": 0.4,
+     "end": 0.72
+    },
+    {
+     "id": "w4",
+     "text": "is",
+     "start": 0.72,
+     "end": 0.8
+    },
+    {
+     "id": "w5",
+     "text": "noise.",
+     "start": 0.96,
+     "end": 1.52
+    },
+    {
+     "id": "w6",
+     "text": "Then",
+     "start": 1.52,
+     "end": 1.84
+    },
+    {
+     "id": "w7",
+     "text": "6",
+     "start": 1.84,
+     "end": 2.16
+    },
+    {
+     "id": "w8",
+     "text": "characters.",
+     "start": 2.16,
+     "end": 3.04
+    },
+    {
+     "id": "w9",
+     "text": "6",
+     "start": 3.04,
+     "end": 3.36
+    },
+    {
+     "id": "w10",
+     "text": "E\u00b7Q\u00b7U",
+     "start": 3.52,
+     "end": 4.4
+    },
+    {
+     "id": "w11",
+     "text": "J",
+     "start": 4.56,
+     "end": 4.72
+    },
+    {
+     "id": "w12",
+     "text": "5.",
+     "start": 4.88,
+     "end": 5.28
+    }
+   ]
+  },
+  {
+   "frame": 4,
+   "path": "assets/voice/04.wav",
+   "duration_s": 3.989,
+   "words": [
+    {
+     "id": "w0",
+     "text": "Every",
+     "start": 0,
+     "end": 0.32
+    },
+    {
+     "id": "w1",
+     "text": "letter",
+     "start": 0.32,
+     "end": 0.64
+    },
+    {
+     "id": "w2",
+     "text": "means",
+     "start": 0.64,
+     "end": 0.88
+    },
+    {
+     "id": "w3",
+     "text": "louder.",
+     "start": 0.88,
+     "end": 1.52
+    },
+    {
+     "id": "w4",
+     "text": "U",
+     "start": 1.52,
+     "end": 1.76
+    },
+    {
+     "id": "w5",
+     "text": "means",
+     "start": 1.84,
+     "end": 2.16
+    },
+    {
+     "id": "w6",
+     "text": "thirty",
+     "start": 2.16,
+     "end": 2.48
+    },
+    {
+     "id": "w7",
+     "text": "times",
+     "start": 2.48,
+     "end": 2.72
+    },
+    {
+     "id": "w8",
+     "text": "louder",
+     "start": 2.72,
+     "end": 3.12
+    },
+    {
+     "id": "w9",
+     "text": "than",
+     "start": 3.12,
+     "end": 3.28
+    },
+    {
+     "id": "w10",
+     "text": "the",
+     "start": 3.28,
+     "end": 3.36
+    },
+    {
+     "id": "w11",
+     "text": "background.",
+     "start": 3.36,
+     "end": 3.92
+    }
+   ]
+  },
+  {
+   "frame": 5,
+   "path": "assets/voice/05.wav",
+   "duration_s": 4.416,
+   "words": [
+    {
+     "id": "w0",
+     "text": "Days",
+     "start": 0,
+     "end": 0.32
+    },
+    {
+     "id": "w1",
+     "text": "later,",
+     "start": 0.32,
+     "end": 0.72
+    },
+    {
+     "id": "w2",
+     "text": "volunteer",
+     "start": 0.72,
+     "end": 1.2
+    },
+    {
+     "id": "w3",
+     "text": "Jerry",
+     "start": 1.2,
+     "end": 1.6
+    },
+    {
+     "id": "w4",
+     "text": "Ehman",
+     "start": 1.6,
+     "end": 2.08
+    },
+    {
+     "id": "w5",
+     "text": "circled",
+     "start": 2.24,
+     "end": 2.56
+    },
+    {
+     "id": "w6",
+     "text": "it",
+     "start": 2.56,
+     "end": 2.72
+    },
+    {
+     "id": "w7",
+     "text": "in",
+     "start": 2.72,
+     "end": 2.88
+    },
+    {
+     "id": "w8",
+     "text": "red,",
+     "start": 2.88,
+     "end": 3.2
+    },
+    {
+     "id": "w9",
+     "text": "and",
+     "start": 3.2,
+     "end": 3.44
+    },
+    {
+     "id": "w10",
+     "text": "wrote",
+     "start": 3.44,
+     "end": 3.68
+    },
+    {
+     "id": "w11",
+     "text": "one",
+     "start": 3.68,
+     "end": 3.84
+    },
+    {
+     "id": "w12",
+     "text": "word.",
+     "start": 3.92,
+     "end": 4.32
+    }
+   ]
+  },
+  {
+   "frame": 7,
+   "path": "assets/voice/07.wav",
+   "duration_s": 8.789,
+   "words": [
+    {
+     "id": "w0",
+     "text": "Big",
+     "start": 0.08,
+     "end": 0.32
+    },
+    {
+     "id": "w1",
+     "text": "Ear",
+     "start": 0.32,
+     "end": 0.64
+    },
+    {
+     "id": "w2",
+     "text": "couldn't",
+     "start": 0.64,
+     "end": 0.88
+    },
+    {
+     "id": "w3",
+     "text": "move.",
+     "start": 0.88,
+     "end": 1.36
+    },
+    {
+     "id": "w4",
+     "text": "Earth's",
+     "start": 1.36,
+     "end": 1.92
+    },
+    {
+     "id": "w5",
+     "text": "spin",
+     "start": 1.92,
+     "end": 2.4
+    },
+    {
+     "id": "w6",
+     "text": "swept",
+     "start": 2.4,
+     "end": 2.72
+    },
+    {
+     "id": "w7",
+     "text": "the",
+     "start": 2.72,
+     "end": 2.88
+    },
+    {
+     "id": "w8",
+     "text": "sky",
+     "start": 2.88,
+     "end": 3.2
+    },
+    {
+     "id": "w9",
+     "text": "past",
+     "start": 3.2,
+     "end": 3.44
+    },
+    {
+     "id": "w10",
+     "text": "it,",
+     "start": 3.44,
+     "end": 3.76
+    },
+    {
+     "id": "w11",
+     "text": "so",
+     "start": 3.76,
+     "end": 4
+    },
+    {
+     "id": "w12",
+     "text": "anything",
+     "start": 4,
+     "end": 4.4
+    },
+    {
+     "id": "w13",
+     "text": "out",
+     "start": 4.4,
+     "end": 4.56
+    },
+    {
+     "id": "w14",
+     "text": "in",
+     "start": 4.56,
+     "end": 4.72
+    },
+    {
+     "id": "w15",
+     "text": "space",
+     "start": 4.72,
+     "end": 5.12
+    },
+    {
+     "id": "w16",
+     "text": "would",
+     "start": 5.12,
+     "end": 5.36
+    },
+    {
+     "id": "w17",
+     "text": "rise",
+     "start": 5.36,
+     "end": 5.68
+    },
+    {
+     "id": "w18",
+     "text": "and",
+     "start": 5.68,
+     "end": 5.84
+    },
+    {
+     "id": "w19",
+     "text": "fall",
+     "start": 5.84,
+     "end": 6.24
+    },
+    {
+     "id": "w20",
+     "text": "over",
+     "start": 6.24,
+     "end": 6.56
+    },
+    {
+     "id": "w21",
+     "text": "72",
+     "start": 6.56,
+     "end": 7.2
+    },
+    {
+     "id": "w22",
+     "text": "seconds.",
+     "start": 7.2,
+     "end": 7.92
+    },
+    {
+     "id": "w23",
+     "text": "This",
+     "start": 7.92,
+     "end": 8.24
+    },
+    {
+     "id": "w24",
+     "text": "did.",
+     "start": 8.24,
+     "end": 8.72
+    }
+   ]
+  },
+  {
+   "frame": 8,
+   "path": "assets/voice/08.wav",
+   "duration_s": 4.331,
+   "words": [
+    {
+     "id": "w0",
+     "text": "It",
+     "start": 0,
+     "end": 0.16
+    },
+    {
+     "id": "w1",
+     "text": "sat",
+     "start": 0.16,
+     "end": 0.4
+    },
+    {
+     "id": "w2",
+     "text": "near",
+     "start": 0.4,
+     "end": 0.64
+    },
+    {
+     "id": "w3",
+     "text": "1420",
+     "start": 0.64,
+     "end": 1.04
+    },
+    {
+     "id": "w4",
+     "text": "MHz,",
+     "start": 1.12,
+     "end": 2.35
+    },
+    {
+     "id": "w6",
+     "text": "the",
+     "start": 2.4,
+     "end": 2.56
+    },
+    {
+     "id": "w7",
+     "text": "natural",
+     "start": 2.56,
+     "end": 2.88
+    },
+    {
+     "id": "w8",
+     "text": "frequency",
+     "start": 2.88,
+     "end": 3.36
+    },
+    {
+     "id": "w9",
+     "text": "of",
+     "start": 3.36,
+     "end": 3.52
+    },
+    {
+     "id": "w10",
+     "text": "hydrogen.",
+     "start": 3.52,
+     "end": 4.16
+    }
+   ]
+  },
+  {
+   "frame": 9,
+   "path": "assets/voice/09.wav",
+   "duration_s": 6.741,
+   "words": [
+    {
+     "id": "w0",
+     "text": "Big",
+     "start": 0.08,
+     "end": 0.32
+    },
+    {
+     "id": "w1",
+     "text": "Ear",
+     "start": 0.32,
+     "end": 0.64
+    },
+    {
+     "id": "w2",
+     "text": "had",
+     "start": 0.64,
+     "end": 0.8
+    },
+    {
+     "id": "w3",
+     "text": "two",
+     "start": 0.8,
+     "end": 0.96
+    },
+    {
+     "id": "w4",
+     "text": "receivers.",
+     "start": 0.96,
+     "end": 1.6
+    },
+    {
+     "id": "w5",
+     "text": "It",
+     "start": 1.6,
+     "end": 1.76
+    },
+    {
+     "id": "w6",
+     "text": "should",
+     "start": 1.76,
+     "end": 1.92
+    },
+    {
+     "id": "w7",
+     "text": "have",
+     "start": 1.92,
+     "end": 2.08
+    },
+    {
+     "id": "w8",
+     "text": "heard",
+     "start": 2.08,
+     "end": 2.32
+    },
+    {
+     "id": "w9",
+     "text": "the",
+     "start": 2.32,
+     "end": 2.4
+    },
+    {
+     "id": "w10",
+     "text": "signal",
+     "start": 2.4,
+     "end": 2.8
+    },
+    {
+     "id": "w11",
+     "text": "twice.",
+     "start": 2.8,
+     "end": 3.36
+    },
+    {
+     "id": "w12",
+     "text": "It",
+     "start": 3.36,
+     "end": 3.52
+    },
+    {
+     "id": "w13",
+     "text": "heard",
+     "start": 3.52,
+     "end": 3.84
+    },
+    {
+     "id": "w14",
+     "text": "it",
+     "start": 3.84,
+     "end": 4
+    },
+    {
+     "id": "w15",
+     "text": "once.",
+     "start": 4,
+     "end": 4.48
+    },
+    {
+     "id": "w16",
+     "text": "Decades",
+     "start": 4.48,
+     "end": 4.96
+    },
+    {
+     "id": "w17",
+     "text": "of",
+     "start": 4.96,
+     "end": 5.12
+    },
+    {
+     "id": "w18",
+     "text": "searching",
+     "start": 5.12,
+     "end": 5.6
+    },
+    {
+     "id": "w19",
+     "text": "since.",
+     "start": 5.6,
+     "end": 6.16
+    },
+    {
+     "id": "w20",
+     "text": "Nothing.",
+     "start": 6.16,
+     "end": 6.64
+    }
+   ]
+  },
+  {
+   "frame": 10,
+   "path": "assets/voice/10.wav",
+   "duration_s": 8.171,
+   "words": [
+    {
+     "id": "w0",
+     "text": "In",
+     "start": 0,
+     "end": 0.24
+    },
+    {
+     "id": "w1",
+     "text": "2024,",
+     "start": 0.24,
+     "end": 1.2
+    },
+    {
+     "id": "w2",
+     "text": "researchers",
+     "start": 1.2,
+     "end": 1.92
+    },
+    {
+     "id": "w3",
+     "text": "proposed",
+     "start": 1.92,
+     "end": 2.48
+    },
+    {
+     "id": "w4",
+     "text": "a",
+     "start": 2.48,
+     "end": 2.56
+    },
+    {
+     "id": "w5",
+     "text": "natural",
+     "start": 2.56,
+     "end": 2.96
+    },
+    {
+     "id": "w6",
+     "text": "cause,",
+     "start": 2.96,
+     "end": 3.68
+    },
+    {
+     "id": "w7",
+     "text": "a",
+     "start": 3.68,
+     "end": 3.84
+    },
+    {
+     "id": "w8",
+     "text": "hydrogen",
+     "start": 3.84,
+     "end": 4.48
+    },
+    {
+     "id": "w9",
+     "text": "cloud,",
+     "start": 4.48,
+     "end": 5.04
+    },
+    {
+     "id": "w10",
+     "text": "briefly",
+     "start": 5.04,
+     "end": 5.52
+    },
+    {
+     "id": "w11",
+     "text": "lit",
+     "start": 5.52,
+     "end": 5.76
+    },
+    {
+     "id": "w12",
+     "text": "by",
+     "start": 5.76,
+     "end": 5.92
+    },
+    {
+     "id": "w13",
+     "text": "a",
+     "start": 5.92,
+     "end": 6
+    },
+    {
+     "id": "w14",
+     "text": "burst",
+     "start": 6,
+     "end": 6.32
+    },
+    {
+     "id": "w15",
+     "text": "from",
+     "start": 6.32,
+     "end": 6.4
+    },
+    {
+     "id": "w16",
+     "text": "a",
+     "start": 6.4,
+     "end": 6.56
+    },
+    {
+     "id": "w17",
+     "text": "magnetar.",
+     "start": 6.56,
+     "end": 7.36
+    },
+    {
+     "id": "w18",
+     "text": "Maybe.",
+     "start": 7.52,
+     "end": 8.08
+    }
+   ]
+  },
+  {
+   "frame": 11,
+   "path": "assets/voice/11.wav",
+   "duration_s": 4.267,
+   "words": [
+    {
+     "id": "w0",
+     "text": "But",
+     "start": 0,
+     "end": 0.24
+    },
+    {
+     "id": "w1",
+     "text": "for",
+     "start": 0.24,
+     "end": 0.4
+    },
+    {
+     "id": "w2",
+     "text": "72",
+     "start": 0.4,
+     "end": 0.96
+    },
+    {
+     "id": "w3",
+     "text": "seconds,",
+     "start": 0.96,
+     "end": 1.44
+    },
+    {
+     "id": "w4",
+     "text": "the",
+     "start": 1.44,
+     "end": 1.6
+    },
+    {
+     "id": "w5",
+     "text": "sky",
+     "start": 1.6,
+     "end": 1.92
+    },
+    {
+     "id": "w6",
+     "text": "got",
+     "start": 1.92,
+     "end": 2.16
+    },
+    {
+     "id": "w7",
+     "text": "loud,",
+     "start": 2.16,
+     "end": 2.8
+    },
+    {
+     "id": "w8",
+     "text": "and",
+     "start": 2.8,
+     "end": 3.04
+    },
+    {
+     "id": "w9",
+     "text": "we",
+     "start": 3.04,
+     "end": 3.2
+    },
+    {
+     "id": "w10",
+     "text": "only",
+     "start": 3.2,
+     "end": 3.36
+    },
+    {
+     "id": "w11",
+     "text": "heard",
+     "start": 3.36,
+     "end": 3.68
+    },
+    {
+     "id": "w12",
+     "text": "it",
+     "start": 3.68,
+     "end": 3.84
+    },
+    {
+     "id": "w13",
+     "text": "once.",
+     "start": 3.84,
+     "end": 4.16
+    }
+   ]
+  }
+ ],
+ "sfx": []
+}

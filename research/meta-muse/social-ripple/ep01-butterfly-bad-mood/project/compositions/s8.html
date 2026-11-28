@@ -1,0 +1,79 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #s8-svg { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+    #s8-svg text { font-family: "Outfit"; }
+  </style>
+  <div id="root" data-composition-id="s8" data-width="1920" data-height="1080">
+    <svg id="s8-svg" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" data-layout-ignore></svg>
+  </div>
+  <script>
+    (function () {
+      const SR = window.SR; const { el, Set, Character, Camera, Butterfly, PAL, EASE, clamp, sampleTrack, drive } = SR;
+      const svg = document.getElementById("s8-svg");
+      const D = 21.2;
+      const world = el("g", {}, svg);
+      const bg = el("g", {}, world), screenL = el("g", {}, world), stageL = el("g", {}, world), ringsL = el("g", {}, world), aud = el("g", {}, world), fx = el("g", {}, world);
+      el("rect", { x: -800, y: -600, width: 3600, height: 2400, fill: "#3B2F3F" }, bg); el("rect", { x: -800, y: 800, width: 3600, height: 1000, fill: "#4A3B4D" }, bg);
+      Set.stage(bg, 760, 1920);
+      const lily = Character(stageL, { id: "s8-lily", color: "#E8A4C8", hair: "ponytail", hairColor: "#6B4A35", seed: 88, scale: 0.68, wings: true, flap: 1.4, x: [[0, 960]], y: [[0, 760]], pose: [[0, "wave", 0], [1.5, "proud", 0.4]], mood: [[0, "joy", 0]] });
+      Character(stageL, { id: "s8-k1", color: PAL.forest, hair: "bun", seed: 81, scale: 0.62, x: [[0, 640]], y: [[0, 760]], pose: [[0, "proud", 0]], mood: [[0, "happy", 0]] }).update(0.5);
+      Character(stageL, { id: "s8-k2", color: PAL.rose, hair: "curly", seed: 82, scale: 0.62, x: [[0, 1290]], y: [[0, 760]], facing: [[0, -1]], pose: [[0, "proud", 0]], mood: [[0, "content", 0]] }).update(0.5);
+      const heads = Set.audienceRows(el("g", { transform: "translate(-340,0)" }, aud), 3, 890, 2600, 7).map((h) => ({ x: h.x - 340, y: h.y }));
+      const dev = Character(aud, { id: "s8-dev", color: PAL.navy, hair: "short", seed: 21, scale: 1.25, x: [[0, 1600]], y: [[0, 1180]], facing: [[0, -1]], pose: [[0, "relaxed", 0]], mood: [[0, "joy", 0]], look: [[0, { x: 0, y: -1 }]] });
+      // projector screen with the study
+      const scr = el("g", {}, screenL);
+      el("rect", { x: 560, y: 0, width: 800, height: 330, fill: "#FBF7EE", stroke: PAL.ink, "stroke-width": 6 }, scr);
+      el("rect", { x: 548, y: -14, width: 824, height: 22, rx: 8, fill: "#3A3540" }, scr);
+      const T = (s, x, y, size, w, col, fam) => { const t = el("text", { x, y, "text-anchor": "middle", "dominant-baseline": "central", "font-family": fam || "Outfit", "font-weight": w, "font-size": size, fill: col || PAL.ink }, scr); t.textContent = s; return t; };
+      T("ONE STUDY", 960, 62, 34, 900, PAL.rude);
+      const big = T("4,739 people · 20 years", 960, 132, 64, 900);
+      T("Is happiness contagious?", 960, 206, 38, 800, "#5B4A3E", "Nunito");
+      T("Framingham Heart Study · Fowler & Christakis, BMJ 2008", 960, 280, 24, 700, "#7A6A5E", "Nunito");
+      // rings from Lily, one per degree, each with its number
+      const C = { x: 960, y: 640 };
+      const R = [{ r: 330, t: 5.1, tc: 7.85, txt: "1°  +15.3%" }, { r: 610, t: 10.4, tc: 12.0, txt: "2°  +9.8%" }, { r: 900, t: 13.2, tc: 14.7, txt: "3°  +5.6%" }];
+      const ringEls = R.map((d) => {
+        const g = el("g", {}, ringsL);
+        const c = el("circle", { cx: C.x, cy: C.y, r: 0, fill: "none", stroke: PAL.kind, "stroke-width": 10 }, g);
+        const chip = el("g", { opacity: 0 }, fx);
+        const ang = -0.6 + (d.r > 700 ? 0.38 : d.r > 400 ? 0.12 : 0), cx = C.x + Math.cos(ang) * d.r, cy = C.y + Math.sin(ang) * d.r;
+        el("rect", { x: -120, y: -36, width: 240, height: 72, rx: 36, fill: PAL.kind, stroke: PAL.ink, "stroke-width": 5 }, chip);
+        const tt = el("text", { x: 0, y: 2, "text-anchor": "middle", "dominant-baseline": "central", "font-family": "Outfit", "font-weight": 900, "font-size": 40, fill: PAL.ink }, chip); tt.textContent = d.txt;
+        return Object.assign({ c, chip, cx: Math.min(cx, 1720), cy: Math.max(cy, 90) }, d);
+      });
+      const pops = heads.map((h) => ({ h, d: Math.hypot(h.x - C.x, h.y - C.y), el: el("circle", { cx: h.x, cy: h.y, r: 0, fill: "none", stroke: PAL.kind, "stroke-width": 4, opacity: 0 }, fx) }));
+      const bf = Butterfly(fx, { x: [[0, 1560]], y: [[0, 150]], scale: 0.9, flap: 0.6, rot: 20 });
+      const cam = Camera(world, [[0, { x: 960, y: 560, z: 1.0, r: 0 }], [0.6, { x: 960, y: 520, z: 1.12, r: 0 }, "inOut"], [4.2, { x: 960, y: 480, z: 1.16, r: 0 }, "linear"],
+        [5.2, { x: 960, y: 640, z: 1.0, r: 0 }, "inOut"], [16.0, { x: 960, y: 620, z: 0.92, r: 0 }, "linear"], [D, { x: 960, y: 600, z: 0.86, r: 0 }, "linear"]]);
+      const tl = gsap.timeline({ paused: true });
+      drive(tl, D, (t) => {
+        cam.update(t);
+        lily.update(t); dev.update(t); bf.update(t);
+        const ks = clamp((t - 0.5) / 0.7, 0, 1);
+        scr.setAttribute("transform", `translate(0,${-340 + EASE.out(ks) * 420})`);
+        // the big count lands on "4,700"
+        const kb = clamp((t - 1.8) / 0.25, 0, 1); big.setAttribute("transform", `translate(960,132) scale(${0.7 + 0.3 * EASE.back(kb)}) translate(-960,-132)`); big.setAttribute("opacity", kb);
+        let reach = 0;
+        ringEls.forEach((d, i) => {
+          const k = clamp((t - d.t) / 1.0, 0, 1), pulse = t > 16.2 ? 1 + 0.03 * Math.sin((t - 16.2) * 6 - i) : 1;
+          d.c.setAttribute("r", EASE.out(k) * d.r * pulse); d.c.setAttribute("opacity", k > 0 ? 0.95 - i * 0.18 : 0);
+          d.c.setAttribute("stroke-width", 10 - i * 2);
+          if (k > 0) reach = Math.max(reach, EASE.out(k) * d.r);
+          const kc = clamp((t - d.tc) / 0.3, 0, 1);
+          d.chip.setAttribute("opacity", kc); d.chip.setAttribute("transform", `translate(${d.cx},${d.cy}) scale(${EASE.back(kc)})`);
+        });
+        // each head lights up as a ring reaches it, and again in the "three degrees" sweep
+        pops.forEach((p) => {
+          const t0 = p.d < reach ? null : null;
+          let k = 0;
+          ringEls.forEach((d) => { const tr = d.t + Math.max(0, (p.d - (d.r - 300)) / d.r); if (p.d <= d.r && p.d > d.r - 300) { const kk = clamp((t - tr) / 0.6, 0, 1); if (kk > 0 && kk < 1) k = Math.max(k, Math.sin(kk * Math.PI)); } });
+          const tsweep = 17.3 + (p.d / 1000) * 2.4, ks2 = clamp((t - tsweep) / 0.7, 0, 1);
+          if (ks2 > 0 && ks2 < 1) k = Math.max(k, Math.sin(ks2 * Math.PI));
+          p.el.setAttribute("r", 18 + k * 30); p.el.setAttribute("opacity", k);
+        });
+      });
+      window.__timelines["s8"] = tl;
+    })();
+  </script>
+</template>

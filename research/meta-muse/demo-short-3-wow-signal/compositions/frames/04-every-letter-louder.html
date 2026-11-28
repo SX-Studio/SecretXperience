@@ -1,0 +1,316 @@
+<template>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-400.woff2") format("woff2");font-weight:400;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-500.woff2") format("woff2");font-weight:500;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-600.woff2") format("woff2");font-weight:600;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-700.woff2") format("woff2");font-weight:700;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-800.woff2") format("woff2");font-weight:800;font-style:normal;}
+@font-face{font-family:"Barlow";src:url("assets/fonts/Barlow-900.woff2") format("woff2");font-weight:900;font-style:normal;}
+@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/IBMPlexMono-400.woff2") format("woff2");font-weight:400;font-style:normal;}
+@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/IBMPlexMono-500.woff2") format("woff2");font-weight:500;font-style:normal;}
+@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/IBMPlexMono-600.woff2") format("woff2");font-weight:600;font-style:normal;}
+@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/IBMPlexMono-700.woff2") format("woff2");font-weight:700;font-style:normal;}
+
+    
+
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      container-type: size;
+      color: #F0ECE5;
+      font-family: "Barlow", sans-serif;
+    }
+
+    /* full-bleed ground — dark register */
+    [id="04-every-letter-louder-bg"] {
+      position: absolute;
+      inset: 0;
+      background: #111111;
+    }
+
+    /* kicker (outside the camera) */
+    [id="04-every-letter-louder-kicker"] {
+      position: absolute;
+      left: 60px;
+      top: 196px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 2.4cqw;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #E85D26;
+      line-height: 1;
+    }
+    [id="04-every-letter-louder-stub"] {
+      display: block;
+      width: 36px;
+      height: 2px;
+      background: #E85D26;
+    }
+
+    /* camera wrapper — slow continuous push toward U */
+    [id="04-every-letter-louder-cam"] {
+      position: absolute;
+      inset: 0;
+      transform-origin: 522px 1000px;
+    }
+
+    /* chart chrome: baseline at y=1267, left axis at x=60 */
+    [id="04-every-letter-louder-baseline"] {
+      position: absolute;
+      left: 60px;
+      top: 1267px;
+      width: 960px;
+      height: 1px;
+      background: #505048;
+      transform-origin: left center;
+    }
+    [id="04-every-letter-louder-axis"] {
+      position: absolute;
+      left: 60px;
+      top: 487px;
+      width: 1px;
+      height: 780px;
+      background: #282826;
+      transform-origin: center bottom;
+    }
+
+    /* bars — heights linearly proportional: 1 unit = 760px / 30 */
+    [class~="04-every-letter-louder-bar"] {
+      --u: calc(760px / 30);
+      position: absolute;
+      bottom: 653px; /* 1920 - 1267 → sits on the baseline */
+      width: 96px;
+      height: calc(var(--u) * var(--v));
+      background: #F0ECE5;
+      transform-origin: center bottom;
+    }
+
+    /* character labels + decoded values under the baseline */
+    [class~="04-every-letter-louder-char"],
+    [class~="04-every-letter-louder-val"] {
+      position: absolute;
+      width: 130px;
+      text-align: center;
+      font-family: "IBM Plex Mono", monospace;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+    [class~="04-every-letter-louder-char"] {
+      top: 1292px;
+      font-weight: 500;
+      font-size: 4.6cqw;
+      color: #F0ECE5;
+    }
+    [class~="04-every-letter-louder-val"] {
+      top: 1360px;
+      font-weight: 400;
+      font-size: 2.6cqw;
+      letter-spacing: 0.04em;
+      color: #888880;
+    }
+
+    /* scale legend */
+    [id="04-every-letter-louder-legend"] {
+      position: absolute;
+      left: 60px;
+      top: 1440px;
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 2.3cqw;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #888880;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    /* background reference line at value 1 */
+    [id="04-every-letter-louder-bgline"] {
+      position: absolute;
+      left: 60px;
+      top: calc(1267px - 760px / 30 - 1px);
+      width: 960px;
+      height: 0;
+      border-top: 2px dashed #F0ECE5;
+      opacity: 0.8;
+    }
+    [id="04-every-letter-louder-bglabel"] {
+      position: absolute;
+      right: 60px;
+      top: 1196px;
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 2.0cqw;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #F0ECE5;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    /* hero count-up above U */
+    [id="04-every-letter-louder-hero"] {
+      position: absolute;
+      left: 302px;
+      width: 440px;
+      bottom: 1416px; /* box bottom at y≈504, just above U's top (507) */
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      font-family: "Barlow", sans-serif;
+      font-weight: 900;
+      font-size: 20cqw;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      color: #E85D26;
+    }
+    [id="04-every-letter-louder-count"] {
+      display: inline-block;
+      font-variant-numeric: tabular-nums;
+      transform-origin: center bottom;
+    }
+    [id="04-every-letter-louder-suffix"] {
+      display: inline-block;
+    }
+  </style>
+
+  <div id="root" data-composition-id="04-every-letter-louder" data-width="1080" data-height="1920" data-duration="4.989">
+    <div id="04-every-letter-louder-bg" class="clip" data-start="0" data-duration="4.989" data-track-index="0"></div>
+
+    <div id="04-every-letter-louder-kicker"><span id="04-every-letter-louder-stub"></span><span>Intensity scale</span></div>
+
+    <div id="04-every-letter-louder-cam">
+      <div id="04-every-letter-louder-axis"></div>
+
+      <div class="04-every-letter-louder-bar" data-k="6" style="left:84px;--v:6"></div>
+      <div class="04-every-letter-louder-bar" data-k="E" style="left:214px;--v:14"></div>
+      <div class="04-every-letter-louder-bar" data-k="Q" style="left:344px;--v:26"></div>
+      <div class="04-every-letter-louder-bar" data-k="U" style="left:474px;--v:30"></div>
+      <div class="04-every-letter-louder-bar" data-k="J" style="left:604px;--v:19"></div>
+      <div class="04-every-letter-louder-bar" data-k="5" style="left:734px;--v:5"></div>
+
+      <div id="04-every-letter-louder-baseline"></div>
+
+      <div class="04-every-letter-louder-char" data-k="6" style="left:67px">6</div>
+      <div class="04-every-letter-louder-char" data-k="E" style="left:197px">E</div>
+      <div class="04-every-letter-louder-char" data-k="Q" style="left:327px">Q</div>
+      <div class="04-every-letter-louder-char" data-k="U" style="left:457px">U</div>
+      <div class="04-every-letter-louder-char" data-k="J" style="left:587px">J</div>
+      <div class="04-every-letter-louder-char" data-k="5" style="left:717px">5</div>
+
+      <div class="04-every-letter-louder-val" style="left:67px">6</div>
+      <div class="04-every-letter-louder-val" style="left:197px">14</div>
+      <div class="04-every-letter-louder-val" style="left:327px">26</div>
+      <div class="04-every-letter-louder-val" style="left:457px">30</div>
+      <div class="04-every-letter-louder-val" style="left:587px">19</div>
+      <div class="04-every-letter-louder-val" style="left:717px">5</div>
+
+      <div id="04-every-letter-louder-legend">0–9 · A=10 … Z=35</div>
+
+      <div id="04-every-letter-louder-bgline"></div>
+      <div id="04-every-letter-louder-bglabel">Background</div>
+
+      <div id="04-every-letter-louder-hero"><span id="04-every-letter-louder-count">1</span><span id="04-every-letter-louder-suffix">×</span></div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const FID = "04-every-letter-louder";
+      const DUR = 4.489;
+      const R = document.querySelector('[data-composition-id="' + FID + '"]');
+      const byId = (s) => R.querySelector('[id="' + FID + "-" + s + '"]');
+      const byCls = (s) => Array.from(R.querySelectorAll('[class~="' + FID + "-" + s + '"]'));
+
+      const CREAM = "#F0ECE5";
+      const CREAM_MUTED = "#888880";
+      const CREAM_HINT = "#505048";
+      const FIRE = "#E85D26";
+
+      const cam = byId("cam");
+      const kicker = byId("kicker");
+      const baseline = byId("baseline");
+      const axis = byId("axis");
+      const bars = byCls("bar");
+      const chars = byCls("char");
+      const vals = byCls("val");
+      const legend = byId("legend");
+      const bgline = byId("bgline");
+      const bglabel = byId("bglabel");
+      const hero = byId("hero");
+      const count = byId("count");
+      const suffix = byId("suffix");
+
+      const uBar = bars.filter((b) => b.dataset.k === "U");
+      const otherBars = bars.filter((b) => b.dataset.k !== "U");
+      const uChar = chars.filter((c) => c.dataset.k === "U");
+      const otherChars = chars.filter((c) => c.dataset.k !== "U");
+
+      const tl = gsap.timeline({ paused: true });
+
+      // Macro camera: slow continuous push toward U across the whole shot
+      tl.fromTo(cam, { scale: 1 }, { scale: 1.035, duration: DUR, ease: "sine.inOut" }, 0);
+
+      // Scene 1 (0.0–1.6s): labels on the baseline, bars grow left→right
+      tl.fromTo(kicker, { opacity: 0, x: -16 }, { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" }, 0);
+      tl.fromTo(baseline, { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: "power3.out" }, 0);
+      tl.fromTo(axis, { scaleY: 0 }, { scaleY: 1, duration: 0.6, ease: "power3.out" }, 0.1);
+      tl.fromTo(chars, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out", stagger: 0.04 }, 0.02);
+      tl.fromTo(bars, { scaleY: 0 }, { scaleY: 1, duration: 0.8, ease: "power3.out", stagger: 0.1 }, 0.2);
+      tl.fromTo(vals, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out", stagger: 0.1 }, 0.55);
+      tl.fromTo(legend, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, 1.05);
+
+      // Scene 2 (1.6–2.6s): on "U" — U turns fire-orange, the rest dim
+      tl.fromTo(uBar, { backgroundColor: CREAM }, { backgroundColor: FIRE, duration: 0.3, ease: "power2.out" }, 1.6);
+      tl.fromTo(otherBars, { backgroundColor: CREAM }, { backgroundColor: CREAM_HINT, duration: 0.4, ease: "power2.out" }, 1.6);
+      tl.fromTo(uChar, { color: CREAM }, { color: FIRE, duration: 0.3, ease: "power2.out" }, 1.6);
+      tl.fromTo(otherChars, { color: CREAM }, { color: CREAM_MUTED, duration: 0.4, ease: "power2.out" }, 1.6);
+
+      // Scene 3 (2.6–4.5s): count-up 1 → 30 with dynamic scale, lands as "30×"
+      const COUNT_AT = 2.6;
+      const COUNT_DUR = 1.1;
+      const state = { value: 1 };
+      tl.fromTo(hero, { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power1.out" }, COUNT_AT);
+      tl.fromTo(
+        state,
+        { value: 1 },
+        {
+          value: 30,
+          duration: COUNT_DUR,
+          ease: "power3.out",
+          onUpdate: () => {
+            count.textContent = String(Math.round(state.value));
+          },
+        },
+        COUNT_AT,
+      );
+      tl.fromTo(count, { scale: 0.5 }, { scale: 1, duration: COUNT_DUR, ease: "power3.out" }, COUNT_AT);
+      tl.fromTo(
+        suffix,
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.4, ease: "back.out(1.6)" },
+        COUNT_AT + COUNT_DUR,
+      );
+
+      // "…than the background" — dashed hairline at value 1, then its label; hold
+      tl.fromTo(
+        bgline,
+        { clipPath: "inset(-4px 100% -4px 0)" },
+        { clipPath: "inset(-4px 0% -4px 0)", duration: 0.5, ease: "power2.inOut" },
+        3.45,
+      );
+      tl.fromTo(bglabel, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" }, 3.75);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines[FID] = tl;
+    })();
+  </script>
+</template>

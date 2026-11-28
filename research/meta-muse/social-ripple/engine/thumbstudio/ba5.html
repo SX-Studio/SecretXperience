@@ -1,0 +1,13 @@
+<!doctype html><html><head><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@900&display=swap" rel="stylesheet">
+<script src="assets/sr-engine-v1.js"></script><script src="assets/sr-v3.js"></script><script src="studio.js"></script><script src="face5.js"></script><script src="assets/cast5.js"></script>
+<style>*{margin:0;padding:0}body{width:1280px;height:720px;overflow:hidden;background:#BFE3F2}svg{position:absolute;inset:0}</style></head>
+<body><svg id="art" viewBox="0 0 1280 720"></svg><script>
+const svg=document.getElementById('art'); TS.defs(svg); const {el}=SR;
+el("rect",{x:0,y:0,width:640,height:720,fill:"#D9D4CC"},svg); el("rect",{x:0,y:600,width:1280,height:120,fill:"#9FCB86"},svg); el("rect",{x:0,y:600,width:640,height:120,fill:"#B8B2A8"},svg);
+const T=(x,s,c)=>el("text",{x,y:64,"text-anchor":"middle","font-family":"Outfit","font-weight":900,"font-size":40,fill:c},svg).textContent=s;
+T(320,"BEFORE · Ep6","#5A5560"); T(960,"AFTER · v5","#1E1B22");
+const OLD={mo:{color:"#E8834A",outfit:"apron",hair:"short",hairColor:"#3A2A22",pants:"#3A4A63",seed:7,thin:true},ana:{color:"#3FA7A0",outfit:"tee",hair:"bun",hairColor:"#5A3A2A",pants:"#2E7A74",seed:5,thin:true},kai:{color:"#FF8A2A",outfit:"jacket",hair:"cap",hairColor:"#E0B020",pants:"#3A4A63",seed:6,thin:true}};
+[["mo","laughing","laugh","proud"],["ana","happy","bliss","wave"],["kai","smug","smug","crossed"]].forEach(([w,m,ex,pose],i)=>{
+  TS.char(svg,OLD[w],{id:"o"+i,x:130+i*190,y:640,scale:1.55,mood:m,pose,facing:1});
+  const c=TS.char(svg,CAST5[w],{id:"n"+i,x:770+i*190,y:640,scale:1.55,mood:"neutral",pose,facing:1}); TS.face5(c,ex); });
+</script></body></html>

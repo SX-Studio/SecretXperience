@@ -1,0 +1,56 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; }
+    #lt-svg { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+    #lt-svg text { font-family: "Nunito"; font-weight: 900; }
+  </style>
+  <div id="root" data-composition-id="lt" data-width="1920" data-height="1080">
+    <svg id="lt-svg" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg"></svg>
+  </div>
+  <script>
+    (function () {
+      const { el, Set, Character, Ripple, PAL, drive } = window.SR;
+      const svg = document.getElementById("lt-svg");
+      const bg = el("g", {}, svg), mid = el("g", {}, svg), fg = el("g", {}, svg), fx = el("g", {}, svg);
+      const G = 860;
+      Set.sky(bg, "morning");
+      Set.sun(bg, 1580, 210, 90);
+      Set.building(bg, -40, 420, 560, G, PAL.sage);
+      Set.building(bg, 1500, 460, 640, G, PAL.slate);
+      Set.shopfront(bg, 1000, 520, G, PAL.terracotta, "CAFE", { awning: PAL.teal });
+      Set.building(bg, 380, 380, 470, G, PAL.sand);
+      Set.lamp(bg, 860, G);
+      Set.tree(bg, 300, G, 0.9);
+      Set.street(bg, G);
+      const car = el("g", {}, mid);
+      const maya = Character(fg, {
+        id: "lt-maya", color: PAL.teal, hair: "ponytail", seed: 5,
+        x: [[0, -120], [2.2, 520, "out"]], y: [[0, G + 40]],
+        pose: [[0, "relaxed"], [2.5, "startle", 0.25], [3.4, "shout", 0.3], [4.6, "crossed", 0.4]],
+        mood: [[0, "content"], [2.5, "shock", 0.2], [3.3, "angry", 0.3]],
+        look: [[0, { x: 1, y: 0 }], [2.5, { x: 1, y: 0.2 }]],
+        prop: { kind: "cup", rot: 0 },
+        squash: [[2.45, 0.06]],
+      });
+      const leo = Character(fg, {
+        id: "lt-leo", color: PAL.mustard, hair: "curly", seed: 9, glasses: true,
+        x: [[0, 1180]], y: [[0, G + 40]], facing: [[0, -1]],
+        pose: [[0, "relaxed"], [5.6, "hipsHands", 0.35]],
+        mood: [[0, "content"], [5.5, "annoyed", 0.35]],
+        look: [[0, { x: 0, y: 0 }], [4.6, { x: 1, y: 0 }]],
+      });
+      const rip = Ripple(fx, { color: PAL.rude, t: 3.35, tThread: 4.3, threadDur: 1.1, maxR: 240, arc: 200 });
+      let carG = null;
+      const tl = gsap.timeline({ paused: true });
+      drive(tl, 7, (t) => {
+        // car passes and honks at 2.4s
+        const cx = -500 + (t / 7) * 3200;
+        if (!carG) carG = Set.car(car, 0, G + 210, PAL.plum, 1);
+        carG.setAttribute("transform", `translate(${cx},${G + 210})`);
+        const a = maya.update(t), b = leo.update(t);
+        rip.update(t, { x: a.headX, y: a.headY }, { x: b.headX, y: b.headY });
+      });
+      window.__timelines["lt"] = tl;
+    })();
+  </script>
+</template>

@@ -1,0 +1,509 @@
+<template id="f03-the-stoop-template">
+  <div
+    id="root"
+    data-composition-id="03-the-stoop"
+    data-start="0"
+    data-duration="7.007"
+    data-width="1080"
+    data-height="1920"
+  >
+    <style>
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500-italic.woff2") format("woff2");font-weight:500;font-style:italic;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600-italic.woff2") format("woff2");font-weight:600;font-style:italic;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+#root, #root * { font-variant-numeric: lining-nums; }
+
+#root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        font-variant-numeric: lining-nums;
+      }
+      #root * { box-sizing: border-box; }
+
+      /* ---------- page ground (own clip layer) ---------- */
+      #f03-paper {
+        position: absolute;
+        inset: 0;
+        background-color: #EFE6D2;
+        background-image:
+          linear-gradient(to right, rgba(185, 169, 140, 0.25) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(185, 169, 140, 0.25) 1px, transparent 1px);
+        background-size: 40px 40px;
+        background-position: 20px 0;
+      }
+      #f03-paper .f03-fibre {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 1920px;
+        opacity: 0.06;
+        mix-blend-mode: multiply;
+      }
+      #f03-paper .f03-vignette {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse 78% 68% at 50% 45%, rgba(239, 230, 210, 0) 55%, rgba(150, 120, 80, 0.22) 100%);
+      }
+
+      /* ---------- stage ---------- */
+      #f03-stage {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 1920px;
+      }
+      #f03-diagram {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: visible;
+      }
+
+      /* bird silhouettes: 240x240 boxes centred on their (x,y) */
+      .f03-bird {
+        position: absolute;
+        left: -120px;
+        top: -120px;
+        width: 240px;
+        height: 240px;
+      }
+      .f03-bird svg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 240px;
+        height: 240px;
+        overflow: visible;
+      }
+
+      /* header label */
+      #f03-header {
+        position: absolute;
+        left: 72px;
+        top: 150px;
+        font-family: "Source Sans 3", sans-serif;
+        font-weight: 700;
+        font-size: 30px;
+        line-height: 1;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #5C4A36;
+        white-space: nowrap;
+      }
+      #f03-header .f03-header-rule {
+        display: block;
+        margin-top: 18px;
+        width: 300px;
+        height: 2px;
+        background: #B9A98C;
+        transform-origin: 0 50%;
+      }
+
+      /* step labels */
+      .f03-step {
+        position: absolute;
+        font-family: "Source Sans 3", sans-serif;
+        font-weight: 700;
+        font-size: 30px;
+        line-height: 1;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #5C4A36;
+        white-space: nowrap;
+      }
+      .f03-step .f03-num {
+        font-family: "Courier Prime", monospace;
+        font-weight: 700;
+        font-size: 34px;
+        letter-spacing: 0.04em;
+        color: #C2412D;
+        margin-right: 12px;
+      }
+      #f03-step-1 { left: 214px; top: 1188px; }
+      #f03-step-2 { left: 420px; top: 282px; }
+      #f03-step-3 { left: 896px; top: 640px; }
+      #f03-step-3 .f03-num { margin-right: 0; display: block; margin-bottom: 8px; }
+
+      /* payoff title */
+      #f03-title {
+        position: absolute;
+        left: 30px;
+        top: 890px;
+        width: 1000px;
+        text-align: center;
+        font-family: "Cormorant Garamond", serif;
+        font-weight: 600;
+        font-size: 96px;
+        line-height: 1.05;
+        letter-spacing: 0.02em;
+        color: #2B2118;
+        white-space: nowrap;
+      }
+      #f03-title-rule {
+        position: absolute;
+        left: 420px;
+        top: 1006px;
+        width: 220px;
+        height: 2px;
+        background: #B9A98C;
+        transform-origin: 50% 50%;
+      }
+
+      /* hand-written field note */
+      #f03-note {
+        position: absolute;
+        left: 352px;
+        top: 1036px;
+        font-family: "Caveat", cursive;
+        font-weight: 700;
+        font-size: 54px;
+        line-height: 1.1;
+        color: #5C4A36;
+        white-space: nowrap;
+      }
+      #f03-leader {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: visible;
+      }
+    </style>
+
+    <!-- paper ground (full-duration background clip) -->
+    <div id="f03-paper" class="clip" data-start="0" data-duration="7.007" data-track-index="0">
+      <svg class="f03-fibre" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <filter id="f03-fibre-filter" x="0" y="0" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.9 0.35" numOctaves="2" seed="3" />
+          <feColorMatrix type="saturate" values="0" />
+        </filter>
+        <rect width="1080" height="1920" filter="url(#f03-fibre-filter)" />
+      </svg>
+      <div class="f03-vignette"></div>
+    </div>
+
+    <!-- content stage -->
+    <div id="f03-stage" class="clip" data-start="0" data-duration="7.007" data-track-index="1">
+      <svg id="f03-diagram" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <mask id="f03-arc-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="1080" height="1920">
+            <path id="f03-arc-reveal" d="" fill="none" stroke="#ffffff" stroke-width="22" stroke-linecap="round" />
+          </mask>
+        </defs>
+
+        <!-- ground hairline -->
+        <line id="f03-ground" x1="72" y1="1440" x2="1008" y2="1440" stroke="#B9A98C" stroke-width="2" />
+        <g id="f03-ground-ticks" stroke="#B9A98C" stroke-width="2"></g>
+
+        <!-- climb arc: dashed ink, revealed by a self-drawing mask -->
+        <path id="f03-arc" d="" fill="none" stroke="#2B2118" stroke-width="4" stroke-linecap="round" stroke-dasharray="14 12" mask="url(#f03-arc-mask)" />
+        <circle id="f03-arc-start" cx="0" cy="0" r="7" fill="#2B2118" />
+
+        <!-- speed lines (drawn in JS) -->
+        <g id="f03-speed"></g>
+
+        <!-- dive line: telemetry red, solid -->
+        <path id="f03-dive" d="" fill="none" stroke="#C2412D" stroke-width="7" stroke-linecap="round" />
+        <path id="f03-dive-head" d="" fill="#C2412D" />
+
+        <!-- reticle around the pigeon -->
+        <g id="f03-reticle" fill="none" stroke="#C2412D" stroke-width="3" stroke-linecap="round">
+          <circle id="f03-reticle-ring" cx="0" cy="0" r="96" stroke-dasharray="12 9" />
+          <path id="f03-reticle-ticks" d="" />
+        </g>
+      </svg>
+
+      <!-- ghost of the climbing pose, left on the arc -->
+      <div id="f03-ghost-a" class="f03-bird">
+        <svg viewBox="-120 -120 240 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path fill="#5C4A36" d="M14,6 C4,28 -16,52 -46,66 C-34,44 -26,24 -20,7 Z" />
+          <path fill="#2B2118" d="M66,0 L56,-6 C50,-14 38,-15 30,-11 C10,-7 -20,-6 -52,-4 L-92,-15 L-86,1 L-94,14 L-52,6 C-20,10 10,12 32,9 C44,7 56,4 66,0 Z" />
+          <path fill="#2B2118" d="M22,-8 C10,-42 -18,-80 -58,-104 C-50,-86 -46,-74 -40,-60 C-34,-44 -30,-26 -26,-6 Z" />
+        </svg>
+      </div>
+
+      <!-- pose A: wings spread, climbing -->
+      <div id="f03-falcon-a" class="f03-bird">
+        <svg viewBox="-120 -120 240 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path fill="#5C4A36" d="M14,6 C4,28 -16,52 -46,66 C-34,44 -26,24 -20,7 Z" />
+          <path fill="#2B2118" d="M66,0 L56,-6 C50,-14 38,-15 30,-11 C10,-7 -20,-6 -52,-4 L-92,-15 L-86,1 L-94,14 L-52,6 C-20,10 10,12 32,9 C44,7 56,4 66,0 Z" />
+          <path fill="#2B2118" d="M22,-8 C10,-42 -18,-80 -58,-104 C-50,-86 -46,-74 -40,-60 C-34,-44 -30,-26 -26,-6 Z" />
+          <circle cx="44" cy="-5" r="2.6" fill="#EFE6D2" />
+        </svg>
+      </div>
+
+      <!-- pose B: wings folding (stays as a ghost at the apex) -->
+      <div id="f03-falcon-b" class="f03-bird">
+        <svg viewBox="-120 -120 240 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path fill="#5C4A36" d="M12,6 C-8,16 -40,24 -80,26 C-56,16 -36,10 -20,7 Z" />
+          <path fill="#2B2118" d="M66,0 L56,-6 C50,-14 38,-15 30,-11 C10,-7 -20,-6 -52,-4 L-92,-13 L-86,1 L-92,12 L-52,6 C-20,10 10,12 32,9 C44,7 56,4 66,0 Z" />
+          <path fill="#2B2118" d="M22,-8 C0,-28 -40,-46 -98,-52 C-74,-36 -50,-18 -24,-6 Z" />
+          <circle cx="44" cy="-5" r="2.6" fill="#EFE6D2" />
+        </svg>
+      </div>
+
+      <!-- pose C: tucked teardrop, motion-blur copy + sharp copy -->
+      <div id="f03-falcon-c-blur" class="f03-bird">
+        <svg viewBox="-120 -120 240 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <filter id="f03-blur-x" x="-80%" y="-40%" width="260%" height="180%">
+              <feGaussianBlur stdDeviation="18 0" />
+            </filter>
+          </defs>
+          <path filter="url(#f03-blur-x)" fill="#2B2118" d="M72,0 L61,-7 C51,-18 34,-20 18,-18 C-20,-14 -60,-6 -100,-2 L-106,0 L-100,2 C-60,6 -20,14 18,18 C34,20 51,18 61,7 Z" />
+        </svg>
+      </div>
+      <div id="f03-falcon-c" class="f03-bird">
+        <svg viewBox="-120 -120 240 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path fill="#2B2118" d="M72,0 L61,-7 C51,-18 34,-20 18,-18 C-20,-14 -60,-6 -100,-2 L-106,0 L-100,2 C-60,6 -20,14 18,18 C34,20 51,18 61,7 Z" />
+          <path fill="none" stroke="#EFE6D2" stroke-opacity="0.45" stroke-width="2" stroke-linecap="round" d="M26,-9 C-6,-8 -46,-4 -86,-1" />
+          <circle cx="47" cy="-6" r="2.6" fill="#EFE6D2" />
+        </svg>
+      </div>
+
+      <!-- pigeon (prey), low right -->
+      <div id="f03-pigeon" class="f03-bird">
+        <svg viewBox="-120 -120 240 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path fill="#5C4A36" d="M8,6 C2,22 -10,36 -28,44 C-22,30 -18,18 -14,7 Z" />
+          <path fill="#2B2118" d="M48,-2 C46,-11 38,-15 30,-13 C20,-11 14,-5 4,-5 C-20,-5 -38,-3 -56,-9 L-63,4 C-40,11 -20,14 4,12 C24,10 40,6 48,-2 Z" />
+          <path fill="#2B2118" d="M48,-3 L57,0 L47,2 Z" />
+          <path fill="#2B2118" d="M14,-5 C10,-30 -2,-52 -22,-60 C-34,-63 -31,-42 -25,-25 C-21,-15 -17,-7 -14,-3 Z" />
+          <circle cx="36" cy="-6" r="2.2" fill="#EFE6D2" />
+        </svg>
+      </div>
+
+      <!-- labels -->
+      <div id="f03-header">Side view &middot; schematic<span class="f03-header-rule"></span></div>
+      <div id="f03-step-1" class="f03-step"><span class="f03-num">01</span>Climb</div>
+      <div id="f03-step-2" class="f03-step"><span class="f03-num">02</span>Fold</div>
+      <div id="f03-step-3" class="f03-step"><span class="f03-num">03</span>Drop</div>
+
+      <div id="f03-title">THE STOOP</div>
+      <div id="f03-title-rule"></div>
+
+      <div id="f03-note">wings folded</div>
+      <svg id="f03-leader" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path id="f03-leader-line" d="" fill="none" stroke="#5C4A36" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+        <path id="f03-leader-tip" d="" fill="none" stroke="#5C4A36" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        var FID = "03-the-stoop";
+        var DUR = 7.007;
+
+        // seeded PRNG (deterministic wobble / jitter)
+        function mulberry32(a) {
+          return function () {
+            a |= 0; a = (a + 0x6D2B79F5) | 0;
+            var t = Math.imul(a ^ (a >>> 15), 1 | a);
+            t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+            return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+          };
+        }
+        var rand = mulberry32(30303);
+        function $(id) { return document.getElementById(id); }
+        function r1(v) { return Math.round(v * 10) / 10; }
+
+        // ---- geometry ----
+        // climb arc: cubic bezier lower-left -> apex (high, right of centre)
+        var P0 = [150, 1330], P1 = [190, 820], P2 = [380, 400], P3 = [760, 400];
+        function bez(t) {
+          var u = 1 - t;
+          var a = u * u * u, b = 3 * u * u * t, c = 3 * u * t * t, d = t * t * t;
+          return [a * P0[0] + b * P1[0] + c * P2[0] + d * P3[0], a * P0[1] + b * P1[1] + c * P2[1] + d * P3[1]];
+        }
+        function bezAngle(t) {
+          var u = 1 - t;
+          var dx = 3 * u * u * (P1[0] - P0[0]) + 6 * u * t * (P2[0] - P1[0]) + 3 * t * t * (P3[0] - P2[0]);
+          var dy = 3 * u * u * (P1[1] - P0[1]) + 6 * u * t * (P2[1] - P1[1]) + 3 * t * t * (P3[1] - P2[1]);
+          return Math.atan2(dy, dx) * 180 / Math.PI;
+        }
+        var arcD = "M" + P0.join(" ") + " C" + P1.join(" ") + " " + P2.join(" ") + " " + P3.join(" ");
+        $("f03-arc").setAttribute("d", arcD);
+        var arcReveal = $("f03-arc-reveal");
+        arcReveal.setAttribute("d", arcD);
+        // approximate arc length by sampling (deterministic)
+        var arcLen = 0, prev = bez(0);
+        for (var i = 1; i <= 200; i++) { var q = bez(i / 200); arcLen += Math.hypot(q[0] - prev[0], q[1] - prev[1]); prev = q; }
+        arcLen = Math.ceil(arcLen) + 4;
+        arcReveal.setAttribute("stroke-dasharray", arcLen + " " + arcLen);
+        $("f03-arc-start").setAttribute("cx", P0[0]);
+        $("f03-arc-start").setAttribute("cy", P0[1]);
+
+        // ground ticks
+        var ticks = "";
+        for (var gx = 112; gx <= 968; gx += 80) ticks += '<line x1="' + gx + '" y1="1440" x2="' + gx + '" y2="1452" />';
+        $("f03-ground-ticks").innerHTML = ticks;
+
+        // dive line: near-vertical, apex -> just above the pigeon
+        var D0 = [776, 452], D1 = [858, 1150];
+        var ddx = D1[0] - D0[0], ddy = D1[1] - D0[1];
+        var diveLen = Math.hypot(ddx, ddy);
+        var ux = ddx / diveLen, uy = ddy / diveLen;   // along dive
+        var px = -uy, py = ux;                          // perpendicular
+        var diveAngle = Math.atan2(ddy, ddx) * 180 / Math.PI;
+        var dive = $("f03-dive");
+        dive.setAttribute("d", "M" + D0.join(" ") + " L" + D1.join(" "));
+        var diveDash = Math.ceil(diveLen) + 4;
+        dive.setAttribute("stroke-dasharray", diveDash + " " + diveDash);
+        var hb = [D1[0] + ux * 10, D1[1] + uy * 10];
+        var hl = [D1[0] - ux * 26 + px * 17, D1[1] - uy * 26 + py * 17];
+        var hr = [D1[0] - ux * 26 - px * 17, D1[1] - uy * 26 - py * 17];
+        $("f03-dive-head").setAttribute("d", "M" + r1(hb[0]) + " " + r1(hb[1]) + " L" + r1(hl[0]) + " " + r1(hl[1]) + " L" + r1(hr[0]) + " " + r1(hr[1]) + " Z");
+
+        // speed lines parallel to the dive (seeded spread)
+        var speedSpecs = [
+          { off: -50, col: "#5C4A36", w: 3 },
+          { off: -30, col: "#C2412D", w: 3 },
+          { off: 30, col: "#C2412D", w: 3 },
+          { off: 52, col: "#5C4A36", w: 2.5 }
+        ];
+        var speedEls = [];
+        var sg = $("f03-speed");
+        speedSpecs.forEach(function (s, k) {
+          var a = 0.18 + rand() * 0.14, b = a + 0.30 + rand() * 0.18;
+          var x0 = D0[0] + ddx * a + px * s.off, y0 = D0[1] + ddy * a + py * s.off;
+          var x1 = D0[0] + ddx * b + px * s.off, y1 = D0[1] + ddy * b + py * s.off;
+          var el = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          el.setAttribute("d", "M" + r1(x0) + " " + r1(y0) + " L" + r1(x1) + " " + r1(y1));
+          el.setAttribute("fill", "none");
+          el.setAttribute("stroke", s.col);
+          el.setAttribute("stroke-width", s.w);
+          el.setAttribute("stroke-linecap", "round");
+          el.setAttribute("id", "f03-speed-" + k);
+          var len = Math.ceil(Math.hypot(x1 - x0, y1 - y0)) + 2;
+          el.setAttribute("stroke-dasharray", len + " " + len);
+          sg.appendChild(el);
+          speedEls.push({ el: el, len: len });
+        });
+
+        // pigeon + reticle
+        var PG = [880, 1300];
+        var RC = [872, 1288];
+        $("f03-reticle-ring").setAttribute("cx", RC[0]);
+        $("f03-reticle-ring").setAttribute("cy", RC[1]);
+        $("f03-reticle-ticks").setAttribute("d",
+          "M" + RC[0] + " " + (RC[1] - 104) + " L" + RC[0] + " " + (RC[1] - 128) +
+          " M" + RC[0] + " " + (RC[1] + 104) + " L" + RC[0] + " " + (RC[1] + 128) +
+          " M" + (RC[0] - 104) + " " + RC[1] + " L" + (RC[0] - 128) + " " + RC[1] +
+          " M" + (RC[0] + 104) + " " + RC[1] + " L" + (RC[0] + 128) + " " + RC[1]);
+
+        // leader: note -> tucked falcon, slight seeded wobble
+        var LA = [636, 1074], LB = [814, 1034];
+        var lpts = [];
+        for (var j = 0; j <= 6; j++) {
+          var f = j / 6;
+          var wob = (j === 0 || j === 6) ? 0 : (rand() - 0.5) * 5;
+          var bow = Math.sin(f * Math.PI) * 16;
+          lpts.push([LA[0] + (LB[0] - LA[0]) * f, LA[1] + (LB[1] - LA[1]) * f + bow + wob]);
+        }
+        var ld = "M" + r1(lpts[0][0]) + " " + r1(lpts[0][1]);
+        for (var m = 1; m < lpts.length; m++) ld += " L" + r1(lpts[m][0]) + " " + r1(lpts[m][1]);
+        var leaderLine = $("f03-leader-line");
+        leaderLine.setAttribute("d", ld);
+        var leaderLen = 0;
+        for (var n = 1; n < lpts.length; n++) leaderLen += Math.hypot(lpts[n][0] - lpts[n - 1][0], lpts[n][1] - lpts[n - 1][1]);
+        leaderLen = Math.ceil(leaderLen) + 4;
+        leaderLine.setAttribute("stroke-dasharray", leaderLen + " " + leaderLen);
+        var tip = $("f03-leader-tip");
+        tip.setAttribute("d", "M" + (LB[0] - 18) + " " + (LB[1] - 10) + " L" + LB[0] + " " + LB[1] + " L" + (LB[0] - 12) + " " + (LB[1] + 16));
+        tip.setAttribute("stroke-dasharray", "60 60");
+
+        // falcon A path keyframes along the arc
+        var N = 48, kx = [], ky = [], kr = [];
+        for (var s = 0; s <= N; s++) {
+          var tt = s / N, pt = bez(tt);
+          kx.push(r1(pt[0])); ky.push(r1(pt[1])); kr.push(r1(bezAngle(Math.min(tt, 0.995))));
+        }
+        var ghostT = 0.55, gp = bez(ghostT);
+        var APEX = [P3[0], P3[1]];
+        var C0 = [770, 424], C1 = [843, 1020];
+
+        // ---- static placement ----
+        gsap.set("#f03-ghost-a", { x: gp[0], y: gp[1], rotation: bezAngle(ghostT) });
+        gsap.set("#f03-falcon-b", { x: APEX[0], y: APEX[1] });
+        gsap.set("#f03-stage", { transformOrigin: "540px 860px" });
+
+        // ---- timeline ----
+        var tl = gsap.timeline({ paused: true });
+
+        // Scene 1 (0.0–2.2): "climbs high above its prey" — arc draws up, spread-wing falcon rides it, pigeon appears low-right
+        tl.set("#f03-falcon-a", { x: kx[0], y: ky[0], rotation: kr[0], opacity: 1 }, 0);
+        tl.fromTo("#f03-header", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 0);
+        tl.fromTo("#f03-header .f03-header-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power2.out" }, 0.15);
+        tl.fromTo("#f03-ground", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.out" }, 0);
+        tl.fromTo("#f03-ground-ticks", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.out" }, 0.1);
+        tl.fromTo("#f03-arc-start", { opacity: 0, scale: 0.3 }, { opacity: 1, scale: 1, duration: 0.3, ease: "power2.out", svgOrigin: P0[0] + " " + P0[1] }, 0);
+        tl.fromTo(arcReveal, { strokeDashoffset: arcLen }, { strokeDashoffset: 0, duration: 2.0, ease: "power1.inOut" }, 0.1);
+        tl.to("#f03-falcon-a", { keyframes: { x: kx, y: ky, rotation: kr, easeEach: "none" }, duration: 2.0, ease: "power1.inOut" }, 0.1);
+        tl.fromTo("#f03-pigeon", { opacity: 0, x: PG[0] + 60, y: PG[1] + 6 }, { opacity: 1, x: PG[0], y: PG[1], duration: 0.8, ease: "power2.out" }, 0.55);
+        tl.to("#f03-pigeon", { y: PG[1] - 6, duration: 1.6, ease: "sine.inOut" }, 1.35);
+        tl.to("#f03-pigeon", { y: PG[1] + 2, duration: 1.8, ease: "sine.inOut" }, 2.95);
+        tl.to("#f03-pigeon", { y: PG[1] - 4, duration: 2.25, ease: "sine.inOut" }, 4.75);
+        tl.fromTo("#f03-step-1", { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 1.0);
+
+        // Scene 2a (2.2–2.85): "folds its wings" — spread pose crossfades to folding pose at the apex
+        tl.fromTo("#f03-ghost-a", { opacity: 0 }, { opacity: 0.28, duration: 0.5, ease: "power1.out" }, 2.2);
+        tl.to("#f03-falcon-a", { opacity: 0, duration: 0.3, ease: "power1.in" }, 2.2);
+        tl.fromTo("#f03-falcon-b", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power1.out" }, 2.2);
+        tl.to("#f03-falcon-b", { rotation: 38, duration: 0.45, ease: "power2.in" }, 2.35);
+        tl.fromTo("#f03-step-2", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 2.3);
+
+        // Scene 2b (2.8–3.8): "and drops" — tucked pose snaps down the red dive line, speed lines streak
+        tl.fromTo("#f03-falcon-c", { opacity: 0, x: C0[0], y: C0[1], rotation: diveAngle }, { opacity: 1, x: C0[0], y: C0[1], rotation: diveAngle, duration: 0.1, ease: "none" }, 2.74);
+        tl.fromTo("#f03-falcon-c-blur", { opacity: 0, x: C0[0], y: C0[1], rotation: diveAngle }, { opacity: 0.6, x: C0[0], y: C0[1], rotation: diveAngle, duration: 0.05, ease: "none" }, 2.8);
+        tl.to("#f03-falcon-b", { opacity: 0.32, duration: 0.25, ease: "power1.out" }, 2.8);
+        tl.fromTo(dive, { strokeDashoffset: diveDash }, { strokeDashoffset: 0, duration: 0.5, ease: "power4.inOut" }, 2.85);
+        tl.to(["#f03-falcon-c", "#f03-falcon-c-blur"], { x: C1[0], y: C1[1], duration: 0.5, ease: "power4.inOut" }, 2.85);
+        tl.to("#f03-falcon-c-blur", { opacity: 0, duration: 0.3, ease: "power1.out" }, 3.3);
+        tl.fromTo("#f03-dive-head", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.25, ease: "expo.out", svgOrigin: D1[0] + " " + D1[1] }, 3.28);
+        speedEls.forEach(function (o, k) {
+          var at = 2.92 + k * 0.04;
+          tl.fromTo(o.el, { strokeDashoffset: o.len, opacity: 0.9 }, { strokeDashoffset: 0, opacity: 0.9, duration: 0.24, ease: "power2.out" }, at);
+          tl.to(o.el, { opacity: 0, duration: 0.3, ease: "power1.out" }, 3.3 + k * 0.03);
+        });
+        tl.fromTo("#f03-step-3", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.4, ease: "expo.out" }, 3.0);
+
+        // camera: gentle push, a short velocity punch on the dive, then a slow settle
+        tl.fromTo("#f03-stage", { scale: 1 }, { scale: 1.012, duration: 2.8, ease: "sine.inOut" }, 0);
+        tl.to("#f03-stage", { scale: 1.028, duration: 0.5, ease: "expo.out" }, 2.85);
+        tl.to("#f03-stage", { scale: 1.042, duration: DUR - 3.4, ease: "sine.inOut" }, 3.4);
+
+        // Scene 3 (3.8–7.0): "It's called the stoop." — title lands, field note writes on, reticle locks on the prey; hold
+        tl.fromTo("#f03-title", { opacity: 0, y: 34, scale: 1.06 }, { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: "power3.out" }, 3.8);
+        tl.fromTo("#f03-title-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power2.out" }, 4.2);
+        tl.fromTo("#f03-note", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.7, ease: "power1.inOut" }, 4.6);
+        tl.fromTo(leaderLine, { strokeDashoffset: leaderLen }, { strokeDashoffset: 0, duration: 0.45, ease: "power2.inOut" }, 5.25);
+        tl.fromTo(tip, { strokeDashoffset: 60 }, { strokeDashoffset: 0, duration: 0.2, ease: "power1.out" }, 5.68);
+        // reticle: quick 2-step snap lock onto the pigeon
+        tl.fromTo("#f03-reticle", { opacity: 0, scale: 1.5, rotation: -20 }, { opacity: 1, scale: 1.16, rotation: -6, duration: 0.16, ease: "power3.out", svgOrigin: RC[0] + " " + RC[1] }, 5.9);
+        tl.to("#f03-reticle", { scale: 1, rotation: 0, duration: 0.2, ease: "power3.out", svgOrigin: RC[0] + " " + RC[1] }, 6.14);
+
+        // pad the timeline to the full frame length
+        tl.set({}, {}, DUR);
+
+        window.__timelines = window.__timelines || {};
+        window.__timelines[FID] = tl;
+      })();
+    </script>
+  </div>
+</template>

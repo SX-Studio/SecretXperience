@@ -1,0 +1,171 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; background: #0B0A12; }
+    #short-svg { position: absolute; inset: 0; width: 1080px; height: 1920px; }
+    #short-svg text { font-family: "Nunito"; }
+  </style>
+  <div id="root" data-composition-id="short" data-width="1080" data-height="1920">
+    <svg id="short-svg" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg" data-layout-ignore></svg>
+  </div>
+  <script>
+    (function () {
+      const SR = window.SR, EP = window.EP, C = window.CINE, V3 = window.V3, T = window.T, WD = window.WORDS;
+      const { el, Character, PAL, clamp, EASE, sampleTrack, mulberry32 } = SR;
+      SR.SKIN = "#F1EBDD";
+      const svg = document.getElementById("short-svg"), D = T.D, d = svg.querySelector("defs") || el("defs", {}, svg);
+      const W = (w, nth = 0, line) => { let k = 0; for (const x of WD) { if ((!line || x[3] === line) && x[0].toLowerCase().replace(/[^a-z0-9']/g, "") === w) { if (k === nth) return x[1]; k++; } } return 0; };
+      const txt = (p, x, y, s, size, fill, o = {}) => EP.txt(p, x, y, s, size, fill, o);
+      // ================= WORLD =================
+      const world = el("g", {}, svg);
+      // ---- SPACE (y 0..1800) ----
+      const spClip = el("clipPath", { id: "spc" }, d); el("rect", { x: -2000, y: -2000, width: 6000, height: 3800 }, spClip); const space = el("g", { "clip-path": "url(#spc)" }, world);
+      C.sky(svg, space, 2200, 1800, [[0, "#05040C"], [0.6, "#0E1030"], [1, "#1C2A5A"]]);
+      C.stars(space, 2200, 1500, 220, 31);
+      C.pool(svg, space, 1950, 220, 380, 380, "#FFF1C2", 0.55); el("circle", { cx: 1950, cy: 220, r: 70, fill: "#FFF6DA" }, space);
+      el("circle", { cx: 1100, cy: 4100, r: 2500, fill: "#2A5A9A", stroke: "#0B0A12", "stroke-width": 8 }, space);       // Earth
+      el("circle", { cx: 1100, cy: 4100, r: 2530, fill: "none", stroke: "#7FC8FF", "stroke-width": 26, opacity: 0.35, filter: C.blur(svg, 14) }, space);
+      const clouds = el("g", {}, space), RC = mulberry32(8);
+      for (let i = 0; i < 14; i++) { const a = -0.45 + i * 0.065, x = 1100 + Math.sin(a) * 2480, y = 4100 - Math.cos(a) * 2480; el("ellipse", { cx: x, cy: y + 30, rx: 70 + RC() * 60, ry: 22, fill: "#EAF2FF", stroke: "#0B0A12", "stroke-width": 4, transform: `rotate(${a * 57},${x},${y + 30})` }, clouds); }
+      const glints = el("g", { filter: C.bloom(svg, 8, 1.8) }, space); const gl = [[880, 1620], [1010, 1600], [1150, 1605], [1290, 1625], [1420, 1660]].map(([x, y]) => C.glint(glints, x, y, 1.1, "#FFF6D0"));
+      const sat = el("g", { transform: "translate(1100,760)" }, space);
+      el("rect", { x: -60, y: -40, width: 120, height: 80, rx: 10, fill: "#C9B27A", stroke: "#0B0A12", "stroke-width": 6 }, sat);
+      [-1, 1].forEach((sx) => { el("rect", { x: sx > 0 ? 70 : -230, y: -30, width: 160, height: 60, fill: "#2F4F8F", stroke: "#0B0A12", "stroke-width": 6 }, sat); for (let k = 1; k < 4; k++) el("path", { d: `M${sx > 0 ? 70 + k * 40 : -230 + k * 40},-30 v60`, stroke: "#0B0A12", "stroke-width": 3 }, sat); });
+      el("path", { d: "M0,40 L0,80 M-24,80 h48", stroke: "#0B0A12", "stroke-width": 6 }, sat); el("circle", { cx: 0, cy: 92, r: 14, fill: "#FF4A3A", stroke: "#0B0A12", "stroke-width": 4 }, sat);
+      const beam = el("polygon", { points: "1100,850 700,1620 1500,1620", fill: "#FF5A48", opacity: 0, style: "mix-blend-mode:screen" }, space);
+      const flames = el("g", { opacity: 0 }, space); gl.forEach((_, i) => { const x = [880, 1010, 1150, 1290, 1420][i]; el("path", { d: `M${x - 10},1520 q10,-60 20,0 q-10,30 -20,0 z`, fill: "#FF8A3A", stroke: "#0B0A12", "stroke-width": 3 }, flames); el("rect", { x: x - 7, y: 1450, width: 14, height: 70, rx: 7, fill: "#E8E2D6", stroke: "#0B0A12", "stroke-width": 3 }, flames); });
+      const tagSun = el("g", { opacity: 0 }, space); el("rect", { x: 620, y: 1290, width: 900, height: 110, rx: 22, fill: "#0B0A12", opacity: 0.8 }, tagSun); txt(tagSun, 1070, 1347, "sunlight on clouds ≠ rockets", 52, "#FFE7A0", { font: "Outfit" });
+      // ---- SURFACE (y 1800..3000) at dawn ----
+      const surf = el("g", {}, world);
+      const dawn = "dawn" + 1; C.sky(svg, el("g", {}, surf), 1, 1, [[0, "#000"], [1, "#000"]]);
+      const skyR = el("rect", { x: -400, y: 1800, width: 3000, height: 1200 }, surf); const lgS = el("linearGradient", { id: "sk2", x1: 0, y1: 0, x2: 0, y2: 1 }, d); [[0, "#1C2A5A"], [0.5, "#7A4A7A"], [0.8, "#F2A25E"], [1, "#FFD08A"]].forEach(([o, c]) => el("stop", { offset: o, "stop-color": c }, lgS)); skyR.setAttribute("fill", "url(#sk2)");
+      C.pool(svg, surf, 1100, 2900, 700, 260, "#FFE0A0", 0.7); el("circle", { cx: 1100, cy: 2930, r: 90, fill: "#FFF0C8" }, surf);
+      const city = el("g", { filter: C.blur(svg, 1.5) }, surf), RB = mulberry32(3); for (let x = -100; x < 2300;) { const w = 60 + RB() * 90, h = 60 + RB() * 220; el("rect", { x, y: 2950 - h, width: w, height: h + 2, fill: "#2A1C34" }, city); for (let r = 0; r < h / 26 - 1; r++) for (let c = 0; c < w / 22 - 1; c++) if (RB() < 0.25) el("rect", { x: x + 8 + c * 22, y: 2950 - h + 10 + r * 26, width: 9, height: 13, fill: "#FFC56B" }, city); x += w + 6; }
+      el("rect", { x: -400, y: 2950, width: 3000, height: 60, fill: "#E9E3D6", stroke: "#0B0A12", "stroke-width": 6 }, surf);  // snow ground
+      const goldR = el("g", { filter: C.bloom(svg, 8, 1.6) }, surf); const gRings = [0, 1, 2, 3, 4].map(() => el("ellipse", { cx: 1250, cy: 2950, rx: 0, ry: 0, fill: "none", stroke: PAL.kind, "stroke-width": 8, opacity: 0 }, goldR));
+      // ---- BUNKER (y 3000..4400) ----
+      const bunker = el("g", {}, world), bunkBg = el("g", {}, bunker);
+      el("rect", { x: -1400, y: 3010, width: 5000, height: 1400, fill: "#2A2E3A" }, bunkBg);
+      for (let x = -400; x < 2600; x += 200) el("rect", { x, y: 3010, width: 8, height: 1200, fill: "#1E212B" }, bunkBg);
+      el("rect", { x: -1400, y: 4200, width: 5000, height: 2400, fill: "#1A1C24" }, bunkBg); for (let i = 0; i < 6; i++) el("rect", { x: -1400, y: 4420 + i * 160, width: 5000, height: 6, fill: "#22252F" }, bunkBg);
+      // the big map screen
+      const map = el("g", {}, bunkBg);
+      el("rect", { x: 250, y: 3120, width: 1700, height: 760, rx: 18, fill: "#0D1A2E", stroke: "#0B0A12", "stroke-width": 10 }, map);
+      for (let i = 1; i < 12; i++) el("path", { d: `M${250 + i * 142},3120 V3880`, stroke: "#1F3A5A", "stroke-width": 2 }, map); for (let i = 1; i < 6; i++) el("path", { d: `M250,${3120 + i * 127} H1950`, stroke: "#1F3A5A", "stroke-width": 2 }, map);
+      el("path", { d: "M330,3330 q80,-90 230,-60 q120,20 150,110 q-20,120 -150,170 q-140,40 -200,-60 q-60,-80 -30,-160 z", fill: "#1E4A3A", stroke: "#5FD3A0", "stroke-width": 5 }, map);  // "USA"
+      el("path", { d: "M1180,3220 q260,-60 560,-10 q140,40 150,160 q-40,120 -260,150 q-260,20 -400,-60 q-120,-90 -50,-240 z", fill: "#3A2A2A", stroke: "#FF8A6A", "stroke-width": 5 }, map);  // "USSR"
+      txt(map, 520, 3350, "USA", 44, "#5FD3A0", { font: "Outfit" }); txt(map, 1500, 3330, "USSR", 44, "#FF8A6A", { font: "Outfit" });
+      const arcs = el("g", { filter: C.bloom(svg, 4, 1.4) }, map), A = [];
+      for (let i = 0; i < 5; i++) A.push(el("path", { d: `M${560 + i * 18},${3420 + i * 10} Q${980},${2980 + i * 30} ${1420 + i * 40},${3320 + i * 14}`, fill: "none", stroke: "#FF4A3A", "stroke-width": 7, "stroke-dasharray": "14 10", opacity: 0 }, arcs));
+      const many = el("g", { opacity: 0 }, map), RM = mulberry32(12); for (let i = 0; i < 160; i++) { const x0 = 360 + RM() * 360, y0 = 3300 + RM() * 200, x1 = 1220 + RM() * 600, y1 = 3240 + RM() * 200; el("path", { d: `M${x0},${y0} Q${(x0 + x1) / 2},${2900 + RM() * 200} ${x1},${y1}`, fill: "none", stroke: "#FF4A3A", "stroke-width": 2.5, opacity: 0.55 }, many); }
+      const cnt = el("g", {}, map); el("rect", { x: 1520, y: 3700, width: 400, height: 150, rx: 12, fill: "#200A0A", stroke: "#FF4A3A", "stroke-width": 5 }, cnt); const cntT = txt(cnt, 1720, 3778, "", 84, "#FF4A3A", { font: "Outfit" });
+      const start = el("g", { opacity: 0 }, map); el("rect", { x: 700, y: 3600, width: 800, height: 170, rx: 16, fill: "#C81E1E", stroke: "#0B0A12", "stroke-width": 8 }, start); txt(start, 1100, 3660, "СТАРТ", 78, "#FFFFFF", { font: "Outfit" }); txt(start, 1100, 3735, "LAUNCH DETECTED", 40, "#FFE0D8", { font: "Outfit" });
+      const lab = el("g", { opacity: 0 }, svg); el("rect", { x: 190, y: 1560, width: 700, height: 70, rx: 12, fill: "#0B0A12", opacity: 0.8 }, lab); txt(lab, 540, 1596, "SERPUKHOV-15 · 26 SEP 1983 · 00:15", 34, "#E8E2D6", { weight: 900 });
+      // siren lamps
+      const sir = [200, 2000].map((x) => { el("rect", { x: x - 30, y: 3010, width: 60, height: 40, fill: "#3A3A44", stroke: "#0B0A12", "stroke-width": 5 }, bunkBg); return el("circle", { cx: x, cy: 3070, r: 34, fill: "#5A1E1E", stroke: "#0B0A12", "stroke-width": 5 }, bunkBg); });
+      const sweep = el("polygon", { points: "", fill: "#FF2A1A", opacity: 0, style: "mix-blend-mode:screen", filter: C.blur(svg, 10) }, bunker);
+      // consoles and people
+      const ppl = el("g", {}, bunker), front = el("g", {}, bunker);
+      const off1 = Character(ppl, { id: "o1", color: "#4F5A40", outfit: "jacket", hair: "short", hairColor: "#5B3A29", pants: "#2F3328", thin: true, scale: 1.85, x: [[0, 470]], y: [[0, 4205]], facing: [[0, 1]], noWalk: true, pose: [[0, "crossed", 0], [W("report", 1) , "relaxed", 0.3], [W("hits") + 0.2, "shrug", 0.3]], mood: [[0, "neutral", 0], [W("siren") + 0.2, "shock", 0.15], [W("hits") + 0.2, "surprised", 0.3]], look: [[0, { x: 0.8, y: 0 }]] });
+      const off2 = Character(ppl, { id: "o2", color: "#4F5A40", outfit: "jacket", hair: "none", glasses: true, pants: "#2F3328", thin: true, scale: 1.8, x: [[0, 1740]], y: [[0, 4205]], facing: [[0, -1]], noWalk: true, pose: [[0, "relaxed", 0], [W("siren") + 0.3, "startle", 0.15], [W("hits") + 0.2, "holdBoth", 0.3]], mood: [[0, "tired", 0], [W("siren") + 0.2, "shock", 0.15], [W("hits") + 0.3, "joy", 0.3]] });
+      const pet = Character(ppl, { id: "pet", color: "#5E6B4A", outfit: "jacket", hair: "short", hairColor: "#3B2B22", pants: "#3A3F33", thin: true, scale: 2.2, x: [[0, 1100]], y: [[0, 4215]], facing: [[0, 1]], noWalk: true,
+        pose: [[0, "crossed", 0], [T.s1, "relaxed", 0.4], [W("siren") + 0.15, "startle", 0.12], [W("hesitates") , "relaxed", 0.4], [W("calls"), "phone", 0.3], [W("waits") + 0.3, "crossed", 0.4], [W("hits") + 0.25, "relaxed", 0.4]],
+        mood: [[0, "deadpan", 0], [T.s1, "content", 0.4], [W("siren") + 0.15, "shock", 0.12], [W("hesitates"), "worried", 0.4], [W("see"), "deadpan", 0.3], [W("hundreds"), "smug", 0.3], [W("waits"), "worried", 0.3], [W("hits") + 0.25, "happy", 0.4]],
+        look: [[0, { x: 0.2, y: -0.4 }], [W("siren"), { x: 0.3, y: -0.8 }], [W("hesitates"), { x: 1, y: 0 }]], prop: { kind: "phone", show: [[0, 0], [W("calls") - 0.05, 0], [W("calls"), 1], [W("waits") + 0.3, 1], [W("waits") + 0.35, 0]] } });
+      el("rect", { x: 300, y: 4060, width: 1600, height: 160, rx: 10, fill: "#4A4E5A", stroke: "#0B0A12", "stroke-width": 8 }, front);
+      for (let i = 0; i < 6; i++) { el("rect", { x: 360 + i * 260, y: 4085, width: 180, height: 90, rx: 8, fill: "#123A2A", stroke: "#0B0A12", "stroke-width": 5 }, front); for (let k = 0; k < 4; k++) el("rect", { x: 380 + i * 260 + k * 38, y: 4190, width: 24, height: 14, rx: 3, fill: ["#FF4A3A", "#FFC56B", "#5FD3A0", "#7FC8FF"][(i + k) % 4] }, front); }
+      const redPhone = el("g", {}, front); el("path", { d: "M1180,4058 q40,-34 80,0 l-8,18 h-64 z", fill: "#C81E1E", stroke: "#0B0A12", "stroke-width": 5 }, redPhone);
+      const soil = el("g", {}, world); el("rect", { x: -1400, y: 2955, width: 5000, height: 120, fill: "#3A2A22", stroke: "#0B0A12", "stroke-width": 6 }, soil); const deep = el("rect", { x: -1400, y: 2955, width: 5000, height: 900, fill: "#3A2A22", opacity: 0 }, soil); el("rect", { x: -1400, y: 2945, width: 5000, height: 26, fill: "#EDE8DC", stroke: "#0B0A12", "stroke-width": 5 }, soil);
+      el("rect", { x: 1020, y: 2880, width: 160, height: 70, rx: 8, fill: "#4A4E5A", stroke: "#0B0A12", "stroke-width": 6 }, soil);
+      const petS = Character(soil, { id: "pets", color: "#5E6B4A", outfit: "jacket", hair: "short", hairColor: "#3B2B22", pants: "#3A3F33", thin: true, scale: 1.9, x: [[0, 1250]], y: [[0, 2955]], facing: [[0, -1]], noWalk: true, pose: [[0, "relaxed", 0]], mood: [[0, "content", 0], [T.f3 + 1.5, "happy", 0.6]], look: [[0, { x: 0.6, y: -0.5 }]], opacity: [[0, 0], [T.f3 - 0.05, 0], [T.f3, 1]] });
+      // radar scope insert (screen-space HUD)
+      const hud = el("g", {}, svg);
+      const radar = el("g", { opacity: 0, transform: "translate(540,820)" }, hud); el("circle", { r: 300, fill: "#062014", stroke: "#0B0A12", "stroke-width": 12 }, radar); [100, 200].forEach((r) => el("circle", { r, fill: "none", stroke: "#1F6A40", "stroke-width": 3 }, radar)); el("path", { d: "M-300,0 H300 M0,-300 V300", stroke: "#1F6A40", "stroke-width": 3 }, radar);
+      const rsw = el("path", { d: "M0,0 L0,-300 A300,300 0 0,1 120,-275 Z", fill: "#5FD3A0", opacity: 0.35 }, radar); txt(radar, 0, 360, "GROUND RADAR: 0", 50, "#5FD3A0", { font: "Outfit" });
+      const clock = el("g", { opacity: 0, transform: "translate(540,780)" }, hud); el("circle", { r: 220, fill: "#F4F1EA", stroke: "#0B0A12", "stroke-width": 12 }, clock); for (let k = 0; k < 12; k++) el("rect", { x: -4, y: -205, width: 8, height: 26, fill: "#0B0A12", transform: `rotate(${k * 30})` }, clock);
+      const mh = el("path", { d: "M0,0 V-170", stroke: "#0B0A12", "stroke-width": 10, "stroke-linecap": "round" }, clock), hh = el("path", { d: "M0,0 V-110", stroke: "#C81E1E", "stroke-width": 14, "stroke-linecap": "round" }, clock);
+      // Lens moment: two thought bubbles
+      const lens = el("g", { opacity: 0 }, hud);
+      const bub = (x, y, c, s) => { const g = el("g", { transform: `translate(${x},${y})` }, lens); el("rect", { x: -230, y: -80, width: 460, height: 160, rx: 70, fill: "#F4F1EA", stroke: c, "stroke-width": 10 }, g); txt(g, 0, 4, s, 70, c, { font: "Outfit" }); return g; };
+      const bR = bub(300, 520, "#D6302A", "ATTACK!"), bG = bub(780, 760, "#C9A227", "ERROR?");
+      // payoff: paperwork (screen space card)
+      const paper = el("g", { opacity: 0 }, hud);
+      el("rect", { x: 0, y: 0, width: 1080, height: 1920, fill: "#2A1E18" }, paper);
+      el("rect", { x: 140, y: 420, width: 800, height: 1000, rx: 10, fill: "#F4EFE2", stroke: "#0B0A12", "stroke-width": 8, transform: "rotate(-3,540,920)" }, paper);
+      for (let i = 0; i < 14; i++) el("rect", { x: 220, y: 560 + i * 52, width: 560 - (i % 3) * 90, height: 12, rx: 6, fill: "#B8B0A0", transform: "rotate(-3,540,920)" }, paper);
+      txt(paper, 520, 500, "DUTY LOG · 26.09.1983", 40, "#0B0A12", { font: "Outfit", attrs: { transform: "rotate(-3,540,920)" } });
+      el("path", { d: "M300,1080 q60,-40 120,10 t140,-20 t120,40", fill: "none", stroke: "#3A5AB0", "stroke-width": 6, transform: "rotate(-3,540,920)" }, paper);
+      const stampG = el("g", { opacity: 0 }, paper); el("rect", { x: -300, y: -90, width: 600, height: 180, rx: 16, fill: "none", stroke: "#D6302A", "stroke-width": 14 }, stampG); txt(stampG, 0, 4, "REPRIMAND", 96, "#D6302A", { font: "Outfit" });
+      const petP = Character(paper, { id: "petp", color: "#5E6B4A", outfit: "jacket", hair: "short", hairColor: "#3B2B22", pants: "#3A3F33", thin: true, scale: 1.6, x: [[0, 860]], y: [[0, 1890]], facing: [[0, -1]], noWalk: true, pose: [[0, "crossed", 0]], mood: [[0, "deadpan", 0]] });
+      // captions: one word at a time
+      const cap = el("g", {}, svg); const capT = txt(cap, 540, 1380, "", 104, "#FFFFFF", { font: "Outfit", attrs: { stroke: "#0B0A12", "stroke-width": 18, "paint-order": "stroke", "stroke-linejoin": "round" } });
+      // grade: light follows the story (warm → red → night blue → space → warm → gold)
+      const gradeR = el("rect", { x: 0, y: 0, width: 1080, height: 1920, style: "mix-blend-mode:multiply" }, svg);
+      const post = el("g", { transform: "scale(0.5625,1.7778)" }, svg); V3.grade(svg, post, { lightK: 0.15, shadow: "#2A1A50", shadowK: 0.35, vignette: 0.55 });
+      const grain = { update() {} };  // no grain: the reference has none and it bloats Shorts
+      const bgBlur = V3.blur(svg); bunkBg.setAttribute("filter", bgBlur.url); const travel = V3.blur(svg); world.setAttribute("filter", travel.url);
+      const mix = (a, b, k) => { const pa = parseInt(a.slice(1), 16), pb = parseInt(b.slice(1), 16); const ch = (s) => Math.round(((pa >> s) & 255) * (1 - k) + ((pb >> s) & 255) * k); return `rgb(${ch(16)},${ch(8)},${ch(0)})`; };
+      const gradeKeys = [[0, "#FF9A8A"], [T.s1 - 0.2, "#FF9A8A"], [T.s1 + 0.4, "#FFE6C4"], [W("siren") - 0.1, "#FFE6C4"], [W("siren") + 0.2, "#FF9A90"], [T.p1, "#FF9A90"], [T.p1 + 0.5, "#8C9CE8"], [T.f1 - 0.2, "#8C9CE8"], [T.f1 + 0.6, "#C8D4FF"], [T.f2 - 0.1, "#C8D4FF"], [T.f2 + 0.2, "#FFE2C0"], [T.f3 - 0.1, "#FFE2C0"], [T.f3 + 0.6, "#FFF0D0"]];
+      const gradeAt = (t) => { let i = 0; while (i < gradeKeys.length - 1 && t >= gradeKeys[i + 1][0]) i++; if (i === gradeKeys.length - 1) return gradeKeys[i][1]; const [t0, c0] = gradeKeys[i], [t1, c1] = gradeKeys[i + 1]; return mix(c0, c1, clamp((t - t0) / Math.max(0.01, t1 - t0), 0, 1)); };
+      // ---- camera: continuous travel, slow push-ins, very few hard cuts ----
+      const head = (c, t) => c.update(t);
+      const pH = (t) => { const r = pet.update(t); return r; };
+      const K = [
+        [0, { x: 1100, y: 3560, z: 1.25 }], [1.9, { x: 1120, y: 3480, z: 1.45 }, "inOut"],                       // hook: on the LAUNCH screen
+        [3.6, { x: 1130, y: 3700, z: 1.6 }, "inOut"], [T.h1_e, { x: 1130, y: 3690, z: 1.72 }, "linear"],          // ...down to Petrov, arms crossed ("do nothing")
+        [T.s1 + 0.8, { x: 1100, y: 3640, z: 1.0 }, "inOut"], [W("satellite") , { x: 1100, y: 3660, z: 1.08 }, "linear"], // wide establishing
+        [W("siren") + 0.4, { x: 1100, y: 3560, z: 1.1 }, "out"], [W("one", 0, "e1") , { x: 1000, y: 3420, z: 1.35 }, "inOut"], [W("five", 0, "e1") + 0.6, { x: 1000, y: 3460, z: 1.45 }, "linear"],
+        [W("report") + 0.3, { x: 1180, y: 3860, z: 1.6 }, "inOut"], [T.e2_e, { x: 1100, y: 3460, z: 1.0 }, "inOut"],    // the red phone, then the map
+        [W("hesitates") + 0.3, { x: 1130, y: 3640, z: 1.9 }, "inOut"], [T.m1_e, { x: 1130, y: 3630, z: 2.1 }, "linear"], // lens moment push-in
+        [W("five", 0, "p1") , { x: 1000, y: 3420, z: 1.3 }, "inOut"], [W("hundreds") + 0.4, { x: 1000, y: 3460, z: 1.15 }, "linear"],
+        [W("radar") , { x: 1100, y: 3700, z: 1.05 }, "inOut"], [W("calls") + 0.2, { x: 1130, y: 3680, z: 1.7 }, "inOut"], [T.p2_e, { x: 1100, y: 3700, z: 1.35 }, "linear"],
+        [T.f1 + 0.9, { x: 1100, y: 980, z: 0.78 }, "inOut"], [W("clouds") + 0.3, { x: 1100, y: 1250, z: 0.85 }, "linear"],   // travel UP into space
+        [T.f2, { x: 1100, y: 1250, z: 0.85 }, "linear"],
+        [T.f3 + 0.05, { x: 1250, y: 2560, z: 1.2 }, "out"], [D, { x: 1240, y: 2480, z: 1.05 }, "linear"],                 // dawn, the gold ripple
+      ];
+      const tl = gsap.timeline({ paused: true });
+      SR.drive(tl, D, (t) => {
+        const c = sampleTrack(K, t, { x: 1100, y: 3600, z: 1 });
+        const shake = (t > W("siren") && t < W("siren") + 0.6) ? 10 * (1 - (t - W("siren")) / 0.6) : 0;
+        V3.apply(world, c, shake, t);
+        // travel motion blur on the big vertical move
+        const tv = clamp((t - T.f1) / 0.9, 0, 1), vb = Math.sin(tv * Math.PI) * 26; travel.set(0.5, vb);
+        const p = pet.update(t); off1.update(t); off2.update(t);
+        // map: arcs, counter, LAUNCH banner
+        const n = t < W("one", 0, "h1") ? 0 : t < W("five", 0, "h1") ? 1 : t < T.s1 ? 5 : t < W("one", 0, "e1") ? 0 : t < W("two") ? 1 : t < W("five", 0, "e1") ? 2 : t < W("hits") ? 5 : 0;
+        A.forEach((a, i) => { a.setAttribute("opacity", i < n ? 1 : 0); a.setAttribute("stroke-dashoffset", -t * 60); });
+        cntT.textContent = n ? "×" + n : "—";
+        const blink = (Math.floor(t * 3) % 2) ? 1 : 0.55; start.setAttribute("opacity", (t < T.s1 && t > 0.8) || (t > W("siren") && t < W("hits")) ? blink : 0);
+        many.setAttribute("opacity", clamp((t - W("hundreds") + 0.1) / 0.3, 0, 1) * (1 - clamp((t - W("radar")) / 0.3, 0, 1)));
+        // sirens + red sweep
+        const alarm = (t > W("siren") && t < W("hits") + 0.2) || (t < T.s1 && t > 0.8);
+        sir.forEach((s) => s.setAttribute("fill", alarm && (Math.floor(t * 4) % 2) ? "#FF3A2A" : "#5A1E1E"));
+        const ang = t * 3.2; sweep.setAttribute("points", `200,3070 ${200 + Math.cos(ang) * 1800},${3070 + Math.abs(Math.sin(ang)) * 1300} ${200 + Math.cos(ang + 0.35) * 1800},${3070 + Math.abs(Math.sin(ang + 0.35)) * 1300}`); sweep.setAttribute("opacity", alarm ? 0.32 : 0);
+        // depth of field: background softens on close shots
+        bgBlur.set(c.z > 1.5 ? (c.z - 1.5) * 9 : 0);
+        // lens moment
+        const kl = clamp((t - W("fear") + 0.1) / 0.3, 0, 1) * (1 - clamp((t - T.p1 + 0.2) / 0.3, 0, 1)); lens.setAttribute("opacity", kl);
+        bR.setAttribute("opacity", clamp((t - W("fear")) / 0.25, 0, 1)); bG.setAttribute("opacity", clamp((t - W("facts")) / 0.25, 0, 1));
+        // radar and clock inserts
+        const kr = clamp((t - W("radar") + 0.15) / 0.25, 0, 1) * (1 - clamp((t - W("calls") + 0.1) / 0.25, 0, 1)); radar.setAttribute("opacity", kr); rsw.setAttribute("transform", `rotate(${t * 240})`);
+        const kc = clamp((t - W("one", 0, "p2") + 0.1) / 0.2, 0, 1) * (1 - clamp((t - W("hits") - 0.25) / 0.25, 0, 1)); clock.setAttribute("opacity", kc);
+        const mins = clamp((t - W("one", 0, "p2")) / (W("hits") - W("one", 0, "p2")), 0, 1) * 5; mh.setAttribute("transform", `rotate(${mins * 6 * 12})`); hh.setAttribute("transform", `rotate(${mins * 6})`);
+        // space: satellite beam, glints read as rockets
+        const kb = clamp((t - W("satellite", 0, "f1")) / 0.4, 0, 1); beam.setAttribute("opacity", 0.22 * kb);
+        gl.forEach((g, i) => g.setAttribute("opacity", clamp((t - W("sunlight") - i * 0.08) / 0.2, 0, 1)));
+        flames.setAttribute("opacity", clamp((t - W("for", 0, "f1")) / 0.25, 0, 1) * 0.85); tagSun.setAttribute("opacity", clamp((t - W("clouds")) / 0.25, 0, 1));
+        // payoff card
+        const kp = clamp((t - T.f2 + 0.05) / 0.2, 0, 1) * (1 - clamp((t - T.f3 + 0.05) / 0.2, 0, 1)); paper.setAttribute("opacity", kp); petP.update(t);
+        const ks = clamp((t - W("reprimand")) / 0.18, 0, 1); stampG.setAttribute("opacity", ks); stampG.setAttribute("transform", `translate(540,1240) rotate(-12) scale(${ks > 0 ? 1.8 - 0.8 * EASE.out(ks) : 1})`);
+        // dawn: gold rings spread from the bunker hatch
+        petS.update(t); deep.setAttribute("opacity", t >= T.f3 - 0.05 ? 1 : 0); lab.setAttribute("opacity", clamp((t - T.s1 - 0.3) / 0.3, 0, 1) * (1 - clamp((t - T.e1 + 0.2) / 0.3, 0, 1)));
+        gRings.forEach((r, i) => { const k = clamp((t - T.f3 - 0.3 - i * 0.45) / 2.2, 0, 1); r.setAttribute("rx", 60 + 1100 * EASE.out(k)); r.setAttribute("ry", 14 + 140 * EASE.out(k)); r.setAttribute("opacity", k > 0 ? (1 - k) * 0.95 : 0); });
+        // captions
+        let cw = ""; for (const x of WD) if (t >= x[1] - 0.02 && t < x[2] + 0.12) cw = x[0].replace(/[,.?!:]/g, "").toUpperCase();
+        capT.textContent = cw; const cur = WD.find((x) => t >= x[1] - 0.02 && t < x[2] + 0.12); const kk = cur ? clamp((t - cur[1]) / 0.08, 0, 1) : 1; capT.setAttribute("transform", `translate(540,1380) scale(${0.85 + 0.15 * EASE.back(kk)}) translate(-540,-1380)`);
+        cap.setAttribute("opacity", kp > 0.5 ? 0 : 1);
+        gradeR.setAttribute("fill", gradeAt(t)); grain.update(t);
+      });
+      window.__timelines["short"] = tl;
+    })();
+  </script>
+</template>

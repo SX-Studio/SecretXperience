@@ -1,0 +1,25 @@
+<!doctype html><html><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Patrick+Hand&family=Anton&display=swap" rel="stylesheet">
+<script src="ink.js"></script><script src="cast.js"></script>
+<style>*{margin:0;padding:0}html,body{width:1920px;height:1080px;overflow:hidden}svg{position:absolute;inset:0}</style></head><body>
+<svg id="ov" width="1920" height="1080" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg"></svg>
+<script>
+document.fonts.ready.then(() => {
+  const svg = document.getElementById("ov"), I = INK(svg), { el, INKC, RED } = I;
+  el("rect", { width: 1920, height: 1080, fill: I.PAPER }, svg);
+  for (let i = 0; i < 24; i++) el("line", { x1: 0, x2: 1920, y1: 40 + i * 48, y2: 40 + i * 48, stroke: "#9CC3D9", "stroke-width": 2, opacity: 0.45 }, svg);
+  const g = el("g", {}, svg), C = CAST(I), mode = new URLSearchParams(location.search).get("n") || "sheet", hs = [];
+  const lab = (t, x, y) => { const e = el("text", { x, y, "text-anchor": "middle", "font-family": "Caveat", "font-weight": 700, "font-size": 70, fill: INKC }, svg); e.textContent = t; };
+  if (mode === "sheet") {
+    [["nia", 300, "wave", "smile"], ["kai", 780, "fist", "determined"], ["mo", 1260, "stand", "neutral"], ["rue", 1700, "cheer", "grin"]].forEach(([n, x, p, f]) => { const h = C.make(g, n, x, 960, 1.0, 0); h.key(0, p, 0).face(0, f); hs.push(h); lab(n[0].toUpperCase() + n.slice(1), x, 1050); });
+  } else if (mode === "anime") {
+    [["naruto", 220, "fist", "grin", "goggles"], ["naruto", 560, "stand", "smile", "band"], ["iruka", 960, "stand", "smile", "band"], ["gaara", 1380, "stand", "neutral", ""], ["haku", 1640, "stand", "smile", "mask"], ["haku", 1820, "stand", "smile", "none"]].forEach(([n, x, p, f, a]) => { const h = C.make(g, n, x, 940, n === "iruka" ? 1.05 : 0.95, 0); h.key(0, p, 0).face(0, f); if (a) h.acc(0, a); hs.push(h); lab(n[0].toUpperCase() + n.slice(1), x, 1040); });
+  } else {
+    const a = C.make(g, "kai", 500, 900, 1.0, 0); a.key(0, "pushUp", 0).face(0, "determined"); hs.push(a);
+    const b = C.make(g, "kai", 1300, 900, 1.0, 0); b.key(0, "pushDown", 0).face(0, "strain"); hs.push(b);
+    const c2 = C.make(g, "kai", 1500, 1060, 0.6, 0); c2.key(0, "flat", 0).face(0, "sad"); hs.push(c2);
+    el("line", { x1: 0, x2: 1920, y1: 900, y2: 900, stroke: INKC, "stroke-width": 4 }, svg);
+  }
+  hs.forEach((h) => h.update(5)); window.READY = true;
+});
+</script></body></html>

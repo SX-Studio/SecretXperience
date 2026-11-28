@@ -1,0 +1,31 @@
+<!doctype html><html><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Patrick+Hand&family=Anton&display=swap" rel="stylesheet">
+<script src="ink.js"></script><script src="cast.js"></script>
+<style>*{margin:0;padding:0}html,body{width:1280px;height:720px;overflow:hidden}svg{position:absolute;inset:0}</style></head><body>
+<svg id="ov" width="1280" height="720" viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg"></svg>
+<script>
+document.fonts.ready.then(() => {
+  const svg = document.getElementById("ov"), I = INK(svg), { el, INKC, RED } = I;
+  el("rect", { width: 1280, height: 720, fill: I.PAPER }, svg);
+  for (let i = 0; i < 16; i++) el("line", { x1: 0, x2: 1280, y1: 20 + i * 48, y2: 20 + i * 48, stroke: "#9CC3D9", "stroke-width": 2, opacity: 0.45 }, svg);
+  // burst behind Vegeta
+  const bg = el("g", { opacity: 0.36 }, svg), cx = 215, cy = 330, n = 22; for (let i = 0; i < n; i++) { const a = (i / n) * Math.PI * 2, w = (Math.PI / n) * (i % 2 ? 0.5 : 0.85), q = (r, d) => `${(cx + Math.cos(a + d) * r).toFixed(1)},${(cy + Math.sin(a + d) * r).toFixed(1)}`; el("path", { d: `M${q(150, 0)} L${q(900, -w / 2)} L${q(900, w / 2)} Z`, fill: "#F2C230" }, bg); }
+  el("path", { d: "M700,0 H1280 V720 H620 Z", fill: "#0D0D0D" }, svg);
+  const FL = 668; el("line", { x1: 0, x2: 690, y1: FL, y2: FL, stroke: "#8A847A", "stroke-width": 4 }, svg);
+  const pod = (x, w, h, lb, fill) => { el("rect", { x, y: FL - h, width: w, height: h, fill, stroke: INKC, "stroke-width": 6 }, svg); const t = el("text", { x: x + w / 2, y: FL - h / 2 + 40, "text-anchor": "middle", "font-family": "Anton", "font-size": 96, fill: INKC }, svg); t.textContent = lb; };
+  pod(90, 250, 140, "2", "#D9D4CB"); pod(340, 270, 210, "1", "#F2C230");
+  const g = el("g", {}, svg), C = CAST(I);
+  const gk = C.make(g, "goku", 475, FL - 210, 0.72, 0); gk.face(0, "grin").key(0, "wave", 0);
+  const vg = C.make(g, "vegeta", 215, FL - 140, 0.74, 0); vg.key(0, "arms", 0).key(0, { head: 10 }, 0).face(0, "strain");
+  gk.update(5); vg.update(5);
+  // anger mark + sweat on Vegeta
+  const am = el("g", { transform: "translate(322,160) rotate(12)" }, svg); el("path", { d: "M-22,-8 q14,-2 14,-16 M8,-24 q0,14 16,14 M22,8 q-14,2 -14,16 M-8,24 q0,-14 -16,-14", fill: "none", stroke: RED, "stroke-width": 7, "stroke-linecap": "round" }, am);
+  el("path", { d: "M118,246 q11,24 0,36 q-11,-12 0,-36 z", fill: "#8CC8F0", stroke: INKC, "stroke-width": 3 }, svg);
+  const T = (txt, x, y, size, fill, o = {}) => { const t = el("text", { x, y, "font-family": o.font || "Anton", "font-size": size, fill, "text-anchor": "middle", "letter-spacing": o.ls ?? 2 }, svg); t.textContent = txt; };
+  T("ALWAYS", 975, 200, 160, "#F4EFE6"); T("2ND PLACE?", 975, 350, 118, RED);
+  const tg = el("g", { transform: "rotate(-3 970 505)" }, svg); el("rect", { x: 735, y: 455, width: 470, height: 100, rx: 12, fill: "#F2C230", stroke: INKC, "stroke-width": 6 }, tg);
+  const tt = el("text", { x: 970, y: 527, "text-anchor": "middle", "font-family": "Anton", "font-size": 62, fill: "#1E1B2E", "letter-spacing": 3 }, tg); tt.textContent = "DRAGON BALL Z";
+  T("explains why", 965, 640, 54, "#9A958C", { font: "Patrick Hand", ls: 0 });
+  I.ready(); I.update(99); window.READY = true;
+});
+</script></body></html>

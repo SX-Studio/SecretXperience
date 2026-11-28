@@ -1,0 +1,26 @@
+<!doctype html><html><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Patrick+Hand&family=Anton&display=swap" rel="stylesheet">
+<script src="ink.js"></script><script src="char.js"></script>
+<style>*{margin:0;padding:0}html,body{width:1920px;height:1080px;overflow:hidden}svg{position:absolute;inset:0}</style></head><body>
+<svg id="ov" width="1920" height="1080" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg"></svg>
+<script>
+document.fonts.ready.then(() => {
+  const svg = document.getElementById("ov"), I = INK(svg), { el, INKC, RED } = I;
+  el("rect", { width: 1920, height: 1080, fill: I.PAPER }, svg);
+  for (let i = 0; i < 24; i++) el("line", { x1: 0, x2: 1920, y1: 40 + i * 48, y2: 40 + i * 48, stroke: "#9CC3D9", "stroke-width": 2, opacity: 0.45 }, svg);
+  el("line", { x1: 120, x2: 120, y1: 0, y2: 1080, stroke: "#E07A7A", "stroke-width": 3, opacity: 0.6 }, svg);
+  const ink = el("g", { filter: "url(#boil0)" }, svg), C = CHAR({ I }), F = [];
+  const lab = (t, x, y, c = INKC) => { const e = el("text", { x, y, "text-anchor": "middle", "font-family": "Caveat", "font-weight": 700, "font-size": 64, fill: c }, svg); e.textContent = t; };
+  const mode = new URLSearchParams(location.search).get("n") || "three";
+  if (mode === "three") {
+    F.push(C.draw(ink, "jinwoo", 380, 900, 1.25, 0, { mood: "serious", glow: true }));
+    F.push(C.draw(ink, "naruto", 960, 900, 1.25, 0, { mood: "grin", pose: "fist" }));
+    F.push(C.draw(ink, "luffy", 1540, 900, 1.25, 0, { mood: "grin" }));
+    lab("Sung Jinwoo", 380, 1050); lab("Naruto", 960, 1050); lab("Luffy", 1540, 1050);
+  } else {
+    F.push(C.draw(ink, "jinwoo", 520, 960, 1.45, 0, { mood: "serious", glow: true }));
+    C.system(ink, 980, 170, 780, ["Push-ups  100/100", "Sit-ups  100/100", "Squats  100/100", "Run  10/10 km"], 0);
+  }
+  I.ready(); I.update(99); F.forEach((f) => f.update(5)); I.setView(-50, -50, 2020, 1180); window.READY = true;
+});
+</script></body></html>

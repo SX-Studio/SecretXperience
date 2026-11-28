@@ -1,0 +1,257 @@
+<template>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-500-italic.woff2") format("woff2");font-weight:500;font-style:italic;font-display:block;}
+@font-face{font-family:"Cormorant Garamond";src:url("assets/fonts/cormorant-garamond-600-italic.woff2") format("woff2");font-weight:600;font-style:italic;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:block;}
+@font-face{font-family:"Source Sans 3";src:url("assets/fonts/source-sans-3-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:block;}
+@font-face{font-family:"Caveat";src:url("assets/fonts/caveat-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+#root, #root * { font-variant-numeric: lining-nums; }
+
+    #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; }
+
+    /* Ground layer: pre-rendered 1080x1920 clip at native size (no crop / scale / filter). */
+    #f03-vid { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+
+    #f03-hud { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; pointer-events: none; }
+
+    /* White flash over the footage window (y 640-1248). */
+    #f03-flash { position: absolute; left: 0; top: 640px; width: 1080px; height: 608px; background: #FFFFFF; opacity: 0; }
+
+    /* AIRBORNE counter, dark zone above the window (below the global banner). */
+    #f03-count {
+      position: absolute; left: 72px; top: 486px; height: 62px;
+      display: flex; align-items: center; gap: 14px; padding: 0 22px 0 20px;
+      background: rgba(10, 8, 6, 0.72); border-left: 2px solid #E8553F;
+      font-family: "Courier Prime", monospace; font-weight: 700; font-size: 34px;
+      letter-spacing: 0.08em; text-transform: uppercase; color: #FFFFFF;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    }
+    #f03-count .f03-cl { margin-right: 8px; }
+    .f03-sq { position: relative; width: 26px; height: 26px; border: 2px solid #E8553F; box-sizing: border-box; }
+    .f03-sqf { position: absolute; left: 3px; top: 3px; right: 3px; bottom: 3px; background: #E8553F; }
+
+    /* AIRBORNE stamp, inside the window above the cat's back. */
+    #f03-stamp {
+      position: absolute; left: 300px; top: 690px; padding: 8px 28px 10px;
+      border: 4px solid #E8553F; border-radius: 16px; background: rgba(10, 8, 6, 0.72);
+      font-family: "Courier Prime", monospace; font-weight: 700; font-size: 64px; line-height: 1;
+      letter-spacing: 0.08em; text-transform: uppercase; color: #E8553F;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6); white-space: nowrap;
+    }
+
+    /* Ground line + gap brackets (freeze frame: hind paw bottom ~y1094, fore paw bottom ~y1078). */
+    #f03-gnd { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+    #f03-line { position: absolute; left: 0; top: 1117px; width: 1080px; height: 8px; filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6)); }
+    #f03-line svg { display: block; }
+    #f03-gtag {
+      position: absolute; right: 72px; top: 1136px;
+      font-family: "Courier Prime", monospace; font-weight: 700; font-size: 34px; line-height: 1;
+      letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255, 255, 255, 0.9);
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+    }
+    .f03-br {
+      position: absolute; width: 28px; box-sizing: border-box;
+      border-top: 4px solid #E8553F; border-bottom: 4px solid #E8553F;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+    }
+    .f03-br::before { content: ""; position: absolute; left: 12px; top: 0; bottom: 0; width: 4px; background: #E8553F; }
+
+    /* Tracked reticle: head while running, dives onto the fore paw during the freeze. */
+    #f03-ret { position: absolute; left: -48px; top: -48px; width: 96px; height: 96px; }
+    #f03-retin { width: 96px; height: 96px; filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6)); }
+    #f03-retin svg { display: block; }
+
+    /* Schematic stride bar, dark zone below the window (y 1290-1545). */
+    #f03-stitle {
+      position: absolute; left: 72px; top: 1270px;
+      font-family: "Courier Prime", monospace; font-weight: 700; font-size: 26px; line-height: 1;
+      letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255, 255, 255, 0.72);
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    }
+    #f03-bar { position: absolute; left: 72px; top: 1330px; width: 936px; height: 76px; display: flex; }
+    .f03-seg {
+      position: relative; width: 234px; height: 76px; box-sizing: border-box; overflow: hidden;
+      border: 2px solid rgba(255, 255, 255, 0.55); margin-left: -2px;
+      background: rgba(10, 8, 6, 0.72);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      font-family: "Courier Prime", monospace; font-weight: 700; text-transform: uppercase;
+      color: #FFFFFF; text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+    }
+    .f03-seg:first-child { margin-left: 0; }
+    .f03-seg.f03-air { background: rgba(120, 116, 110, 0.55); }
+    .f03-fill { position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: #E8553F; }
+    .f03-t1 { position: relative; font-size: 24px; line-height: 1.1; letter-spacing: 0.06em; }
+    .f03-t2 { position: relative; font-size: 20px; line-height: 1.1; letter-spacing: 0.06em; opacity: 0.85; }
+    #f03-ph { position: absolute; left: 70px; top: 1318px; width: 4px; height: 100px; background: #FFFFFF; box-shadow: 0 0 6px rgba(0, 0, 0, 0.6); }
+    #f03-ph::before { content: ""; position: absolute; left: -8px; top: -12px; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 12px solid #FFFFFF; }
+
+    #f03-label { position: absolute; left: 0; top: 1428px; width: 1080px; text-align: center; }
+    #f03-pill {
+      display: inline-block; padding: 12px 30px 14px 28px;
+      background: rgba(10, 8, 6, 0.72); border-left: 2px solid #E8553F;
+      font-family: "Courier Prime", monospace; font-weight: 700; font-size: 36px; line-height: 1.2;
+      letter-spacing: 0.08em; text-transform: uppercase; color: #FFFFFF;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6); white-space: nowrap;
+    }
+    #f03-l1, #f03-l2 { display: block; }
+    #f03-l2 { color: #E8553F; }
+    #f03-pill .f03-red { color: #E8553F; }
+  </style>
+
+  <div id="root" data-composition-id="03-flight" data-width="1080" data-height="1920">
+    <video id="f03-vid" src="public/clips/s3_raw.mp4" muted playsinline class="clip" data-start="0" data-duration="3.827" data-track-index="0"></video>
+
+    <div id="f03-hud" class="clip" data-start="0" data-duration="3.827" data-track-index="1">
+      <div id="f03-flash"></div>
+
+      <div id="f03-gnd">
+        <div id="f03-line"><svg width="1080" height="8" viewBox="0 0 1080 8"><line x1="0" y1="4" x2="1080" y2="4" stroke="rgba(255,255,255,0.9)" stroke-width="4" stroke-dasharray="20 12"/></svg></div>
+        <div id="f03-gtag">GROUND</div>
+        <!-- hind paw x~115 (bottom 1094) / fore paw x~856 (bottom 1078) -> ground y1121 -->
+        <div class="f03-br" style="left:101px; top:1094px; height:27px;"></div>
+        <div class="f03-br" style="left:842px; top:1078px; height:43px;"></div>
+      </div>
+
+      <div id="f03-stamp">AIRBORNE</div>
+
+      <div id="f03-count">
+        <span class="f03-cl">AIRBORNE</span>
+        <span class="f03-sq"><span id="f03-sq1f" class="f03-sqf"></span></span>
+        <span class="f03-sq"><span id="f03-sq2f" class="f03-sqf"></span></span>
+      </div>
+
+      <div id="f03-ret">
+        <div id="f03-retin">
+          <svg width="96" height="96" viewBox="0 0 96 96">
+            <circle cx="48" cy="48" r="30" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2"/>
+            <line x1="48" y1="4" x2="48" y2="16" stroke="#E8553F" stroke-width="4" stroke-linecap="round"/>
+            <line x1="48" y1="80" x2="48" y2="92" stroke="#E8553F" stroke-width="4" stroke-linecap="round"/>
+            <line x1="4" y1="48" x2="16" y2="48" stroke="#E8553F" stroke-width="4" stroke-linecap="round"/>
+            <line x1="80" y1="48" x2="92" y2="48" stroke="#E8553F" stroke-width="4" stroke-linecap="round"/>
+            <line x1="48" y1="38" x2="48" y2="44" stroke="rgba(255,255,255,0.9)" stroke-width="2"/>
+            <line x1="48" y1="52" x2="48" y2="58" stroke="rgba(255,255,255,0.9)" stroke-width="2"/>
+            <line x1="38" y1="48" x2="44" y2="48" stroke="rgba(255,255,255,0.9)" stroke-width="2"/>
+            <line x1="52" y1="48" x2="58" y2="48" stroke="rgba(255,255,255,0.9)" stroke-width="2"/>
+          </svg>
+        </div>
+      </div>
+
+      <div id="f03-stitle">ONE STRIDE (SCHEMATIC)</div>
+      <div id="f03-bar">
+        <div class="f03-seg"><span class="f03-t1">FEET DOWN</span></div>
+        <div class="f03-seg f03-air"><div id="f03-fill1" class="f03-fill"></div><span class="f03-t1">AIRBORNE</span><span class="f03-t2">(GATHERED)</span></div>
+        <div class="f03-seg"><span class="f03-t1">FEET DOWN</span></div>
+        <div class="f03-seg f03-air"><div id="f03-fill2" class="f03-fill"></div><span class="f03-t1">AIRBORNE</span><span class="f03-t2">(EXTENDED)</span></div>
+      </div>
+      <div id="f03-ph"></div>
+
+      <div id="f03-label"><span id="f03-pill"><span id="f03-l1"></span><span id="f03-l2">TWICE PER STRIDE</span></span></div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      window.__timelines = window.__timelines || {};
+      var DUR = 3.827;
+      var FPS = 24;
+      var FZ = 1.5, FZ_END = 2.375;          // built-in freeze (s3.json frozen:true)
+      var SWEEP0 = 1.6, SWEEP1 = 3.2;         // stride-bar playhead
+      var BAR_W = 936, SEG = BAR_W / 4;
+      function segT(px) { return SWEEP0 + (SWEEP1 - SWEEP0) * (px / BAR_W); }
+
+      // Head track (composite px) from public/clips/s3.json, rounded.
+      var HEAD = [[880,882],[879,882],[878,882],[875,882],[874,882],[872,882],[871,883],[868,882],[867,883],[865,883],[864,883],[862,884],[862,884],[860,884],[858,884],[856,884],[854,884],[851,884],[850,885],[848,885],[847,886],[844,885],[843,886],[840,886],[840,886],[838,887],[835,886],[834,887],[831,887],[830,887],[828,887],[826,888],[826,890],[822,887],[823,890],[821,890],[819,890],[819,890],[819,890],[819,890],[819,890],[819,890],[819,890],[819,890],[819,890],[819,890],[819,890],[819,890],[819,890],[819,890],[819,890],[819,890],[819,890],[819,890],[819,890],[819,890],[819,890],[819,890],[819,890],[817,891],[816,891],[813,891],[810,889],[809,891],[808,891],[807,892],[804,892],[803,892],[801,893],[799,893],[798,893],[795,893],[794,893],[792,893],[790,893],[787,891],[785,891],[785,894],[783,894],[782,895],[779,895],[778,895],[776,895],[774,896],[773,896],[771,896],[770,896],[768,897],[766,897],[764,897],[763,898],[761,898],[759,898],[758,898]];
+
+      // Reticle lock during the freeze: the lowest fore paw (measured on the frozen frame).
+      var LOCK = { s: FZ, e: FZ_END, x: 850, y: 1058 };
+      var DIVE = 0.3, RELEASE = 0.35;
+
+      function sample(arr, t) {
+        var N = arr.length;
+        var f = Math.max(0, t) * FPS;
+        var i = Math.min(N - 1, Math.floor(f));
+        var j = Math.min(N - 1, i + 1);
+        var k = Math.min(1, f - i);
+        return [arr[i][0] + (arr[j][0] - arr[i][0]) * k, arr[i][1] + (arr[j][1] - arr[i][1]) * k];
+      }
+
+      var retEl = document.getElementById("f03-ret");
+      function writeReticle(t) {
+        var h = sample(HEAD, t);
+        var x = h[0], y = h[1], m = 0;
+        if (t >= LOCK.s && t < LOCK.e) {
+          var a = Math.min(1, (t - LOCK.s) / DIVE);
+          m = 1 - Math.pow(1 - a, 4);                                         // power4.out dive
+        } else if (t >= LOCK.e && t < LOCK.e + RELEASE) {
+          var b = (t - LOCK.e) / RELEASE;
+          m = 1 - (b < 0.5 ? 2 * b * b : 1 - Math.pow(-2 * b + 2, 2) / 2);    // power2.inOut release
+        }
+        if (m > 0) { x += (LOCK.x - x) * m; y += (LOCK.y - y) * m; }
+        retEl.style.transform = "translate(" + x.toFixed(1) + "px," + y.toFixed(1) + "px)";
+      }
+
+      // Label line 1: one span per character for a seek-safe type-on.
+      var l1 = document.getElementById("f03-l1");
+      var TEXT = "ALL 4 FEET OFF THE GROUND";
+      for (var c = 0; c < TEXT.length; c++) {
+        var sp = document.createElement("span");
+        sp.className = "f03-ch" + (TEXT[c] === "4" ? " f03-red" : "");
+        sp.textContent = TEXT[c] === " " ? " " : TEXT[c];
+        l1.appendChild(sp);
+      }
+
+      gsap.set("#f03-fill1, #f03-fill2", { scaleX: 0, transformOrigin: "0% 50%" });
+
+      var tl = gsap.timeline({ paused: true });
+
+      // Tracking proxy: single source of truth for the reticle position.
+      var proxy = { p: 0 };
+      writeReticle(0);
+      tl.to(proxy, { p: DUR, duration: DUR, ease: "none", onUpdate: function () { writeReticle(proxy.p); } }, 0);
+
+      // Phase 1 (0-1.5, "Twice in every stride,") — reticle locks on, counter arrives, stride bar builds.
+      tl.fromTo("#f03-retin", { scale: 1.4, opacity: 0 }, { scale: 0.9, opacity: 1, duration: 0.08, ease: "expo.out" }, 0.05);
+      tl.to("#f03-retin", { scale: 1, duration: 0.12, ease: "expo.out" }, 0.13);
+      tl.fromTo("#f03-count", { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 0.2);
+      tl.fromTo("#f03-stitle", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }, 0.88);
+      tl.fromTo("#f03-bar .f03-seg", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.3, ease: "power3.out", stagger: 0.08 }, 0.95);
+
+      // Phase 2 (1.5, freeze) — flash, ground line + gap brackets, AIRBORNE stamp, square 1, reticle dives to paw.
+      tl.fromTo("#f03-flash", { opacity: 0 }, { opacity: 0.85, duration: 0.01, ease: "none" }, FZ);
+      tl.to("#f03-flash", { opacity: 0, duration: 0.07, ease: "none" }, FZ + 0.01);
+      tl.fromTo("#f03-line", { clipPath: "inset(0px 100% 0px 0px)" }, { clipPath: "inset(0px 0% 0px 0px)", duration: 0.3, ease: "power2.out" }, FZ + 0.04);
+      tl.fromTo("#f03-gtag", { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.25, ease: "power2.out" }, FZ + 0.22);
+      tl.fromTo("#f03-gnd .f03-br", { scaleY: 0, transformOrigin: "50% 100%" }, { scaleY: 1, transformOrigin: "50% 100%", duration: 0.22, ease: "power3.out", stagger: 0.08 }, FZ + 0.16);
+      tl.fromTo("#f03-stamp", { opacity: 0, scale: 1.35, rotation: -4 }, { opacity: 1, scale: 1, rotation: -4, duration: 0.25, ease: "expo.out" }, FZ + 0.08);
+      tl.fromTo("#f03-sq1f", { scale: 0 }, { scale: 1, duration: 0.2, ease: "expo.out" }, FZ + 0.08);
+      tl.to("#f03-retin", { scale: 1.4, duration: 0.04, ease: "power2.out" }, FZ + 0.28);
+      tl.to("#f03-retin", { scale: 0.9, duration: 0.08, ease: "expo.out" }, FZ + 0.32);
+      tl.to("#f03-retin", { scale: 1, duration: 0.12, ease: "expo.out" }, FZ + 0.40);
+      // Ground evidence holds past the freeze, then clears (stamp holds).
+      tl.to("#f03-gnd", { opacity: 0, duration: 0.2, ease: "power1.out" }, 2.5);
+
+      // Phase 3 (1.6-3.2) — playhead sweeps one stride; airborne segments light red as it crosses them.
+      tl.fromTo("#f03-ph", { opacity: 0, x: 0 }, { opacity: 1, x: 0, duration: 0.12, ease: "power2.out" }, SWEEP0 - 0.12);
+      tl.to("#f03-ph", { x: BAR_W, duration: SWEEP1 - SWEEP0, ease: "none" }, SWEEP0);
+      tl.to("#f03-fill1", { scaleX: 1, duration: segT(2 * SEG) - segT(SEG), ease: "none" }, segT(SEG));
+      tl.to("#f03-fill2", { scaleX: 1, duration: segT(4 * SEG) - segT(3 * SEG), ease: "none" }, segT(3 * SEG));
+      tl.fromTo("#f03-sq2f", { scale: 0 }, { scale: 1, duration: 0.2, ease: "expo.out" }, segT(3 * SEG));
+
+      // Label (on "all four feet leave the ground"): line 1 types on, line 2 lands with the second airborne phase.
+      tl.fromTo("#f03-pill", { opacity: 0, scaleX: 0.94 }, { opacity: 1, scaleX: 1, duration: 0.18, ease: "power3.out" }, 1.62);
+      tl.fromTo("#f03-l1 .f03-ch", { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none", stagger: 0.02 }, 1.66);
+      tl.fromTo("#f03-l2", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.25, ease: "power3.out" }, 2.82);
+
+      tl.set({}, {}, DUR);
+      window.__timelines["03-flight"] = tl;
+    })();
+  </script>
+</template>

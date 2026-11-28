@@ -1,0 +1,90 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #s5-svg { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+    #s5-svg text { font-family: "Nunito"; }
+  </style>
+  <div id="root" data-composition-id="s5" data-width="1920" data-height="1080">
+    <svg id="s5-svg" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" data-layout-ignore></svg>
+  </div>
+  <script>
+    (function () {
+      const SR = window.SR; const { el, Set, Character, Camera, Bubble, Badge, Ripple, PAL, EASE, clamp, sampleTrack, mulberry32, drive } = SR;
+      const svg = document.getElementById("s5-svg");
+      const world = el("g", {}, svg);
+      const L = { bg: el("g", {}, world), board: el("g", {}, world), back: el("g", {}, world), counterL: el("g", {}, world), front: el("g", {}, world), fx: el("g", {}, world) };
+      const D = 19.4;
+      const cafe = window.EP1.cafe(L, { id: "s5" }); const G = cafe.G;
+      // Dev, still stuck in traffic outside the window (honks again near the end)
+      const carOut = Set.car(cafe.carSlot, 0, 0, "#C9A227", 1);
+      // Maya now sits at the window table, scowling into her coffee
+      const maya = Character(L.back, { id: "s5-maya", color: PAL.teal, hair: "ponytail", seed: 5, scale: 0.95, x: [[0, 600]], y: [[0, G + 30]], facing: [[0, 1]], pose: [[0, "sit", 0]], mood: [[0, "annoyed", 0]], prop: { kind: "cup" } });
+      const leo = Character(L.counterL, { id: "s5-leo", color: PAL.mustard, hair: "curly", glasses: true, seed: 9, x: [[0, 1420]], y: [[0, G - 64]], facing: [[0, -1]], noWalk: true,
+        pose: [[0, "hipsHands", 0], [6.3, "point", 0.12], [7.6, "crossed", 0.4]], mood: [[0, "annoyed", 0], [6.3, "angry", 0.12], [7.6, "annoyed", 0.4]], squash: [[6.3, 0.06]], look: [[0, { x: 1, y: 0.2 }]] });
+      cafe.counter();
+      // coins: a growing pile, then scattered by "NEXT!"
+      const coinsG = el("g", {}, L.counterL);
+      const R = mulberry32(912), coins = [];
+      for (let i = 0; i < 26; i++) coins.push({ x: 1210 + (R() - 0.5) * 70, y: 708 - Math.floor(i / 6) * 7 - R() * 3, tIn: 3.7 + i * 0.065, vx: (R() - 0.5) * 900, vy: -300 - R() * 520, spin: R(), c: R() < 0.6 ? "#C9C2B5" : "#C58B5B", el: null });
+      coins.forEach((c) => { c.el = el("ellipse", { rx: 13, ry: 5, fill: c.c, stroke: PAL.ink, "stroke-width": 2.5, opacity: 0 }, coinsG); });
+      // Sam walks in, stands on tiptoes at the counter
+      const sam = Character(L.front, { id: "s5-sam", color: "#6BA8D9", hair: "cap", hairColor: PAL.rude, seed: 2, scale: 0.72,
+        x: [[0, -120], [1.0, -120], [2.6, 1180, "out"], [12.4, 1180], [14.6, 120, "in"]], y: [[0, G + 70], [3.2, G + 70], [3.5, G + 56], [6.4, G + 56], [6.6, G + 70]],
+        facing: [[0, 1], [12.3, -1]],
+        pose: [[0, "relaxed", 0], [3.4, "give", 0.3], [6.45, "startle", 0.1], [7.2, "slump", 0.4], [12.3, "relaxed", 0.3]],
+        mood: [[0, "content", 0], [3.4, "happy", 0.3], [6.45, "shock", 0.1], [7.2, "sad", 0.4], [12.0, "annoyed", 0.5]], squash: [[6.42, 0.08]], look: [[0, { x: 1, y: -0.3 }], [7.2, { x: 0.2, y: 0.8 }]] });
+      const samMark = el("circle", { r: 48, fill: "none", stroke: PAL.rude, "stroke-width": 6, opacity: 0 }, L.fx);
+      const leoMark = el("circle", { r: 62, fill: "none", stroke: PAL.rude, "stroke-width": 6 }, L.fx);
+      const jump = Ripple(L.fx, { color: PAL.rude, t: 6.35, dur: 1.0, maxR: 150, rings: 2, width: 7, tThread: 6.4, threadDur: 0.4, threadHold: 0.25, arc: 90 });
+      const next = Bubble(L.fx, { text: "NEXT!", t0: 6.3, t1: 7.6, side: -1, shout: true, size: 52 });
+      const b2 = Badge(L.fx, { text: "2°", t0: 0.45, t1: 2.4, lift: 120 });
+      const b3 = Badge(L.fx, { text: "3°", t0: 8.25, t1: 12.0, lift: 100 });
+      // chain recap threads (car -> Maya -> Leo -> Sam), one per drum hit
+      const chainG = el("g", {}, L.fx);
+      const seg = (i) => el("path", { fill: "none", stroke: PAL.rude, "stroke-width": 8, "stroke-linecap": "round", "stroke-dasharray": "0 4000" }, chainG);
+      const segs = [seg(0), seg(1), seg(2)]; const hits = [9.0, 9.75, 10.55];
+      const ring = (x, y) => el("circle", { cx: x, cy: y, r: 0, fill: "none", stroke: PAL.rude, "stroke-width": 6 }, chainG);
+      const hitRings = [ring(0, 0), ring(0, 0), ring(0, 0), ring(0, 0)];
+      // tiny honk burst outside the window at the end
+      const honk = el("g", { opacity: 0 }, L.fx);
+      el("path", { d: "M-40,-26 L-12,-20 L0,-44 L12,-20 L42,-28 L22,-4 L44,18 L12,14 L2,40 L-10,14 L-42,22 L-22,-2 Z", fill: PAL.white, stroke: PAL.rude, "stroke-width": 5 }, honk);
+      const cam = Camera(L.fx.parentNode, [[0, { x: 1260, y: 600, z: 1.6, r: 0 }], [5.8, { x: 1270, y: 610, z: 1.7, r: 0 }, "linear"], [6.3, { x: 1260, y: 600, z: 1.85, r: 0 }, "out"],
+        [8.1, { x: 1250, y: 600, z: 1.8, r: 0 }], [8.9, { x: 960, y: 560, z: 1.0, r: 0 }, "inOut"], [12.2, { x: 900, y: 560, z: 1.1, r: 0 }, "linear"],
+        [15.6, { x: 760, y: 560, z: 1.25, r: 0 }, "inOut"], [17.4, { x: 600, y: 540, z: 2.2, r: 0 }, "inOut"], [D, { x: 600, y: 540, z: 2.3, r: 0 }, "linear"]],
+        { shake: [[6.28, 0], [6.32, 6], [6.9, 0, "out"]] });
+      const tl = gsap.timeline({ paused: true });
+      drive(tl, D, (t) => {
+        cam.update(t);
+        cafe.door.open(clamp((t - 0.6) / 0.3, 0, 1) * (1 - clamp((t - 1.8) / 0.4, 0, 1)) + clamp((t - 13.6) / 0.3, 0, 1) * (1 - clamp((t - 15.0) / 0.4, 0, 1)));
+        const cx = 420 + Math.min(t, 12) * 4; carOut.setAttribute("transform", `translate(${cx},708) scale(0.5)`);
+        const m = maya.update(t), l = leo.update(t), s = sam.update(t);
+        const mh = { x: m.headX, y: m.headY }, lh = { x: l.headX, y: l.headY }, sh = { x: s.headX, y: s.headY };
+        coins.forEach((c) => {
+          const vis = t >= c.tIn;
+          let x = c.x, y = c.y;
+          if (t > 6.35) { const dt = t - 6.35; x += c.vx * dt; y += c.vy * dt + 1400 * dt * dt; y = Math.min(y, G + 60); }
+          c.el.setAttribute("cx", x); c.el.setAttribute("cy", y); c.el.setAttribute("opacity", vis ? (t > 6.35 ? Math.max(0, 1 - (t - 7.2) / 0.6) : 1) : 0);
+        });
+        leoMark.setAttribute("cx", lh.x); leoMark.setAttribute("cy", lh.y); leoMark.setAttribute("r", 62 + 5 * Math.sin(t * 5));
+        samMark.setAttribute("cx", sh.x); samMark.setAttribute("cy", sh.y); samMark.setAttribute("opacity", clamp((t - 6.7) / 0.3, 0, 1) * 0.9);
+        jump.update(t, lh, sh); next.update(t, lh); b2.update(t, lh); b3.update(t, sh);
+        // the recap chain
+        const carP = { x: cx + 20, y: 668 };
+        const pts = [carP, mh, lh, sh];
+        segs.forEach((p, i) => {
+          const a = pts[i], b = pts[i + 1], k = clamp((t - hits[i] + 0.25) / 0.3, 0, 1), ko = clamp((t - 12.2) / 0.5, 0, 1);
+          p.setAttribute("d", `M${a.x},${a.y} Q${(a.x + b.x) / 2},${Math.min(a.y, b.y) - 120} ${b.x},${b.y}`);
+          p.setAttribute("stroke-dasharray", `${k * 1400} 4000`); p.setAttribute("opacity", 1 - ko);
+        });
+        hitRings.forEach((r, i) => {
+          const t0 = i === 0 ? 8.95 : hits[i - 1] + 0.05, k = clamp((t - t0) / 0.6, 0, 1);
+          r.setAttribute("cx", pts[i].x); r.setAttribute("cy", pts[i].y); r.setAttribute("r", 30 + EASE.out(k) * 70); r.setAttribute("opacity", k > 0 && k < 1 ? 1 - k : 0);
+        });
+        const kh = clamp((t - 17.3) / 0.15, 0, 1);
+        honk.setAttribute("opacity", t > 17.3 ? 1 - clamp((t - 18.4) / 0.3, 0, 1) : 0);
+        honk.setAttribute("transform", `translate(${cx + 110},${650}) scale(${0.6 + 0.4 * EASE.back(kh)})`);
+      });
+      window.__timelines["s5"] = tl;
+    })();
+  </script>
+</template>

@@ -1,0 +1,22 @@
+<!doctype html><html><head><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@700&display=swap" rel="stylesheet">
+<script src="assets/sr-engine-v1.js"></script><script src="assets/face5rig.js"></script><script src="assets/paper-rig.js"></script>
+<style>*{margin:0;padding:0}body{width:1920px;height:1080px;overflow:hidden;background:#F3E4C8}svg{position:absolute;inset:0}</style></head>
+<body><svg id="art" viewBox="0 0 1920 1080"></svg><script>
+const svg=document.getElementById('art'), {el}=SR;
+const ANA={skin:"#9A6440",shirt:"#3FA7A0",pants:"#2E5A74",shoes:"#F2EDE4",hair:"#2A1A14",hairStyle:"bun",seed:5,body:"slim"}, YOU={skin:"#E3AE85",shirt:"#6C5CE7",pants:"#2E3A5A",shoes:"#F2EDE4",hair:"#1E1B22",hairStyle:"short",seed:51};
+const MO={skin:"#C98B5E",shirt:"#E8834A",pants:"#3A4A63",shoes:"#6B4A34",hair:"#3A2A22",hairStyle:"short",seed:7,body:"round"}, KAI={skin:"#B07448",shirt:"#FF8A2A",pants:"#3A4A63",shoes:"#7A5230",hair:"#E0B020",hairStyle:"cap",seed:6,body:"broad"};
+const EX=["neutral","happy","laugh","grin","sad","worried","crying","angry","shock","surprised","smug","skeptic","forced","bliss","relieved","touched","nervous","embarrassed","determined","cheeky"];
+const lab=(x,y,s,fs=22)=>el("text",{x,y,"text-anchor":"middle","font-family":"Fredoka","font-weight":700,"font-size":fs,fill:"#3a2e2a"},svg).textContent=s;
+const issues=[];
+EX.forEach((m,i)=>{ const cx=96+(i%10)*192, cy=60+Math.floor(i/10)*300; const clip=el("clipPath",{id:"c"+i},svg); el("rect",{x:cx-92,y:cy,width:184,height:250,rx:14},clip);
+  const g=el("g",{"clip-path":`url(#c${i})`},svg); el("rect",{x:cx-92,y:cy,width:184,height:250,fill:i%2?"#FFF2DC":"#FBE8CC"},g);
+  const c=SR.Paper(g,Object.assign({},[ANA,YOU,MO,KAI][i%4],{scale:1.0,x:[[0,cx]],y:[[0,cy+505]],facing:[[0,1]],noWalk:true,pose:[[0,"relaxed",0]],mood:[[0,m,0]],look:[[0,{x:0,y:0}]]})); c.update(0.4+i*0.37);
+  lab(cx,cy+238,m.toUpperCase(),20); });
+// poses, with a bench for the sitting ones and the joint checker
+const PS=Object.keys(SR.PAPER_POSES); lab(960,660,"POSES (joint checker below each)",26);
+PS.forEach((p,i)=>{ const x=50+i*87, y=1040, k=0.42; el("line",{x1:x-40,y1:y,x2:x+40,y2:y,stroke:"#b59b78","stroke-width":2},svg);
+  if(/^sit/.test(p)){ el("rect",{x:x-40,y:y-(56+4+10)*k*1-14,width:80,height:14,rx:5,fill:"#8B5E3C",filter:"url(#pshadow2)"},svg); }
+  const c=SR.Paper(svg,Object.assign({},[YOU,ANA][i%2],{scale:k,x:[[0,x]],y:[[0,y]],facing:[[0,i%3?1:-1]],noWalk:true,pose:[[0,p,0]],mood:[[0,"happy",0]],look:[[0,{x:0,y:0}]]})); c.update(0.5);
+  const iss=c.check(y); if(iss.length) issues.push(p+": "+iss.join("; ")); lab(x,y+22,p,13); if(iss.length) lab(x,y+36,"!",16); });
+SR.paperGrain(svg); window.__ISSUES=issues;
+</script></body></html>

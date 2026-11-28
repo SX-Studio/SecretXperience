@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js" integrity="sha384-sG0Hv1tP1lZCk9KQmrIbY/XNwi+OY84GQqhMscbnsoBFqAz8KNCil1kvfL3Hbbk2" crossorigin="anonymous"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #1A1510;
+      }
+      .scene {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+      #el-banner { z-index: 50; }
+      #el-captions { z-index: 60; }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="29.244"
+      data-width="1080"
+      data-height="1920"
+    >
+      <div
+        id="el-01-hook"
+        class="scene"
+        data-composition-id="01-hook"
+        data-composition-src="compositions/frames/01-hook.html"
+        data-start="0"
+        data-duration="3.749"
+        data-track-index="0"
+      ></div>
+      <audio
+        id="el-01-hook-voice"
+        src="assets/voice/01.wav"
+        data-start="0"
+        data-duration="3.749"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-02-speed"
+        class="scene"
+        data-composition-id="02-speed"
+        data-composition-src="compositions/frames/02-speed.html"
+        data-start="3.749"
+        data-duration="7.603"
+        data-track-index="1"
+      ></div>
+      <audio
+        id="el-02-speed-voice"
+        src="assets/voice/02.wav"
+        data-start="3.749"
+        data-duration="7.603"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-03-ghost"
+        class="scene"
+        data-composition-id="03-ghost"
+        data-composition-src="compositions/frames/03-ghost.html"
+        data-start="11.352"
+        data-duration="3.647"
+        data-track-index="0"
+      ></div>
+      <audio
+        id="el-03-ghost-voice"
+        src="assets/voice/03.wav"
+        data-start="11.352"
+        data-duration="3.147"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-04-american-cheetah"
+        class="scene"
+        data-composition-id="04-american-cheetah"
+        data-composition-src="compositions/frames/04-american-cheetah.html"
+        data-start="14.499"
+        data-duration="9.618"
+        data-track-index="1"
+      ></div>
+      <audio
+        id="el-04-american-cheetah-voice"
+        src="assets/voice/04.wav"
+        data-start="14.499"
+        data-duration="9.118"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div
+        id="el-05-loop"
+        class="scene"
+        data-composition-id="05-loop"
+        data-composition-src="compositions/frames/05-loop.html"
+        data-start="23.617"
+        data-duration="5.627"
+        data-track-index="0"
+      ></div>
+      <audio
+        id="el-05-loop-voice"
+        src="assets/voice/05.wav"
+        data-start="23.617"
+        data-duration="5.627"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <!-- captions -->
+      <div
+        id="el-banner"
+        class="scene"
+        data-composition-id="banner"
+        data-composition-src="compositions/banner.html"
+        data-start="0"
+        data-duration="29.244"
+        data-track-index="3"
+      ></div>
+      <div
+        id="el-captions"
+        data-track-kind="captions"
+        class="scene"
+        data-composition-id="captions"
+        data-composition-src="compositions/captions.html"
+        data-start="0"
+        data-duration="29.244"
+        data-track-index="2"
+      ></div>
+
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+      // ── frame transitions (injected by transitions.mjs) ──
+      (function () { var tl = window.__timelines["main"];
+        tl.to("#el-03-ghost", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 14.499);
+        tl.fromTo("#el-04-american-cheetah", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 14.499);
+        tl.addLabel("hf:transition:03-ghost:04-american-cheetah:crossfade", 14.499);
+        tl.to("#el-04-american-cheetah", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 23.617);
+        tl.fromTo("#el-05-loop", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 23.617);
+        tl.addLabel("hf:transition:04-american-cheetah:05-loop:crossfade", 23.617);
+        tl.to({}, { duration: 29.244 }, 0); // full-span anchor — main.duration() == composition total (Studio master duration)
+      })();
+    </script>
+  </body>
+</html>

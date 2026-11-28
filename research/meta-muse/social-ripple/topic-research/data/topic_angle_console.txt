@@ -1,0 +1,93 @@
+== topic_rank: base outlier rate 17.5% of 4385
+Intelligence/IQ                        all= 124 out= 39 5x= 27 rate= 31.5% lift=1.79 medM= 1.38 W= 147.7 BAL= 92.6 ch=15
+Parenting/Kids                         all= 189 out= 65 5x= 48 rate= 34.4% lift=1.96 medM= 1.38 W= 221.1 BAL= 72.8 ch=14
+Love                                   all=  87 out= 23 5x= 17 rate= 26.4% lift=1.51 medM= 1.08 W=  78.7 BAL= 54.5 ch=9
+Rules/Norms                            all=  54 out= 17 5x= 13 rate= 31.5% lift= 1.8 medM= 1.17 W=  56.3 BAL= 54.1 ch=11
+Money (personal)                       all= 189 out= 23 5x= 12 rate= 12.2% lift=0.69 medM= 1.04 W=  58.3 BAL= 45.1 ch=12
+History/Empires                        all= 119 out= 19 5x=  9 rate= 16.0% lift=0.91 medM=  1.0 W=  49.7 BAL= 42.6 ch=11
+Crowds/Mass behaviour                  all=  52 out= 15 5x= 11 rate= 28.8% lift=1.64 medM= 1.23 W=  49.2 BAL= 42.1 ch=8
+Respect/Status                         all=  89 out= 17 5x= 12 rate= 19.1% lift=1.09 medM= 0.99 W=  56.0 BAL= 39.8 ch=7
+Loneliness                             all=  40 out= 12 5x=  7 rate= 30.0% lift=1.71 medM= 1.18 W=  39.0 BAL= 39.0 ch=8
+Personality                            all=  55 out= 19 5x= 17 rate= 34.5% lift=1.97 medM= 2.12 W=  67.4 BAL= 38.8 ch=6
+Home/Interior (lifestyle)              all= 137 out= 51 5x= 35 rate= 37.2% lift=2.12 medM= 1.75 W= 183.4 BAL= 36.8 ch=6
+Sadness/Depression                     all=  72 out= 12 5x=  7 rate= 16.7% lift=0.95 medM= 1.06 W=  39.8 BAL= 36.2 ch=8
+Habits/Routine                         all=  78 out= 18 5x= 12 rate= 23.1% lift=1.32 medM= 1.39 W=  54.2 BAL= 35.7 ch=8
+Sleep/Dreams                           all=  50 out= 14 5x= 11 rate= 28.0% lift= 1.6 medM=  0.9 W=  52.6 BAL= 35.1 ch=6
+Countries/Geopolitics                  all= 192 out= 28 5x=  8 rate= 14.6% lift=0.83 medM= 1.04 W=  61.5 BAL= 33.6 ch=9
+Discipline                             all=  19 out=  7 5x=  4 rate= 36.8% lift= 2.1 medM=  0.9 W=  32.2 BAL= 32.2 ch=5
+Addiction                              all=  34 out=  9 5x=  7 rate= 26.5% lift=1.51 medM= 1.56 W=  32.1 BAL= 32.1 ch=6
+Silence/Quiet                          all=  36 out=  8 5x=  6 rate= 22.2% lift=1.27 medM= 1.11 W=  32.1 BAL= 32.1 ch=7
+Generations                            all=  37 out= 10 5x=  9 rate= 27.0% lift=1.54 medM= 0.99 W=  50.2 BAL= 31.7 ch=3
+Inflation/Prices                       all=  45 out= 11 5x=  5 rate= 24.4% lift=1.39 medM= 0.91 W=  31.6 BAL= 31.6 ch=8
+Trauma/Childhood                       all=  40 out= 13 5x= 10 rate= 32.5% lift=1.85 medM= 0.98 W=  42.8 BAL= 31.5 ch=5
+Lust/Desire                            all=  39 out= 16 5x=  9 rate= 41.0% lift=2.34 medM= 2.19 W=  44.6 BAL= 31.3 ch=7
+Procrastination/Laziness               all=  81 out= 15 5x=  8 rate= 18.5% lift=1.06 medM= 0.89 W=  42.2 BAL= 30.8 ch=6
+Social media/Internet                  all=  54 out= 12 5x=  5 rate= 22.2% lift=1.27 medM= 0.94 W=  33.3 BAL= 29.2 ch=7
+Introvert/Staying home                 all=  27 out=  8 5x=  7 rate= 29.6% lift=1.69 medM= 0.86 W=  35.6 BAL= 28.5 ch=5
+Effects/biases (named)                 all=  34 out=  9 5x=  7 rate= 26.5% lift=1.51 medM= 1.25 W=  30.9 BAL= 28.3 ch=6
+Narcissism/Dark traits                 all=  83 out= 20 5x= 13 rate= 24.1% lift=1.37 medM= 1.47 W=  58.7 BAL= 25.2 ch=4
+Kindness/Nice people                   all=  17 out=  9 5x=  7 rate= 52.9% lift=3.02 medM= 3.16 W=  28.7 BAL= 23.9 ch=5
+Overthinking                           all=  25 out= 11 5x= 10 rate= 44.0% lift=2.51 medM= 2.25 W=  45.3 BAL= 22.8 ch=3
+Dating/Attraction                      all=  48 out= 14 5x= 12 rate= 29.2% lift=1.66 medM= 1.08 W=  37.9 BAL= 22.6 ch=5
+Death/Mortality                        all=  52 out=  9 5x=  6 rate= 17.3% lift=0.99 medM= 0.98 W=  26.3 BAL= 21.5 ch=6
+Lying/Trust                            all=  41 out=  9 5x=  6 rate= 22.0% lift=1.25 medM= 1.06 W=  33.3 BAL= 20.3 ch=4
+Economy/Crisis                         all= 157 out= 14 5x=  3 rate=  8.9% lift=0.51 medM= 1.01 W=  28.1 BAL= 19.7 ch=5
+Stress/Burnout                         all=  31 out=  6 5x=  5 rate= 19.4% lift= 1.1 medM=  1.1 W=  19.5 BAL= 19.5 ch=4
+Charisma                               all=  29 out= 10 5x=  9 rate= 34.5% lift=1.97 medM= 1.58 W=  32.2 BAL= 19.3 ch=3
+Consciousness/Reality                  all=  61 out= 19 5x= 11 rate= 31.1% lift=1.78 medM= 1.17 W=  52.1 BAL= 19.1 ch=4
+Dopamine                               all=  19 out=  7 5x=  6 rate= 36.8% lift= 2.1 medM= 1.58 W=  25.2 BAL= 18.8 ch=4
+Social experiments                     all=  32 out=  9 5x=  6 rate= 28.1% lift= 1.6 medM= 2.02 W=  22.8 BAL= 18.2 ch=4
+Confidence                             all=  24 out=  5 5x=  4 rate= 20.8% lift=1.19 medM=  0.9 W=  17.7 BAL= 17.7 ch=3
+Conversation/Social skills             all=  38 out= 10 5x=  9 rate= 26.3% lift= 1.5 medM= 1.11 W=  31.6 BAL= 16.6 ch=4
+Friendship                             all=  36 out=  7 5x=  3 rate= 19.4% lift=1.11 medM= 0.82 W=  16.4 BAL= 16.4 ch=6
+Work/Jobs                              all=  77 out=  8 5x=  4 rate= 10.4% lift=0.59 medM= 0.84 W=  19.8 BAL= 15.6 ch=4
+Anger                                  all=  19 out=  4 5x=  3 rate= 21.1% lift= 1.2 medM= 0.89 W=  15.1 BAL= 15.1 ch=3
+Stoicism/Letting go                    all=  85 out= 15 5x= 11 rate= 17.6% lift=1.01 medM=  0.9 W=  42.7 BAL= 14.3 ch=4
+Scams/Fraud                            all=  24 out=  5 5x=  4 rate= 20.8% lift=1.19 medM= 0.88 W=  14.1 BAL= 14.1 ch=4
+Empathy/Sensitivity                    all=  16 out=  4 5x=  2 rate= 25.0% lift=1.43 medM= 1.25 W=  14.7 BAL= 13.0 ch=2
+Poverty/Inequality                     all=  20 out=  5 5x=  3 rate= 25.0% lift=1.43 medM=  1.5 W=  15.3 BAL= 13.0 ch=3
+Cities/Housing market                  all=  36 out=  7 5x=  0 rate= 19.4% lift=1.11 medM= 1.62 W=  13.8 BAL= 12.0 ch=4
+Ego                                    all=   6 out=  3 5x=  3 rate= 50.0% lift=2.85 medM= 5.82 W=  11.6 BAL= 11.6 ch=3
+Happiness/Meaning                      all=  50 out=  6 5x=  2 rate= 12.0% lift=0.68 medM= 0.86 W=  13.1 BAL= 11.5 ch=4
+Anxiety                                all=  22 out=  4 5x=  3 rate= 18.2% lift=1.04 medM= 0.98 W=  10.4 BAL= 10.4 ch=3
+Manipulation                           all=   9 out=  3 5x=  2 rate= 33.3% lift= 1.9 medM= 1.05 W=  10.4 BAL= 10.4 ch=2
+Birth rate/Demographics                all=  19 out=  4 5x=  3 rate= 21.1% lift= 1.2 medM=  1.0 W=  10.4 BAL= 10.4 ch=3
+Tax/Tariffs                            all=  15 out=  4 5x=  1 rate= 26.7% lift=1.52 medM= 1.71 W=   8.2 BAL=  8.2 ch=3
+Envy/Jealousy                          all=   5 out=  3 5x=  2 rate= 60.0% lift=3.42 medM=  4.0 W=   9.9 BAL=  7.9 ch=1
+Tipping/Manners                        all=  20 out=  3 5x=  1 rate= 15.0% lift=0.86 medM= 0.91 W=   6.6 BAL=  6.6 ch=3
+Capitalism/Socialism/Systems           all=  17 out=  3 5x=  0 rate= 17.6% lift=1.01 medM= 1.02 W=   5.9 BAL=  5.9 ch=2
+Shame/Guilt                            all=   6 out=  1 5x=  1 rate= 16.7% lift=0.95 medM= 0.68 W=   3.5 BAL=  3.5 ch=1
+Banks/Bank run                         all=  11 out=  1 5x=  0 rate=  9.1% lift=0.52 medM= 0.86 W=   2.0 BAL=  2.0 ch=1
+Weekend/Work week                      all=   2 out=  1 5x=  0 rate= 50.0% lift=2.85 medM= 2.13 W=   1.9 BAL=  1.9 ch=1
+Fear                                   all=  17 out=  1 5x=  0 rate=  5.9% lift=0.34 medM= 0.74 W=   1.8 BAL=  1.8 ch=1
+== angle_rank: base outlier rate 17.5% of 4385
+The X that Y (object story)            all= 382 out= 78 5x= 48 rate= 20.4% lift=1.16 medM=  1.0 W= 239.8 BAL=141.9 ch=24
+Why …                                  all= 534 out= 67 5x= 40 rate= 12.5% lift=0.72 medM= 0.94 W= 201.9 BAL=115.3 ch=21
+Number list (N things/signs/habits)    all= 347 out= 93 5x= 61 rate= 26.8% lift=1.53 medM= 1.29 W= 296.3 BAL=113.5 ch=16
+Psychology of …                        all= 305 out=107 5x= 86 rate= 35.1% lift= 2.0 medM= 1.07 W= 455.9 BAL= 99.0 ch=12
+How to …                               all= 335 out= 65 5x= 42 rate= 19.4% lift=1.11 medM= 0.94 W= 209.1 BAL= 95.4 ch=17
+Explained                              all= 177 out= 54 5x= 34 rate= 30.5% lift=1.74 medM= 1.12 W= 164.1 BAL= 89.1 ch=16
+Parenthetical promise (… And How To …) all= 137 out= 36 5x= 28 rate= 26.3% lift= 1.5 medM= 1.17 W= 159.9 BAL= 84.2 ch=12
+People who …                           all= 189 out= 55 5x= 41 rate= 29.1% lift=1.66 medM= 0.88 W= 210.8 BAL= 72.4 ch=8
+Hidden / secret / truth                all= 160 out= 31 5x= 16 rate= 19.4% lift= 1.1 medM= 1.08 W=  82.3 BAL= 67.6 ch=15
+Dark / danger / terrifying             all= 190 out= 37 5x= 20 rate= 19.5% lift=1.11 medM= 1.24 W= 109.3 BAL= 66.3 ch=14
+Traits / rare / superpower             all=  53 out= 21 5x= 16 rate= 39.6% lift=2.26 medM= 1.38 W=  72.1 BAL= 57.4 ch=10
+Experiment / study                     all=  53 out= 17 5x= 12 rate= 32.1% lift=1.83 medM= 2.11 W=  64.9 BAL= 55.4 ch=9
+Entire history / everything about      all=  89 out= 19 5x= 12 rate= 21.3% lift=1.22 medM= 1.05 W=  54.5 BAL= 54.5 ch=15
+Philosopher / thinker frame            all= 250 out= 68 5x= 40 rate= 27.2% lift=1.55 medM= 1.36 W= 188.9 BAL= 53.3 ch=9
+Every … / Every type                   all= 117 out= 29 5x= 15 rate= 24.8% lift=1.41 medM=  1.0 W=  88.3 BAL= 51.2 ch=10
+Named effect / theory / law            all= 131 out= 44 5x= 30 rate= 33.6% lift=1.92 medM= 1.71 W= 137.9 BAL= 50.6 ch=7
+How …(mechanism)                       all=  84 out= 19 5x= 10 rate= 22.6% lift=1.29 medM= 1.17 W=  47.3 BAL= 43.4 ch=11
+Money angle (keeps you poor / makes mo all=  85 out= 19 5x= 10 rate= 22.4% lift=1.27 medM= 1.19 W=  51.7 BAL= 43.2 ch=11
+Signs …                                all=  79 out= 18 5x=  9 rate= 22.8% lift= 1.3 medM= 1.34 W=  55.0 BAL= 39.6 ch=8
+Country / place                        all= 191 out= 27 5x=  8 rate= 14.1% lift=0.81 medM= 1.03 W=  59.4 BAL= 33.6 ch=9
+Generational label                     all=  30 out=  9 5x=  9 rate= 30.0% lift=1.71 medM= 0.98 W=  48.5 BAL= 29.9 ch=2
+Levels / stages / tiers                all=  43 out= 11 5x=  9 rate= 25.6% lift=1.46 medM= 1.28 W=  35.5 BAL= 29.8 ch=6
+So X it … (hyperbole)                  all=  15 out=  8 5x=  8 rate= 53.3% lift=3.04 medM=11.58 W=  52.0 BAL= 25.5 ch=2
+Mistake(s)                             all=  58 out= 11 5x=  6 rate= 19.0% lift=1.08 medM= 0.88 W=  28.5 BAL= 20.6 ch=6
+Animated short film (ONE WORD)         all=  14 out=  4 5x=  3 rate= 28.6% lift=1.63 medM=  0.5 W=  15.1 BAL= 15.1 ch=2
+Paradox                                all=  31 out=  7 5x=  6 rate= 22.6% lift=1.29 medM= 1.71 W=  21.8 BAL= 13.8 ch=3
+Explained like you're 5 / with an obje all=  33 out=  6 5x=  2 rate= 18.2% lift=1.04 medM=  1.0 W=  15.1 BAL= 13.5 ch=3
+What happens when/to                   all=  23 out=  6 5x=  2 rate= 26.1% lift=1.49 medM= 1.93 W=  15.2 BAL= 13.5 ch=4
+What if                                all=  28 out=  5 5x=  3 rate= 17.9% lift=1.02 medM= 1.31 W=  14.8 BAL= 11.2 ch=2
+I tried / I spent (value concentration all=   7 out=  4 5x=  3 rate= 57.1% lift=3.26 medM= 3.13 W=  12.6 BAL= 11.0 ch=2

@@ -1,0 +1,17 @@
+<!doctype html><html><head><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@900&display=swap" rel="stylesheet">
+<script src="assets/sr-engine-v1.js"></script><script src="assets/sr-v3.js"></script><script src="studio.js"></script><script src="face5.js"></script>
+<style>*{margin:0;padding:0}body{width:1280px;height:720px;overflow:hidden;background:#1E1B22}svg{position:absolute;inset:0}</style></head>
+<body><svg id="art" viewBox="0 0 1280 720"></svg><script>
+const svg=document.getElementById('art'); TS.defs(svg); const {el}=SR;
+const L={mo:{color:"#E8834A",outfit:"apron",hair:"short",hairColor:"#3A2A22",pants:"#3A4A63",seed:7},ana:{color:"#3FA7A0",outfit:"tee",hair:"bun",hairColor:"#5A3A2A",pants:"#2E7A74",seed:5},
+ theo:{color:"#8A93A6",outfit:"hoodie",hair:"short",hairColor:"#6A4A3A",pants:"#3A4050",seed:21},kai:{color:"#FF8A2A",outfit:"jacket",hair:"cap",hairColor:"#E0B020",pants:"#3A4A63",seed:6},
+ bea:{skin:"ink",color:"#F2C14E",outfit:"apron",hair:"ponytail",hairColor:"#1E1B22",pants:"#6A4A8A",seed:4},finn:{color:"#F4C430",outfit:"coat",hair:"cap",hairColor:"#2E4A6A",pants:"#3A4A63",seed:11},
+ nia:{skin:"ink",color:"#E8634A",outfit:"jacket",hair:"curly",hairColor:"#1E1B22",pants:"#2E3A5A",seed:9},you:{color:"#6C5CE7",outfit:"tee",hair:"short",hairColor:"#1E1B22",pants:"#2E3A5A",seed:51}};
+const S=[["laugh","mo","#FFC93C"],["cheeky","finn","#7DE0B0"],["smug","kai","#FF9E6B"],["shock","you","#FF6B6B"],["grin","theo","#8FD3FF"],["skeptic","nia","#C9B6FF"],
+ ["angry","kai","#FF5A5A"],["worried","theo","#9FB4E8"],["kiss","bea","#FF9FC4"],["wail","bea","#6F8FD6"],["forced","ana","#8FA0FF"],["bliss","ana","#FFD68A"]];
+S.forEach(([ex,who,col],i)=>{ const cx=107+(i%6)*213, cy=180+Math.floor(i/6)*360, k=2.15;
+  const clip=el("clipPath",{id:"c"+i},svg.querySelector("defs")); el("rect",{x:cx-100,y:cy-172,width:200,height:344,rx:18},clip);
+  const g=el("g",{"clip-path":`url(#c${i})`},svg); el("rect",{x:cx-100,y:cy-172,width:200,height:344,fill:col},g);
+  const c=TS.char(g,L[who],{id:"f"+i,x:cx-15,y:cy+262*k+5,scale:k,mood:"neutral",pose:"relaxed",facing:1}); TS.face5(c,ex);
+  el("text",{x:cx-88,y:cy+160,"font-family":"Outfit","font-weight":900,"font-size":24,fill:"#fff",stroke:"#1E1B22","stroke-width":6,"paint-order":"stroke"},svg).textContent=ex.toUpperCase(); });
+</script></body></html>

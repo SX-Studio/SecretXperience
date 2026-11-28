@@ -1,0 +1,60 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #s2-svg { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+    #s2-svg text { font-family: "Outfit"; }
+  </style>
+  <div id="root" data-composition-id="s2" data-width="1920" data-height="1080">
+    <svg id="s2-svg" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" data-layout-ignore></svg>
+  </div>
+  <script>
+    (function () {
+      const SR = window.SR; const { el, Set, Butterfly, Camera, PAL, EASE, clamp, sampleTrack, drive } = SR;
+      const svg = document.getElementById("s2-svg");
+      const world = el("g", {}, svg);
+      const bg = el("g", {}, world), txt = el("g", {}, world), fx = el("g", {}, world);
+      const G = 980;
+      Set.sky(bg, "morning", 1920, 1080);
+      Set.sun(bg, 1700, 140, 80);
+      Set.building(bg, -60, 520, 520, G, PAL.sage, { cols: 3 });
+      Set.shopfront(bg, 520, 900, G, PAL.terracotta, "THE DAILY GRIND", { awning: PAL.teal });
+      Set.building(bg, 1420, 560, 540, G, PAL.slate, { cols: 3 });
+      el("rect", { x: 0, y: G, width: 1920, height: 100, fill: PAL.walk }, bg);
+      // title words: each drops in on its spoken word
+      const words = [
+        { s: "THE", x: 560, y: 210, size: 96, t: 1.05, c: PAL.ink },
+        { s: "BUTTERFLY", x: 1000, y: 210, size: 132, t: 1.25, c: PAL.ink },
+        { s: "EFFECT", x: 1480, y: 210, size: 132, t: 1.95, c: PAL.ink },
+        { s: "OF A BAD MOOD", x: 960, y: 370, size: 120, t: 2.5, c: PAL.rude },
+      ];
+      const W = words.map((w) => {
+        const g = el("g", { opacity: 0 }, txt);
+        const t = el("text", { x: 0, y: 0, "text-anchor": "middle", "dominant-baseline": "central", "font-family": "Outfit", "font-weight": 900, "font-size": w.size, fill: w.c, "letter-spacing": "-3" }, g);
+        t.textContent = w.s; return Object.assign({ g }, w);
+      });
+      // nudge horizontal layout after measuring
+      try { let x = 960; const line = W.slice(0, 3); const widths = line.map((w) => w.g.firstChild.getComputedTextLength()); const total = widths.reduce((a, b) => a + b, 0) + 34 * 2; let cx = 960 - total / 2; line.forEach((w, i) => { w.x = cx + widths[i] / 2; cx += widths[i] + 34; }); } catch (e) {}
+      // red scribble under "BAD MOOD"
+      const scrib = el("path", { d: "M740,442 C860,462 1000,420 1110,448 S1290,462 1330,438", fill: "none", stroke: PAL.rude, "stroke-width": 12, "stroke-linecap": "round", "stroke-dasharray": "0 2000" }, txt);
+      // the butterfly: flies a loop and lands on the title
+      const bf = Butterfly(fx, { x: [[0, -80], [1.0, 420], [1.8, 760], [2.6, 1240], [3.3, 1190], [3.7, 1165, "out"]], y: [[0, 760], [1.0, 640], [1.8, 520], [2.6, 120], [3.3, 230], [3.7, 268, "out"]],
+        rotT: [[0, -20], [1.8, 10], [3.0, -10], [3.7, 18]], scale: 1.6, flap: 3.4 });
+      const cam = Camera(world, [[0, { x: 960, y: 540, z: 1.0, r: 0 }], [4.6, { x: 960, y: 540, z: 1.05, r: 0 }, "linear"]]);
+      const tl = gsap.timeline({ paused: true });
+      drive(tl, 4.6, (t) => {
+        cam.update(t);
+        W.forEach((w) => {
+          const k = clamp((t - w.t) / 0.32, 0, 1);
+          w.g.setAttribute("opacity", t >= w.t ? 1 : 0);
+          const dy = (1 - EASE.back(k)) * -260, sq = k > 0.6 && k < 1 ? 1 - Math.sin(((k - 0.6) / 0.4) * Math.PI) * 0.12 : 1;
+          w.g.setAttribute("transform", `translate(${w.x},${w.y + dy}) scale(${2 - sq},${sq})`);
+        });
+        const ks = clamp((t - 2.95) / 0.5, 0, 1);
+        scrib.setAttribute("stroke-dasharray", `${ks * 720} 2000`); scrib.setAttribute("opacity", ks > 0 ? 1 : 0);
+        // butterfly flaps slower once landed
+        bf.update(t);
+      });
+      window.__timelines["s2"] = tl;
+    })();
+  </script>
+</template>

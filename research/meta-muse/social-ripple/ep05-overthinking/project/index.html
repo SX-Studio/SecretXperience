@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script src="assets/three.min.js"></script>
+    <script src="assets/sr-engine-v1.js"></script>
+    <script src="assets/sr-v3.js"></script>
+    <script src="assets/lips.js"></script>
+    <script src="assets/ep2-sets.js"></script>
+    <script src="assets/t.js"></script>
+    <script src="assets/sr3d.js"></script>
+    <script src="assets/sr-type.js"></script>
+    <script src="assets/sr-fx3d.js"></script>
+    <script src="assets/ep3-kit.js"></script>
+    <script src="assets/ep3-town.js"></script>
+    <script src="assets/ep3-interiors.js"></script>
+    <script src="assets/ep3-props.js"></script>
+    <script src="assets/ep4-kit.js"></script>
+    <script src="assets/ep5-kit.js"></script>
+    <script src="assets/ep5-props.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #0B0A12; }
+      #root { width: 1920px; height: 1080px; position: relative; overflow: hidden; background: #0B0A12; }
+      #bg, #ov, #hud { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; display: block; }
+      #vig { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; background: radial-gradient(ellipse 66% 62% at 50% 50%, rgba(18,12,26,0) 62%, rgba(18,12,26,0.5) 100%); }
+      #fontwarm { position: absolute; left: -9999px; top: 0; font-family: "Outfit"; font-weight: 900; }
+      #fontwarm b { font-family: "Nunito"; font-weight: 900; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="199.42" data-width="1920" data-height="1080">
+      <div id="fontwarm" data-layout-ignore>Aa 0123 $ <b>Aa 0123</b></div>
+      <canvas id="bg" width="1920" height="1080" data-layout-ignore></canvas>
+      <svg id="ov" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" data-layout-ignore></svg>
+      <div id="vig" data-layout-ignore></div>
+      <svg id="hud" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" data-layout-ignore></svg>
+      <audio id="mix" class="clip" src="assets/mix.wav" data-start="0" data-duration="199.42" data-track-index="2" data-volume="1"></audio>
+    </div>
+    <script src="assets/ep5-story.js"></script>
+  </body>
+</html>
