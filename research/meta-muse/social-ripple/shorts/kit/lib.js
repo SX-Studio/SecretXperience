@@ -57,6 +57,19 @@
       for (let r = 1; r < rows; r++) I.path(p, `M${x},${y + r * cw} h${cols * cw}`, at + 0.25 + r * 0.02, 0.12, { w: 3, silent: true });
       marks.forEach(([i, t, col]) => { const c = i % cols, r = Math.floor(i / cols), a = x + c * cw + cw * 0.2, b = y + r * cw + cw * 0.2, w = cw * 0.6;
         I.path(p, `M${a},${b} l${w},${w} M${a + w},${b} l${-w},${w}`, t, 0.12, { w: 7, color: col || RED, silent: i % 3 > 0 }); }); };
+    // ---- character-highlight helpers (long-form and Shorts)
+    // name plate: black slanted plate with the character's name or epithet in yellow, optional handwritten sub line
+    L.plate = (p, x, y, name, at, o = {}) => { const fs = o.size || 56, W2 = name.length * fs * 0.52 + 64, g = el("g", { opacity: 0 }, p); el("path", { d: `M${x - W2 / 2 + 12},${y - fs * 0.8} H${x + W2 / 2 + 14} L${x + W2 / 2 - 12},${y + fs * 0.42} H${x - W2 / 2 - 14} Z`, fill: "#0D0D0D", stroke: "#F2C230", "stroke-width": 5, "stroke-linejoin": "round" }, g);
+      const e = el("text", { x, y, "text-anchor": "middle", "font-family": "Anton", "font-size": fs, fill: "#F2C230", "letter-spacing": 3 }, g); e.textContent = name;
+      if (o.sub) { const s2 = el("text", { x, y: y + fs * 1.25, "text-anchor": "middle", "font-family": "Caveat", "font-weight": 700, "font-size": fs * 0.86, fill: INKC }, g); s2.textContent = o.sub; }
+      I.fill(p, g, at, 0.15, { sound: "slap" }); return g; };
+    // manga burst behind a character; returns an updater that turns it slowly
+    L.burst = (p, cx, cy, r0, r1, at, o = {}) => { const n = o.n || 22, g = el("g", { opacity: 0 }, p), gi = el("g", {}, g); for (let i = 0; i < n; i++) { const a = (i / n) * Math.PI * 2, w = (Math.PI / n) * (i % 2 ? 0.5 : 0.85), q = (r, d) => `${(cx + Math.cos(a + d) * r).toFixed(1)},${(cy + Math.sin(a + d) * r).toFixed(1)}`; el("path", { d: `M${q(r0, 0)} L${q(r1, -w / 2)} L${q(r1, w / 2)} Z`, fill: o.col || "#F2C230" }, gi); }
+      I.fill(p, g, at, 0.2, { sound: false }); g.setAttribute("data-op", o.op ?? 0.34); return (t) => { gi.setAttribute("transform", `rotate(${(t * 6).toFixed(2)} ${cx} ${cy})`); gi.setAttribute("opacity", o.op ?? 0.34); }; };
+    // flame-shaped energy aura behind a character; returns { g, update(t) }; visible between on and off
+    L.aura = (p, cx, fy, w, h, col, on, off = 1e9) => { const g = el("g", { opacity: 0 }, p), fl = (ww, hh) => `M${cx - ww / 2},${fy} Q${cx - ww * 0.72},${fy - hh * 0.5} ${cx - ww * 0.26},${fy - hh * 0.74} Q${cx - ww * 0.3},${fy - hh * 0.95} ${cx},${fy - hh} Q${cx + ww * 0.3},${fy - hh * 0.95} ${cx + ww * 0.26},${fy - hh * 0.74} Q${cx + ww * 0.72},${fy - hh * 0.5} ${cx + ww / 2},${fy} Z`;
+      el("path", { d: fl(w, h), fill: col, opacity: 0.42 }, g); el("path", { d: fl(w * 0.72, h * 0.86), fill: "#FFFFFF", opacity: 0.4 }, g);
+      return { g, update: (t) => { const v = t >= on && t < off, k = clamp((t - on) / 0.25, 0, 1); g.setAttribute("opacity", v ? k : 0); if (v) g.setAttribute("transform", `translate(${cx},${fy}) scale(${(1 + 0.05 * Math.sin(t * 13)).toFixed(3)},${(0.9 + 0.1 * k + 0.07 * Math.sin(t * 17 + 1)).toFixed(3)}) translate(${-cx},${-fy})`); } }; };
     return L;
   };
 })();
