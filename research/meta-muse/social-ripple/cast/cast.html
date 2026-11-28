@@ -13,7 +13,7 @@ document.fonts.ready.then(() => {
   if (mode === "sheet") {
     [["nia", 300, "wave", "smile"], ["kai", 780, "fist", "determined"], ["mo", 1260, "stand", "neutral"], ["rue", 1700, "cheer", "grin"]].forEach(([n, x, p, f]) => { const h = C.make(g, n, x, 960, 1.0, 0); h.key(0, p, 0).face(0, f); hs.push(h); lab(n[0].toUpperCase() + n.slice(1), x, 1050); });
   } else if (mode === "anime") {
-    [["naruto", 260, "fist", "grin", "goggles"], ["naruto", 660, "stand", "smile", "band"], ["iruka", 1060, "stand", "smile", "band"], ["gaara", 1440, "stand", "neutral", ""], ["haku", 1760, "stand", "smile", ""]].forEach(([n, x, p, f, a]) => { const h = C.make(g, n, x, 940, n === "iruka" ? 1.05 : 0.95, 0); h.key(0, p, 0).face(0, f); if (a) h.acc(0, a); hs.push(h); lab(n[0].toUpperCase() + n.slice(1), x, 1040); });
+    [["naruto", 220, "fist", "grin", "goggles"], ["naruto", 560, "stand", "smile", "band"], ["iruka", 960, "stand", "smile", "band"], ["gaara", 1380, "stand", "neutral", ""], ["haku", 1640, "stand", "smile", "mask"], ["haku", 1820, "stand", "smile", "none"]].forEach(([n, x, p, f, a]) => { const h = C.make(g, n, x, 940, n === "iruka" ? 1.05 : 0.95, 0); h.key(0, p, 0).face(0, f); if (a) h.acc(0, a); hs.push(h); lab(n[0].toUpperCase() + n.slice(1), x, 1040); });
   } else {
     const a = C.make(g, "kai", 500, 900, 1.0, 0); a.key(0, "pushUp", 0).face(0, "determined"); hs.push(a);
     const b = C.make(g, "kai", 1300, 900, 1.0, 0); b.key(0, "pushDown", 0).face(0, "strain"); hs.push(b);

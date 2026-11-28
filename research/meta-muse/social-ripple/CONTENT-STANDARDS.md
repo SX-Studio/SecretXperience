@@ -43,6 +43,7 @@ Working assumption: the algorithm shows people what they're thinking about. Ever
 
 ## 6b. Characters: who appears when
 - **Anime characters when the lesson references them.** When the narration is telling an anime moment, that anime's characters are on screen, drawn and animated in our own style with accurate signature details (hair, eyes, outfit, marks, props, and canon touches such as Naruto's goggles before he earns the headband). Check every detail against references first; a fan must never think "that doesn't look like him".
+- **Continuity is absolute.** Each anime character has one locked model sheet (saved in `cast/`) that matches canon: correct outfit, colours, accessories and marks for the era or scene being referenced (for example Haku's hunter-nin mask, green haori and bun holder; Naruto's goggles before the headband). The same design is reused in every episode, Short and cover. Check the model sheet against references before first use, and never improvise colours or outfits.
 - **The Social Ripple crew for everything else:** hosting, the viewer's own situations, study explanations, conclusions, summaries, the small step and the outro. Nia, Kai, Mo and Rue have common hairstyles and current streetwear so viewers see themselves in them.
 - **Story-specific extras** are created per episode as needed.
 - **All drawn by us:** no official art, screenshots, footage, logos or soundtrack. Plot is told in our own words; no dialogue quoted beyond a few words.
@@ -77,7 +78,7 @@ Working assumption: the algorithm shows people what they're thinking about. Ever
 - [ ] Each lesson has a one-sentence core truth that gets its own moment?
 - [ ] Ends on a better next thought + a comment prompt asking for their version?
 - [ ] Cover = relatable situation + body sensation + mystery + specific number?
-- [ ] Anime characters when referenced (details checked), crew for conclusions; always alive; correct anatomy; actions matching the narration?
+- [ ] Anime characters when referenced, matching their locked canon model sheets (outfit, colours, accessories); crew for conclusions; always alive; correct anatomy; actions matching the narration?
 - [ ] Camera never still; new move at least every ~4 s (1.5–2.5 s in Shorts); punch-ins on key words; push-in on the core truth?
 - [ ] (Shorts) first frame = cover, hook < 2 s, 20–30 s, loops?
 - [ ] No shame or fear-bait; suggestions labelled as ours; care line on heavy topics?
