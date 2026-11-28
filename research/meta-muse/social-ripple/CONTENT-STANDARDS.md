@@ -70,6 +70,15 @@ Some viewers come for the anime first, so every episode and Short gives them a r
   - bold two-word captions over the scene;
   - a character highlight in the first half (see 6c).
   This is a hypothesis, not a finding. Judge it on Studio's "viewed vs. swiped away" for the One Piece Shorts against the earlier ones, then keep it, change it or drop it.
+- **Shorts rulebook (YouTube Studio guidance, 2026-11-28).** Baseline: Shorts average 44.7% "viewed vs. swiped away" (habit Short 45.8%, ice-water Short 43.5%). Target 75%+, which Studio calls ambitious. Every new Short follows these:
+  1. **No warm-up.** Start mid-action on the provocative line. No scene-setting, greeting or slow draw-on.
+  2. **Audio and picture say the same thing at frame zero.** The on-screen hook is the spoken hook, three to five words, large, high contrast, centred.
+  3. **Lead with tension about the viewer**, as a question or a belief turned upside down, not with background ("Someone is better than you.", not "In Dragon Ball Z, Vegeta...").
+  4. **Open loop.** In the first five seconds raise a question that is only answered in the final seconds. If the answer arrives at second ten, they leave at second ten.
+  5. **A visual change every 2 to 3 seconds:** character cutaway, moving key-word text, punch-in or angle change.
+  6. **Trim every breath.** Gaps between narration lines of about 0.12 s, voice a little faster, no trailing silence.
+  7. **No exit signals.** No "so", "that's why", "in conclusion", "remember". Deliver the punchline and end.
+  8. **Seamless loop.** The last sentence runs grammatically into the first one, with no bridge phrase, and the picture is back on the first frame.
 - **Improve forward, don't redo.** Lessons from each upload go into the next piece. Published or delivered content is not re-cut, re-rendered or re-issued unless the channel owner asks for that specific piece (owner's instruction, 2026-11-28).
 
 ## 8. Truth and care (guardrails)
@@ -98,7 +107,7 @@ Some viewers come for the anime first, so every episode and Short gives them a r
 - [ ] Cover = relatable situation + body sensation + mystery + specific number?
 - [ ] Anime characters when referenced, matching their locked canon model sheets (outfit, colours, accessories); crew for conclusions; always alive; correct anatomy; actions matching the narration?
 - [ ] Camera never still; new move at least every ~4 s (1.5–2.5 s in Shorts); punch-ins on key words; push-in on the core truth?
-- [ ] (Shorts) first frame = cover (slab headline + tag), close-up scene under it, motion and voice from frame 0, hook question < 2 s, 20–30 s, loops?
+- [ ] (Shorts) first frame = cover (slab headline + tag); spoken hook = on-screen hook (3–5 words) at frame 0; open loop answered only at the end; change every 2–3 s; gaps trimmed; no exit-signal phrases; last sentence runs into the first; 20–30 s?
 - [ ] Anime characters highlighted: an iconic line, signature pose or moment, and a name plate, all checked against the source?
 - [ ] No shame or fear-bait; suggestions labelled as ours; care line on heavy topics?
 - [ ] Own drawings only; no official assets; creators credited?
