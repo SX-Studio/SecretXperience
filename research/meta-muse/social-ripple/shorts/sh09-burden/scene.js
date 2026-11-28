@@ -7,7 +7,7 @@
   const Y0 = Y(0), FL0 = Y0 + 300; N.floor(Y0); N.hook(Y0, ["AFRAID YOU'RE", 138], ["A BURDEN?", 165], "ONE PIECE");
   const far = [[70, 0.52, "#A9A39A"], [170, 0.6, "#8F877A"], [280, 0.52, "#A9A39A"], [372, 0.46, "#B8B0A2"]].map(([x, s, c]) => person(x, FL0, s, -2, c));
   N.ups.push((t) => { const u = t >= S("b5") ? 0 : ease(clamp((t - 0.3) / 2.6, 0, 1)); far.forEach((g) => g.setAttribute("transform", `translate(${(u * 46).toFixed(1)},0)`)); });
-  const robin0 = mk(ink, "robin", 740, FL0, 1.5, -2); robin0.key(0, "cuffed", 0).key(0, { head: 12 }, 0).face(0, "sad").key(0.5, { head: 24 }, 1.0).key(S("b5"), { head: 12 }, 0);
+  const robin0 = mk(ink, "robin", 790, FL0, 1.3, -2); robin0.key(0, "cuffed", 0).key(0, { head: 12 }, 0).face(0, "sad").key(0.5, { head: 24 }, 1.0).key(S("b5"), { head: 12 }, 0);
 
   // ---------- B1: twenty years; the deal ----------
   const Y1 = Y(1), FL1 = Y1 + 300; N.floor(Y1);
