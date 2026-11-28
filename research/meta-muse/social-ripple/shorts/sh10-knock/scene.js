@@ -6,10 +6,12 @@
   const door = (cx, fl) => { el("path", { d: `M${cx - 105},${fl} V${fl - 600} H${cx + 105} V${fl}`, fill: "#FFFDF6", stroke: "#8A5A2B", "stroke-width": 11, "stroke-linejoin": "round" }, ink); el("circle", { cx: cx + 66, cy: fl - 280, r: 13, fill: INKC }, ink); };
 
   // ---------- B0: the hook, in motion from frame 0 — Nami can't knock; Luffy is waiting on the other side ----------
-  const Y0 = Y(0), FLc = Y0 + 640; N.hook2(Y0, ["WAITING TO", 196], ["BE NOTICED?", 172], "ONE PIECE", 230);
+  const Y0 = Y(0), FLc = Y0 + 660;
+  N.burst(850, Y0 + 40, 210, 1050); N.hook(Y0, ["WAITING TO", 166], ["BE NOTICED?", 160], "ONE PIECE");
   el("path", { d: `M375,${FLc} V${FLc - 880} H660 V${FLc}`, fill: "#FFFDF6", stroke: "#8A5A2B", "stroke-width": 14, "stroke-linejoin": "round" }, ink); el("circle", { cx: 612, cy: FLc - 400, r: 18, fill: INKC }, ink);
   const nami0 = mk(ink, "nami", 200, FLc, 1.6, -2); nami0.face(0, "sad").key(0, { aR: -100, eR: -80, head: 10 }, 0).key(0.1, { aR: -134, eR: -60, head: 2 }, 0.4).key(0.9, { aR: -120, eR: -70, head: 6 }, 0.3).key(1.7, { aR: -96, eR: -84, head: 16 }, 0.6).key(S("c5"), { aR: -100, eR: -80, head: 10 }, 0);
-  const luffy0 = mk(ink, "luffy", 850, FLc, 1.6, -2); luffy0.key(0, "arms", 0).face(0, "smile").key(0.6, { head: -8 }, 0.4).key(1.8, { head: 6 }, 0.5).key(S("c5"), { head: 0 }, 0);
+  const luffy0 = mk(ink, "luffy", 850, FLc, 1.6, -2); luffy0.key(0, "arms", 0).face(0, "smile").key(0.6, { head: -8 }, 0.4).face(1.5, "grin").key(1.8, { head: 6 }, 0.5).face(S("c5"), "smile").key(S("c5"), { head: 0 }, 0);
+  L.pop(N.win(1.5, S("c2")), "shishishi!", 800, Y0 - 262, 78, 1.5, INKC, "Caveat", "pop", 6);
 
   // ---------- B1: they knew — but both had to say it ----------
   const Y1 = Y(1), FL1 = Y1 + 300; N.floor(Y1);

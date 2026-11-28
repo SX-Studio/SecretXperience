@@ -1,6 +1,6 @@
 # One Piece Shorts (batch 3): upload kit
 
-Built to the content standards with the new test opening (no title slab, close-up scene, motion and voice from frame 0, the viewer's thought as a question): first frame = cover, 26–30 s, loops, One Piece characters on screen when the story references them, crew for the studies. Facts: `../anime-ep03-one-piece-help/RESEARCH.md`. Long-form these point to: "Why You Can't Ask for Help (One Piece Explains)".
+Built to the content standards with the test opening (slab headline kept; close-up scene, motion and voice from frame 0, the viewer's thought as a question, character highlights): first frame = cover, 26–30 s, loops, One Piece characters on screen when the story references them, crew for the studies. Facts: `../anime-ep03-one-piece-help/RESEARCH.md`. Long-form these point to: "Why You Can't Ask for Help (One Piece Explains)".
 
 | File | Cover | Title |
 |---|---|---|

@@ -50,15 +50,25 @@ Working assumption: the algorithm shows people what they're thinking about. Ever
 - **Rigged and always alive:** breathing, blinking, mouths that move with the voice, side view for walking and floor moves, correct anatomy (hands plant, joints bend the right way).
 - **Motion correlates with the narration:** characters act out what's said, react to on-screen events and shift expression on emotional lines; camera and character move together.
 
+## 6c. Highlight the anime characters (fan moments)
+Some viewers come for the anime first, so every episode and Short gives them a reason to stay:
+- **An iconic line on screen** at the moment it belongs to, a few words at most ("OF COURSE I WILL!", "SAY IT!", "I want to live!", Luffy's "shishishi").
+- **A signature pose or moment**, acted by the rig (Luffy's fists in the air, the hat placed on Nami's head, Sogeking's shot burning the flag).
+- **A name plate** with the character's name or epithet on first appearance ("STRAW HAT LUFFY", "CAT BURGLAR NAMI", Nico Robin "the Devil Child").
+- **A burst behind the character** in the opening so they stand out from the paper.
+- Everything is checked against the source first (line, episode, outfit); a wrong catchphrase is worse than none. Lines stay short and are never the lesson itself: the lesson still comes from the research and the crew.
+
 ## 7. Shorts
 - Hook line under 2 seconds; 20–30 seconds; one idea; last line loops into the first.
 - The referenced anime character in every Short, plus the anime name on screen; each Short voices one thought, and the long video is the full answer.
 - **Opening under test (from 2026-11-28).** Every Short so far has had under 50% "stayed to watch", across different topics, so the shared opening is the suspect. The test format for the first two seconds:
-  - no black title slab: the scene fills the frame, with the character in close-up;
+  - the cover look stays: black headline slab, white and red text, yellow anime tag (the channel owner likes this style; keep it);
+  - under the slab the scene fills the frame, with the anime character in close-up and a burst behind them;
   - the viewer's own thought as a question of four words or fewer, on screen and spoken, with the voice starting on the first frame ("Can't ask for help?");
   - something moving from frame 0 (a hat placed, a head dropping, a hand raised to knock), and a sound hit on the headline;
   - the anime name in the first two seconds;
-  - bold two-word captions over the scene.
+  - bold two-word captions over the scene;
+  - a character highlight in the first half (see 6c).
   This is a hypothesis, not a finding. Judge it on Studio's "viewed vs. swiped away" for the One Piece Shorts against the earlier ones, then keep it, change it or drop it.
 
 ## 8. Truth and care (guardrails)
@@ -87,7 +97,8 @@ Working assumption: the algorithm shows people what they're thinking about. Ever
 - [ ] Cover = relatable situation + body sensation + mystery + specific number?
 - [ ] Anime characters when referenced, matching their locked canon model sheets (outfit, colours, accessories); crew for conclusions; always alive; correct anatomy; actions matching the narration?
 - [ ] Camera never still; new move at least every ~4 s (1.5–2.5 s in Shorts); punch-ins on key words; push-in on the core truth?
-- [ ] (Shorts) first frame = cover, scene fills the frame, motion and voice from frame 0, hook question < 2 s, 20–30 s, loops?
+- [ ] (Shorts) first frame = cover (slab headline + tag), close-up scene under it, motion and voice from frame 0, hook question < 2 s, 20–30 s, loops?
+- [ ] Anime characters highlighted: an iconic line, signature pose or moment, and a name plate, all checked against the source?
 - [ ] No shame or fear-bait; suggestions labelled as ours; care line on heavy topics?
 - [ ] Own drawings only; no official assets; creators credited?
 - [ ] −14 LUFS, captions, upload info in chat, pushed?

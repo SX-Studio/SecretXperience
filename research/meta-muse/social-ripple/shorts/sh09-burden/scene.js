@@ -4,14 +4,16 @@
   const { S, E, W, T, I, Y, el, INKC, RED, clamp, ease } = K, L = LIB(K), C = CAST(I), N = NSHORT(K, L, C), { F, mk, person } = N, ink = K.ink;
 
   // ---------- B0: the hook, in motion from frame 0 — Robin, cuffed, as her crew arrives behind her ----------
-  const Y0 = Y(0), FLc = Y0 + 640; N.floor(Y0); N.hook2(Y0, ["FEEL LIKE", 210], ["A BURDEN?", 210], "ONE PIECE", 250);
+  const Y0 = Y(0), FLc = Y0 + 640; N.floor(Y0);
   const far = [[-140, 0.74, "#A9A39A"], [-30, 0.84, "#8F877A"], [90, 0.74, "#A9A39A"], [190, 0.66, "#B8B0A2"]].map(([x, s, c]) => person(x, Y0 + 300, s, -2, c));
   N.ups.push((t) => { const u = t >= S("b5") ? 0 : ease(clamp(t / 1.1, 0, 1)); far.forEach((g) => g.setAttribute("transform", `translate(${(u * 190).toFixed(1)},0)`)); });
+  N.burst(700, Y0 - 20, 250, 1050); N.hook(Y0, ["FEEL LIKE", 172], ["A BURDEN?", 172], "ONE PIECE");
   const robin0 = mk(ink, "robin", 700, FLc, 1.8, -2); robin0.key(0, "cuffed", 0).key(0, { head: 6 }, 0).face(0, "sad").key(0.1, { head: 24 }, 0.5).cry(1.0, S("b5")).face(1.0, "strain").key(1.9, { head: 10 }, 0.5).face(S("b5"), "sad").key(S("b5"), { head: 6 }, 0);
 
   // ---------- B1: twenty years; the deal ----------
   const Y1 = Y(1), FL1 = Y1 + 300; N.floor(Y1);
   L.tx(ink, "20 years on the run", 90, Y1 - 620, 92, S("b2") - 0.1, 0.7);
+  N.plate(300, Y1 - 300, "NICO ROBIN", S("b2") + 0.1, { size: 60, sub: "\"the Devil Child\"", until: F("b2", 0.46) });
   const r1 = mk(ink, "robin", 150, FL1, 0.9, S("b2") - 0.3); r1.view(0, "side", 1).face(0, "sad").move(S("b2"), 330, T.b2[1] * 0.4).view(F("b2", 0.45), "front");
   const tr = [560, 730, 900].map((x, i) => person(x, FL1, 0.8, S("b2") + 0.1 + i * 0.08));
   N.ups.push((t) => tr.forEach((g, i) => { const u = ease(clamp((t - F("b2", 0.22) - i * 0.14) / 0.5, 0, 1)); g.setAttribute("transform", `translate(${(u * 70).toFixed(1)},${(-u * 24).toFixed(1)})`); g.setAttribute("opacity", (1 - 0.65 * u).toFixed(2)); }));
@@ -26,7 +28,13 @@
   I.path(ink, `M660,${TW + 700} V${TW} H1180 M660,${TW} v-44 H1180 M800,${TW - 44} V${Y2 - 560} H1180`, S("b3"), 0.7, { w: 8, color: "#8A847A" });
   [[40, "#A9A39A"], [440, "#8F877A"]].forEach(([x, c], i) => person(x, RF, 0.6, S("b3") + 0.1 + i * 0.06, c));
   const luffy = mk(ink, "luffyEL", 330, RF, 0.9, S("b3") - 0.1); luffy.key(0, "arms", 0).face(0, "determined").key(F("b3", 0.5), { aL: 146, eL: -14, aR: -146, eR: 14, head: -8 }, 0.2).face(F("b3", 0.5), "strain");
-  const soge = mk(ink, "sogeking", 180, RF, 0.84, S("b3"));
+  const soge = mk(ink, "sogeking", 180, RF, 0.84, S("b3")); soge.key(F("b3", 0.1), { aR: -112, eR: 0 }, 0.25);
+  // the flag: Sogeking's shot sets it alight
+  const fx = 690, fy = Y2 - 690, tS = F("b3", 0.16), tH = tS + 0.42; I.path(ink, `M${fx},${TW - 44} V${fy}`, S("b3") + 0.1, 0.3, { w: 8, color: "#6B6359" }); const flag = el("g", {}, ink); L.rect(flag, fx, fy, 200, 128, S("b3") + 0.2, "#FFFFFF", { rx: 2, sound: false });
+  I.fill(flag, el("path", { d: `M${fx + 100},${fy + 64} m-20,0 a20,20 0 1,0 40,0 a20,20 0 1,0 -40,0 M${fx + 46},${fy + 64} h108 M${fx + 100},${fy + 18} v92`, fill: "none", stroke: "#2A3A6A", "stroke-width": 7, opacity: 0 }), S("b3") + 0.3, 0.2, { sound: false });
+  const shot = el("circle", { r: 15, fill: "#F28C28", stroke: INKC, "stroke-width": 4, opacity: 0 }, ink), burn = el("g", { opacity: 0 }, ink); [[36, 0], [100, -18], [164, 0]].forEach(([dx, dy], i) => el("path", { d: `M${fx + dx - 30},${fy + 128 + dy} q-40,-80 10,-150 q10,60 40,40 q-10,-60 40,-90 q10,90 -30,200 z`, fill: i % 2 ? "#F2C230" : "#F28C28" }, burn));
+  N.ups.push((t) => { const u = clamp((t - tS) / (tH - tS), 0, 1), x0 = 250, y0 = RF - 290; shot.setAttribute("opacity", u > 0 && u < 1 ? 1 : 0); shot.setAttribute("cx", (x0 + (fx + 100 - x0) * u).toFixed(1)); shot.setAttribute("cy", (y0 + (fy + 64 - y0) * u - Math.sin(u * Math.PI) * 70).toFixed(1));
+    const b = clamp((t - tH) / 0.35, 0, 1); burn.setAttribute("opacity", (b * (0.8 + 0.2 * Math.sin(t * 10))).toFixed(2)); flag.setAttribute("opacity", (1 - 0.75 * clamp((t - tH) / 1.0, 0, 1)).toFixed(2)); });
   const robin = mk(ink, "robin", 930, TW, 0.86, S("b3") + 0.1); robin.key(0, "cuffed", 0).face(0, "sad").face(F("b3", 0.55), "wow").face(F("b3", 0.82), "strain").cry(F("b3", 0.78)).key(F("b3", 0.82), { head: -8 }, 0.3);
   const sw = el("g", {}, ink); N.ups.push((t) => sw.setAttribute("display", t < F("b3", 0.8) ? "inline" : "none")); L.pop(sw, "SAY IT!", 300, Y2 - 250, 140, F("b3", 0.52), RED, "Anton", "bigslam", -4);
   L.rect(ink, 430, Y2 - 500, 540, 130, F("b3", 0.84), "#FFFDF6", { rx: 44, sound: "pop" }); L.pop(ink, "I want to live!", 700, Y2 - 410, 86, F("b3", 0.86), RED, "Caveat", false);
@@ -44,7 +52,7 @@
 
   const posters = [{ on: [S("b5") - 0.05, E("b5") + 0.3], shakeAt: F("b5", 0.72), lines: [
     { txt: "ASKING ISN'T", x: 90, y: 620, size: 160, at: S("b5") }, { txt: "TAKING.", x: 90, y: 830, size: 220, at: F("b5", 0.2) }, { txt: "IT'S LETTING SOMEONE", x: 90, y: 1010, size: 96, fill: "#9A958C", at: F("b5", 0.48) }, { txt: "SHOW UP FOR YOU.", x: 90, y: 1200, size: 122, fill: RED, at: F("b5", 0.72), big: true }] }];
-  const shots = [[0, 540, Y0 - 120, 1.05], [0.9, 565, Y0 - 92, 1.13, 1], [2.4, 520, Y0 - 90, 1.1, -1], [S("b2") - 0.35, 540, Y1 - 120, 1.05, -1], [F("b2", 0.5), 540, Y1 - 165, 1.12], [S("b3") - 0.35, 540, Y2 - 120, 1.05, 1], [F("b3", 0.48), 360, Y2 - 20, 1.3, -1], [F("b3", 0.8), 810, Y2 - 180, 1.3, 1],
+  const shots = [[0, 540, Y0 - 120, 1.05], [0.9, 565, Y0 - 92, 1.13, 1], [2.4, 520, Y0 - 90, 1.1, -1], [S("b2") - 0.35, 540, Y1 - 120, 1.05, -1], [F("b2", 0.5), 540, Y1 - 165, 1.12], [S("b3") - 0.35, 540, Y2 - 150, 1.05, 1], [F("b3", 0.16) + 0.3, 700, Y2 - 420, 1.3], [F("b3", 0.48), 360, Y2 - 20, 1.3, -1], [F("b3", 0.8), 810, Y2 - 180, 1.3, 1],
     [S("b4") - 0.35, 540, Y3 - 120, 1.05], [F("b4", 0.2), 480, Y3 + 20, 1.22, -1], [F("b4", 0.56), 540, Y3 - 200, 1.05, 1], [S("b6") - 0.25, 540, Y0 - 120, 1.05]];
-  K.run({ shots, posters, drift: 0.02, events: [{ type: "bigslam", at: 0.03 }], punches: [{ t: F("b2", 0.52), z: 1.07 }, { t: F("b3", 0.86), z: 1.08 }, { t: F("b4", 0.74), z: 1.06 }], shakes: [{ t: F("b3", 0.52), a: 12 }], extra: N.tick });
+  K.run({ shots, posters, drift: 0.02, events: [{ type: "bigslam", at: 0.03 }], punches: [{ t: F("b2", 0.52), z: 1.07 }, { t: F("b3", 0.86), z: 1.08 }, { t: F("b4", 0.74), z: 1.06 }], shakes: [{ t: F("b3", 0.52), a: 12 }, { t: F("b3", 0.16) + 0.42, a: 10 }], extra: N.tick });
 })();
