@@ -174,7 +174,7 @@
       h.update = (t) => {
         const vis = t >= at; root.setAttribute("opacity", vis ? 1 : 0); if (!vis) return; const pop = clamp((t - at) / 0.35, 0, 1), sc = s * (0.6 + 0.4 * (1 + 1.7 * Math.pow(pop - 1, 3) + 0.7 * Math.pow(pop - 1, 2)));
         let vw = views[0]; for (const q of views) if (t >= q[0]) vw = q; const side = vw[1] === "side", dir = vw[2];
-        if (curView !== vw[1] + dir) { curView = vw[1] + dir; tFront.style.display = side ? "none" : "inline"; tSide.style.display = side ? "inline" : "none"; det.style.display = side ? "none" : "inline";
+        if (curView !== vw[1] + dir) { curView = vw[1] + dir; tFront.style.display = side ? "none" : "inline"; tSide.style.display = side ? "inline" : "none"; det.setAttribute("transform", side ? "translate(2,0) scale(0.62,1)" : "");
           earR.style.display = side ? "none" : "inline"; const ft = side ? `translate(${0.3 * r},0) translate(0,-228) scale(0.86,1) translate(0,228)` : ""; faceG.setAttribute("transform", ft); glassG.setAttribute("transform", ft);
           body.setAttribute("transform", dir < 0 ? "scale(-1,1)" : ""); legs.forEach((lg) => { lg.th.px = side ? lg.d * 6 : lg.d * 24; lg.shoe.setAttribute("cx", side ? 16 : lg.d * 6); });
           arms.forEach((a) => { a.ua.px = side ? 0 : a.d * 50; }); const far = arms[1].ua.g; if (side) torso.insertBefore(far, torso.firstChild); else torso.insertBefore(far, headG); }

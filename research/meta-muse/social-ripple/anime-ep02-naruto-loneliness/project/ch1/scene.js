@@ -24,7 +24,7 @@
   L.tx(g1, "you're in good company.", X1 - 180, 300, 90, F("o2", 0.1), 0.8);
   L.pop(g1, "one of the most popular anime heroes ever", X1 + 300, 460, 54, F("o2", 0.5), L.GREY, "Patrick Hand", false);
   L.sign(g1, "NARUTO", X1 + 300, 620, 420, 130, F("o2", 0.62), { font: "Anton", size: 100, fill: "#1E1B2E", color: "#F2C230", rot: -3 });
-  L.pop(g1, "(the story, told — not drawn)", X1 + 300, 760, 42, F("o2", 0.75), L.GREY, "Patrick Hand", false);
+  
 
   // ---------- B2: a village full of people ----------
   const X2 = X(2), g2 = B(2);
@@ -32,7 +32,7 @@
   I.path(g2, `M${X2 - 960},${560} l120,-90 l120,90 v340 M${X2 - 700},${600} l90,-70 l90,70 v300 M${X2 + 500},${560} l120,-90 l120,90 v340 M${X2 + 760},${600} l90,-70 l90,70 v300`, S("o3"), 0.8, { w: 6, color: "#A9A39A" });
   I.path(g2, `M${X2 - 1100},${FL} H${X2 + 1100}`, S("o3"), 0.5, { w: 5, color: "#8A847A", silent: true });
   const vil = [-480, -330, -180, 200, 350, 500].map((dx, i) => person(g2, X2 + dx, 0.7, F("o3", 0.2) + i * 0.06));
-  const mo2 = mk(g2, "mo", X2, FL, 0.82, S("o3") - 0.2); mo2.key(0, "stand", 0).face(0, "neutral").key(F("o3", 0.7), "slump", 0.5).face(F("o3", 0.7), "sad");
+  const mo2 = mk(g2, "naruto", X2, FL, 0.82, S("o3") - 0.2); mo2.key(0, "stand", 0).face(0, "neutral").key(F("o3", 0.7), "slump", 0.5).face(F("o3", 0.7), "sad");
   // villagers turn away: their heads slide to the side (backs to Mo)
   ups.push((t) => { const u = clamp((t - F("o3", 0.65)) / 0.5, 0, 1); vil.forEach((g, i) => g.setAttribute("transform", `translate(${((i < 3 ? -1 : 1) * 40 * u).toFixed(1)},0)`)); });
   L.pop(g2, "…and almost no one would look at him.", X2, 330, 60, F("o3", 0.75), RED, "Caveat", false);

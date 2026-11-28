@@ -13,7 +13,7 @@
   const mo = mk(g0, "mo", X0 + 160, FL, 1.0, S("t2") - 0.2); mo.key(0, "pockets", 0).face(0, "sad").face(F("t2", 0.92), "wow");
   L.thought(g0, X0 + 560, 360, 560, 170, F("t2", 0.55)); L.pop(g0, "\"nobody wants to talk to me\"", X0 + 560, 380, 50, F("t2", 0.75), INKC, "Caveat", false);
   I.path(g0, `M${X0 + 300},${270} L${X0 + 820},${450} M${X0 + 820},${270} L${X0 + 300},${450}`, F("t2", 0.92), 0.3, { w: 12, color: RED, loud: 1.3 });
-  L.sign(g0, "only a handful of studies: a hint, not a guarantee", X0 - 380, 300, 840, 80, S("t3"), { size: 40, rot: 2, fill: "#FFF6E6", color: L.GREY });
+  L.sign(g0, "only a handful of studies: a hint, not a guarantee", X0 + 640, 800, 780, 80, S("t3"), { size: 38, rot: 2, fill: "#FFF6E6", color: L.GREY });
 
   // ---------- B1: the train — talking to a stranger ----------
   const X1 = X(1), g1 = B(1); floor(g1, X1, S("t4") - 0.4);

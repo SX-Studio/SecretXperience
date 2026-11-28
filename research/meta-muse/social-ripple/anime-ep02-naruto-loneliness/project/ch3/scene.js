@@ -11,7 +11,7 @@
   // ---------- B0: surrounded, not seen ----------
   const X0 = X(0), g0 = B(0); floor(g0, X0, S("q2") - 0.4);
   [-720, -520, -320, 320, 520, 720].forEach((dx, i) => person(g0, X0 + dx, 0.95, S("q2") + i * 0.05));
-  const mo = mk(g0, "mo", X0, FL, 1.05, S("q2") - 0.3); mo.key(0, "pockets", 0).face(0, "neutral").face(F("q2", 0.6), "sad");
+  const mo = mk(g0, "naruto", X0, FL, 0.95, S("q2") - 0.3); mo.key(0, "stand", 0).face(0, "neutral").face(F("q2", 0.6), "sad");
   L.sign(g0, "surrounded ✓", X0 - 520, 260, 340, 90, F("q2", 0.3), { size: 56, rot: -4, fill: "#E3F2D6", color: L.GREEN });
   L.sign(g0, "seen ✗", X0 + 520, 260, 240, 90, F("q2", 0.75), { size: 56, rot: 4, fill: "#FFD9C9", color: RED });
 

@@ -20,7 +20,7 @@
 
   // ---------- B1: adults keep their distance; kids copy ----------
   const X1 = X(1), g1 = B(1); floor(g1, X1, S("p2") - 0.4);
-  const kid = mk(g1, "mo", X1, FL, 0.8, S("p2") - 0.3); kid.key(0, "stand", 0).face(0, "neutral").face(F("p2", 0.55), "sad").key(F("p2", 0.55), "slump", 0.5);
+  const kid = mk(g1, "naruto", X1, FL, 0.8, S("p2") - 0.3); kid.key(0, "stand", 0).face(0, "neutral").face(F("p2", 0.55), "sad").key(F("p2", 0.55), "slump", 0.5);
   const adults = [-560, -360, 360, 560].map((dx, i) => person(g1, X1 + dx, 1.1, S("p2") + i * 0.08, DARK));
   [["shh", -460, 300], ["don't talk about it", 460, 280]].forEach(([t, dx, y], i) => { const at = F("p2", 0.12) + i * 0.15, bw = t.length * 26 + 70;
     L.rect(g1, X1 + dx - bw / 2, y - 50, bw, 74, at, "#FFFDF6", { rx: 30, sound: "pop" }); L.pop(g1, t, X1 + dx, y, 44, at + 0.03, INKC, "Patrick Hand", false); });
@@ -34,7 +34,7 @@
   I.path(g2, `M${X2 - 900},${FL} L${X2 - 820},${260} Q${X2},${180} ${X2 + 820},${260} L${X2 + 900},${FL}`, S("p3") - 0.3, 0.7, { w: 8, color: "#8A847A" });
   [-480, 0, 480].forEach((dx, i) => { const cx = X2 + dx, at = S("p3") + i * 0.12; I.path(g2, `M${cx - 120},${520} Q${cx - 120},${320} ${cx},${320} Q${cx + 120},${320} ${cx + 120},${520} Q${cx},${600} ${cx - 120},${520}`, at, 0.4, { w: 6, color: "#A9A39A" });
     I.path(g2, `M${cx - 55},${430} h30 M${cx + 25},${430} h30 M${cx - 30},${505} h60`, at + 0.2, 0.2, { w: 6, color: "#A9A39A", silent: true }); });
-  const tagger = mk(g2, "mo", X2 - 120, FL, 0.85, S("p3")); tagger.face(0, "grin").key(F("p3", 0.3), "wave", 0.25).key(F("p3", 0.42), "point", 0.2).key(F("p3", 0.54), "wave", 0.2).key(F("p3", 0.66), "point", 0.2).key(F("p3", 0.8), "cheer", 0.3);
+  const tagger = mk(g2, "naruto", X2 - 120, FL, 0.85, S("p3")); tagger.face(0, "grin").key(F("p3", 0.3), "wave", 0.25).key(F("p3", 0.42), "point", 0.2).key(F("p3", 0.54), "wave", 0.2).key(F("p3", 0.66), "point", 0.2).key(F("p3", 0.8), "cheer", 0.3);
   [["#E04A3A", -480], ["#3A8FE0", -470], ["#F2C230", 0], ["#4E8A3A", 10], ["#E04A3A", 480], ["#B05AE0", 470]].forEach(([col, dx], i) => I.path(g2, `M${X2 + dx - 90},${380 + (i % 2) * 70} q40,-60 90,0 t90,10`, F("p3", 0.32) + i * 0.07, 0.25, { w: 16, color: col, loud: 1.2 }));
   L.sign(g2, "better yelled at than invisible", X2 + 400, 760, 640, 100, F("p3", 0.82), { size: 52, rot: -3, fill: "#FFFDF6", color: RED });
 
@@ -42,7 +42,7 @@
   const X3 = X(3), g3 = B(3); floor(g3, X3, S("p4") - 0.4);
   I.path(g3, `M${X3 - 640},${FL} L${X3 - 520},${360} L${X3 - 400},${FL} M${X3 - 130},${FL} L${X3 - 10},${360} L${X3 + 110},${FL} M${X3 - 540},${370} H${X3 + 10}`, S("p4") - 0.3, 0.7, { w: 9, color: "#8A5A2B" });
   const swing = el("g", {}, g3); I.path(swing, `M${X3 - 330},${372} V${700} M${X3 - 190},${372} V${700}`, S("p4"), 0.4, { w: 5, color: INKC, silent: true }); L.rect(swing, X3 - 350, 694, 180, 22, S("p4") + 0.1, "#A0703A", { rx: 4, sound: false });
-  const sw = mk(swing, "mo", X3 - 260, 700 + 170 * 0.78 - 74 * 0.78 + 4, 0.78, S("p4") + 0.1); sw.view(0, "side", 1).key(0, "sit", 0).face(0, "neutral").face(F("p4", 0.55), "sad").key(F("p4", 0.55), { head: 18 }, 0.6);
+  const sw = mk(swing, "naruto", X3 - 260, 700 + 170 * 0.78 - 74 * 0.78 + 4, 0.78, S("p4") + 0.1); sw.view(0, "side", 1).key(0, "sit", 0).face(0, "neutral").face(F("p4", 0.55), "sad").key(F("p4", 0.55), { head: 18 }, 0.6);
   ups.push((t) => swing.setAttribute("transform", `rotate(${(Math.sin(t * 1.3) * 3).toFixed(2)} ${X3 - 260} 372)`));
   const fams = [[360, 0.95, DARK], [470, 0.6, GREY], [700, 1.0, DARK], [800, 0.58, GREY]].map(([dx, s2, col], i) => person(g3, X3 + dx, s2, F("p4", 0.22) + i * 0.06, col));
   ups.push((t) => { const u = ease(clamp((t - F("p4", 0.45)) / 1.6, 0, 1)); fams.forEach((g) => g.setAttribute("transform", `translate(${(u * 420).toFixed(1)},0)`)); });
